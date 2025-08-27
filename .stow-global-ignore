@@ -1,0 +1,47 @@
+# STOW RECOMMENDED FILES TO IGNORE
+^/README.*
+^/LICENSE.*
+^/COPYING
+
+RCS
+.+,v
+
+CVS
+\.\#.+       # CVS conflict files / emacs lock files
+\.cvsignore
+
+\.svn
+_darcs
+\.hg
+
+\.git
+\.gitignore
+\.gitmodules
+
+.+~          # emacs backup files
+\#.*\#       # emacs autosave files
+
+
+# EDITORS
+.idea
+.vscode
+
+# PYTHON TOOLS
+/.venv
+\uv.lock
+/venv
+
+# Config files
+.secrets.baseline
+.pre-commit-config.yaml
+.pre-commit-config.yaml.lock
+
+# Mkdocs
+/docs
+mkdocs.yml
+
+# GIT
+.gitignore
+.zshrc
+.editorconfig
+.gitconfig
