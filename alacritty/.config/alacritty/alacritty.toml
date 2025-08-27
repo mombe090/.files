@@ -1,0 +1,63 @@
+[general]
+import = ["~/.config/alacritty/themes/catppuccin_macchiato.toml"]
+
+[bell]
+animation = "EaseOutExpo"
+duration = 0
+
+[env]
+TERM = "xterm-256color"
+
+[font]
+size = 18
+
+[font.bold]
+family = "CaskaydiaMono Nerd Font Mono"
+style = "Bold"
+
+[font.glyph_offset]
+x = 0
+y = 0
+
+[font.italic]
+family = "CaskaydiaMono Nerd Font Mono"
+
+[font.normal]
+family = "CaskaydiaMono Nerd Font Mono"
+style = "Regular"
+
+[font.offset]
+x = 0
+y = 0
+
+[mouse]
+hide_when_typing = true
+
+[[mouse.bindings]]
+action = "PasteSelection"
+mouse = "Middle"
+
+[selection]
+semantic_escape_chars = ",│`|:\"' ()[]{}<>"
+
+[window]
+decorations = "Transparent"
+dynamic_title = true
+startup_mode = "Windowed"
+opacity= 0.95
+blur = true
+option_as_alt = "Both"
+
+[window.dimensions]
+columns = 120
+lines = 40
+
+[window.padding]
+x = 10
+y = 15
+
+[keyboard]
+bindings = [
+  { key = "V", mods = "Control", action = "Paste" },
+  { key = "B", mods = "Control", action = "Copy" }
+]
