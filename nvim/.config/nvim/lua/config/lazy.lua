@@ -1,4 +1,3 @@
--- TODO: hilight the current line only in normal mode
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"
@@ -50,23 +49,6 @@ require("lazy").setup({
         "tohtml",
         "tutor",
         "zipPlugin",
-      },
-    },
-  },
-  {
-    "neovim/nvim-lspconfig",
-    opts = {
-      servers = { eslint = {} },
-      setup = {
-        eslint = function()
-          require("lazyvim.util").lsp.on_attach(function(client)
-            if client.name == "eslint" then
-              client.server_capabilities.documentFormattingProvider = true
-            elseif client.name == "tsserver" then
-              client.server_capabilities.documentFormattingProvider = false
-            end
-          end)
-        end,
       },
     },
   },
