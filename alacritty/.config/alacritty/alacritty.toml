@@ -1,5 +1,6 @@
 [general]
 import = ["~/.config/alacritty/themes/catppuccin_macchiato.toml"]
+#import = ["~/.config/alacritty/themes/catppuccin_latte.toml"]
 
 [bell]
 animation = "EaseOutExpo"
@@ -9,7 +10,7 @@ duration = 0
 TERM = "xterm-256color"
 
 [font]
-size = 18
+size = 14
 
 [font.bold]
 family = "CaskaydiaMono Nerd Font Mono"
@@ -44,7 +45,7 @@ semantic_escape_chars = ",│`|:\"' ()[]{}<>"
 decorations = "Transparent"
 dynamic_title = true
 startup_mode = "Windowed"
-opacity= 0.95
+opacity = 0.95
 blur = true
 option_as_alt = "Both"
 
@@ -59,5 +60,5 @@ y = 15
 [keyboard]
 bindings = [
   { key = "V", mods = "Control", action = "Paste" },
-  { key = "B", mods = "Control", action = "Copy" }
+  { key = "B", mods = "Control", action = "Copy" },
 ]

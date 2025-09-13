@@ -1,3 +1,12 @@
+# CARAPACE CONFIGURATION
+export CARAPACE_BRIDGES='zsh,bash,inshellisense'
+zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+source <(carapace _carapace)
+
+zstyle ':completion:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
+
+
+
 # ===== COMPLETION STYLING =====
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"

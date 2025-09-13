@@ -101,3 +101,6 @@ alias psg='ps aux | grep'
 alias h='history'
 alias j='jobs -l'
 alias b='btop'
+
+# ===== LUA LANGUAGE =======
+alias lua='lua5.4'

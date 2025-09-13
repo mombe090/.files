@@ -43,6 +43,9 @@ if [[ "$USER" == "$PERSONAL_USER" ]]; then
   command -v devbox &> /dev/null && eval "$(devbox global shellenv --preserve-path-stack -r)" && hash -r
 fi
 
+# Activate vi keybindings
+bindkey -v
+
 # ===== PROMPT SETUP =====
 # 🎨 Starship prompt
 eval "$(starship init zsh)"

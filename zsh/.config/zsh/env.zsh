@@ -10,8 +10,12 @@ export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 
-# Tool configurations
-export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
+# CARAPACE CONFIGURATION
+export CARAPACE_BRIDGES='zsh,bash,inshellisense'
+zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+source <(carapace _carapace)
+
+zstyle ':completion:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
 export LS_COLORS="$(vivid generate catppuccin-frappe)"
 
 # Development tools
