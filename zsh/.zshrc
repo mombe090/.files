@@ -1,4 +1,4 @@
-autoload -Uz compinit && compinit
+autoload -Uz compinit
 # ===== ZINIT SETUP =====
 # 📁 Set Zinit home directory based on XDG specification
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
@@ -16,9 +16,9 @@ source "$ZINIT_HOME/zinit.zsh"
 # 📂 Load configuration files in order
 typeset -a zsh_configs=(
   ~/.config/zsh/env.zsh
-  ~/.config/zsh/plugins.zsh
   ~/.config/zsh/history.zsh
-  ~/.config/zsh/keybindings.zsh
+  ~/.config/zsh/plugins.zsh
+  ~/.config/zsh/Keybindings.zsh
   ~/.config/zsh/aliases.zsh
   ~/.config/zsh/completions.zsh
 )
@@ -28,7 +28,7 @@ for config in $zsh_configs; do
 done
 
 # 🔍 Enable completions and replay zinit
-autoload -Uz compinit && compinit
+compinit
 zinit cdreplay -q
 
 # ===== SHELL INTEGRATIONS =====
