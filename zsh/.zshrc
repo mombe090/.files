@@ -21,6 +21,8 @@ typeset -a zsh_configs=(
   ~/.config/zsh/Keybindings.zsh
   ~/.config/zsh/aliases.zsh
   ~/.config/zsh/completions.zsh
+  ~/.config/zsh/fzf.git.zsh
+  ~/.config/zsh/themes/catppuccin-fzf-frappe.sh
 )
 
 for config in $zsh_configs; do

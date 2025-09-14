@@ -4,3 +4,4 @@
 --paging=never
 --map-syntax "*.ino:C++"
 --map-syntax ".ignore:Git Ignore"
+--theme="Catppuccin Mocha"
