@@ -45,8 +45,8 @@ semantic_escape_chars = ",│`|:\"' ()[]{}<>"
 decorations = "Transparent"
 dynamic_title = true
 startup_mode = "Windowed"
-opacity = 0.95
-blur = true
+opacity = 0.9788
+blur = false
 option_as_alt = "Both"
 
 [window.dimensions]
