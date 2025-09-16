@@ -1,0 +1,137 @@
+{
+  // Markdownlint configuration for dotfiles repository
+  // Based on industry best practices and GitHub standards
+
+  // Enable all rules by default
+  "default": true,
+
+  // MD001/heading-increment - Heading levels should only increment by one level at a time
+  "MD001": true,
+
+  // MD003/heading-style - Use consistent heading style (ATX preferred for GitHub)
+  "MD003": {
+    "style": "atx",
+  },
+
+  // MD004/ul-style - Use consistent unordered list style
+  "MD004": {
+    "style": "dash",
+  },
+
+  // MD007/ul-indent - Unordered list indentation (2 spaces standard)
+  "MD007": {
+    "indent": 2,
+    "start_indented": false,
+  },
+
+  // MD009/no-trailing-spaces - Allow trailing spaces for line breaks
+  "MD009": {
+    "br_spaces": 2,
+    "list_item_empty_lines": false,
+    "strict": false,
+  },
+
+  // MD012/no-multiple-blanks - Allow max 2 consecutive blank lines for readability
+  "MD012": {
+    "maximum": 2,
+  },
+
+  // MD013/line-length - Relaxed line length for better readability
+  "MD013": false,
+
+  // MD022/blanks-around-headings - Require blank lines around headings
+  "MD022": {
+    "lines_above": 1,
+    "lines_below": 1,
+  },
+
+  // MD024/no-duplicate-heading - Allow duplicate headings in different sections
+  "MD024": {
+    "siblings_only": true,
+  },
+
+  // MD025/single-title - Allow multiple H1s (common in READMEs with badges)
+  "MD025": false,
+
+  // MD026/no-trailing-punctuation - Remove trailing punctuation from headings
+  "MD026": {
+    "punctuation": ".,;:!。，；：！",
+  },
+
+  // MD029/ol-prefix - Use ordered numbering for ordered lists
+  "MD029": {
+    "style": "ordered",
+  },
+
+  // MD033/no-inline-html - Allow common HTML elements for GitHub compatibility
+  "MD033": {
+    "allowed_elements": [
+      "details",
+      "summary",
+      "img",
+      "br",
+      "sub",
+      "sup",
+      "kbd",
+      "mark",
+      "div",
+      "span",
+    ],
+  },
+
+  // MD035/hr-style - Use consistent horizontal rule style
+  "MD035": {
+    "style": "---",
+  },
+
+  // MD036/no-emphasis-as-heading - Stricter punctuation check
+  "MD036": {
+    "punctuation": ".,;:!?。，；：！？",
+  },
+
+  // MD040/fenced-code-language - Require language for code blocks
+  "MD040": {
+    "allowed_languages": [],
+    "language_only": false,
+  },
+
+  // MD041/first-line-heading - Allow preamble before first heading (for badges, etc.)
+  "MD041": {
+    "allow_preamble": true,
+    "front_matter_title": "^\\s*title\\s*[:=]",
+    "level": 1,
+  },
+
+  // MD046/code-block-style - Use fenced code blocks
+  "MD046": {
+    "style": "fenced",
+  },
+
+  // MD048/code-fence-style - Use backticks for code fences
+  "MD048": {
+    "style": "backtick",
+  },
+
+  // MD049/emphasis-style - Use asterisks for emphasis
+  "MD049": {
+    "style": "asterisk",
+  },
+
+  // MD050/strong-style - Use asterisks for strong emphasis
+  "MD050": {
+    "style": "asterisk",
+  },
+
+  // MD059/descriptive-link-text - Enforce descriptive link text
+  "MD059": {
+    "prohibited_texts": [
+      "click here",
+      "here",
+      "link",
+      "more",
+      "read more",
+      "this",
+    ],
+  },
+}
+
