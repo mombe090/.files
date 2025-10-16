@@ -104,3 +104,6 @@ alias b='btop'
 
 # ===== LUA LANGUAGE =======
 alias lua='lua5.4'
+
+# ===== NixOs ==============
+alias rebuild-mini='sudo darwin-rebuild switch --flake ~/.config/nix#mombe-mini'

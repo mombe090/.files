@@ -1,4 +1,4 @@
-theme = catppuccin-macchiato
+theme = "Catppuccin Frappe"
 
 # show all font ghostty +list-fonts
 font-family = "CaskaydiaMono Nerd Font Mono"
@@ -14,8 +14,8 @@ macos-option-as-alt = true
 macos-icon = "official"
 
 background-blur-radius = 20
-background-opacity = 0.95
-background-blur-radius = 25
+background-opacity = 0.90
+#background-blur-radius = 25
 
 shell-integration = "zsh"
 

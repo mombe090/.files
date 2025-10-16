@@ -19,6 +19,8 @@ return {
       markdown = true,
       help = true,
       terraform = true,
+      hcl = true,
+      yaml = true,
     },
   },
 }

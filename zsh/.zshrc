@@ -54,3 +54,8 @@ eval "$(starship init zsh)"
 
 # 🎯 Customize the prompt (optional: adds spacing)
 PROMPT="${PROMPT}"$'\n\n➡ '
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/mombe090/.lmstudio/bin"
+# End of LM Studio CLI section
+

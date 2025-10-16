@@ -28,3 +28,6 @@ elif [[ -n "$WSL_DISTRO_NAME" ]]; then
     # WSL paths
     export PATH="$PATH:$WSL_USER_HOME/AppData/Local/Programs/Microsoft VS Code/bin"
 fi
+
+# Ignore Python Warnings
+export PYTHONWARNINGS="ignore::FutureWarning"
