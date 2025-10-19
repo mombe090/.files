@@ -33,6 +33,9 @@ done
 compinit
 zinit cdreplay -q
 
+# 📦 Load post-compinit completions (must be after compinit)
+[[ -f ~/.config/zsh/completions-post.zsh ]] && source ~/.config/zsh/completions-post.zsh
+
 # ===== SHELL INTEGRATIONS =====
 # 🔗 Initialize modern shell tools
 eval "$(fzf --zsh)"
@@ -58,4 +61,6 @@ PROMPT="${PROMPT}"$'\n\n➡ '
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/mombe090/.lmstudio/bin"
 # End of LM Studio CLI section
+
+export MAVEN_OPTS="--add-opens java.base/sun.misc=ALL-UNNAMED"
 

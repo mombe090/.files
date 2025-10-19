@@ -31,3 +31,8 @@ fi
 
 # Ignore Python Warnings
 export PYTHONWARNINGS="ignore::FutureWarning"
+
+# JAVA 
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
+export PATH="$JAVA_HOME/bin:$PATH"
+

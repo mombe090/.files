@@ -12,22 +12,9 @@ fpath=(
     $fpath
 )
 
-# Force reload completion system
-autoload -Uz compinit
-compinit -u
-
-# Enable and load standard completion functions
+# ===== LOAD COMPLETION DEFINITIONS (BEFORE compinit) =====
+# Load standard completion functions
 autoload -Uz _files _complete _match _approximate _path_files _directories
-
-# Ensure basic completion works
-zstyle ':completion:*' completer _complete _match _approximate
-zstyle ':completion:*:match:*' original only
-zstyle ':completion:*:approximate:*' max-errors 1 numeric
-
-# Initialize carapace completion AFTER compinit
-if command -v carapace &> /dev/null; then
-    source <(carapace _carapace)
-fi
 
 # ===== COMPLETION STYLING =====
 zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
@@ -74,14 +61,6 @@ fi'
 zstyle ':fzf-tab:*' fzf-bindings 'ctrl-j:accept,ctrl-k:kill-line,ctrl-alt-j:preview-down,ctrl-alt-k:preview-up'
 zstyle ':fzf-tab:*' fzf-flags '--height=80%' '--preview-window=right:50%' '--bind=tab:down,shift-tab:up'
 
-# ===== TOOL-SPECIFIC COMPLETIONS =====
-# Kubectl completion
-if command -v kubectl &> /dev/null; then
-    source <(kubectl completion zsh)
-    if command -v kubecolor &> /dev/null; then
-        compdef kubecolor=kubectl
-    fi
-fi
-
+# ===== INTEGRATIONS =====
 # AWS KIRO INTEGRATION
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
