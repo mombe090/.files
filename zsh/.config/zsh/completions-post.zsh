@@ -4,9 +4,17 @@
 
 # Kubectl completion
 if command -v kubectl &> /dev/null; then
-    source <(kubectl completion zsh)
+    # Get the actual kubectl binary path (not the alias)
+    local kubectl_bin=$(whence -p kubectl)
+    
+    # Load kubectl completion from the actual binary
+    source <($kubectl_bin completion zsh)
+    
+    # If kubecolor is installed, copy kubectl completion to it and common aliases
     if command -v kubecolor &> /dev/null; then
         compdef kubecolor=kubectl
+        compdef k=kubectl
+        compdef kubeclt=kubectl  # Typo alias
     fi
 fi
 
