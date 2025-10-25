@@ -8,6 +8,7 @@ return {
         "javascript",
         "json",
         "java",
+        "hcl",
         "lua",
         "markdown",
         "markdown_inline",
@@ -15,6 +16,7 @@ return {
         "query",
         "regex",
         "tsx",
+        "terraform",
         "typescript",
         "vim",
         "yaml",
@@ -31,6 +33,21 @@ return {
       -- make sure mason installs the server
       servers = {
         jdtls = {},
+        copilot = { enabled = false },
+        terraformls = {
+          cmd = { "terraform-ls", "serve" },
+          filetypes = { "terraform", "terraform-vars", "tf" },
+          root_dir = function(fname)
+            return require("lspconfig.util").root_pattern(".terraform", ".git")(fname)
+          end,
+          settings = {
+            terraform = {
+              experimentalFeatures = {
+                prefillRequiredFields = true, -- auto-populate Azure resource fields like name/location
+              },
+            },
+          },
+        },
       },
       setup = {
         jdtls = function()

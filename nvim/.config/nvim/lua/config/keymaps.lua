@@ -26,3 +26,7 @@ for key, message in pairs(arrows) do
     end, { noremap = true, silent = true })
   end
 end
+
+keymap.set("n", "<leader>td", "<cmd>Telescope terraform_doc<cr>", { desc = "Terraform docs" })
+keymap.set("n", "<leader>tv", ":!terraform validate<cr>", { desc = "Validate Terraform" })
+keymap.set("n", "<leader>tf", ":!terraform fmt %<cr>", { desc = "Format current file" })

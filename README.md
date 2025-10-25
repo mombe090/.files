@@ -10,10 +10,6 @@ This is a collection of my personal dotfiles and configurations to set up quickl
 - [Installation](#installation)
 - [Features](#features)
 - [Software & Tools](#software--tools)
-- [Screenshots](#screenshots)
-- [Customization](#customization)
-- [License](#license)
-- [Contact](#contact)
 
 ---
 
