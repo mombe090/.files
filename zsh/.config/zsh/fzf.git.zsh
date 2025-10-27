@@ -1,26 +1,47 @@
 # The MIT License (MIT)
+
 #
+
 # Copyright (c) 2024 Junegunn Choi
+
 #
+
 # Permission is hereby granted, free of charge, to any person obtaining a copy
+
 # of this software and associated documentation files (the "Software"), to deal
+
 # in the Software without restriction, including without limitation the rights
+
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+
 # copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
+
+# furnished to do so, subject to the following conditions
+
 #
+
 # The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
+
+# all copies or substantial portions of the Software
+
 #
+
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY
+
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM
+
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
+
+# THE SOFTWARE
 
 # shellcheck disable=SC2039
+
 [[ $0 = - ]] && return
 
 __fzf_git_color() {
@@ -39,7 +60,8 @@ __fzf_git_cat() {
     return
   fi
 
-  # Sometimes bat is installed as batcat
+# Sometimes bat is installed as batcat
+
   _fzf_git_bat_options="--style='${BAT_STYLE:-full}' --color=$(__fzf_git_color .) --pager=never"
   if command -v batcat > /dev/null; then
     echo "batcat $_fzf_git_bat_options"
@@ -159,7 +181,9 @@ if [[ $- =~ i ]] || [[ $1 = --run ]]; then # ----------------------------------
 if [[ $__fzf_git_fzf ]]; then
   eval "$__fzf_git_fzf"
 else
-  # Redefine this function to change the options
+
+# Redefine this function to change the options
+
   _fzf_git_fzf() {
     fzf --height 50% --tmux 90%,70% \
       --layout reverse --multi --min-height 20+ --border \
@@ -206,7 +230,7 @@ _fzf_git_branches() {
   [[ -n "${BASH_VERSION:-}" ]] && shell=bash || shell=zsh
 
   bash "$__fzf_git" --list branches |
-  __fzf_git_fzf=$(declare -f _fzf_git_fzf) _fzf_git_fzf --ansi \
+  __fzf_git_fzf=$(declare -f _fzf_git_fzf)_fzf_git_fzf --ansi \
     --border-label '🌲 Branches ' \
     --header-lines 2 \
     --tiebreak begin \
@@ -330,7 +354,7 @@ if [[ $1 = --run ]]; then
   shift
   type=$1
   shift
-  eval "_fzf_git_$type" "$@"
+  eval "*fzf_git*$type" "$@"
 
 elif [[ $- =~ i ]]; then # ------------------------------------------------------
 if [[ -n "${BASH_VERSION:-}" ]]; then
@@ -370,7 +394,7 @@ elif [[ -n "${ZSH_VERSION:-}" ]]; then
       if [[ ${o[1]} == "?" ]];then
         eval "fzf-git-$o-widget() { zle -M '$(_fzf_git_list_bindings)' }"
       else
-        eval "fzf-git-$o-widget() { local result=\$(_fzf_git_$o | __fzf_git_join); zle reset-prompt; LBUFFER+=\$result }"
+        eval "fzf-git-$o-widget() { local result=\$(*fzf_git*$o | __fzf_git_join); zle reset-prompt; LBUFFER+=\$result }"
       fi
       eval "zle -N fzf-git-$o-widget"
       for m in emacs vicmd viins; do

@@ -1,6 +1,7 @@
 theme = "Catppuccin Frappe"
 
 # show all font ghostty +list-fonts
+
 font-family = "CaskaydiaMono Nerd Font Mono"
 font-family-bold = "CaskaydiaMono Nerd Font Mono"
 font-family-bold-italic = "JetBrainsMonoNL NFM Bold Italic"
@@ -9,13 +10,13 @@ font-size = 16
 
 mouse-hide-while-typing = true
 copy-on-select = true
-#window-decoration = true
+# window-decoration = true
 macos-option-as-alt = true
 macos-icon = "official"
 
 background-blur-radius = 20
 background-opacity = 0.90
-#background-blur-radius = 25
+# background-blur-radius = 25
 
 shell-integration = "zsh"
 

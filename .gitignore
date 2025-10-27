@@ -1,8 +1,10 @@
 # Ignore all idea and vscode files
+
 .idea
 .vscode
 
 # Env files
+
 .envrc
 .env
 .env.local

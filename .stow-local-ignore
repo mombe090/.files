@@ -1,4 +1,5 @@
 # STOW RECOMMENDED FILES TO IGNORE
+
 ^/README.*
 ^/LICENSE.*
 ^/COPYING
@@ -23,24 +24,29 @@ _darcs
 
 
 # EDITORS
+
 .idea
 .vscode
 
 # PYTHON TOOLS
+
 /.venv
 \uv.lock
 /venv
 
 # Config files
+
 .secrets.baseline
 .pre-commit-config.yaml
 .pre-commit-config.yaml.lock
 
 # Mkdocs
+
 /docs
 mkdocs.yml
 
 # GIT
+
 .gitignore
 .zshrc
 .editorconfig

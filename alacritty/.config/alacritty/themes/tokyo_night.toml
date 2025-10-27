@@ -1,12 +1,15 @@
 # Colors (Tokyo Night)
+
 # Source https//github.com/zatchheems/tokyo-night-alacritty-theme
 
 # Default colors
+
 [colors.primary]
 background = '#1a1b26'
 foreground = '#a9b1d6'
 
 # Normal colors
+
 [colors.normal]
 black   = '#32344a'
 red     = '#f7768e'
@@ -18,6 +21,7 @@ cyan    = '#449dab'
 white   = '#787c99'
 
 # Bright colors
+
 [colors.bright]
 black   = '#444b6a'
 red     = '#ff7a93'

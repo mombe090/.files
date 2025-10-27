@@ -1,4 +1,5 @@
 # History
+
 HISTSIZE=10000
 HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE

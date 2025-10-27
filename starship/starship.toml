@@ -5,6 +5,7 @@ command_timeout = 1000
 format = """$os$username$hostname$kubernetes$directory$git_branch$git_status\n"""
 
 # Drop ugly default prompt characters
+
 [character]
 success_symbol = ''
 error_symbol = ''
@@ -24,6 +25,7 @@ Macos = '󰀵'
 # ---y
 
 # Shows the username
+
 [username]
 style_user = 'white bold'
 style_root = 'black bold'
@@ -32,12 +34,14 @@ disabled = false
 show_always = true
 
 # Shows the hostname
+
 [hostname]
 ssh_only = true
 format = '󰇄 [$hostname](bold yellow) '
 disabled = false
 
 # Shows current directory
+
 [directory]
 truncation_length = 1
 truncation_symbol = '…/'
@@ -48,16 +52,20 @@ format = ' [$path]($style)[$read_only]($read_only_style) '
 style = "italic bold "
 
 # Shows current git branch
+
 [git_branch]
 symbol = ' '
 format = '[$symbol$branch]($style)'
+
 # truncation_length = 4
+
 truncation_symbol = '…/'
 style = 'bold green'
 
 # Shows current git status
+
 [git_status]
-format = '([ \( $all_status$ahead_behind\)]($style) )'
+format = '([\( $all_status$ahead_behind\)]($style) )'
 style = 'bold green'
 conflicted = '[ confliced=${count}](red) '
 up_to_date = '[󰘽 up-to-date](green) '
@@ -72,6 +80,7 @@ renamed = '[󱍸 renamed=${count}](yellow) '
 deleted = '[󰍶 deleted=${count}](red) '
 
 # Shows kubernetes context and namespace
+
 [kubernetes]
 format = '[󱃾 $context\[$namespace\]](bold blue) '
 disabled = false

@@ -1,20 +1,20 @@
 [alias]
-	co = checkout
-	br = branch
-	ci = commit
-	st = status
+ co = checkout
+ br = branch
+ ci = commit
+ st = status
 [pull]
-	rebase = true
+ rebase = true
 [init]
-	defaultBranch = master
+ defaultBranch = master
 [user]
-	name = Mamadou Yaya DIALLO
-	email = yayamombeya090@gmail.com
+ name = Mamadou Yaya DIALLO
+ email = <yayamombeya090@gmail.com>
 [credential "https://github.com"]
-	helper =
-	helper = !/usr/bin/gh auth git-credential
+ helper =
+ helper = !/usr/bin/gh auth git-credential
 [credential "https://gist.github.com"]
-	helper =
+ helper =
   helper = !/usr/bin/gh auth git-credential
 
 [core]
@@ -31,7 +31,7 @@
     conflictStyle = zdiff3
 
 [include]
-	path = ~/.config/delta/themes/catppuccin.gitconfig
+ path = ~/.config/delta/themes/catppuccin.gitconfig
 
 [delta]
   features = catppuccin-mocha
