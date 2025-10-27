@@ -1,5 +1,6 @@
 [general]
 import = ["~/.config/alacritty/themes/catppuccin_macchiato.toml"]
+
 # import = ["~/.config/alacritty/themes/catppuccin_latte.toml"]
 
 [bell]
@@ -57,8 +58,12 @@ lines = 40
 x = 10
 y = 15
 
-#[keyboard]
-#bindings = [
-#  { key = "V", mods = "Control", action = "Paste" },
-#  { key = "B", mods = "Control", action = "Copy" },
-#]
+# [keyboard]
+
+# bindings = [
+
+# { key = "V", mods = "Control", action = "Paste" }
+
+# { key = "B", mods = "Control", action = "Copy" }
+
+# ]

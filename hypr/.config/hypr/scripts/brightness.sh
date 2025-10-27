@@ -1,4 +1,5 @@
 # !/usr/bin/env sh
+
 direction=$1 # '+' or '-'
 monitor_data=$(hyprctl monitors -j)
 focused_name=$(echo $monitor_data | jq -r '.[] | select(.focused == true) | .name')
