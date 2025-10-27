@@ -25,7 +25,7 @@ Starship is a fast, customizable, cross-shell prompt written in Rust. It shows c
 - `󱍸` Renamed files
 - `󰍶` Deleted files
 - `󰘽` Up-to-date
-- ` ` Stashed changes
+- `󰜘` Stashed changes
 
 ## Installation
 

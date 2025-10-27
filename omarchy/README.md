@@ -36,7 +36,7 @@ stow omarchy
 
 ## Structure
 
-```
+```text
 ~/.config/omarchy/
 ├── branding/          # Omarchy branding assets
 ├── current/theme/     # Active theme (symlinked)

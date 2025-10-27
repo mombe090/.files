@@ -18,7 +18,7 @@
 
 When Neovim starts, it follows this flow:
 
-```
+```text
 init.lua → config/lazy.lua → lazy.nvim (plugin manager) → LazyVim → Your plugins
 ```
 
@@ -112,7 +112,7 @@ return {
 
 ### Directory Layout
 
-```
+```text
 ~/.config/nvim/
 ├── init.lua                    # Entry point
 ├── lua/
@@ -324,7 +324,7 @@ From your `lazyvim.json`:
 **1. Harpoon** (`lua/plugins/harpoon.lua`)
 Quick file navigation:
 
-```
+```text
 <leader>H  - Mark file
 <leader>h  - Show marks
 <leader>1-5 - Jump to file 1-5
@@ -367,7 +367,7 @@ return {
 
 ### 1. Plugin Loading Lifecycle
 
-```
+```text
 Startup → Check keys/events/cmds → Need plugin? → Load → Run config → Ready
 ```
 
@@ -673,4 +673,4 @@ K                  - Hover documentation
 
 ---
 
-**Happy Vimming! 🚀**
+## Happy Vimming! 🚀

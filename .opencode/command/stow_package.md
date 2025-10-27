@@ -2,6 +2,8 @@
 description: Create new folder a tools configuration with stow package manager.
 ---
 
+# Stow Package
+
 Create new directory structure in the root of the project.
 
 Follow the structure below:

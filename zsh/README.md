@@ -42,7 +42,7 @@ Feature-rich shell configuration with aliases, completions, and modern tools.
 
 ### Configuration Files
 
-```
+```text
 ~/.config/zsh/
 ├── aliases.zsh           # All aliases
 ├── completions.zsh       # Shell completions

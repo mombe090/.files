@@ -12,7 +12,7 @@ if command -v kubectl &> /dev/null; then
 
     # Load kubectl completion from the actual binary
     source <($kubectl_bin completion zsh)
-    
+
     # If kubecolor is installed, copy kubectl completion to it and common aliases
     if command -v kubecolor &> /dev/null; then
         compdef kubecolor=kubectl

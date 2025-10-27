@@ -23,7 +23,7 @@ stow nvim
 
 ## Structure
 
-```
+```text
 ~/.config/nvim/
 ├── init.lua              # Entry point
 ├── lua/

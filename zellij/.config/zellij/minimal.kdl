@@ -39,7 +39,7 @@ layout {
                 // 
                 // 
                 // 
-                //  
+                // 
                 // 
                 // 
                 // 
@@ -90,7 +90,7 @@ layout {
                 // 󰎺
                 // 󰎻
                 // 󰎽
-                // 󰎾   
+                // 󰎾
               // formatting for inactive tabs
                 tab_normal              "#[fg=#6C7086]{name}"
                 tab_normal_fullscreen   "#[fg=#6C7086]{name}"
@@ -116,6 +116,6 @@ layout {
         }
     }
     tab name="HOME" focus=true borderless=true
-    
+
 }
 
