@@ -17,8 +17,9 @@ return {
     panel = { enabled = false },
     filetypes = {
       markdown = true,
+      yaml = true,
       help = true,
-      -- terraform = true,
+      terraform = true,
       java = true,
     },
   },

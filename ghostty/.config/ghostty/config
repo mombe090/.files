@@ -24,3 +24,6 @@ background-opacity = 0.90
 shell-integration = "zsh"
 
 # show keybiding ghostty +list-keybinds --default
+
+# Slowdown mouse scrolling
+mouse-scroll-multiplier = 0.95

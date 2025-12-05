@@ -73,7 +73,7 @@ eval "$(starship init zsh)"
 
 # 🎯 Customize the prompt (optional: adds spacing)
 
-PROMPT="${PROMPT}"$'\n\n➡ '
+#PROMPT="${PROMPT}"$'\n\n➡ '
 
 # Added by LM Studio CLI (lms)
 
@@ -83,3 +83,7 @@ export PATH="$PATH:/Users/mombe090/.lmstudio/bin"
 
 export MAVEN_OPTS="--add-opens java.base/sun.misc=ALL-UNNAMED"
 
+
+# opencode
+export PATH=/home/mombe090/.opencode/bin:$PATH
+eval "$(zellij setup --generate-auto-start zsh)"
