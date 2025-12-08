@@ -26,7 +26,7 @@ fi
 # Ensure base config files exist (copy from hypr package if missing)
 if [[ -d "$DOTFILES_HYPR" ]]; then
     log_info "  → Ensuring base config files exist..."
-    
+
     # List of required config files
     REQUIRED_CONFIGS=(
         "hyprland.conf"
@@ -39,7 +39,7 @@ if [[ -d "$DOTFILES_HYPR" ]]; then
         "utilities.conf"
         "workspaces.conf"
     )
-    
+
     COPIED_COUNT=0
     for conf in "${REQUIRED_CONFIGS[@]}"; do
         if [[ ! -f "$TARGET_HYPR/$conf" ]] && [[ -f "$DOTFILES_HYPR/$conf" ]]; then
@@ -47,7 +47,7 @@ if [[ -d "$DOTFILES_HYPR" ]]; then
             COPIED_COUNT=$((COPIED_COUNT + 1))
         fi
     done
-    
+
     if [[ $COPIED_COUNT -gt 0 ]]; then
         log_success "  ✓ Copied $COPIED_COUNT base config files"
     else

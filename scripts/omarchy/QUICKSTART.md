@@ -120,11 +120,11 @@ Run patches to apply.
 
 ## Safety Features
 
-✅ **Automatic Backups** - Before any change  
-✅ **Idempotent** - Run as many times as you want  
-✅ **Dry Run Mode** - Preview before applying  
-✅ **Comprehensive Logging** - Track all changes  
-✅ **Non-Destructive** - Omarchy configs preserved  
+✅ **Automatic Backups** - Before any change
+✅ **Idempotent** - Run as many times as you want
+✅ **Dry Run Mode** - Preview before applying
+✅ **Comprehensive Logging** - Track all changes
+✅ **Non-Destructive** - Omarchy configs preserved
 
 ## Logs & Backups
 

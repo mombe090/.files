@@ -95,10 +95,10 @@ For applications where Omarchy already has configurations (Hyprland, Waybar, etc
   - Specify which apps for each approach:
     ```
     Omarchy + tweaks:
-    - 
-    
+    -
+
     Fully custom:
-    - 
+    -
     ```
 
 ---

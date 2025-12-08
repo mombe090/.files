@@ -44,7 +44,7 @@ source = /home/user/.config/hypr/custom/workspaces_custom.conf
 ```
 
 **Benefits:**
-- ✅ Edit custom configs in `~/.files/hypr/.config/hypr/custom/` 
+- ✅ Edit custom configs in `~/.files/hypr/.config/hypr/custom/`
 - ✅ Changes immediately reflected (symlinks)
 - ✅ Git tracks all customizations
 - ✅ Non-destructive layering on top of Omarchy defaults

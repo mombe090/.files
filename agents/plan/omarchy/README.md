@@ -1,6 +1,6 @@
 # Omarchy Dotfiles Evolution - Planning Documents
 
-**Created:** December 7, 2025  
+**Created:** December 7, 2025
 **Status:** Planning Phase - Awaiting User Input
 
 ---

@@ -1,7 +1,7 @@
 # Omarchy Patching Strategy - Injection Approach
 
-**Date:** December 7, 2025  
-**Strategy:** Source injection instead of symlinks  
+**Date:** December 7, 2025
+**Strategy:** Source injection instead of symlinks
 **Principle:** Idempotent, non-destructive configuration patching
 
 ---
@@ -59,11 +59,11 @@ source = ~/.config/hypr/monitors.conf  # User overrides
 
 ### Benefits
 
-✅ **Non-destructive** - Original Omarchy configs untouched  
-✅ **Idempotent** - Safe to run multiple times  
-✅ **Updatable** - Edit files in dotfiles, re-run patch  
-✅ **Omarchy-compatible** - Benefit from Omarchy updates  
-✅ **Clear separation** - Your customizations in `custom/` directory  
+✅ **Non-destructive** - Original Omarchy configs untouched
+✅ **Idempotent** - Safe to run multiple times
+✅ **Updatable** - Edit files in dotfiles, re-run patch
+✅ **Omarchy-compatible** - Benefit from Omarchy updates
+✅ **Clear separation** - Your customizations in `custom/` directory
 
 ---
 
@@ -76,16 +76,16 @@ inject_source() {
     local config_file="$1"
     local source_line="$2"
     local marker="$3"  # Optional: comment marker to identify our additions
-    
+
     # Check if source line already exists
     if grep -Fxq "$source_line" "$config_file" 2>/dev/null; then
         log_info "Source already present: $source_line"
         return 0
     fi
-    
+
     # Backup original
     backup_file "$config_file"
-    
+
     # Add marker comment if provided
     if [[ -n "$marker" ]]; then
         if ! grep -q "$marker" "$config_file" 2>/dev/null; then
@@ -93,7 +93,7 @@ inject_source() {
             echo "$marker" >> "$config_file"
         fi
     fi
-    
+
     # Inject source line
     echo "$source_line" >> "$config_file"
     log_success "Injected: $source_line"
@@ -321,13 +321,13 @@ source = ~/.config/hypr/custom/workspaces_custom.conf
 remove_custom_sources() {
     local config_file="$1"
     local marker="# === Custom Dotfiles Overrides ==="
-    
+
     # Backup before modification
     backup_file "$config_file"
-    
+
     # Remove everything from marker to end
     sed -i "/$marker/,\$d" "$config_file"
-    
+
     log_info "Removed custom sources from: $config_file"
 }
 ```
@@ -338,11 +338,11 @@ remove_custom_sources() {
 remove_source() {
     local config_file="$1"
     local source_line="$2"
-    
+
     backup_file "$config_file"
     grep -Fxv "$source_line" "$config_file" > "$config_file.tmp"
     mv "$config_file.tmp" "$config_file"
-    
+
     log_info "Removed source: $source_line"
 }
 ```
@@ -353,11 +353,11 @@ remove_source() {
 
 This injection approach is:
 
-✅ **Cleaner** - No symlink complexity  
-✅ **Safer** - Original configs preserved  
-✅ **Flexible** - Easy to add/remove patches  
-✅ **Transparent** - Clear what's being changed  
-✅ **Idempotent** - Run as many times as needed  
-✅ **Omarchy-friendly** - Works with their update system  
+✅ **Cleaner** - No symlink complexity
+✅ **Safer** - Original configs preserved
+✅ **Flexible** - Easy to add/remove patches
+✅ **Transparent** - Clear what's being changed
+✅ **Idempotent** - Run as many times as needed
+✅ **Omarchy-friendly** - Works with their update system
 
 This is the strategy we'll implement in the actual patch scripts!

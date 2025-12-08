@@ -36,13 +36,13 @@ Every time you run `./install.sh`, a comprehensive backup is created **BEFORE** 
 ## Double-Layer Protection
 
 ### Layer 1: Comprehensive Backup (Entry Point)
-**When:** At the start of `./install.sh`, before ANY changes  
-**What:** All critical config files and directories  
+**When:** At the start of `./install.sh`, before ANY changes
+**What:** All critical config files and directories
 **Why:** Complete restore point if anything goes wrong
 
 ### Layer 2: Individual Script Backups
-**When:** Before each script modifies a file  
-**What:** Specific file being modified  
+**When:** Before each script modifies a file
+**What:** Specific file being modified
 **Why:** Granular restore if specific change causes issues
 
 ## Backup Locations
@@ -113,12 +113,12 @@ Even in dry-run, you see what would be backed up:
 
 ## Safety Guarantees
 
-✅ **Backup FIRST, change LATER** - Always in that order  
-✅ **Timestamped** - Never lose previous backups  
-✅ **Comprehensive** - All critical files backed up  
-✅ **Double-layer** - Entry point + per-script backups  
-✅ **Logged** - All backup operations in log file  
-✅ **Automatic** - No manual steps required  
+✅ **Backup FIRST, change LATER** - Always in that order
+✅ **Timestamped** - Never lose previous backups
+✅ **Comprehensive** - All critical files backed up
+✅ **Double-layer** - Entry point + per-script backups
+✅ **Logged** - All backup operations in log file
+✅ **Automatic** - No manual steps required
 
 ## Emergency Restore
 

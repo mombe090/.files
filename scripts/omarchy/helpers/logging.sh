@@ -31,9 +31,9 @@ log_warn() {
 run_logged() {
     local description="$1"
     shift
-    
+
     log_info "Starting: $description"
-    
+
     if "$@" >> "$DOTFILES_LOG_FILE" 2>&1; then
         log_success "Completed: $description"
         return 0

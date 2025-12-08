@@ -17,7 +17,7 @@ CURRENT=0
 for script in "$CONFIG_DIR"/*.sh; do
     # Skip all.sh itself
     [[ "$(basename "$script")" == "all.sh" ]] && continue
-    
+
     CURRENT=$((CURRENT + 1))
     script_name=$(basename "$script" .sh)
     log_info "→ [$CURRENT/$TOTAL_SCRIPTS] Patching: $script_name"

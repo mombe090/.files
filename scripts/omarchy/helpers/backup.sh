@@ -13,12 +13,12 @@ backup_file() {
     local target="$1"
     local timestamp
     timestamp=$(date +%Y%m%d_%H%M%S)
-    
+
     if [[ -e "$target" ]]; then
         local backup_name
         backup_name="$(basename "$target").backup_$timestamp"
         local backup_path="$BACKUP_DIR/$backup_name"
-        
+
         cp -r "$target" "$backup_path"
         log_info "Backed up: $target -> $backup_path"
     fi
@@ -28,7 +28,7 @@ backup_file() {
 restore_backup() {
     local backup_path="$1"
     local target="$2"
-    
+
     if [[ -e "$backup_path" ]]; then
         rm -rf "$target"
         cp -r "$backup_path" "$target"

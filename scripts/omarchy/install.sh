@@ -87,7 +87,7 @@ log_info "Force: $FORCE"
 # Create comprehensive backup before ANY changes
 if [[ "$DRY_RUN" != "true" ]]; then
     log_info "Creating comprehensive backup before applying patches..."
-    
+
     # Backup critical config directories
     BACKUP_TARGETS=(
         "$HOME/.config/hypr/hyprland.conf"
@@ -95,13 +95,13 @@ if [[ "$DRY_RUN" != "true" ]]; then
         "$HOME/.zshrc"
         "$HOME/.gitconfig"
     )
-    
+
     for target in "${BACKUP_TARGETS[@]}"; do
         if [[ -e "$target" ]]; then
             backup_file "$target"
         fi
     done
-    
+
     log_success "Backup completed. Backups stored in: $BACKUP_DIR"
 else
     log_info "[DRY RUN] Would create comprehensive backup before changes"

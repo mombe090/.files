@@ -255,7 +255,7 @@ Built following Omarchy's battle-tested patterns with an injection strategy for 
 
 ---
 
-**Status:** ✅ PRODUCTION READY  
-**Version:** 1.0  
-**Date:** December 7, 2025  
+**Status:** ✅ PRODUCTION READY
+**Version:** 1.0
+**Date:** December 7, 2025
 **Ready to use!** 🚀

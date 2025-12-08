@@ -1,7 +1,7 @@
 # Omarchy Dotfiles Evolution Plan
 
-**Date:** December 7, 2025  
-**Author:** AI Assistant  
+**Date:** December 7, 2025
+**Author:** AI Assistant
 **Purpose:** Evolve personal dotfiles to integrate with Omarchy's patching system
 
 ---
@@ -248,9 +248,9 @@ log_warn() {
 run_logged() {
     local description="$1"
     shift
-    
+
     log_info "Starting: $description"
-    
+
     if "$@" >> "$DOTFILES_LOG_FILE" 2>&1; then
         log_success "Completed: $description"
         return 0
@@ -311,21 +311,21 @@ get_omarchy_version() {
 create_symlink() {
     local source="$1"
     local target="$2"
-    
+
     # Check if source exists
     if [[ ! -e "$source" ]]; then
         log_error "Source does not exist: $source"
         return 1
     fi
-    
+
     # Backup existing target
     if [[ -e "$target" ]]; then
         backup_file "$target"
     fi
-    
+
     # Create parent directory if needed
     mkdir -p "$(dirname "$target")"
-    
+
     # Create symlink
     ln -snf "$source" "$target"
     log_info "Created symlink: $target -> $source"
@@ -334,7 +334,7 @@ create_symlink() {
 # Remove symlink safely
 remove_symlink() {
     local target="$1"
-    
+
     if [[ -L "$target" ]]; then
         rm "$target"
         log_info "Removed symlink: $target"
@@ -349,12 +349,12 @@ remove_symlink() {
 verify_symlink() {
     local target="$1"
     local expected_source="$2"
-    
+
     if [[ -L "$target" ]]; then
         local actual_source
         actual_source=$(readlink -f "$target")
         expected_source=$(readlink -f "$expected_source")
-        
+
         if [[ "$actual_source" == "$expected_source" ]]; then
             return 0
         fi
@@ -380,12 +380,12 @@ backup_file() {
     local target="$1"
     local timestamp
     timestamp=$(date +%Y%m%d_%H%M%S)
-    
+
     if [[ -e "$target" ]]; then
         local backup_name
         backup_name="$(basename "$target").backup_$timestamp"
         local backup_path="$BACKUP_DIR/$backup_name"
-        
+
         cp -r "$target" "$backup_path"
         log_info "Backed up: $target -> $backup_path"
     fi
@@ -395,7 +395,7 @@ backup_file() {
 restore_backup() {
     local backup_path="$1"
     local target="$2"
-    
+
     if [[ -e "$backup_path" ]]; then
         rm -rf "$target"
         cp -r "$backup_path" "$target"
@@ -704,7 +704,7 @@ CONFIG_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 for script in "$CONFIG_DIR"/*.sh; do
     # Skip all.sh itself
     [[ "$(basename "$script")" == "all.sh" ]] && continue
-    
+
     log_info "Running: $(basename "$script")"
     bash "$script"
 done
@@ -1256,7 +1256,7 @@ For applications where Omarchy already has configs (like Hyprland):
   - Preserve Omarchy's default sourcing
   - Add your custom overrides
   - Benefit from Omarchy updates
-  
+
 - [ ] **Option B:** Completely replace with your configs
   - Full control
   - Won't get Omarchy updates
@@ -1287,7 +1287,7 @@ How should the patch scripts work with stow?
 - [ ] **Independent (Recommended):** Scripts and stow work together
   - Stow manages dotfiles
   - Scripts create patches/symlinks
-  
+
 - [ ] **Replace stow:** Scripts handle everything
   - No more stow usage
   - All management via scripts
@@ -1381,6 +1381,6 @@ After answering the questions above:
 
 ---
 
-**Plan Version:** 1.0  
-**Last Updated:** December 7, 2025  
+**Plan Version:** 1.0
+**Last Updated:** December 7, 2025
 **Status:** Awaiting user input for implementation

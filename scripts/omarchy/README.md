@@ -161,10 +161,10 @@ source = ~/.config/hypr/custom/workspaces_custom.conf
 
 ### Benefits
 
-✅ **Non-destructive** - Original Omarchy configs untouched  
-✅ **Idempotent** - Safe to run multiple times  
-✅ **Updatable** - Edit in dotfiles, re-run patches  
-✅ **Compatible** - Benefit from Omarchy updates  
+✅ **Non-destructive** - Original Omarchy configs untouched
+✅ **Idempotent** - Safe to run multiple times
+✅ **Updatable** - Edit in dotfiles, re-run patches
+✅ **Compatible** - Benefit from Omarchy updates
 ✅ **Clear** - Your customizations in `custom/` directories
 
 ## Safety Features
@@ -215,23 +215,23 @@ cp ~/.local/state/dotfiles/backups/hyprland.conf.backup_TIMESTAMP \
    ```bash
    #!/usr/bin/env bash
    # <App> configuration patches
-   
+
    log_info "Applying <app> patches..."
-   
+
    DOTFILES_APP="$DOTFILES_ROOT/<app>/.config/<app>"
    TARGET_APP="$HOME/.config/<app>"
    CUSTOM_DIR="$TARGET_APP/custom"
-   
+
    # Create custom directory
    mkdir -p "$CUSTOM_DIR"
-   
+
    # Copy custom configs
    cp "$DOTFILES_APP/custom.conf" "$CUSTOM_DIR/custom.conf"
-   
+
    # Inject source line
    inject_source "$TARGET_APP/config.conf" \
                  "source = $CUSTOM_DIR/custom.conf"
-   
+
    log_success "<App> patches applied"
    ```
 
@@ -354,9 +354,9 @@ cp ~/.local/state/dotfiles/backups/hyprland.conf.backup_TIMESTAMP \
 
 ### Safety Guarantees
 
-✅ **Backup before execution** - Every run starts with comprehensive backup  
-✅ **Additional backups per-script** - Each config script also backs up before changes  
-✅ **Timestamped** - Never overwrites previous backups  
-✅ **Logged** - All backup operations logged  
-✅ **Dry-run shows message** - See backup plan without executing  
+✅ **Backup before execution** - Every run starts with comprehensive backup
+✅ **Additional backups per-script** - Each config script also backs up before changes
+✅ **Timestamped** - Never overwrites previous backups
+✅ **Logged** - All backup operations logged
+✅ **Dry-run shows message** - See backup plan without executing
 
