@@ -298,7 +298,7 @@ theme "catppuccin-mocha"
 // The folder in which Zellij will look for themes
 // (Requires restart)
 //
-theme_dir "/Users/mombe090/.config/zellij/themes"
+//theme_dir "/home/mombe090/.config/zellij/themes"
 
 // Toggle enabling the mouse mode.
 // On certain configurations, or terminals this could
