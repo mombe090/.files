@@ -1,0 +1,11 @@
+# Unwanted Omarchy Default Packages
+# Lines starting with # are comments
+# Add packages you want to remove (one per line)
+
+# Example: Terminal emulators (if you prefer ghostty/alacritty)
+# kitty
+
+# Example: Browsers (if you prefer another)
+# firefox
+
+# Add your unwanted packages below:

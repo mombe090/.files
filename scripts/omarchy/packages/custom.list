@@ -1,0 +1,13 @@
+# Custom Packages to Install
+# Lines starting with # are comments
+# Add packages you want installed (one per line)
+
+# Development tools (already detected from your config)
+fzf
+ripgrep
+eza
+fd
+bat
+delta
+
+# Add your custom packages below:
