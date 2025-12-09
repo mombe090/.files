@@ -41,6 +41,17 @@ export PYTHONWARNINGS="ignore::FutureWarning"
 
 # JAVA
 
-export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
-export PATH="$JAVA_HOME/bin:$PATH"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS paths
+    export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
+    export JAVA_HOME=/opt/homebrew/opt/openjdk@21
+elif [[ -n "$WSL_DISTRO_NAME" ]]; then
+    export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
+    export PATH="$JAVA_HOME/bin:$PATH"
+
+
+    # WSL paths
+    export PATH="$PATH:$WSL_USER_HOME/AppData/Local/Programs/Microsoft VS Code/bin"
+fi
+
 

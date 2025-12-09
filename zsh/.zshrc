@@ -86,3 +86,5 @@ export MAVEN_OPTS="--add-opens java.base/sun.misc=ALL-UNNAMED"
 eval "$(uv generate-shell-completion zsh)"
 export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
 export JAVA_HOME=/opt/homebrew/opt/openjdk@21
+alias 'docker=container'
+export PATH="$HOME/.local/bin:$PATH"
