@@ -78,4 +78,4 @@ trusted_config_paths = [
 
 vivid = "latest"
 uv = "latest"
-go-task = "latest"
+go-task = "aqua:go-task/task@latest"
