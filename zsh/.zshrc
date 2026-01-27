@@ -1,5 +1,8 @@
 autoload -Uz compinit
 
+# ===== MISE CONFIGURATION =====
+eval "$(mise activate zsh)"
+
 # ===== ZINIT SETUP =====
 
 # 📁 Set Zinit home directory based on XDG specification
