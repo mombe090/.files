@@ -34,9 +34,6 @@ trusted_config_paths = [
 # Ruby
 "ruby" = "latest"
 
-# Lua
-"lua" = "5.1"
-
 # ===== CLI TOOLS =====
 # Modern replacements
 "bat" = "latest"          # cat replacement
@@ -61,7 +58,6 @@ trusted_config_paths = [
 "helm" = "latest"
 "k9s" = "latest"
 "kind" = "latest"
-#"flux" = "latest"
 
 # Infrastructure as Code
 "terraform" = "latest"
