@@ -77,9 +77,6 @@ trusted_config_paths = [
 # GitOps
 "argocd" = "latest"
 
-# Container tools
-"docker" = "latest"
-
 # ===== GIT & VERSION CONTROL =====
 "github-cli" = "latest"   # gh command
 "lazygit" = "latest"      # TUI for git
