@@ -76,6 +76,6 @@ trusted_config_paths = [
 # ===== EDITOR & DEV TOOLS =====
 "neovim" = "latest"
 
-vivid = "latest"
-uv = "latest"
-go-task = "aqua:go-task/task@latest"
+"vivid" = "latest"
+"uv" = "latest"
+"aqua:go-task/task" = "latest"
