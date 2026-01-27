@@ -1,0 +1,33 @@
+version: '3'
+
+tasks:
+  build:
+    desc: Build Docker image (Usage: task build tag=v1.0.0 image=myapp)
+    vars:
+      image: '{{.image | default "myapp"}}'
+      tag: '{{.tag | default "latest"}}'
+    cmds:
+      - docker build -t {{.image}}:{{.tag}} .
+
+  push:
+    desc: Push image to registry (Usage: task push tag=v1.0.0)
+    deps: [build]
+    vars:
+      image: '{{.image | default "myapp"}}'
+      tag: '{{.tag | default "latest"}}'
+    cmds:
+      - docker push {{.image}}:{{.tag}}
+
+  run:
+    desc: Run container (Usage: task run port=8080)
+    vars:
+      image: '{{.image | default "myapp"}}'
+      port: '{{.port | default "3000"}}'
+    cmds:
+      - docker run -p {{.port}}:3000 {{.image}}:latest
+
+  clean:
+    desc: Remove containers and images
+    cmds:
+      - docker-compose down -v
+      - docker system prune -f

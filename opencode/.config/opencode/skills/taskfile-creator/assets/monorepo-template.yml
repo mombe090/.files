@@ -1,0 +1,45 @@
+version: '3'
+
+# Example monorepo Taskfile with included sub-taskfiles
+
+includes:
+  backend:
+    taskfile: ./backend
+    dir: ./backend
+  frontend:
+    taskfile: ./frontend
+    dir: ./frontend
+  infra:
+    taskfile: ./infrastructure
+    dir: ./infrastructure
+    aliases: [tf]
+
+tasks:
+  default:
+    desc: Show all tasks
+    cmds:
+      - task --list-all
+
+  install:
+    desc: Install all dependencies
+    deps:
+      - backend:install
+      - frontend:install
+
+  build:
+    desc: Build all services
+    deps:
+      - backend:build
+      - frontend:build
+
+  test:
+    desc: Test all services
+    cmds:
+      - task: backend:test
+      - task: frontend:test
+
+  clean:
+    desc: Clean all artifacts
+    cmds:
+      - task: backend:clean
+      - task: frontend:clean

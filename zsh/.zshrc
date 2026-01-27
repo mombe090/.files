@@ -88,3 +88,9 @@ export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
 export JAVA_HOME=/opt/homebrew/opt/openjdk@21
 alias 'docker=container'
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="/opt/homebrew/Cellar/node/25.2.1/bin:$PATH"
+
+# ~/.bashrc
+
+# export TASK_EXE='go-task' if needed
+eval "$(go-task --completion zsh)"

@@ -1,0 +1,36 @@
+version: '3'
+
+# Global variables - use sparingly, prefer CLI parameters
+vars:
+  app_name: myapp
+
+# Global environment variables
+env:
+  # Add global env vars here
+
+# Load environment from .env files
+dotenv: ['.env']
+
+tasks:
+  default:
+    desc: Show available tasks
+    cmds:
+      - task --list
+
+  build:
+    desc: Build the application
+    cmds:
+      - echo "Building {{.app_name}}..."
+      # Add your build commands here
+
+  test:
+    desc: Run tests
+    cmds:
+      - echo "Running tests..."
+      # Add your test commands here
+
+  clean:
+    desc: Clean artifacts
+    cmds:
+      - echo "Cleaning..."
+      # Add your clean commands here

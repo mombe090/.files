@@ -1,0 +1,84 @@
+# Mise Configuration for Dotfiles
+# Documentation: https://mise.jdx.dev/configuration.html
+
+[settings]
+experimental = true
+verbose = false
+yes = false
+
+# configure `mise install` to always keep the downloaded archive
+always_keep_download = false        # deleted after install by default
+always_keep_install = false         # deleted on failure by default
+
+env_file = '.env'
+
+# ===== LANGUAGE RUNTIMES =====
+[tools]
+# Node.js ecosystem
+"node" = "lts"
+"bun" = "latest"
+
+# Python
+"python" = "latest"
+
+# Go
+"go" = "latest"
+
+# Rust
+"rust" = "latest"
+
+# Ruby
+"ruby" = "latest"
+
+# Lua
+"lua" = "latest"
+
+# ===== CLI TOOLS =====
+# Modern replacements
+"bat" = "latest"          # cat replacement
+"eza" = "latest"          # ls replacement
+"fd" = "latest"           # find replacement
+"ripgrep" = "latest"      # grep replacement
+"fzf" = "latest"          # fuzzy finder
+"zoxide" = "latest"       # smart cd
+
+# Shell enhancements
+"starship" = "latest"     # shell prompt
+"direnv" = "latest"       # environment switcher
+
+# System tools
+"btop" = "latest"         # system monitor
+"jq" = "latest"           # JSON processor
+"yq" = "latest"           # YAML processor
+
+# ===== DEVOPS & CLOUD TOOLS =====
+# Kubernetes
+"kubectl" = "latest"
+"helm" = "latest"
+"k9s" = "latest"
+"kind" = "latest"
+"flux" = "latest"
+
+# Infrastructure as Code
+"terraform" = "latest"
+"opentofu" = "latest"
+
+# Configuration Management
+"ansible" = "latest"
+
+# Cloud CLIs
+"awscli" = "latest"
+"azure-cli" = "latest"
+
+# GitOps
+"argocd" = "latest"
+
+# Container tools
+"docker" = "latest"
+
+# ===== GIT & VERSION CONTROL =====
+"github-cli" = "latest"   # gh command
+"lazygit" = "latest"      # TUI for git
+
+# ===== EDITOR & DEV TOOLS =====
+"neovim" = "latest"

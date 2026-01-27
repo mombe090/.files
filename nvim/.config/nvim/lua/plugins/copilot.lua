@@ -18,7 +18,7 @@ return {
     filetypes = {
       markdown = true,
       help = true,
-      -- terraform = true,
+      terraform = true,
       java = true,
     },
   },
