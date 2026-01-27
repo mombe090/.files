@@ -40,18 +40,35 @@ install_mise() {
 # ===== CONFIGURE SHELL =====
 configure_shell() {
     local zshrc="$HOME/.zshrc"
+    local bashrc="$HOME/.bashrc"
 
-    if grep -q 'mise activate' "$zshrc" 2>/dev/null; then
-        log_warn "mise already configured in ~/.zshrc"
-        return 0
-    fi
-
-    log_info "Adding mise to ~/.zshrc..."
-    cat >> "$zshrc" << 'EOF'
+    # Configure zsh
+    if [[ -f "$zshrc" ]]; then
+        if grep -q 'mise activate' "$zshrc" 2>/dev/null; then
+            log_warn "mise already configured in ~/.zshrc"
+        else
+            log_info "Adding mise to ~/.zshrc..."
+            cat >> "$zshrc" << 'EOF'
 
 # ===== MISE CONFIGURATION =====
 eval "$(mise activate zsh)"
 EOF
+        fi
+    fi
+
+    # Configure bash
+    if [[ -f "$bashrc" ]]; then
+        if grep -q 'mise activate' "$bashrc" 2>/dev/null; then
+            log_warn "mise already configured in ~/.bashrc"
+        else
+            log_info "Adding mise to ~/.bashrc..."
+            cat >> "$bashrc" << 'EOF'
+
+# ===== MISE CONFIGURATION =====
+eval "$(mise activate bash)"
+EOF
+        fi
+    fi
 
     log_info "Shell configured"
 }
@@ -64,7 +81,7 @@ main() {
     configure_shell
 
     log_info "✓ Done! Next steps:"
-    echo "  1. source ~/.zshrc"
+    echo "  1. source ~/.zshrc (or ~/.bashrc)"
     echo "  2. cd $DOTFILES_ROOT && mise install"
     echo "  3. mise list"
 }
