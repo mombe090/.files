@@ -96,4 +96,4 @@ export PATH="/opt/homebrew/Cellar/node/25.2.1/bin:$PATH"
 # ~/.bashrc
 
 # export TASK_EXE='go-task' if needed
-eval "$(go-task --completion zsh)"
+eval "$(task --completion zsh)"
