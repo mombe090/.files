@@ -75,3 +75,7 @@ trusted_config_paths = [
 
 # ===== EDITOR & DEV TOOLS =====
 "neovim" = "latest"
+
+vivid = "latest"
+uv = "latest"
+go-task = "latest"
