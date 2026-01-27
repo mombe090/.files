@@ -72,7 +72,6 @@ trusted_config_paths = [
 
 # Cloud CLIs
 "awscli" = "latest"
-"azure-cli" = "latest"
 
 # GitOps
 "argocd" = "latest"
