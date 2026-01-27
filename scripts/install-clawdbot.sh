@@ -29,7 +29,7 @@ install_clawdbot() {
     fi
 
     # Install globally with npm
-    npm install -g @clawdbot/cli
+    npm install -g clawdbot
 
     log_info "clawdbot installed"
 }
