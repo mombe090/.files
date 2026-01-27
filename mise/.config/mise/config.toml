@@ -67,9 +67,6 @@ trusted_config_paths = [
 "terraform" = "latest"
 "opentofu" = "latest"
 
-# Configuration Management
-"ansible" = "latest"
-
 # Cloud CLIs
 "awscli" = "latest"
 
