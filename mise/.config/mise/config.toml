@@ -35,7 +35,7 @@ trusted_config_paths = [
 "ruby" = "latest"
 
 # Lua
-"lua" = "latest"
+"lua" = "5.1"
 
 # ===== CLI TOOLS =====
 # Modern replacements
