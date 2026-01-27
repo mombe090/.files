@@ -12,6 +12,10 @@ always_keep_install = false         # deleted on failure by default
 
 env_file = '.env'
 
+trusted_config_paths = [
+    '~/.config/mise',
+]
+
 # ===== LANGUAGE RUNTIMES =====
 [tools]
 # Node.js ecosystem
@@ -57,7 +61,7 @@ env_file = '.env'
 "helm" = "latest"
 "k9s" = "latest"
 "kind" = "latest"
-"flux" = "latest"
+#"flux" = "latest"
 
 # Infrastructure as Code
 "terraform" = "latest"
