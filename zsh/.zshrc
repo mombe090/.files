@@ -1,7 +1,10 @@
 autoload -Uz compinit
 
 # ===== MISE CONFIGURATION =====
-eval "$(mise activate zsh)"
+# If Os not macOS, skip mise activation
+if [[ "$OSTYPE" != "darwin"* ]]; then
+  eval "$(mise activate zsh)"
+fi
 
 # ===== ZINIT SETUP =====
 
@@ -78,19 +81,3 @@ eval "$(starship init zsh)"
 
 PROMPT="${PROMPT}"$'\n\n➡ '
 
-# Added by LM Studio CLI (lms)
-
-export PATH="$PATH:/Users/mombe090/.lmstudio/bin"
-
-# End of LM Studio CLI section
-
-export MAVEN_OPTS="--add-opens java.base/sun.misc=ALL-UNNAMED"
-
-eval "$(uv generate-shell-completion zsh)"
-export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
-export JAVA_HOME=/opt/homebrew/opt/openjdk@21
-alias 'docker=container'
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="/opt/homebrew/Cellar/node/25.2.1/bin:$PATH"
-
-# ~/.bashrc

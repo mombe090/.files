@@ -39,16 +39,26 @@ fi
 
 export PYTHONWARNINGS="ignore::FutureWarning"
 
-# JAVA
+export PATH="$HOME/.local/bin:$PATH"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # macOS paths
     export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
     export JAVA_HOME=/opt/homebrew/opt/openjdk@21
+
+    export MAVEN_OPTS="--add-opens java.base/sun.misc=ALL-UNNAMED"
+    export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
+    export JAVA_HOME=/opt/homebrew/opt/openjdk@21
+    export PATH="/opt/homebrew/Cellar/node/25.2.1/bin:$PATH"
+
+    # Added by LM Studio CLI (lms)
+
+    export PATH="$PATH:$HOME/.lmstudio/bin"
+
+    # End of LM Studio CLI section
 elif [[ -n "$WSL_DISTRO_NAME" ]]; then
     export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
     export PATH="$JAVA_HOME/bin:$PATH"
-
 
     # WSL paths
     export PATH="$PATH:$WSL_USER_HOME/AppData/Local/Programs/Microsoft VS Code/bin"

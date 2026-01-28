@@ -35,3 +35,7 @@ fi
 if command -v carapace &> /dev/null; then
     source <(carapace _carapace)
 fi
+
+if command -v kubecolor &> /dev/null; then
+  eval "$(uv generate-shell-completion zsh)"
+fi
