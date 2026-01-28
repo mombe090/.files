@@ -3,22 +3,25 @@
  br = branch
  ci = commit
  st = status
+
 [pull]
  rebase = true
+
 [init]
  defaultBranch = main
 
 [user]
- # Personal information moved to ~/.gitconfig.local
- # Create ~/.gitconfig.local with your name and email
- name = Mamadou Yaya DIALLO
- email = yayamombeya090@gmail.com
+ # Set your personal information in ~/.gitconfig.local
+ # name = Your Name
+ # email = your.email@example.com
+
 [credential "https://github.com"]
  helper =
  helper = !/usr/bin/gh auth git-credential
+
 [credential "https://gist.github.com"]
  helper =
-  helper = !/usr/bin/gh auth git-credential
+ helper = !/usr/bin/gh auth git-credential
 
 [core]
     pager = delta
@@ -28,7 +31,6 @@
 
 [delta]
     navigate = true  # use n and N to move between diff sections
-    #dark = dark      # or light = true, or omit for auto-detection
 
 [merge]
     conflictStyle = zdiff3

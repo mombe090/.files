@@ -1,8 +1,8 @@
 autoload -Uz compinit
 
 # ===== MISE CONFIGURATION =====
-# If Os not macOS, skip mise activation
-if [[ "$OSTYPE" != "darwin"* ]]; then
+# Activate mise if available
+if command -v mise &> /dev/null; then
   eval "$(mise activate zsh)"
 fi
 

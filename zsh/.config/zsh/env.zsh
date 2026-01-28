@@ -27,41 +27,38 @@ export LOCALSTACK_ACTIVATE_PRO=0
 
 # Path additions (OS-specific)
 
+export PATH="$HOME/.local/bin:$PATH"
+
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # macOS paths
     export PATH="$PATH:/Applications/IntelliJ IDEA.app/Contents/MacOS"
+    
+    # Java configuration (macOS)
+    if [[ -d "/opt/homebrew/opt/openjdk@21" ]]; then
+        export JAVA_HOME=/opt/homebrew/opt/openjdk@21
+        export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
+        export MAVEN_OPTS="--add-opens java.base/sun.misc=ALL-UNNAMED"
+    fi
+    
+    # Node.js (use mise or nvm instead of hardcoded path)
+    # If you need a specific version, use: mise use -g node@25
+    
+    # LM Studio CLI
+    export PATH="$PATH:$HOME/.lmstudio/bin"
+    
 elif [[ -n "$WSL_DISTRO_NAME" ]]; then
     # WSL paths
     export PATH="$PATH:$WSL_USER_HOME/AppData/Local/Programs/Microsoft VS Code/bin"
+    
+    # Java configuration (WSL)
+    if [[ -d "/usr/lib/jvm/java-21-openjdk" ]]; then
+        export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
+        export PATH="$JAVA_HOME/bin:$PATH"
+    fi
 fi
 
 # Ignore Python Warnings
 
 export PYTHONWARNINGS="ignore::FutureWarning"
-
-export PATH="$HOME/.local/bin:$PATH"
-
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    # macOS paths
-    export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
-    export JAVA_HOME=/opt/homebrew/opt/openjdk@21
-
-    export MAVEN_OPTS="--add-opens java.base/sun.misc=ALL-UNNAMED"
-    export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
-    export JAVA_HOME=/opt/homebrew/opt/openjdk@21
-    export PATH="/opt/homebrew/Cellar/node/25.2.1/bin:$PATH"
-
-    # Added by LM Studio CLI (lms)
-
-    export PATH="$PATH:$HOME/.lmstudio/bin"
-
-    # End of LM Studio CLI section
-elif [[ -n "$WSL_DISTRO_NAME" ]]; then
-    export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
-    export PATH="$JAVA_HOME/bin:$PATH"
-
-    # WSL paths
-    export PATH="$PATH:$WSL_USER_HOME/AppData/Local/Programs/Microsoft VS Code/bin"
-fi
 
 

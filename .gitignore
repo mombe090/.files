@@ -9,3 +9,9 @@
 .env
 .env.local
 node_modules/
+
+# Local git configuration (contains personal info)
+.gitconfig.local
+
+# Backup location tracking
+.dotfiles-backup-location
