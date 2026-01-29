@@ -212,6 +212,16 @@ install_mise() {
     fi
 }
 
+# ===== INSTALL ESSENTIAL BUILD TOOLS =====
+install_essentials() {
+    log_step "Installing essential build tools..."
+    if [[ -x "$SCRIPTS_DIR/install-essentials.sh" ]]; then
+        bash "$SCRIPTS_DIR/install-essentials.sh"
+    else
+        log_warn "install-essentials.sh not found or not executable"
+    fi
+}
+
 # ===== INSTALL CORE TOOLS =====
 install_core_tools() {
     log_step "Installing core tools..."
@@ -413,6 +423,7 @@ full_install() {
     backup_configs
     install_homebrew
     install_mise
+    install_essentials
     install_core_tools
     install_optional_tools
     install_modern_fonts
@@ -469,6 +480,11 @@ custom_install() {
     read -p "Install mise? [Y/n]: " install_mise_choice
     if [[ ! "$install_mise_choice" =~ ^[Nn]$ ]]; then
         install_mise
+    fi
+    
+    read -p "Install essential build tools (gcc, make, cmake, etc.)? [Y/n]: " install_essentials_choice
+    if [[ ! "$install_essentials_choice" =~ ^[Nn]$ ]]; then
+        install_essentials
     fi
     
     read -p "Install core tools (zsh, stow)? [Y/n]: " install_core
@@ -532,6 +548,8 @@ show_completion_message() {
     echo "  4. Edit ~/.gitconfig.local with your personal git information"
     echo ""
     echo "  5. Verify installations:"
+    echo "     gcc --version     # C compiler (build-essential)"
+    echo "     make --version    # Build tool"
     echo "     dotnet --version  # .NET SDK"
     echo "     bun --version     # Bun runtime"
     echo "     tsc --version     # TypeScript (after shell restart)"
@@ -549,8 +567,12 @@ show_completion_message() {
     echo "     ./scripts/install-modern-fonts.sh           # CascadiaMono, JetBrainsMono, VictorMono"
     echo "     ./scripts/install-modern-fonts.sh --list    # List installed fonts"
     echo ""
-    echo "  9. Optional: Install personal tools (not included by default):"
-    echo "     ./scripts/install-clawdbot.sh               # Clawdbot CLI"
+    echo "  9. Install essential build tools (if not already installed):"
+    echo "     ./scripts/install-essentials.sh             # gcc, make, cmake, dev libraries"
+    echo "     ./scripts/install-essentials.sh --list      # List installed tools"
+    echo ""
+    echo "  10. Optional: Install personal tools (not included by default):"
+    echo "      ./scripts/install-clawdbot.sh              # Clawdbot CLI"
     echo ""
     
     if [[ -f "$HOME/.dotfiles-backup-location" ]]; then
