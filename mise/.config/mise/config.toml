@@ -65,6 +65,8 @@ trusted_config_paths = [
 
 # Infrastructure as Code
 "terraform" = "latest"
+"tflint" = "latest"           # Terraform linter
+"terraform-docs" = "latest"   # Generate docs from Terraform modules
 "opentofu" = "latest"
 
 # Cloud CLIs
