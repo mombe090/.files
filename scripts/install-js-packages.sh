@@ -250,17 +250,17 @@ install_packages() {
         # Check if already installed
         if bun pm ls -g 2>/dev/null | grep -q "^$pkg@"; then
             log_warn "$pkg is already installed (skipping)"
-            ((skipped++))
+            skipped=$((skipped + 1))
             continue
         fi
         
         # Install package
         if bun add -g "$pkg" &> /dev/null; then
             log_success "$pkg installed"
-            ((installed++))
+            installed=$((installed + 1))
         else
             log_error "Failed to install $pkg"
-            ((failed++))
+            failed=$((failed + 1))
         fi
         
         echo ""
