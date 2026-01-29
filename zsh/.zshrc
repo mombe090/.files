@@ -79,5 +79,5 @@ eval "$(starship init zsh)"
 
 # 🎯 Customize the prompt (optional: adds spacing)
 
-PROMPT="${PROMPT}"$'\n\n➡ '
+PROMPT="${PROMPT}"$'\n\n> '
 
