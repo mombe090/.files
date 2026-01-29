@@ -132,8 +132,9 @@ The install script will:
 2. ✅ Detect your operating system
 3. ✅ Install required dependencies
 4. ✅ Install mise and modern CLI tools
-5. ✅ Create symlinks using GNU Stow
-6. ✅ Set up shell configurations
+5. ✅ Install modern Nerd Fonts for terminal icons
+6. ✅ Create symlinks using GNU Stow
+7. ✅ Set up shell configurations
 
 ### Installation Options
 
@@ -235,6 +236,7 @@ These dotfiles include:
 - ✏️  **Neovim** with [LazyVim](https://www.lazyvim.org/) distribution
 - 🪟 **Zellij** terminal multiplexer configuration
 - 🎨 Consistent **Catppuccin** theme across all tools
+- 🔤 **Nerd Fonts** (CascadiaMono, JetBrainsMono, VictorMono) for icon support
 
 ### Window Manager (Linux)
 
@@ -320,6 +322,7 @@ Utility scripts in `scripts/`:
 - **`install-stow.sh`** - Install GNU Stow
 - **`install-dotnet.sh`** - Install .NET SDK/Runtime (cross-platform)
 - **`install-js-packages.sh`** - Install JS/TS packages globally via bun
+- **`install-modern-fonts.sh`** - Install modern Nerd Fonts (CascadiaMono, JetBrainsMono, VictorMono)
 - **`manage-stow.sh`** - Manage stow packages (stow/unstow/restow)
 - **`check-dotnet.sh`** - Diagnostic tool for .NET PATH issues
 - **`backup.sh`** - Backup existing configurations
