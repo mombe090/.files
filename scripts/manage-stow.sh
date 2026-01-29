@@ -41,6 +41,66 @@ get_available_packages() {
     printf '%s\n' "${packages[@]}" | sort
 }
 
+# ===== BACKUP CONFLICTING FILES =====
+backup_conflicts() {
+    local pkg="$1"
+    local backup_dir="$HOME/.dotfiles-backup-$(date +%Y%m%d-%H%M%S)"
+    local backed_up=false
+    
+    # Get list of files that would be stowed
+    local files_to_stow=$(cd "$DOTFILES_ROOT/$pkg" && find . -type f -o -type l | sed 's|^\./||')
+    
+    while IFS= read -r file; do
+        local target="$HOME/$file"
+        
+        # Check if file exists and is not already a symlink to our dotfiles
+        if [[ -e "$target" ]] && [[ ! -L "$target" ]]; then
+            # Create backup directory if needed
+            if [[ "$backed_up" == false ]]; then
+                mkdir -p "$backup_dir"
+                backed_up=true
+                log_info "Creating backup at: $backup_dir"
+            fi
+            
+            # Backup the file
+            local target_dir=$(dirname "$target")
+            local backup_target="$backup_dir/${target#$HOME/}"
+            local backup_target_dir=$(dirname "$backup_target")
+            
+            mkdir -p "$backup_target_dir"
+            cp -a "$target" "$backup_target"
+            log_warn "Backed up: ~/${target#$HOME/} → $backup_target"
+            
+            # Remove the original file so stow can create symlink
+            rm -f "$target"
+        elif [[ -L "$target" ]]; then
+            # Check if symlink points to our dotfiles
+            local link_target=$(readlink "$target")
+            if [[ "$link_target" == *"$DOTFILES_ROOT/$pkg"* ]]; then
+                # Already stowed correctly, skip
+                continue
+            else
+                # Symlink exists but points elsewhere, back it up
+                if [[ "$backed_up" == false ]]; then
+                    mkdir -p "$backup_dir"
+                    backed_up=true
+                    log_info "Creating backup at: $backup_dir"
+                fi
+                
+                local backup_target="$backup_dir/${target#$HOME/}.symlink"
+                echo "$link_target" > "$backup_target"
+                log_warn "Backed up symlink: ~/${target#$HOME/} → $backup_target"
+                rm -f "$target"
+            fi
+        fi
+    done <<< "$files_to_stow"
+    
+    if [[ "$backed_up" == true ]]; then
+        echo "$backup_dir" >> "$HOME/.dotfiles-backup-location"
+        log_success "Backup complete: $backup_dir"
+    fi
+}
+
 # ===== CHECK STOW INSTALLATION =====
 check_stow() {
     if ! command -v stow &> /dev/null; then
@@ -85,6 +145,9 @@ stow_packages() {
         fi
         
         log_info "Stowing: $pkg"
+        
+        # Check for conflicts and backup if needed
+        backup_conflicts "$pkg"
         
         # Stow with verbose output, filter out the BUG message
         if stow -v -t "$HOME" "$pkg" 2>&1 | grep -v "BUG in find_stowed_path"; then

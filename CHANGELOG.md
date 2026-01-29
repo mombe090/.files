@@ -9,6 +9,11 @@ All notable changes to this dotfiles repository will be documented in this file.
 - **`scripts/manage-stow.sh`** - Centralized GNU Stow package management
   - Stow/unstow/restow operations for dotfiles packages
   - Default packages: zsh, mise, zellij, bat, nvim, starship
+  - **Auto-backup conflicting files before stowing** ✨
+    - Automatically detects existing files that would conflict
+    - Creates timestamped backups before removing conflicts
+    - Backs up both regular files and symlinks
+    - Tracks backup location in `~/.dotfiles-backup-location`
   - Auto-detects available packages in dotfiles repo
   - Shows stow status for packages
   - List available packages with default indicators
