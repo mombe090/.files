@@ -1,0 +1,23 @@
+# UV Configuration
+# Documentation: https://docs.astral.sh/uv/configuration/
+
+[pip]
+# Use the system Python when available
+system = false
+
+# Prefer binary wheels
+prefer-binary = true
+
+# Compile Python files to bytecode
+compile-bytecode = true
+
+[cache]
+# Cache directory (default: ~/.cache/uv)
+# dir = "~/.cache/uv"
+
+[global]
+# Allow pre-release versions
+allow-prerelease = false
+
+# Prefer using system packages
+# system-site-packages = false

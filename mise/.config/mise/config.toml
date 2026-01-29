@@ -69,7 +69,6 @@ trusted_config_paths = [
 "aqua:terraform-linters/tflint" = "latest"        # Terraform linter
 "aqua:terraform-docs/terraform-docs" = "latest"   # Generate docs from Terraform modules
 "opentofu" = "latest"
-"aqua:bridgecrewio/checkov" = "latest"            # Security & compliance scanner for IaC
 
 # Cloud CLIs
 "awscli" = "latest"
@@ -85,6 +84,9 @@ trusted_config_paths = [
 "neovim" = "latest"
 "aqua:tree-sitter/tree-sitter" = "latest"
 
-"vivid" = "latest"
+# Python development
+"aqua:astral-sh/ty" = "latest"        # Fast Python linter & formatter
 "uv" = "latest"
+
+"vivid" = "latest"
 "aqua:go-task/task" = "latest"

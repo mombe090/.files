@@ -29,6 +29,9 @@ export LOCALSTACK_ACTIVATE_PRO=0
 
 export PATH="$HOME/.local/bin:$PATH"
 
+# UV virtual environment for global Python tools
+export PATH="$HOME/.venv/bin:$PATH"
+
 # Bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
