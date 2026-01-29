@@ -310,6 +310,16 @@ stow_configs() {
 }
 
 
+# ===== INSTALL MODERN FONTS =====
+install_modern_fonts() {
+    log_step "Installing modern fonts..."
+    if [[ -x "$SCRIPTS_DIR/install-modern-fonts.sh" ]]; then
+        bash "$SCRIPTS_DIR/install-modern-fonts.sh"
+    else
+        log_warn "install-modern-fonts.sh not found or not executable"
+    fi
+}
+
 # ===== POST-INSTALL SETUP =====
 post_install() {
     log_step "Running post-install setup..."
@@ -405,6 +415,7 @@ full_install() {
     install_mise
     install_core_tools
     install_optional_tools
+    install_modern_fonts
     install_dotnet true  # Pass 'true' for auto-install
     install_mise_tools
     stow_configs
@@ -470,6 +481,11 @@ custom_install() {
         install_optional_tools
     fi
     
+    read -p "Install modern fonts (CascadiaMono, JetBrainsMono, VictorMono)? [Y/n]: " install_fonts
+    if [[ ! "$install_fonts" =~ ^[Nn]$ ]]; then
+        install_modern_fonts
+    fi
+    
     read -p "Install .NET SDK? [Y/n]: " install_dotnet_choice
     if [[ ! "$install_dotnet_choice" =~ ^[Nn]$ ]]; then
         install_dotnet
@@ -529,7 +545,11 @@ show_completion_message() {
     echo "     ./scripts/install-js-packages.sh --personal # Personal packages"
     echo "     ./scripts/install-js-packages.sh --all      # Both pro & personal"
     echo ""
-    echo "  8. Optional: Install personal tools (not included by default):"
+    echo "  8. Install modern fonts (if not already installed):"
+    echo "     ./scripts/install-modern-fonts.sh           # CascadiaMono, JetBrainsMono, VictorMono"
+    echo "     ./scripts/install-modern-fonts.sh --list    # List installed fonts"
+    echo ""
+    echo "  9. Optional: Install personal tools (not included by default):"
     echo "     ./scripts/install-clawdbot.sh               # Clawdbot CLI"
     echo ""
     
