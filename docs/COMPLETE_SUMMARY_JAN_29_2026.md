@@ -2,13 +2,14 @@
 
 ## Overview
 
-Five major improvements implemented today:
+Six major improvements implemented today:
 
 1. ✅ **Smart ZSH Backup Logic** - Only backs up real files, not symlinks
 2. ✅ **Professional vs Personal JS Packages** - Separate configs for work and personal
 3. ✅ **Personal Tools Optional** - Clawdbot and other personal tools are optional
 4. ✅ **Homebrew Skip on Linux** - Automatic skip, no prompts on Linux systems
 5. ✅ **Stow Logic Fix** - Fixed false failure reports in stow operations
+6. ✅ **Stow Hang Fix** - Fixed script hanging after first package
 
 ---
 
@@ -180,6 +181,50 @@ fi
 
 ---
 
+## 6. Stow Hang Fix
+
+### File: `scripts/manage-stow.sh`
+
+**Problem:** Script hung after stowing first package, never completed installation.
+
+**Symptoms:**
+```
+[INFO] Stowing: zsh
+[✓] zsh stowed
+# ← Hangs here forever, never processes other packages
+# Post-install completion message never appears
+```
+
+**Root Cause:** The `((variable++))` syntax for incrementing counters was hanging:
+```bash
+if stow -t "$HOME" "$pkg" 2>/dev/null; then
+    log_success "$pkg stowed"
+    ((stowed++))  # ← HUNG HERE
+fi
+```
+
+**Solution:** Changed to explicit arithmetic expansion:
+```bash
+if stow -t "$HOME" "$pkg" 2>/dev/null; then
+    log_success "$pkg stowed"
+    stowed=$((stowed + 1))  # ✅ WORKS
+fi
+```
+
+**Lines Changed:**
+- Line 208: `((skipped++))` → `skipped=$((skipped + 1))`
+- Line 221: `((stowed++))` → `stowed=$((stowed + 1))`
+- Line 224: `((failed++))` → `failed=$((failed + 1))`
+
+**Result:**
+- ✅ All packages stow successfully
+- ✅ Loop completes fully (zsh → mise → zellij → bat → nvim → starship)
+- ✅ Summary displays correctly
+- ✅ Post-install message appears
+- ✅ Installation completes fully
+
+---
+
 ## Files Summary
 
 ### Created
@@ -189,6 +234,7 @@ fi
 | `docs/CHANGES_JAN_29_2026.md` | Detailed change summary |
 | `docs/HOMEBREW_LINUX_SKIP.md` | Homebrew skip documentation |
 | `docs/STOW_FIX_JAN_29_2026.md` | Stow logic fix documentation |
+| `docs/STOW_HANG_FIX_JAN_29_2026.md` | Stow hang fix documentation |
 | `ARCHITECTURE.md` | Architecture documentation (from earlier) |
 | `docs/SIMPLIFIED_ARCHITECTURE.md` | Visual architecture guide (from earlier) |
 | `docs/COMPLETION_SUMMARY.md` | Earlier completion summary |
@@ -196,7 +242,7 @@ fi
 ### Modified
 | File | Changes |
 |------|---------|
-| `scripts/manage-stow.sh` | Smart ZSH backup + stow logic fix |
+| `scripts/manage-stow.sh` | Smart ZSH backup + stow fixes (logic & hang) |
 | `scripts/install-js-packages.sh` | Professional/personal split |
 | `scripts/config/js.pkg.yml` | Professional packages only |
 | `install.sh` | Personal tools + Homebrew skip |

@@ -204,7 +204,7 @@ stow_packages() {
     for pkg in "${packages[@]}"; do
         if [[ ! -d "$DOTFILES_ROOT/$pkg" ]]; then
             log_warn "Package '$pkg' not found in $DOTFILES_ROOT (skipping)"
-            ((skipped++))
+            skipped=$((skipped + 1))
             continue
         fi
         
@@ -219,10 +219,10 @@ stow_packages() {
         # Check if stow succeeded by running it again without verbose
         if stow -t "$HOME" "$pkg" 2>/dev/null; then
             log_success "$pkg stowed"
-            ((stowed++))
+            stowed=$((stowed + 1))
         else
             log_error "Failed to stow $pkg"
-            ((failed++))
+            failed=$((failed + 1))
         fi
         
         echo ""
