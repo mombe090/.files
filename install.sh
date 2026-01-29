@@ -181,6 +181,14 @@ install_package() {
 
 # ===== INSTALL HOMEBREW =====
 install_homebrew() {
+    local os=$(detect_os)
+    
+    # Only install Homebrew on macOS
+    if [[ "$os" != "macos" ]]; then
+        log_info "Skipping Homebrew installation (not macOS)"
+        return 0
+    fi
+    
     log_step "Installing Homebrew..."
     if [[ -x "$SCRIPTS_DIR/install-homebrew.sh" ]]; then
         bash "$SCRIPTS_DIR/install-homebrew.sh"
@@ -434,12 +442,17 @@ custom_install() {
     log_info "Starting CUSTOM installation..."
     echo ""
     
+    local os=$(detect_os)
+    
     check_prerequisites
     backup_configs
     
-    read -p "Install Homebrew (macOS)? [y/N]: " install_brew
-    if [[ "$install_brew" =~ ^[Yy]$ ]]; then
-        install_homebrew
+    # Only ask about Homebrew on macOS
+    if [[ "$os" == "macos" ]]; then
+        read -p "Install Homebrew? [Y/n]: " install_brew
+        if [[ ! "$install_brew" =~ ^[Nn]$ ]]; then
+            install_homebrew
+        fi
     fi
     
     read -p "Install mise? [Y/n]: " install_mise_choice
