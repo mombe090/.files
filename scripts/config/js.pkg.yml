@@ -1,0 +1,52 @@
+# JavaScript/TypeScript packages to install globally via bun
+# Format: YAML list of package names
+
+packages:
+  # Package managers & tools
+  - pnpm
+  - yarn
+  
+  # TypeScript & Type checking
+  - typescript
+  - tsx
+  - ts-node
+  - "@types/node"
+  
+  # Linting & Formatting
+  - eslint
+  - prettier
+  
+  # Build tools
+  - vite
+  - esbuild
+  - tsup
+  
+  # Testing
+  - vitest
+  - jest
+  
+  # Development tools
+  - nodemon
+  - concurrently
+  - rimraf
+  - dotenv-cli
+  
+  # CLI tools
+  - http-server
+  - serve
+  - npm-check-updates
+  - depcheck
+  
+  # Documentation
+  - typedoc
+  - jsdoc
+
+# Optional: Packages to install only if specified
+# Uncomment to enable
+# optional:
+#   - next
+#   - nuxt
+#   - "@angular/cli"
+#   - "@vue/cli"
+#   - create-react-app
+#   - gatsby-cli

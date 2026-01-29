@@ -318,8 +318,13 @@ Utility scripts in `scripts/`:
 - **`install-mise.sh`** - Install mise version manager
 - **`install-zsh.sh`** - Install and set zsh as default
 - **`install-stow.sh`** - Install GNU Stow
+- **`install-dotnet.sh`** - Install .NET SDK/Runtime (cross-platform)
+- **`install-js-packages.sh`** - Install JS/TS packages globally via bun
+- **`check-dotnet.sh`** - Diagnostic tool for .NET PATH issues
 - **`backup.sh`** - Backup existing configurations
 - **`uninstall.sh`** - Remove dotfiles and restore backups
+
+For detailed documentation, see: [scripts/README.md](scripts/README.md)
 
 ## Troubleshooting
 

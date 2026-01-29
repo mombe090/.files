@@ -4,6 +4,44 @@ All notable changes to this dotfiles repository will be documented in this file.
 
 ## [Unreleased] - 2026-01-29
 
+### Added
+
+- **`scripts/install-js-packages.sh`** - Install JavaScript/TypeScript packages globally via bun
+  - Reads package list from YAML config file (`scripts/config/js.pkg.yml`)
+  - Supports install, list, and update operations
+  - Interactive confirmation (can skip with `--yes` flag)
+  - Auto-creates default config with common packages
+  - Simple YAML parser (no external dependencies)
+  - Tracks installed/failed/skipped packages
+  - Default packages: TypeScript, ESLint, Prettier, Vite, Vitest, and more
+
+- **`scripts/config/js.pkg.yml`** - Package list configuration
+  - YAML format for easy editing
+  - Pre-configured with common JavaScript/TypeScript tools
+  - Organized by category (package managers, build tools, testing, etc.)
+  - Optional packages section for framework CLIs
+
+- **`scripts/check-dotnet.sh`** - New diagnostic tool for .NET installation issues
+  - Checks if dotnet is in PATH
+  - Searches for dotnet binary in common locations (/usr/bin, /usr/local/bin, ~/.dotnet)
+  - Shows installed .NET packages (OS-specific: apt/brew/yum/pacman)
+  - Checks shell profile files for dotnet configuration
+  - Provides actionable troubleshooting steps
+  - Helps diagnose PATH configuration problems
+
+- **`DOTNET_TROUBLESHOOTING.md`** - Comprehensive troubleshooting guide
+  - Common issues and solutions
+  - Platform-specific notes (Ubuntu/Debian, macOS, RHEL/Fedora)
+  - PATH configuration instructions
+  - Manual installation fallback steps
+  - Quick reference commands
+
+- **`VM_DOTNET_FIX.md`** - Quick fix guide for VM installations
+  - TL;DR solution for "command not found" errors
+  - Why the issue happens (shell command caching)
+  - Multiple solution options
+  - Verification steps
+
 ### Changed
 
 - **`scripts/install-dotnet.sh`** - Updated default .NET version from 8.0 to 10.0
@@ -11,20 +49,55 @@ All notable changes to this dotfiles repository will be documented in this file.
   - Updated help documentation and examples
   - Improved verification with better PATH troubleshooting
   - Added detailed diagnostics for PATH issues
+  - Better instructions referencing dotfiles env config
 
-- **`install.sh`** - Fixed .NET installation step visibility
-  - Now shows "[STEP] Checking .NET SDK installation..." even when dotnet is already installed
+- **`install.sh`** - Enhanced installation process
+  - Fixed .NET installation step visibility (shows even when already installed)
   - Better feedback during full installation mode
   - Clearer success/skip messages
+  - Enhanced completion message with troubleshooting tips
+  - **Integrated JavaScript packages installation in post_install**
+    - Automatically installs JS packages if bun is available
+    - Runs at the end of installation (all modes)
+    - Non-blocking (doesn't fail if packages have issues)
+    - Skips gracefully if bun not installed
+
+- **`zsh/.config/zsh/env.zsh`** - Added .NET PATH configuration
+  - macOS: Sets DOTNET_ROOT for Homebrew installations
+  - Linux: Automatically adds ~/.dotnet to PATH if manually installed
+  - WSL: Configures PATH for manual installations
+  - Smart detection: Only adds to PATH if not already available via package manager
 
 ### Added
 
 - **`scripts/check-dotnet.sh`** - New diagnostic tool for .NET installation issues
   - Checks if dotnet is in PATH
-  - Searches for dotnet binary in common locations
-  - Shows installed .NET packages (OS-specific)
+  - Searches for dotnet binary in common locations (/usr/bin, /usr/local/bin, ~/.dotnet)
+  - Shows installed .NET packages (OS-specific: apt/brew/yum/pacman)
+  - Checks shell profile files for dotnet configuration
   - Provides actionable troubleshooting steps
   - Helps diagnose PATH configuration problems
+
+- **`DOTNET_TROUBLESHOOTING.md`** - Comprehensive troubleshooting guide
+  - Common issues and solutions
+  - Platform-specific notes (Ubuntu/Debian, macOS, RHEL/Fedora)
+  - PATH configuration instructions
+  - Manual installation fallback steps
+  - Quick reference commands
+
+- **`VM_DOTNET_FIX.md`** - Quick fix guide for VM installations
+  - TL;DR solution for "command not found" errors
+  - Why the issue happens (shell command caching)
+  - Multiple solution options
+  - Verification steps
+
+### Documentation
+
+- **`scripts/README.md`** - Updated .NET installation docs
+  - Changed default version from 8.0 to 10.0
+  - Added check-dotnet.sh documentation
+  - Better post-installation instructions
+  - Shell reload commands for fixing PATH issues
 
 ## [1.0.0] - 2026-01-27
 

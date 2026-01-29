@@ -407,6 +407,18 @@ EOF
         log_info "Created ~/.envrc for direnv"
     fi
     
+    # Install JavaScript/TypeScript packages via bun (if available)
+    if command -v bun &> /dev/null; then
+        log_step "Installing JavaScript/TypeScript packages..."
+        if [[ -x "$SCRIPTS_DIR/install-js-packages.sh" ]]; then
+            AUTO_CONFIRM=true bash "$SCRIPTS_DIR/install-js-packages.sh" --yes || log_warn "JS packages installation had issues (optional)"
+            log_success "JavaScript packages installation complete"
+        fi
+    else
+        log_info "bun not available, skipping JavaScript packages installation"
+        log_info "Install bun and run: ./scripts/install-js-packages.sh"
+    fi
+    
     log_success "Post-install setup complete"
 }
 
@@ -560,9 +572,13 @@ show_completion_message() {
     echo ""
     echo "  4. Edit ~/.gitconfig.local with your personal git information"
     echo ""
-    echo "  5. Verify .NET installation (if installed):"
-    echo "     dotnet --version"
-    echo "     # If 'command not found', run: ./scripts/check-dotnet.sh"
+    echo "  5. Verify installations:"
+    echo "     dotnet --version  # .NET SDK"
+    echo "     bun --version     # Bun runtime"
+    echo "     # If 'command not found', restart shell or run diagnostics"
+    echo ""
+    echo "  6. Install/update JavaScript packages (if bun available):"
+    echo "     ./scripts/install-js-packages.sh"
     echo ""
     
     if [[ -f "$HOME/.dotfiles-backup-location" ]]; then
@@ -573,6 +589,7 @@ show_completion_message() {
     
     echo "For troubleshooting:"
     echo "  - .NET issues: cat $DOTFILES_ROOT/DOTNET_TROUBLESHOOTING.md"
+    echo "  - JS packages: cat $DOTFILES_ROOT/scripts/INSTALL_JS_PACKAGES_GUIDE.md"
     echo "  - General help: cat $DOTFILES_ROOT/README.md"
     echo ""
 }

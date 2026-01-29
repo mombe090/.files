@@ -197,6 +197,95 @@ Searching for dotnet binary:
 
 ---
 
+#### `install-js-packages.sh`
+
+Install JavaScript/TypeScript packages globally using bun from a YAML config file.
+
+```bash
+./scripts/install-js-packages.sh [OPTIONS]
+```
+
+**What it does:**
+
+- Reads package list from `scripts/config/js.pkg.yml`
+- Installs packages globally using bun
+- Supports install, list, and update operations
+- Auto-creates default config if missing
+
+**Prerequisites:**
+
+Install bun first:
+
+```bash
+# Via mise (recommended)
+mise use -g bun@latest
+
+# Or direct install
+curl -fsSL https://bun.sh/install | bash
+```
+
+**Options:**
+
+```bash
+--install, -i       Install packages from config (default)
+--list, -l          List globally installed packages
+--update, -u        Update all packages to latest versions
+--yes, -y           Auto-confirm installation (no prompts)
+--help, -h          Show help message
+```
+
+**Examples:**
+
+```bash
+# Install packages from config (interactive)
+./scripts/install-js-packages.sh
+
+# Install without confirmation
+./scripts/install-js-packages.sh --yes
+
+# List installed packages
+./scripts/install-js-packages.sh --list
+
+# Update all packages to latest
+./scripts/install-js-packages.sh --update
+```
+
+**Config file:** `scripts/config/js.pkg.yml`
+
+```yaml
+packages:
+  - typescript
+  - tsx
+  - prettier
+  - eslint
+  - vite
+  - vitest
+  # ... more packages
+```
+
+**Customize packages:**
+
+```bash
+# Edit config file
+nano scripts/config/js.pkg.yml
+
+# Then install
+./scripts/install-js-packages.sh
+```
+
+**Default packages included:**
+
+- Package managers: pnpm, yarn
+- TypeScript: typescript, tsx, ts-node
+- Linting/Formatting: eslint, prettier, biome
+- Build tools: vite, esbuild, tsup
+- Testing: vitest, jest
+- Dev tools: nodemon, concurrently, rimraf
+- CLI tools: http-server, serve, npm-check-updates
+- Documentation: typedoc, jsdoc
+
+---
+
 ### Utility Scripts
 
 #### `backup.sh`
