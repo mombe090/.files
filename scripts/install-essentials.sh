@@ -84,21 +84,13 @@ install_debian_essentials() {
         
         # Development libraries
         "libssl-dev"           # OpenSSL development files
-        "libffi-dev"           # Foreign function interface library
-        "libreadline-dev"      # Readline library
         "zlib1g-dev"           # Compression library
         "libbz2-dev"           # Bzip2 library
-        "libsqlite3-dev"       # SQLite library
-        "libncurses5-dev"      # Terminal control library
         "libgdbm-dev"          # GNU dbm library
         "liblzma-dev"          # LZMA library
         "libxml2-dev"          # XML library
         "libxmlsec1-dev"       # XML security library
         "libcurl4-openssl-dev" # cURL library
-        
-        # Python build dependencies
-        "python3-dev"          # Python 3 development files
-        "python3-pip"          # Python package installer
         
         # Additional tools
         "software-properties-common" # Manage PPAs
@@ -181,20 +173,9 @@ install_redhat_essentials() {
         # Development libraries
         "openssl-devel"        # OpenSSL development files
         "libffi-devel"         # Foreign function interface
-        "readline-devel"       # Readline library
         "zlib-devel"           # Compression library
         "bzip2-devel"          # Bzip2 library
-        "sqlite-devel"         # SQLite library
-        "ncurses-devel"        # Terminal control library
-        "gdbm-devel"           # GNU dbm library
-        "xz-devel"             # LZMA library
-        "libxml2-devel"        # XML library
-        "libxmlsec1-devel"     # XML security library (if available)
         "libcurl-devel"        # cURL library
-        
-        # Python build dependencies
-        "python3-devel"        # Python 3 development files
-        "python3-pip"          # Python package installer
         
         # Additional tools
         "gnupg2"               # GNU Privacy Guard
@@ -671,7 +652,6 @@ main() {
     echo "  g++ --version      # C++ compiler"
     echo "  make --version     # Build tool"
     echo "  cmake --version    # Build system"
-    echo "  python3 --version  # Python"
     echo ""
 }
 
