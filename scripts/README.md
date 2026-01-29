@@ -76,6 +76,65 @@ Install GNU Stow for dotfiles management.
 
 ---
 
+#### `install-dotnet.sh`
+
+Install .NET SDK and/or Runtime (cross-platform).
+
+```bash
+./scripts/install-dotnet.sh [OPTIONS]
+```
+
+**What it does:**
+
+- Detects OS and installs .NET appropriately
+- **macOS**: Uses Homebrew to install dotnet-sdk
+- **Ubuntu/Debian**: Uses apt with version-specific packages
+- **RHEL/Fedora**: Uses yum/dnf
+- **Arch Linux**: Uses pacman
+- **Fallback**: Uses Microsoft's official install script
+- Verifies installation after completion
+
+**Options:**
+
+```bash
+--version VERSION    .NET version (default: 8.0)
+--sdk-only           Install only SDK
+--runtime-only       Install only Runtime
+--help, -h           Show help message
+```
+
+**Examples:**
+
+```bash
+# Install latest LTS (.NET 8.0 SDK)
+./scripts/install-dotnet.sh
+
+# Install .NET 10 SDK
+./scripts/install-dotnet.sh --version 10.0
+
+# Install only runtime
+./scripts/install-dotnet.sh --runtime-only
+
+# Install specific version via environment variable
+DOTNET_VERSION=9.0 ./scripts/install-dotnet.sh
+```
+
+**Supported .NET Versions:**
+
+- .NET 10 (latest)
+- .NET 9
+- .NET 8 (LTS - recommended)
+
+**After Installation:**
+
+```bash
+dotnet --version
+dotnet --info
+dotnet new console -n MyApp
+```
+
+---
+
 ### Utility Scripts
 
 #### `backup.sh`

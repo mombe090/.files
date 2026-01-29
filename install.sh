@@ -278,6 +278,29 @@ install_optional_tools() {
     log_success "Optional tools installation complete"
 }
 
+# ===== INSTALL DOTNET =====
+install_dotnet() {
+    log_step "Installing .NET SDK..."
+    
+    if command -v dotnet &> /dev/null; then
+        local dotnet_version=$(dotnet --version 2>/dev/null || echo "unknown")
+        log_info ".NET already installed (version: $dotnet_version)"
+        return 0
+    fi
+    
+    read -p "Install .NET SDK? [Y/n]: " install_dotnet
+    if [[ "$install_dotnet" =~ ^[Nn]$ ]]; then
+        log_info "Skipping .NET installation"
+        return 0
+    fi
+    
+    if [[ -x "$SCRIPTS_DIR/install-dotnet.sh" ]]; then
+        bash "$SCRIPTS_DIR/install-dotnet.sh"
+    else
+        log_warn "install-dotnet.sh not found or not executable"
+    fi
+}
+
 # ===== INSTALL MISE TOOLS FROM CONFIG =====
 install_mise_tools() {
     local mise_config="$HOME/.config/mise/config.toml"
@@ -430,6 +453,7 @@ full_install() {
     install_mise
     install_core_tools
     install_optional_tools
+    install_dotnet
     install_mise_tools
     stow_configs
     post_install
@@ -485,7 +509,12 @@ custom_install() {
         install_optional_tools
     fi
     
-    read -p "Install mise tools from .mise.toml? [Y/n]: " install_mise_tools_choice
+    read -p "Install .NET SDK? [Y/n]: " install_dotnet_choice
+    if [[ ! "$install_dotnet_choice" =~ ^[Nn]$ ]]; then
+        install_dotnet
+    fi
+    
+    read -p "Install mise tools from config? [Y/n]: " install_mise_tools_choice
     if [[ ! "$install_mise_tools_choice" =~ ^[Nn]$ ]]; then
         install_mise_tools
     fi

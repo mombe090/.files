@@ -47,6 +47,10 @@ trusted_config_paths = [
 "starship" = "latest"     # shell prompt
 "direnv" = "latest"       # environment switcher
 
+# Terminal multiplexers
+"zellij" = "latest"       # modern multiplexer
+"tmux" = "latest"         # classic multiplexer
+
 # System tools
 "btop" = "latest"         # system monitor
 "jq" = "latest"           # JSON processor

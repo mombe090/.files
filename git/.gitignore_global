@@ -1,0 +1,56 @@
+.idea/
+local_stuff/
+
+# Uncomment tools your don't use globally
+#  .vscode/
+
+# mise (rtx) tool version management
+.mise.toml.local
+.rtx.toml.local
+.tool-versions.local
+
+# Node.js / npm
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.pnpm-store/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.so
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
+.coverage
+.mypy_cache/
+.ruff_cache/
+
+# Ruby
+.bundle/
+vendor/bundle/
+
+# Go
+*.test
+*.out
+#Taskfile.yml
+
+# Rust
+target/
+Cargo.lock
+
+# Java
+*.class
+.gradle/
+build/
+
+# Environment files
+.env
+.env.local
+.envrc

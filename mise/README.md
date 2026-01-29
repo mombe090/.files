@@ -36,9 +36,13 @@ This directory contains the mise configuration that will be symlinked to `~/.con
 
 - **starship** - Cross-shell prompt
 - **direnv** - Per-directory environment variables
+- **zellij** - Modern terminal multiplexer
+- **tmux** - Classic terminal multiplexer
 - **btop** - Resource monitor
 - **jq** - JSON processor
 - **yq** - YAML processor
+
+**Note:** Zinit (Zsh plugin manager) is not available in mise and is automatically installed via git clone in `.zshrc`.
 
 ### DevOps & Cloud
 
