@@ -4,6 +4,11 @@
 
 set -e
 
+# Activate mise if available (needed for bun installed via mise)
+if command -v mise &> /dev/null; then
+  eval "$(mise activate zsh)"
+fi
+
 SCRIPT_DIR="$(cd "$(dirname "${(%):-%x}")" && pwd)"
 CONFIG_FILE_PRO="$SCRIPT_DIR/config/js.pkg.yml"
 CONFIG_FILE_PERSONAL="$SCRIPT_DIR/config/js.pkg.personal.yml"
