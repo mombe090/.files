@@ -17,8 +17,17 @@ log_warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 log_success() { echo -e "${GREEN}[✓]${NC} $1"; }
 
+# Activate mise if available
+activate_mise() {
+    if command -v mise &> /dev/null; then
+        eval "$(mise activate bash)"
+    fi
+}
+
 # Check if UV is installed
 check_uv() {
+    activate_mise
+    
     if ! command -v uv &> /dev/null; then
         log_error "UV is not installed"
         log_info "Install UV with mise: mise install uv"
