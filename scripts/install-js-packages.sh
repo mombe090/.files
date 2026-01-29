@@ -1,10 +1,10 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 # Install JavaScript/TypeScript packages globally using bun
 # Reads package list from scripts/config/js.pkg.yml (professional) and js.pkg.personal.yml (personal)
 
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${(%):-%x}")" && pwd)"
 CONFIG_FILE_PRO="$SCRIPT_DIR/config/js.pkg.yml"
 CONFIG_FILE_PERSONAL="$SCRIPT_DIR/config/js.pkg.personal.yml"
 
