@@ -126,7 +126,7 @@ install_font() {
     local installed=0
     while IFS= read -r font_file; do
         cp "$font_file" "$fonts_dir/"
-        ((installed++))
+        installed=$((installed + 1))
     done < <(find "$temp_dir/${font_name}" -type f \( -name "*.ttf" -o -name "*.otf" \) ! -name "*Windows*" ! -path "*/.*")
     
     # Cleanup
@@ -254,29 +254,29 @@ EOF
     local failed=0
     
     # Install CascadiaMono Nerd Font
-    ((total++))
+    total=$((total + 1))
     if install_font "CascadiaMono" "$CASCADIA_URL" "$fonts_dir"; then
-        ((success++))
+        success=$((success + 1))
     else
-        ((failed++))
+        failed=$((failed + 1))
     fi
     echo ""
     
     # Install JetBrainsMono Nerd Font
-    ((total++))
+    total=$((total + 1))
     if install_font "JetBrainsMono" "$JETBRAINS_URL" "$fonts_dir"; then
-        ((success++))
+        success=$((success + 1))
     else
-        ((failed++))
+        failed=$((failed + 1))
     fi
     echo ""
     
     # Install VictorMono Font
-    ((total++))
+    total=$((total + 1))
     if install_font "VictorMono" "$VICTOR_MONO_URL" "$fonts_dir"; then
-        ((success++))
+        success=$((success + 1))
     else
-        ((failed++))
+        failed=$((failed + 1))
     fi
     echo ""
     
