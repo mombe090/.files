@@ -113,11 +113,17 @@ All notable changes to this dotfiles repository will be documented in this file.
     - Default packages reduced to core set: zsh, mise, zellij, bat, nvim, starship
     - Minimal install now stows only zsh and git
     - Fallback to manual stow if script not found
-  - **Integrated JavaScript packages installation in post_install**
-    - Automatically installs JS packages if bun is available
-    - Runs at the end of installation (all modes)
-    - Non-blocking (doesn't fail if packages have issues)
-    - Skips gracefully if bun not installed
+  - **Simplified JavaScript packages installation**
+    - Delegates all logic to install-js-packages.sh script
+    - No duplicate bun checks in main installer
+    - Single responsibility: just call the script
+    - Script handles all bun detection, messaging, and installation
+
+- **`scripts/install-js-packages.sh`** - Improved messaging
+  - Changed "error" to "warning" when bun not found
+  - More helpful instructions for post-install
+  - Graceful exit when bun unavailable (exit 0 instead of exit 1)
+  - Better suited for automated installation flows
 
 - **`scripts/install-dotnet.sh`** - Updated default .NET version from 8.0 to 10.0
   - Default installation now uses .NET 10 (latest stable)

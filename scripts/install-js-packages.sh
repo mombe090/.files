@@ -23,16 +23,19 @@ log_success() { echo -e "${GREEN}[✓]${NC} $1"; }
 # ===== CHECK BUN INSTALLATION =====
 check_bun() {
     if ! command -v bun &> /dev/null; then
-        log_error "bun is not installed"
-        log_info "Install bun first:"
+        log_warn "bun is not installed - skipping JavaScript packages"
+        log_info "To install JavaScript packages later:"
         echo ""
-        echo "  # Install via mise (recommended)"
-        echo "  mise use -g bun@latest"
+        echo "  1. Install bun:"
+        echo "     curl -fsSL https://bun.sh/install | bash"
         echo ""
-        echo "  # Or install directly"
-        echo "  curl -fsSL https://bun.sh/install | bash"
+        echo "  2. Restart shell:"
+        echo "     exec \$SHELL -l"
         echo ""
-        exit 1
+        echo "  3. Install packages:"
+        echo "     ./scripts/install-js-packages.sh"
+        echo ""
+        exit 0
     fi
     
     local bun_version=$(bun --version)

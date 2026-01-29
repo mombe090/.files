@@ -204,47 +204,28 @@ install_package() {
 
 # ===== INSTALL HOMEBREW (macOS only) =====
 install_homebrew() {
-    local os=$(detect_os)
-    
-    if [[ "$os" != "macos" ]]; then
-        return 0
+    if [[ -x "$SCRIPTS_DIR/install-homebrew.sh" ]]; then
+        bash "$SCRIPTS_DIR/install-homebrew.sh"
     fi
-    
-    log_step "Checking Homebrew..."
-    
-    if command -v brew &> /dev/null; then
-        log_info "Homebrew already installed"
-        return 0
+}
+
+# ===== INSTALL MISE =====
+install_mise() {
+    if [[ -x "$SCRIPTS_DIR/install-mise.sh" ]]; then
+        bash "$SCRIPTS_DIR/install-mise.sh"
     fi
-    
-    bash "$SCRIPTS_DIR/install-homebrew.sh"
-    
-    # Add brew to PATH for current session
-    if [[ $(uname -m) == "arm64" ]]; then
-        eval "$(/opt/homebrew/bin/brew shellenv)"
-    else
-        eval "$(/usr/local/bin/brew shellenv)"
-    fi
-    
-    log_success "Homebrew installed"
 }
 
 # ===== INSTALL CORE TOOLS =====
 install_core_tools() {
     log_step "Installing core tools..."
     
-    # Install zsh
-    if ! command -v zsh &> /dev/null; then
+    if [[ -x "$SCRIPTS_DIR/install-zsh.sh" ]]; then
         bash "$SCRIPTS_DIR/install-zsh.sh"
-    else
-        log_info "zsh already installed"
     fi
     
-    # Install stow
-    if ! command -v stow &> /dev/null; then
+    if [[ -x "$SCRIPTS_DIR/install-stow.sh" ]]; then
         bash "$SCRIPTS_DIR/install-stow.sh"
-    else
-        log_info "stow already installed"
     fi
     
     log_success "Core tools installed"
@@ -280,97 +261,35 @@ install_optional_tools() {
 
 # ===== INSTALL DOTNET =====
 install_dotnet() {
-    local auto_install="${1:-false}"  # Accept parameter for auto-install
-    
-    log_step "Checking .NET SDK installation..."
-    
-    if command -v dotnet &> /dev/null; then
-        local dotnet_version=$(dotnet --version 2>/dev/null || echo "unknown")
-        log_info ".NET already installed (version: $dotnet_version)"
-        log_success ".NET SDK check complete"
-        return 0
-    fi
-    
-    log_info ".NET SDK not found, installing..."
-    
-    # Only prompt if not auto-installing
-    if [[ "$auto_install" != "true" ]]; then
-        read -p "Install .NET SDK? [Y/n]: " install_dotnet_choice
-        if [[ "$install_dotnet_choice" =~ ^[Nn]$ ]]; then
-            log_info "Skipping .NET installation"
-            return 0
-        fi
-    else
-        log_info "Auto-installing .NET SDK (full installation mode)"
-    fi
-    
     if [[ -x "$SCRIPTS_DIR/install-dotnet.sh" ]]; then
         AUTO_INSTALL=true bash "$SCRIPTS_DIR/install-dotnet.sh"
-        log_success ".NET SDK installation complete"
-    else
-        log_warn "install-dotnet.sh not found or not executable"
     fi
 }
 
 # ===== INSTALL MISE TOOLS FROM CONFIG =====
 install_mise_tools() {
-    local mise_config="$HOME/.config/mise/config.toml"
-    
-    if [[ ! -f "$mise_config" ]]; then
-        log_info "No mise config found at $mise_config, skipping mise tool installation"
-        return 0
-    fi
-    
     log_step "Installing tools from mise config..."
     
     if command -v mise &> /dev/null; then
         mise install
         log_success "Mise tools installed"
     else
-        log_warn "mise not available, skipping mise tool installation"
+        log_info "mise not available, skipping mise tool installation"
     fi
 }
 
 # ===== STOW CONFIGURATIONS =====
 stow_configs() {
-    log_step "Symlinking configurations with GNU Stow..."
-    
-    # Use manage-stow.sh script with default packages
-    # Default packages: zsh, mise, zellij, bat, nvim, starship
     if [[ -x "$SCRIPTS_DIR/manage-stow.sh" ]]; then
         bash "$SCRIPTS_DIR/manage-stow.sh" stow
-    else
-        # Fallback to manual stow if script not found
-        log_warn "manage-stow.sh not found, using fallback method"
-        
-        local packages=(
-            "zsh"
-            "mise"
-            "zellij"
-            "bat"
-            "nvim"
-            "starship"
-        )
-        
-        cd "$DOTFILES_ROOT"
-        
-        for package in "${packages[@]}"; do
-            if [[ -d "$package" ]]; then
-                log_info "Stowing $package..."
-                stow -v -t "$HOME" "$package" 2>&1 | grep -v "BUG in find_stowed_path" || true
-            else
-                log_warn "Package directory $package not found, skipping"
-            fi
-        done
     fi
-    
-    log_success "Configurations symlinked"
 }
 
 
 # ===== POST-INSTALL SETUP =====
 post_install() {
     log_step "Running post-install setup..."
+    echo ""
     
     # Create local gitconfig if it doesn't exist
     if [[ ! -f "$HOME/.gitconfig.local" ]]; then
@@ -395,18 +314,13 @@ EOF
         log_info "Created ~/.envrc for direnv"
     fi
     
-    # Install JavaScript/TypeScript packages via bun (if available)
-    if command -v bun &> /dev/null; then
-        log_step "Installing JavaScript/TypeScript packages..."
-        if [[ -x "$SCRIPTS_DIR/install-js-packages.sh" ]]; then
-            AUTO_CONFIRM=true bash "$SCRIPTS_DIR/install-js-packages.sh" --yes || log_warn "JS packages installation had issues (optional)"
-            log_success "JavaScript packages installation complete"
-        fi
-    else
-        log_info "bun not available, skipping JavaScript packages installation"
-        log_info "Install bun and run: ./scripts/install-js-packages.sh"
+    # Install JavaScript/TypeScript packages via bun
+    echo ""
+    if [[ -x "$SCRIPTS_DIR/install-js-packages.sh" ]]; then
+        AUTO_CONFIRM=true bash "$SCRIPTS_DIR/install-js-packages.sh" --yes || true
     fi
     
+    echo ""
     log_success "Post-install setup complete"
 }
 
