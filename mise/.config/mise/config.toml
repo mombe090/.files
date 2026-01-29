@@ -69,6 +69,7 @@ trusted_config_paths = [
 "aqua:terraform-linters/tflint" = "latest"        # Terraform linter
 "aqua:terraform-docs/terraform-docs" = "latest"   # Generate docs from Terraform modules
 "opentofu" = "latest"
+"aqua:bridgecrewio/checkov" = "latest"            # Security & compliance scanner for IaC
 
 # Cloud CLIs
 "awscli" = "latest"
