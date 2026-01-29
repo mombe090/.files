@@ -282,13 +282,16 @@ install_optional_tools() {
 install_dotnet() {
     local auto_install="${1:-false}"  # Accept parameter for auto-install
     
-    log_step "Installing .NET SDK..."
+    log_step "Checking .NET SDK installation..."
     
     if command -v dotnet &> /dev/null; then
         local dotnet_version=$(dotnet --version 2>/dev/null || echo "unknown")
         log_info ".NET already installed (version: $dotnet_version)"
+        log_success ".NET SDK check complete"
         return 0
     fi
+    
+    log_info ".NET SDK not found, installing..."
     
     # Only prompt if not auto-installing
     if [[ "$auto_install" != "true" ]]; then
@@ -546,10 +549,20 @@ show_completion_message() {
     echo ""
     echo "Next steps:"
     echo ""
-    echo "  1. If zsh was installed, log out and back in (or run: exec zsh)"
-    echo "  2. Source your shell config: source ~/.zshrc"
-    echo "  3. If you installed mise: mise install"
+    echo "  1. Restart your shell to load new configurations:"
+    echo "     exec \$SHELL -l"
+    echo ""
+    echo "  2. Or source your shell config:"
+    echo "     source ~/.zshrc"
+    echo ""
+    echo "  3. If you installed mise, install tools from config:"
+    echo "     mise install"
+    echo ""
     echo "  4. Edit ~/.gitconfig.local with your personal git information"
+    echo ""
+    echo "  5. Verify .NET installation (if installed):"
+    echo "     dotnet --version"
+    echo "     # If 'command not found', run: ./scripts/check-dotnet.sh"
     echo ""
     
     if [[ -f "$HOME/.dotfiles-backup-location" ]]; then
@@ -558,7 +571,9 @@ show_completion_message() {
         echo ""
     fi
     
-    echo "For more information, see: $DOTFILES_ROOT/README.md"
+    echo "For troubleshooting:"
+    echo "  - .NET issues: cat $DOTFILES_ROOT/DOTNET_TROUBLESHOOTING.md"
+    echo "  - General help: cat $DOTFILES_ROOT/README.md"
     echo ""
 }
 

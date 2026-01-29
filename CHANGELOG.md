@@ -2,7 +2,31 @@
 
 All notable changes to this dotfiles repository will be documented in this file.
 
-## [Unreleased] - 2026-01-27
+## [Unreleased] - 2026-01-29
+
+### Changed
+
+- **`scripts/install-dotnet.sh`** - Updated default .NET version from 8.0 to 10.0
+  - Default installation now uses .NET 10 (latest stable)
+  - Updated help documentation and examples
+  - Improved verification with better PATH troubleshooting
+  - Added detailed diagnostics for PATH issues
+
+- **`install.sh`** - Fixed .NET installation step visibility
+  - Now shows "[STEP] Checking .NET SDK installation..." even when dotnet is already installed
+  - Better feedback during full installation mode
+  - Clearer success/skip messages
+
+### Added
+
+- **`scripts/check-dotnet.sh`** - New diagnostic tool for .NET installation issues
+  - Checks if dotnet is in PATH
+  - Searches for dotnet binary in common locations
+  - Shows installed .NET packages (OS-specific)
+  - Provides actionable troubleshooting steps
+  - Helps diagnose PATH configuration problems
+
+## [1.0.0] - 2026-01-27
 
 ### Added
 

@@ -14,7 +14,7 @@ log_warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 
 # ===== CONFIGURATION =====
-DOTNET_VERSION="${DOTNET_VERSION:-8.0}"  # Default to .NET 8 LTS
+DOTNET_VERSION="${DOTNET_VERSION:-10.0}"  # Default to .NET 10
 INSTALL_SDK="${INSTALL_SDK:-true}"       # Install SDK by default
 INSTALL_RUNTIME="${INSTALL_RUNTIME:-false}"  # Runtime included with SDK
 
@@ -209,11 +209,51 @@ verify_installation() {
         echo ""
         dotnet --info
     else
-        log_error "dotnet command not found"
-        log_warn "You may need to:"
-        log_warn "  1. Restart your terminal"
-        log_warn "  2. Add dotnet to your PATH"
-        log_warn "  3. Run: export PATH=\"\$PATH:\$HOME/.dotnet\""
+        log_error "dotnet command not found in current shell"
+        log_warn ""
+        log_warn "Troubleshooting steps:"
+        log_warn ""
+        log_warn "1. Restart your terminal/shell session"
+        log_warn "   - Close and reopen your terminal"
+        log_warn "   - Or run: exec \$SHELL -l"
+        log_warn ""
+        log_warn "2. Check if dotnet is installed in these locations:"
+        
+        local dotnet_paths=(
+            "/usr/local/bin/dotnet"
+            "/usr/bin/dotnet"
+            "/opt/homebrew/bin/dotnet"
+            "$HOME/.dotnet/dotnet"
+        )
+        
+        local found_path=""
+        for path in "${dotnet_paths[@]}"; do
+            if [[ -f "$path" ]]; then
+                log_warn "   Found: $path"
+                found_path="$path"
+            fi
+        done
+        
+        if [[ -n "$found_path" ]]; then
+            log_warn ""
+            log_warn "3. Test dotnet directly:"
+            log_warn "   $found_path --version"
+            log_warn ""
+            log_warn "4. If using these dotfiles, the PATH is configured in:"
+            log_warn "   ~/.config/zsh/env.zsh (check if stowed correctly)"
+            log_warn ""
+            log_warn "5. Or add to PATH manually (temporary fix):"
+            local dotnet_dir=$(dirname "$found_path")
+            log_warn "   export PATH=\"\$PATH:$dotnet_dir\""
+            log_warn ""
+            log_warn "6. Reload shell configuration:"
+            log_warn "   source ~/.zshrc  # or exec \$SHELL -l"
+        else
+            log_warn ""
+            log_warn "3. Installation may have failed - check logs above"
+            log_warn "4. Try manual installation: https://dotnet.microsoft.com/download"
+        fi
+        
         return 1
     fi
 }
@@ -275,13 +315,13 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
     echo "Install .NET SDK and/or Runtime"
     echo ""
     echo "Options:"
-    echo "  --version VERSION    .NET version to install (default: 8.0)"
+    echo "  --version VERSION    .NET version to install (default: 10.0)"
     echo "  --sdk-only          Install only SDK"
     echo "  --runtime-only      Install only Runtime"
     echo "  --help, -h          Show this help message"
     echo ""
     echo "Environment Variables:"
-    echo "  DOTNET_VERSION      .NET version (default: 8.0)"
+    echo "  DOTNET_VERSION      .NET version (default: 10.0)"
     echo "  INSTALL_SDK         Install SDK (default: true)"
     echo "  INSTALL_RUNTIME     Install Runtime (default: false)"
     echo ""

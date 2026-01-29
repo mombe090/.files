@@ -97,7 +97,7 @@ Install .NET SDK and/or Runtime (cross-platform).
 **Options:**
 
 ```bash
---version VERSION    .NET version (default: 8.0)
+--version VERSION    .NET version (default: 10.0)
 --sdk-only           Install only SDK
 --runtime-only       Install only Runtime
 --help, -h           Show help message
@@ -106,11 +106,11 @@ Install .NET SDK and/or Runtime (cross-platform).
 **Examples:**
 
 ```bash
-# Install latest LTS (.NET 8.0 SDK)
+# Install latest version (.NET 10.0 SDK)
 ./scripts/install-dotnet.sh
 
-# Install .NET 10 SDK
-./scripts/install-dotnet.sh --version 10.0
+# Install .NET 8 LTS SDK
+./scripts/install-dotnet.sh --version 8.0
 
 # Install only runtime
 ./scripts/install-dotnet.sh --runtime-only
@@ -121,16 +121,78 @@ DOTNET_VERSION=9.0 ./scripts/install-dotnet.sh
 
 **Supported .NET Versions:**
 
-- .NET 10 (latest)
+- .NET 10 (latest - default)
 - .NET 9
-- .NET 8 (LTS - recommended)
+- .NET 8 (LTS)
 
 **After Installation:**
 
 ```bash
+# Verify installation
 dotnet --version
 dotnet --info
+
+# If dotnet command not found, try these:
+# 1. Restart your shell
+exec $SHELL -l
+
+# 2. Or reload your shell config
+source ~/.zshrc  # or ~/.bashrc
+
+# 3. Or clear command hash (bash/zsh)
+hash -r
+
+# 4. Run diagnostics
+./scripts/check-dotnet.sh
+
+# Create test app
 dotnet new console -n MyApp
+```
+
+---
+
+#### `check-dotnet.sh`
+
+Diagnostic tool to troubleshoot .NET installation and PATH issues.
+
+```bash
+./scripts/check-dotnet.sh
+```
+
+**What it does:**
+
+- Shows current PATH and checks if dotnet is in it
+- Searches for dotnet binary in common locations
+- Lists installed .NET packages (apt/brew/yum/pacman)
+- Checks shell profile files for dotnet configuration
+- Provides actionable troubleshooting steps
+
+**When to use:**
+
+- After installing .NET but getting "command not found"
+- When dotnet works in one shell but not another
+- To verify .NET installation locations
+- To debug PATH configuration issues
+
+**Example output:**
+
+```bash
+=== .NET Installation Diagnostics ===
+
+Current PATH:
+     1  /usr/local/bin
+     2  /usr/bin
+     3  /bin
+     ...
+
+Checking 'dotnet' command:
+✓ dotnet found in PATH
+Location: /usr/bin/dotnet
+Version: 10.0.101
+
+Searching for dotnet binary:
+✓ Found: /usr/bin/dotnet
+  Version: 10.0.101
 ```
 
 ---
