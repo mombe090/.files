@@ -257,6 +257,25 @@ install_dotnet() {
     fi
 }
 
+# ===== INSTALL PERSONAL TOOLS (OPTIONAL) =====
+install_personal_tools() {
+    log_step "Installing personal/optional tools..."
+    echo ""
+    
+    # Clawdbot CLI - Optional personal tool
+    if [[ -x "$SCRIPTS_DIR/install-clawdbot.sh" ]]; then
+        log_info "Installing Clawdbot CLI..."
+        bash "$SCRIPTS_DIR/install-clawdbot.sh" || log_warn "Failed to install clawdbot (optional)"
+    fi
+    
+    # Add more personal tools here in the future
+    # if [[ -x "$SCRIPTS_DIR/install-xyz.sh" ]]; then
+    #     bash "$SCRIPTS_DIR/install-xyz.sh" || log_warn "Failed to install xyz (optional)"
+    # fi
+    
+    log_success "Personal tools installation complete"
+}
+
 # ===== INSTALL MISE TOOLS FROM CONFIG =====
 install_mise_tools() {
     log_step "Installing tools from mise config..."
@@ -443,6 +462,11 @@ custom_install() {
         install_dotnet
     fi
     
+    read -p "Install personal tools (clawdbot, etc.)? [y/N]: " install_personal
+    if [[ "$install_personal" =~ ^[Yy]$ ]]; then
+        install_personal_tools
+    fi
+    
     read -p "Install mise tools from config? [Y/n]: " install_mise_tools_choice
     if [[ ! "$install_mise_tools_choice" =~ ^[Nn]$ ]]; then
         install_mise_tools
@@ -483,8 +507,13 @@ show_completion_message() {
     echo "     bun --version     # Bun runtime"
     echo "     # If 'command not found', restart shell or run diagnostics"
     echo ""
-    echo "  6. Install/update JavaScript packages (if bun available):"
-    echo "     ./scripts/install-js-packages.sh"
+    echo "  6. Install/update JavaScript packages:"
+    echo "     ./scripts/install-js-packages.sh           # Professional packages only"
+    echo "     ./scripts/install-js-packages.sh --personal # Personal packages"
+    echo "     ./scripts/install-js-packages.sh --all      # Both pro & personal"
+    echo ""
+    echo "  7. Optional: Install personal tools (not included by default):"
+    echo "     ./scripts/install-clawdbot.sh               # Clawdbot CLI"
     echo ""
     
     if [[ -f "$HOME/.dotfiles-backup-location" ]]; then

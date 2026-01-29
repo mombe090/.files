@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # Install JavaScript/TypeScript packages globally using bun
-# Reads package list from scripts/config/js.pkg.yml
+# Reads package list from scripts/config/js.pkg.yml (professional) and js.pkg.personal.yml (personal)
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_FILE="$SCRIPT_DIR/config/js.pkg.yml"
+CONFIG_FILE_PRO="$SCRIPT_DIR/config/js.pkg.yml"
+CONFIG_FILE_PERSONAL="$SCRIPT_DIR/config/js.pkg.personal.yml"
 
 # Colors
 GREEN='\033[0;32m'
@@ -44,21 +45,68 @@ check_bun() {
 
 # ===== CHECK CONFIG FILE =====
 check_config() {
-    if [[ ! -f "$CONFIG_FILE" ]]; then
-        log_error "Config file not found: $CONFIG_FILE"
+    local config_type="$1"  # "pro" or "personal"
+    local config_file=""
+    
+    if [[ "$config_type" == "personal" ]]; then
+        config_file="$CONFIG_FILE_PERSONAL"
+    else
+        config_file="$CONFIG_FILE_PRO"
+    fi
+    
+    if [[ ! -f "$config_file" ]]; then
+        log_warn "Config file not found: $config_file"
         log_info "Creating default config file..."
         mkdir -p "$SCRIPT_DIR/config"
-        create_default_config
-        log_success "Created default config at: $CONFIG_FILE"
+        create_default_config "$config_type"
+        log_success "Created default config at: $config_file"
         log_info "Edit the file to customize packages, then re-run this script"
-        exit 0
+        return 1
     fi
+    
+    echo "$config_file"
 }
 
 # ===== CREATE DEFAULT CONFIG =====
 create_default_config() {
-    cat > "$CONFIG_FILE" << 'EOF'
-# JavaScript/TypeScript packages to install globally via bun
+    local config_type="${1:-pro}"  # Default to professional
+    
+    if [[ "$config_type" == "personal" ]]; then
+        # Personal/optional packages
+        cat > "$CONFIG_FILE_PERSONAL" << 'EOF'
+# Personal JavaScript/TypeScript packages (optional)
+# These packages are for personal projects and won't be installed on company PCs
+# Format: YAML list of package names
+
+packages:
+  # Personal CLI tools
+  - vercel
+  - netlify-cli
+  - firebase-tools
+  
+  # Personal frameworks/tools
+  - next
+  - nuxt
+  - "@angular/cli"
+  - "@vue/cli"
+  - create-react-app
+  - gatsby-cli
+  - astro
+  
+  # Personal development
+  - ngrok
+  - localtunnel
+  - pm2
+  
+  # Add your personal packages here
+  # - your-package-name
+
+EOF
+    else
+        # Professional/work packages
+        cat > "$CONFIG_FILE_PRO" << 'EOF'
+# Professional JavaScript/TypeScript packages
+# These packages are safe to install on any machine (personal or company PC)
 # Format: YAML list of package names
 
 packages:
@@ -91,24 +139,24 @@ packages:
   - rimraf
   - dotenv-cli
   
+  # CLI tools
+  - http-server
+  - serve
+  - npm-check-updates
+  - depcheck
+  
   # Documentation
   - typedoc
   - jsdoc
 
-# Optional: Packages to install only if specified
-# Uncomment to enable
-# optional:
-#   - next
-#   - nuxt
-#   - "@angular/cli"
-#   - "@vue/cli"
-#   - create-react-app
-#   - gatsby-cli
 EOF
+    fi
 }
 
 # ===== PARSE YAML FILE =====
 parse_yaml() {
+    local config_file="$1"
+    
     # Simple YAML parser for package list
     # Extracts packages from "packages:" section
     
@@ -141,7 +189,7 @@ parse_yaml() {
             local pkg=$(echo "$line" | sed 's/^-[[:space:]]*//;s/^["'\'']\(.*\)["'\'']$/\1/')
             [[ -n "$pkg" ]] && packages+=("$pkg")
         fi
-    done < "$CONFIG_FILE"
+    done < "$config_file"
     
     # Return packages as array
     printf '%s\n' "${packages[@]}"
@@ -149,14 +197,25 @@ parse_yaml() {
 
 # ===== INSTALL PACKAGES =====
 install_packages() {
-    log_step "Reading package list from: $CONFIG_FILE"
+    local config_type="${1:-pro}"  # Default to professional packages
+    
+    log_step "Installing $config_type packages..."
+    
+    # Check config file exists (creates if missing)
+    local config_file=$(check_config "$config_type")
+    if [[ -z "$config_file" ]]; then
+        log_info "Config file was just created. Edit it and re-run this script."
+        return 0
+    fi
+    
+    log_info "Reading package list from: $config_file"
     
     # Parse YAML and get packages
-    local packages=($(parse_yaml))
+    local packages=($(parse_yaml "$config_file"))
     
     if [[ ${#packages[@]} -eq 0 ]]; then
         log_warn "No packages found in config file"
-        exit 0
+        return 0
     fi
     
     log_info "Found ${#packages[@]} packages to install"
@@ -171,14 +230,14 @@ install_packages() {
     
     # Ask for confirmation unless --yes flag
     if [[ "$AUTO_CONFIRM" != "true" ]]; then
-        read -p "Install these packages globally with bun? [Y/n]: " confirm
+        read -p "Install these $config_type packages globally with bun? [Y/n]: " confirm
         if [[ "$confirm" =~ ^[Nn]$ ]]; then
             log_info "Installation cancelled"
-            exit 0
+            return 0
         fi
     fi
     
-    log_step "Installing packages globally..."
+    log_step "Installing $config_type packages globally..."
     echo ""
     
     local installed=0
@@ -234,18 +293,27 @@ list_packages() {
 
 # ===== UPDATE ALL PACKAGES =====
 update_packages() {
-    log_step "Updating globally installed packages..."
+    local config_type="${1:-pro}"  # Default to professional packages
+    
+    log_step "Updating $config_type packages..."
     echo ""
     
+    # Check config file exists
+    local config_file=$(check_config "$config_type")
+    if [[ -z "$config_file" ]]; then
+        log_info "Config file was just created. Edit it and re-run this script."
+        return 0
+    fi
+    
     # Parse packages from config
-    local packages=($(parse_yaml))
+    local packages=($(parse_yaml "$config_file"))
     
     if [[ ${#packages[@]} -eq 0 ]]; then
         log_warn "No packages found in config file"
-        exit 0
+        return 0
     fi
     
-    log_info "Updating ${#packages[@]} packages..."
+    log_info "Updating ${#packages[@]} $config_type packages..."
     echo ""
     
     for pkg in "${packages[@]}"; do
@@ -263,18 +331,30 @@ show_help() {
 Usage: $0 [OPTIONS]
 
 Install JavaScript/TypeScript packages globally using bun.
-Reads package list from: $CONFIG_FILE
+Supports two separate config files:
+  - Professional: $CONFIG_FILE_PRO (safe for work/company PCs)
+  - Personal: $CONFIG_FILE_PERSONAL (personal projects only)
 
 Options:
-  --install, -i       Install packages from config (default)
+  --install, -i       Install professional packages (default)
+  --personal, -p      Install personal packages
+  --all, -a           Install both professional AND personal packages
   --list, -l          List globally installed packages
-  --update, -u        Update all packages to latest versions
+  --update, -u        Update professional packages to latest versions
+  --update-personal   Update personal packages to latest versions
   --yes, -y           Auto-confirm installation (no prompts)
   --help, -h          Show this help message
 
 Examples:
-  # Install packages from config
+  # Install professional packages only (safe for work PC)
   $0
+  $0 --install
+
+  # Install personal packages only
+  $0 --personal
+
+  # Install both professional AND personal packages
+  $0 --all
 
   # Install without confirmation prompt
   $0 --yes
@@ -282,8 +362,11 @@ Examples:
   # List installed packages
   $0 --list
 
-  # Update all packages
+  # Update professional packages
   $0 --update
+
+  # Update personal packages
+  $0 --update-personal
 
 Config file format (YAML):
   packages:
@@ -298,12 +381,25 @@ EOF
 # ===== MAIN =====
 main() {
     local action="install"
+    local config_type="pro"
+    local install_all=false
     
     # Parse arguments
     while [[ $# -gt 0 ]]; do
         case $1 in
             --install|-i)
                 action="install"
+                config_type="pro"
+                shift
+                ;;
+            --personal|-p)
+                action="install"
+                config_type="personal"
+                shift
+                ;;
+            --all|-a)
+                action="install"
+                install_all=true
                 shift
                 ;;
             --list|-l)
@@ -312,6 +408,12 @@ main() {
                 ;;
             --update|-u)
                 action="update"
+                config_type="pro"
+                shift
+                ;;
+            --update-personal)
+                action="update"
+                config_type="personal"
                 shift
                 ;;
             --yes|-y)
@@ -334,16 +436,24 @@ main() {
     case $action in
         install)
             check_bun
-            check_config
-            install_packages
+            if [[ "$install_all" == true ]]; then
+                log_info "Installing BOTH professional and personal packages"
+                echo ""
+                install_packages "pro"
+                echo ""
+                echo "================================================"
+                echo ""
+                install_packages "personal"
+            else
+                install_packages "$config_type"
+            fi
             ;;
         list)
             list_packages
             ;;
         update)
             check_bun
-            check_config
-            update_packages
+            update_packages "$config_type"
             ;;
     esac
 }

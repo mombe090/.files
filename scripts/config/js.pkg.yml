@@ -1,4 +1,5 @@
-# JavaScript/TypeScript packages to install globally via bun
+# Professional JavaScript/TypeScript packages
+# These packages are safe to install on any machine (personal or company PC)
 # Format: YAML list of package names
 
 packages:
@@ -40,13 +41,3 @@ packages:
   # Documentation
   - typedoc
   - jsdoc
-
-# Optional: Packages to install only if specified
-# Uncomment to enable
-# optional:
-#   - next
-#   - nuxt
-#   - "@angular/cli"
-#   - "@vue/cli"
-#   - create-react-app
-#   - gatsby-cli

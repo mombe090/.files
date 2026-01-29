@@ -327,6 +327,38 @@ Utility scripts in `scripts/`:
 
 For detailed documentation, see: [scripts/README.md](scripts/README.md)
 
+## Documentation
+
+### Architecture & Design
+
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Detailed architecture documentation
+  - Simplified, delegated design principles
+  - Script responsibilities and flow
+  - Installation process breakdown
+  - Error handling and logging
+  - Best practices for contributors
+- **[docs/SIMPLIFIED_ARCHITECTURE.md](docs/SIMPLIFIED_ARCHITECTURE.md)** - Visual architecture guide
+  - Before/after comparison
+  - Function simplification breakdown
+  - Visual flow diagrams
+  - Testing strategies
+
+### Installation Guides
+
+- **[INSTALLATION_FLOW.md](INSTALLATION_FLOW.md)** - Visual installation flow diagram
+- **[scripts/README.md](scripts/README.md)** - Detailed script documentation
+
+### Troubleshooting Guides
+
+- **[DOTNET_TROUBLESHOOTING.md](DOTNET_TROUBLESHOOTING.md)** - .NET SDK PATH issues
+- **[VM_DOTNET_FIX.md](VM_DOTNET_FIX.md)** - .NET fixes for VMs
+- **[scripts/INSTALL_JS_PACKAGES_GUIDE.md](scripts/INSTALL_JS_PACKAGES_GUIDE.md)** - JavaScript package installation
+- **[scripts/MANAGE_STOW_GUIDE.md](scripts/MANAGE_STOW_GUIDE.md)** - GNU Stow management
+
+### Changelog
+
+- **[CHANGELOG.md](CHANGELOG.md)** - Version history and changes
+
 ## Troubleshooting
 
 ### Zinit not loading plugins

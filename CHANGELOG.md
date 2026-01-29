@@ -4,6 +4,66 @@ All notable changes to this dotfiles repository will be documented in this file.
 
 ## [Unreleased] - 2026-01-29
 
+### Major Refactor: Simplified Architecture (v2.0)
+
+#### Changed
+
+- **Simplified `install.sh`** - Complete refactor to thin orchestrator pattern
+  - **Removed ALL duplicate logic** - Scripts now handle their own checks
+  - **Removed ~40 lines of duplicate code**
+  - Each function now just delegates to appropriate script
+  - No more duplicate checks for brew, mise, zsh, stow, dotnet, bun
+  - Scripts are now fully responsible for their own logic:
+    - OS detection
+    - Installation checks
+    - PATH configuration
+    - Error handling
+  - install.sh functions now 3-8 lines each (down from 15-25 lines)
+  - Better error messages from scripts (clearer source of errors)
+  - Added fallback logging when scripts not found/executable
+
+- **Enhanced all scripts for self-containment**
+  - Each script now includes its own logging functions
+  - Each script handles its own prerequisite checks
+  - Scripts exit gracefully when not applicable
+  - Consistent exit codes across all scripts (0 = success/skip, 1 = error)
+  - Scripts can be tested independently without install.sh
+
+#### Added
+
+- **`ARCHITECTURE.md`** - Comprehensive architecture documentation
+  - Detailed explanation of simplified architecture principles
+  - Script responsibilities and workflows
+  - Installation flow breakdown
+  - Error handling strategies
+  - Cross-platform support details
+  - Best practices for contributors
+  - Future improvement roadmap
+
+- **`docs/SIMPLIFIED_ARCHITECTURE.md`** - Visual architecture guide
+  - Before/after code comparison
+  - Visual flow diagrams
+  - Function simplification breakdown (line count savings)
+  - Benefits of simplified architecture
+  - Testing strategies and examples
+  - Future improvements section
+
+- **Documentation section in README.md**
+  - Links to all architecture docs
+  - Links to troubleshooting guides
+  - Links to installation guides
+  - Better organized documentation structure
+
+#### Benefits of v2.0
+
+- ✅ **Single Responsibility**: Each script does ONE thing
+- ✅ **No Duplication**: Logic exists in ONE place only
+- ✅ **Easier Testing**: Scripts can be tested independently
+- ✅ **Better Maintainability**: Edit one file to fix one thing
+- ✅ **Clearer Errors**: Know exactly which script failed
+- ✅ **Graceful Degradation**: Scripts handle edge cases internally
+- ✅ **Self-Documenting**: Each script is self-contained and readable
+
 ### Added
 
 - **`scripts/manage-stow.sh`** - Centralized GNU Stow package management

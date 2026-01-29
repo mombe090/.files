@@ -44,17 +44,101 @@ get_available_packages() {
 # ===== BACKUP CONFLICTING FILES =====
 backup_conflicts() {
     local pkg="$1"
-    local backup_dir="$HOME/.dotfiles-backup-$(date +%Y%m%d-%H%M%S)"
+    local backup_dir="$HOME/.dotfiles-stow-backup-$(date +%Y%m%d-%H%M%S)"
     local backed_up=false
     
-    # Get list of files that would be stowed
-    local files_to_stow=$(cd "$DOTFILES_ROOT/$pkg" && find . -type f -o -type l | sed 's|^\./||')
+    # Special handling for zsh package - only backup .zshrc
+    if [[ "$pkg" == "zsh" ]]; then
+        local zshrc="$HOME/.zshrc"
+        
+        # Only backup if .zshrc exists and is NOT a symlink to our dotfiles
+        if [[ -f "$zshrc" ]] && [[ ! -L "$zshrc" ]]; then
+            mkdir -p "$backup_dir"
+            cp -a "$zshrc" "$backup_dir/.zshrc"
+            log_warn "Backed up: ~/.zshrc"
+            rm -f "$zshrc"
+            backed_up=true
+        elif [[ -L "$zshrc" ]]; then
+            # Resolve the symlink to absolute path
+            local resolved=$(readlink -f "$zshrc" 2>/dev/null || echo "")
+            # If symlink exists but doesn't point to our dotfiles, back it up
+            if [[ -n "$resolved" ]] && [[ "$resolved" != *"$DOTFILES_ROOT/zsh"* ]]; then
+                local link_target=$(readlink "$zshrc")
+                mkdir -p "$backup_dir"
+                echo "$link_target" > "$backup_dir/.zshrc.symlink-info"
+                log_warn "Backed up symlink: ~/.zshrc → $link_target"
+                rm -f "$zshrc"
+                backed_up=true
+            fi
+        fi
+        
+        # For .config/zsh, only backup if it's NOT a symlink to our dotfiles
+        local config_zsh="$HOME/.config/zsh"
+        if [[ -d "$config_zsh" ]] && [[ ! -L "$config_zsh" ]]; then
+            # It's a real directory, backup it
+            mkdir -p "$backup_dir/.config"
+            cp -a "$config_zsh" "$backup_dir/.config/"
+            log_warn "Backed up: ~/.config/zsh (was a directory)"
+            rm -rf "$config_zsh"
+            backed_up=true
+        elif [[ -L "$config_zsh" ]]; then
+            # Resolve the symlink to absolute path
+            local resolved=$(readlink -f "$config_zsh" 2>/dev/null || echo "")
+            # If symlink exists but doesn't point to our dotfiles, back it up
+            if [[ -n "$resolved" ]] && [[ "$resolved" != *"$DOTFILES_ROOT/zsh"* ]]; then
+                local link_target=$(readlink "$config_zsh")
+                mkdir -p "$backup_dir/.config"
+                echo "$link_target" > "$backup_dir/.config/zsh.symlink-info"
+                log_warn "Backed up symlink: ~/.config/zsh → $link_target"
+                rm -f "$config_zsh"
+                backed_up=true
+            fi
+        fi
+        
+        if [[ "$backed_up" == true ]]; then
+            echo "$backup_dir" >> "$HOME/.dotfiles-backup-location"
+            log_success "Backup complete: $backup_dir"
+        fi
+        return 0
+    fi
+    
+    # General backup logic for other packages
+    local files_to_stow=$(cd "$DOTFILES_ROOT/$pkg" && find . -type f -o -type l 2>/dev/null | sed 's|^\./||')
     
     while IFS= read -r file; do
+        [[ -z "$file" ]] && continue
+        
         local target="$HOME/$file"
         
-        # Check if file exists and is not already a symlink to our dotfiles
-        if [[ -e "$target" ]] && [[ ! -L "$target" ]]; then
+        # Skip if target doesn't exist
+        [[ ! -e "$target" ]] && continue
+        
+        # If target is a symlink, check where it points
+        if [[ -L "$target" ]]; then
+            local link_target=$(readlink "$target")
+            local resolved_target=$(readlink -f "$target" 2>/dev/null || echo "")
+            
+            # Skip if symlink already points to our dotfiles
+            if [[ "$link_target" == *"$DOTFILES_ROOT/$pkg"* ]] || [[ "$resolved_target" == *"$DOTFILES_ROOT/$pkg"* ]]; then
+                continue
+            fi
+            
+            # Symlink exists but points elsewhere, back it up
+            if [[ "$backed_up" == false ]]; then
+                mkdir -p "$backup_dir"
+                backed_up=true
+                log_info "Creating backup at: $backup_dir"
+            fi
+            
+            local backup_target="$backup_dir/${target#$HOME/}.symlink-info"
+            local backup_target_dir=$(dirname "$backup_target")
+            mkdir -p "$backup_target_dir"
+            echo "$link_target" > "$backup_target"
+            log_warn "Backed up symlink: ~/${target#$HOME/} → $link_target"
+            rm -f "$target"
+            
+        # If target is a regular file or directory (not a symlink)
+        elif [[ -f "$target" ]] || [[ -d "$target" ]]; then
             # Create backup directory if needed
             if [[ "$backed_up" == false ]]; then
                 mkdir -p "$backup_dir"
@@ -62,36 +146,16 @@ backup_conflicts() {
                 log_info "Creating backup at: $backup_dir"
             fi
             
-            # Backup the file
-            local target_dir=$(dirname "$target")
+            # Backup the file/directory
             local backup_target="$backup_dir/${target#$HOME/}"
             local backup_target_dir=$(dirname "$backup_target")
             
             mkdir -p "$backup_target_dir"
             cp -a "$target" "$backup_target"
-            log_warn "Backed up: ~/${target#$HOME/} → $backup_target"
+            log_warn "Backed up: ~/${target#$HOME/}"
             
-            # Remove the original file so stow can create symlink
-            rm -f "$target"
-        elif [[ -L "$target" ]]; then
-            # Check if symlink points to our dotfiles
-            local link_target=$(readlink "$target")
-            if [[ "$link_target" == *"$DOTFILES_ROOT/$pkg"* ]]; then
-                # Already stowed correctly, skip
-                continue
-            else
-                # Symlink exists but points elsewhere, back it up
-                if [[ "$backed_up" == false ]]; then
-                    mkdir -p "$backup_dir"
-                    backed_up=true
-                    log_info "Creating backup at: $backup_dir"
-                fi
-                
-                local backup_target="$backup_dir/${target#$HOME/}.symlink"
-                echo "$link_target" > "$backup_target"
-                log_warn "Backed up symlink: ~/${target#$HOME/} → $backup_target"
-                rm -f "$target"
-            fi
+            # Remove the original so stow can create symlink
+            rm -rf "$target"
         fi
     done <<< "$files_to_stow"
     
