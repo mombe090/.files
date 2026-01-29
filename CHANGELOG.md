@@ -4,6 +4,101 @@ All notable changes to this dotfiles repository will be documented in this file.
 
 ## [Unreleased] - 2026-01-29
 
+### v2.1 - Modern Fonts & Critical Bug Fixes
+
+#### Added
+
+- **`scripts/install-modern-fonts.sh`** - Install modern Nerd Fonts for development ✨
+  - Automatically downloads and installs Nerd Fonts
+  - Fonts included:
+    - **CascadiaMono Nerd Font** v3.4.0 (Cascadia Code + icons)
+    - **JetBrainsMono Nerd Font** v3.4.0 (JetBrains Mono + icons)
+    - **VictorMono Font** (Victor Mono - cursive italics)
+  - Cross-platform support (macOS/Linux)
+  - Auto OS detection and font directory setup
+  - Automatically updates font cache on Linux (fc-cache)
+  - `--list` option to show installed fonts
+  - Downloads from official nerd-fonts releases
+  - Installs 170+ font variants (CascadiaMono: 36, JetBrainsMono: 96, VictorMono: 42)
+  
+- **`docs/INSTALL_MODERN_FONTS_GUIDE.md`** - Comprehensive font installation guide
+  - Detailed installation instructions
+  - Font feature descriptions (ligatures, icons, variants)
+  - Terminal configuration examples
+  - Troubleshooting tips
+  - Platform-specific notes
+
+- **Integrated font installation into main installer**
+  - Added `install_modern_fonts()` function to `install.sh`
+  - Included in full installation by default
+  - Added prompt in custom installation mode
+  - Updated completion message with font info
+
+#### Fixed
+
+- **CRITICAL: Fixed script hanging issues** 🐛
+  - **Root cause**: `((counter++))` syntax caused infinite hangs
+  - **Solution**: Changed to `counter=$((counter + 1))` pattern
+  - **Files affected**:
+    - `scripts/manage-stow.sh` - Fixed stow/unstow operations hanging
+    - `scripts/install-js-packages.sh` - Fixed package installation hanging
+    - `scripts/install-modern-fonts.sh` - Fixed font installation hanging
+  - Scripts now complete successfully and show summary statistics
+
+- **CRITICAL: Fixed stow backup deleting repository files** 🐛
+  - **Root cause**: Backup function followed parent directory symlinks
+  - **Impact**: Running stow operations deleted actual dotfiles repo files
+  - **Solution**: Added parent directory symlink detection in `backup_conflicts()`
+  - **File**: `scripts/manage-stow.sh`
+  - Now safely backs up only actual files, not symlink-linked repo files
+
+- **Fixed bun/mise integration issues** 🔧
+  - **Problem**: Bun installed via mise only available in zsh, not bash
+  - **Problem**: JavaScript packages installed but inaccessible (`tsc: command not found`)
+  - **Solutions**:
+    - Created `bash/.bashrc` and `bash/.bash_profile` with mise activation
+    - Added mise activation directly in `install-js-packages.sh`
+    - Configured `~/.bun/bin` in PATH for global packages
+    - Added bash to default stow packages
+
+#### Changed
+
+- **`bash/` package** - New bash configuration with mise support
+  - `bash/.bashrc` - Bash config with `eval "$(mise activate bash)"`
+  - `bash/.bash_profile` - Bash login config
+  - Ensures bun and other mise tools work in bash scripts
+
+- **`scripts/manage-stow.sh`** - Enhanced default packages
+  - Added `bash` to `DEFAULT_PACKAGES` array
+  - Now stows: zsh, bash, mise, zellij, bat, nvim, starship
+
+- **`scripts/install-js-packages.sh`** - Added mise activation
+  - Script now activates mise internally for bun access
+  - Works in non-interactive shells and SSH sessions
+  - No longer depends on shell profile being sourced
+
+#### Documentation
+
+- **`docs/BASH_MISE_CONFIGURATION.md`** - Bash mise integration guide
+  - Why bash configuration was needed
+  - How mise activation works in bash
+  - Troubleshooting bash + mise issues
+  
+- **`docs/BUN_PATH_CONFIGURATION.md`** - Bun PATH setup guide
+  - How bun global packages work
+  - PATH configuration for `~/.bun/bin`
+  - Verification steps
+
+- **`docs/STOW_HANG_FIX_JAN_29_2026.md`** - Stow hang fix documentation
+- **`docs/JS_PACKAGES_HANG_FIX_JAN_29_2026.md`** - JS packages hang fix
+- **`docs/STOW_BACKUP_DELETE_FIX_JAN_29_2026.md`** - Backup delete bug fix
+- **`docs/COMPLETE_SUMMARY_JAN_29_2026.md`** - Summary of Jan 29 fixes
+
+- **Updated `README.md`**
+  - Added Nerd Fonts to Terminal & Editor features
+  - Added `install-modern-fonts.sh` to Scripts section
+  - Updated installation steps to include font installation
+
 ### Major Refactor: Simplified Architecture (v2.0)
 
 #### Changed
