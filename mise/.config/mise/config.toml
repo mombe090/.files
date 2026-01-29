@@ -79,6 +79,7 @@ trusted_config_paths = [
 
 # ===== EDITOR & DEV TOOLS =====
 "neovim" = "latest"
+"aqua:tree-sitter/tree-sitter" = "latest"
 
 "vivid" = "latest"
 "uv" = "latest"
