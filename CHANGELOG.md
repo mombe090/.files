@@ -8,6 +8,25 @@ All notable changes to this dotfiles repository will be documented in this file.
 
 #### Added
 
+- **`scripts/install-essentials.sh`** - Install essential build tools and dependencies 🔨
+  - Installs C/C++ compilers (gcc, g++, clang on some platforms)
+  - Installs build tools (make, cmake, pkg-config)
+  - Installs development libraries:
+    - OpenSSL, libffi, readline, zlib, bzip2, SQLite
+    - ncurses, gdbm, LZMA, libxml2, libcurl
+  - Installs compression tools (zip, unzip, tar, gzip, bzip2, xz)
+  - Installs Python development headers and pip
+  - Installs version control tools (git, git-lfs)
+  - Cross-platform support:
+    - **Debian/Ubuntu**: Uses `apt` and `build-essential` package
+    - **RHEL/Fedora/Rocky/Alma**: Uses `dnf`/`yum` and `@development-tools` group
+    - **Arch Linux**: Uses `pacman` and `base-devel` package
+    - **Alpine Linux**: Uses `apk` and `build-base` package
+    - **macOS**: Uses Homebrew (requires Xcode Command Line Tools)
+  - `--list` option to show installed compilers and build tools
+  - Summary statistics (installed/already installed/failed)
+  - Tested on Ubuntu 25.04 (ARM64)
+
 - **`scripts/install-modern-fonts.sh`** - Install modern Nerd Fonts for development ✨
   - Automatically downloads and installs Nerd Fonts
   - Fonts included:
@@ -27,6 +46,12 @@ All notable changes to this dotfiles repository will be documented in this file.
   - Terminal configuration examples
   - Troubleshooting tips
   - Platform-specific notes
+
+- **Integrated essentials installation into main installer**
+  - Added `install_essentials()` function to `install.sh`
+  - Included in full installation by default (runs after mise, before core tools)
+  - Added prompt in custom installation mode
+  - Updated completion message with build tools verification
 
 - **Integrated font installation into main installer**
   - Added `install_modern_fonts()` function to `install.sh`
@@ -95,9 +120,11 @@ All notable changes to this dotfiles repository will be documented in this file.
 - **`docs/COMPLETE_SUMMARY_JAN_29_2026.md`** - Summary of Jan 29 fixes
 
 - **Updated `README.md`**
+  - Added Build Essentials section in Dependencies
   - Added Nerd Fonts to Terminal & Editor features
+  - Added `install-essentials.sh` to Scripts section
   - Added `install-modern-fonts.sh` to Scripts section
-  - Updated installation steps to include font installation
+  - Updated installation steps to include build tools and fonts
 
 ### Major Refactor: Simplified Architecture (v2.0)
 
