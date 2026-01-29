@@ -88,6 +88,20 @@ These are automatically installed by the install script:
 - **zsh** - Shell
 - **stow** - Symlink manager
 
+### Build Essentials (Optional but Recommended)
+
+For compiling software from source and building native extensions:
+
+- **build-essential** (Debian) / **base-devel** (Arch) / **Development Tools** (RHEL)
+- **gcc/g++** - C/C++ compilers
+- **make** - Build automation tool
+- **cmake** - Cross-platform build system
+- **pkg-config** - Package configuration tool
+- Development libraries: OpenSSL, libffi, readline, zlib, SQLite, ncurses, etc.
+- Python development headers and pip
+
+Use `./scripts/install-essentials.sh` to install these automatically.
+
 ### Optional (Recommended)
 
 The install script will attempt to install these via mise or your system package manager:
@@ -131,10 +145,11 @@ The install script will:
 1. ✅ Automatically backup your existing configurations
 2. ✅ Detect your operating system
 3. ✅ Install required dependencies
-4. ✅ Install mise and modern CLI tools
-5. ✅ Install modern Nerd Fonts for terminal icons
-6. ✅ Create symlinks using GNU Stow
-7. ✅ Set up shell configurations
+4. ✅ Install essential build tools (gcc, make, cmake, development libraries)
+5. ✅ Install mise and modern CLI tools
+6. ✅ Install modern Nerd Fonts for terminal icons
+7. ✅ Create symlinks using GNU Stow
+8. ✅ Set up shell configurations
 
 ### Installation Options
 
@@ -318,6 +333,7 @@ Utility scripts in `scripts/`:
 
 - **`install-homebrew.sh`** - Install Homebrew (macOS)
 - **`install-mise.sh`** - Install mise version manager
+- **`install-essentials.sh`** - Install essential build tools (gcc, make, cmake, dev libraries)
 - **`install-zsh.sh`** - Install and set zsh as default
 - **`install-stow.sh`** - Install GNU Stow
 - **`install-dotnet.sh`** - Install .NET SDK/Runtime (cross-platform)
