@@ -269,6 +269,60 @@ fi
 
 ---
 
+## 8. Stow Backup Delete Fix
+
+### File: `scripts/manage-stow.sh`
+
+**Problem:** Backup function was **deleting files from the repository** when stowing already-stowed packages.
+
+**Symptoms:**
+```bash
+$ ./scripts/manage-stow.sh stow bat
+[INFO] Creating backup...
+[WARN] Backed up: ~/.config/bat/config
+# Backs up and deletes files from repository!
+
+$ git status
+  deleted:    bat/.config/bat/config
+  deleted:    nvim/.config/nvim/init.lua
+  ... (many deleted files)
+```
+
+**Root Cause:** Backup function checked individual files but didn't check if **parent directories were symlinks**:
+```
+~/.config/bat → ../../.files/bat/.config/bat
+
+When checking ~/.config/bat/config:
+  - Bash follows the symlink
+  - Finds the actual file in the repository
+  - Backs it up and DELETES it!
+```
+
+**Solution:** Check parent directories for symlinks before backing up files:
+```bash
+# Walk up directory tree
+local parent_dir="$target"
+while [[ "$parent_dir" != "$HOME" ]]; do
+    parent_dir=$(dirname "$parent_dir")
+    if [[ -L "$parent_dir" ]]; then
+        local parent_resolved=$(readlink -f "$parent_dir")
+        if [[ "$parent_resolved" == *"$DOTFILES_ROOT/$pkg"* ]]; then
+            # Parent is symlinked to dotfiles, skip backup
+            is_already_stowed=true
+            break
+        fi
+    fi
+done
+```
+
+**Result:**
+- ✅ Repository files never deleted
+- ✅ Re-running stow is safe (idempotent)
+- ✅ Only backs up actual conflicts
+- ✅ Works with directory and file symlinks
+
+---
+
 ## Files Summary
 
 ### Created
@@ -280,6 +334,7 @@ fi
 | `docs/STOW_FIX_JAN_29_2026.md` | Stow logic fix documentation |
 | `docs/STOW_HANG_FIX_JAN_29_2026.md` | Stow hang fix documentation |
 | `docs/JS_PACKAGES_HANG_FIX_JAN_29_2026.md` | JS packages hang fix documentation |
+| `docs/STOW_BACKUP_DELETE_FIX_JAN_29_2026.md` | Stow backup delete fix documentation |
 | `ARCHITECTURE.md` | Architecture documentation (from earlier) |
 | `docs/SIMPLIFIED_ARCHITECTURE.md` | Visual architecture guide (from earlier) |
 | `docs/COMPLETION_SUMMARY.md` | Earlier completion summary |
@@ -287,7 +342,7 @@ fi
 ### Modified
 | File | Changes |
 |------|---------|
-| `scripts/manage-stow.sh` | Smart ZSH backup + stow fixes (logic & hang) |
+| `scripts/manage-stow.sh` | Smart ZSH backup + stow fixes (logic, hang, backup delete) |
 | `scripts/install-js-packages.sh` | Professional/personal split + hang fix |
 | `scripts/config/js.pkg.yml` | Professional packages only |
 | `install.sh` | Personal tools + Homebrew skip |

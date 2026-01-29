@@ -29,6 +29,10 @@ export LOCALSTACK_ACTIVATE_PRO=0
 
 export PATH="$HOME/.local/bin:$PATH"
 
+# Bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # macOS paths
     export PATH="$PATH:/Applications/IntelliJ IDEA.app/Contents/MacOS"
