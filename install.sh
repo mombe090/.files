@@ -280,6 +280,8 @@ install_optional_tools() {
 
 # ===== INSTALL DOTNET =====
 install_dotnet() {
+    local auto_install="${1:-false}"  # Accept parameter for auto-install
+    
     log_step "Installing .NET SDK..."
     
     if command -v dotnet &> /dev/null; then
@@ -288,14 +290,20 @@ install_dotnet() {
         return 0
     fi
     
-    read -p "Install .NET SDK? [Y/n]: " install_dotnet
-    if [[ "$install_dotnet" =~ ^[Nn]$ ]]; then
-        log_info "Skipping .NET installation"
-        return 0
+    # Only prompt if not auto-installing
+    if [[ "$auto_install" != "true" ]]; then
+        read -p "Install .NET SDK? [Y/n]: " install_dotnet_choice
+        if [[ "$install_dotnet_choice" =~ ^[Nn]$ ]]; then
+            log_info "Skipping .NET installation"
+            return 0
+        fi
+    else
+        log_info "Auto-installing .NET SDK (full installation mode)"
     fi
     
     if [[ -x "$SCRIPTS_DIR/install-dotnet.sh" ]]; then
-        bash "$SCRIPTS_DIR/install-dotnet.sh"
+        AUTO_INSTALL=true bash "$SCRIPTS_DIR/install-dotnet.sh"
+        log_success ".NET SDK installation complete"
     else
         log_warn "install-dotnet.sh not found or not executable"
     fi
@@ -453,7 +461,7 @@ full_install() {
     install_mise
     install_core_tools
     install_optional_tools
-    install_dotnet
+    install_dotnet true  # Pass 'true' for auto-install
     install_mise_tools
     stow_configs
     post_install

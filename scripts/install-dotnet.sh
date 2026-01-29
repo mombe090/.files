@@ -58,6 +58,13 @@ check_dotnet() {
     if command -v dotnet &> /dev/null; then
         local version=$(dotnet --version 2>/dev/null || echo "unknown")
         log_warn ".NET is already installed (version: $version)"
+        
+        # Skip prompt if AUTO_INSTALL is set
+        if [[ "$AUTO_INSTALL" == "true" ]]; then
+            log_info "Skipping additional .NET installation (auto-install mode)"
+            exit 0
+        fi
+        
         log_info "To install additional versions, continue anyway"
         read -p "Continue installation? [y/N]: " continue_install
         if [[ ! "$continue_install" =~ ^[Yy]$ ]]; then
