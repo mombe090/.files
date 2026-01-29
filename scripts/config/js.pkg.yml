@@ -41,3 +41,7 @@ packages:
   # Documentation
   - typedoc
   - jsdoc
+
+  # AI Tools
+  - opencode-ai
+  - @github/copilot
