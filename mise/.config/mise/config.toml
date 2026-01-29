@@ -60,6 +60,7 @@ trusted_config_paths = [
 # Kubernetes
 "kubectl" = "latest"
 "helm" = "latest"
+"aqua:norwoodj/helm-docs" = "latest"   # Generate docs from Helm charts
 "k9s" = "latest"
 "kind" = "latest"
 
