@@ -2,12 +2,13 @@
 
 ## Overview
 
-Three major improvements implemented today:
+Five major improvements implemented today:
 
 1. ✅ **Smart ZSH Backup Logic** - Only backs up real files, not symlinks
 2. ✅ **Professional vs Personal JS Packages** - Separate configs for work and personal
 3. ✅ **Personal Tools Optional** - Clawdbot and other personal tools are optional
 4. ✅ **Homebrew Skip on Linux** - Automatic skip, no prompts on Linux systems
+5. ✅ **Stow Logic Fix** - Fixed false failure reports in stow operations
 
 ---
 
@@ -138,6 +139,47 @@ fi
 
 ---
 
+## 5. Stow Logic Fix
+
+### File: `scripts/manage-stow.sh`
+
+**Problem:** Script reported "Failed to stow" even when stow succeeded.
+
+**Root Cause:**
+```bash
+# OLD/BROKEN CODE:
+if stow -v -t "$HOME" "$pkg" 2>&1 | grep -v "BUG in find_stowed_path"; then
+    log_success "$pkg stowed"
+else
+    log_error "Failed to stow $pkg"  # ❌ False failure
+fi
+```
+
+When stow only outputs the BUG message:
+- `grep -v` filters it out → empty output
+- Empty output makes `if` condition fail
+- Reports failure even though stow succeeded
+
+**Solution:** Separate verbose output from success check:
+```bash
+# Show verbose output (filtered)
+stow -v -t "$HOME" "$pkg" 2>&1 | grep -v "BUG in find_stowed_path" || true
+
+# Check success separately (idempotent)
+if stow -t "$HOME" "$pkg" 2>/dev/null; then
+    log_success "$pkg stowed"
+else
+    log_error "Failed to stow $pkg"
+fi
+```
+
+**Result:**
+- ✅ Correctly reports success/failure based on exit code
+- ✅ Still shows verbose output (minus harmless BUG message)
+- ✅ Idempotent (safe to run stow multiple times)
+
+---
+
 ## Files Summary
 
 ### Created
@@ -146,6 +188,7 @@ fi
 | `scripts/config/js.pkg.personal.yml` | Personal JS packages config |
 | `docs/CHANGES_JAN_29_2026.md` | Detailed change summary |
 | `docs/HOMEBREW_LINUX_SKIP.md` | Homebrew skip documentation |
+| `docs/STOW_FIX_JAN_29_2026.md` | Stow logic fix documentation |
 | `ARCHITECTURE.md` | Architecture documentation (from earlier) |
 | `docs/SIMPLIFIED_ARCHITECTURE.md` | Visual architecture guide (from earlier) |
 | `docs/COMPLETION_SUMMARY.md` | Earlier completion summary |
@@ -153,7 +196,7 @@ fi
 ### Modified
 | File | Changes |
 |------|---------|
-| `scripts/manage-stow.sh` | Smart ZSH backup logic |
+| `scripts/manage-stow.sh` | Smart ZSH backup + stow logic fix |
 | `scripts/install-js-packages.sh` | Professional/personal split |
 | `scripts/config/js.pkg.yml` | Professional packages only |
 | `install.sh` | Personal tools + Homebrew skip |

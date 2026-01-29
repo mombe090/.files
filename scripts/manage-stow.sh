@@ -213,8 +213,11 @@ stow_packages() {
         # Check for conflicts and backup if needed
         backup_conflicts "$pkg"
         
-        # Stow with verbose output, filter out the BUG message
-        if stow -v -t "$HOME" "$pkg" 2>&1 | grep -v "BUG in find_stowed_path"; then
+        # Stow the package (suppress BUG message but keep other output)
+        stow -v -t "$HOME" "$pkg" 2>&1 | grep -v "BUG in find_stowed_path" || true
+        
+        # Check if stow succeeded by running it again without verbose
+        if stow -t "$HOME" "$pkg" 2>/dev/null; then
             log_success "$pkg stowed"
             ((stowed++))
         else
