@@ -6,6 +6,60 @@ All notable changes to this dotfiles repository will be documented in this file.
 
 ### Added
 
+- **`scripts/manage-stow.sh`** - Centralized GNU Stow package management
+  - Stow/unstow/restow operations for dotfiles packages
+  - Default packages: zsh, mise, zellij, bat, nvim, starship
+  - Auto-detects available packages in dotfiles repo
+  - Shows stow status for packages
+  - List available packages with default indicators
+  - Supports custom package selection
+  - Better error handling and user feedback
+  - Summary statistics (stowed/failed/skipped)
+
+- **`scripts/install-js-packages.sh`** - Install JavaScript/TypeScript packages globally via bun
+  - Reads package list from YAML config file (`scripts/config/js.pkg.yml`)
+  - Supports install, list, and update operations
+  - Interactive confirmation (can skip with `--yes` flag)
+  - Auto-creates default config with common packages
+  - Simple YAML parser (no external dependencies)
+  - Tracks installed/failed/skipped packages
+  - Default packages: TypeScript, ESLint, Prettier, Vite, Vitest, and more
+
+- **`scripts/config/js.pkg.yml`** - Package list configuration
+  - YAML format for easy editing
+  - Pre-configured with common JavaScript/TypeScript tools
+  - Organized by category (package managers, build tools, testing, etc.)
+  - Optional packages section for framework CLIs
+
+- **`scripts/check-dotnet.sh`** - New diagnostic tool for .NET installation issues
+  - Checks if dotnet is in PATH
+  - Searches for dotnet binary in common locations (/usr/bin, /usr/local/bin, ~/.dotnet)
+  - Shows installed .NET packages (OS-specific: apt/brew/yum/pacman)
+  - Checks shell profile files for dotnet configuration
+  - Provides actionable troubleshooting steps
+  - Helps diagnose PATH configuration problems
+
+- **`DOTNET_TROUBLESHOOTING.md`** - Comprehensive troubleshooting guide
+  - Common issues and solutions
+  - Platform-specific notes (Ubuntu/Debian, macOS, RHEL/Fedora)
+  - PATH configuration instructions
+  - Manual installation fallback steps
+  - Quick reference commands
+
+- **`VM_DOTNET_FIX.md`** - Quick fix guide for VM installations
+  - TL;DR solution for "command not found" errors
+  - Why the issue happens (shell command caching)
+  - Multiple solution options
+  - Verification steps
+
+- **`INSTALLATION_FLOW.md`** - Complete installation flow documentation
+  - Step-by-step flow diagram
+  - JavaScript packages integration explanation
+  - Different installation scenarios
+  - Customization options
+
+### Changed
+
 - **`scripts/install-js-packages.sh`** - Install JavaScript/TypeScript packages globally via bun
   - Reads package list from YAML config file (`scripts/config/js.pkg.yml`)
   - Supports install, list, and update operations
@@ -44,23 +98,28 @@ All notable changes to this dotfiles repository will be documented in this file.
 
 ### Changed
 
+- **`install.sh`** - Enhanced installation process
+  - Fixed .NET installation step visibility (shows even when already installed)
+  - Better feedback during full installation mode
+  - Clearer success/skip messages
+  - Enhanced completion message with troubleshooting tips
+  - **Integrated manage-stow.sh for package management**
+    - Uses new manage-stow.sh script for stowing packages
+    - Default packages reduced to core set: zsh, mise, zellij, bat, nvim, starship
+    - Minimal install now stows only zsh and git
+    - Fallback to manual stow if script not found
+  - **Integrated JavaScript packages installation in post_install**
+    - Automatically installs JS packages if bun is available
+    - Runs at the end of installation (all modes)
+    - Non-blocking (doesn't fail if packages have issues)
+    - Skips gracefully if bun not installed
+
 - **`scripts/install-dotnet.sh`** - Updated default .NET version from 8.0 to 10.0
   - Default installation now uses .NET 10 (latest stable)
   - Updated help documentation and examples
   - Improved verification with better PATH troubleshooting
   - Added detailed diagnostics for PATH issues
   - Better instructions referencing dotfiles env config
-
-- **`install.sh`** - Enhanced installation process
-  - Fixed .NET installation step visibility (shows even when already installed)
-  - Better feedback during full installation mode
-  - Clearer success/skip messages
-  - Enhanced completion message with troubleshooting tips
-  - **Integrated JavaScript packages installation in post_install**
-    - Automatically installs JS packages if bun is available
-    - Runs at the end of installation (all modes)
-    - Non-blocking (doesn't fail if packages have issues)
-    - Skips gracefully if bun not installed
 
 - **`zsh/.config/zsh/env.zsh`** - Added .NET PATH configuration
   - macOS: Sets DOTNET_ROOT for Homebrew installations

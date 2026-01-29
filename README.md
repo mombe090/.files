@@ -320,6 +320,7 @@ Utility scripts in `scripts/`:
 - **`install-stow.sh`** - Install GNU Stow
 - **`install-dotnet.sh`** - Install .NET SDK/Runtime (cross-platform)
 - **`install-js-packages.sh`** - Install JS/TS packages globally via bun
+- **`manage-stow.sh`** - Manage stow packages (stow/unstow/restow)
 - **`check-dotnet.sh`** - Diagnostic tool for .NET PATH issues
 - **`backup.sh`** - Backup existing configurations
 - **`uninstall.sh`** - Remove dotfiles and restore backups

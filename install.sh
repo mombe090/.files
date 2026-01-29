@@ -335,50 +335,38 @@ install_mise_tools() {
 stow_configs() {
     log_step "Symlinking configurations with GNU Stow..."
     
-    # Get all stow packages (directories with .config or dot files)
-    local packages=(
-        "zsh"
-        "git"
-        "nvim"
-        "starship"
-        "alacritty"
-        "ghostty"
-        "bat"
-        "delta"
-        "mise"
-        "zellij"
-    )
-    
-    # Optional packages (only stow if directory exists)
-    local optional_packages=(
-        "hypr"
-        "omarchy"
-        "nushell"
-        "opencode"
-    )
-    
-    cd "$DOTFILES_ROOT"
-    
-    # Stow core packages
-    for package in "${packages[@]}"; do
-        if [[ -d "$package" ]]; then
-            log_info "Stowing $package..."
-            stow -v -t "$HOME" "$package" 2>&1 | grep -v "BUG in find_stowed_path" || true
-        else
-            log_warn "Package directory $package not found, skipping"
-        fi
-    done
-    
-    # Stow optional packages
-    for package in "${optional_packages[@]}"; do
-        if [[ -d "$package" ]]; then
-            log_info "Stowing optional package: $package..."
-            stow -v -t "$HOME" "$package" 2>&1 | grep -v "BUG in find_stowed_path" || true
-        fi
-    done
+    # Use manage-stow.sh script with default packages
+    # Default packages: zsh, mise, zellij, bat, nvim, starship
+    if [[ -x "$SCRIPTS_DIR/manage-stow.sh" ]]; then
+        bash "$SCRIPTS_DIR/manage-stow.sh" stow
+    else
+        # Fallback to manual stow if script not found
+        log_warn "manage-stow.sh not found, using fallback method"
+        
+        local packages=(
+            "zsh"
+            "mise"
+            "zellij"
+            "bat"
+            "nvim"
+            "starship"
+        )
+        
+        cd "$DOTFILES_ROOT"
+        
+        for package in "${packages[@]}"; do
+            if [[ -d "$package" ]]; then
+                log_info "Stowing $package..."
+                stow -v -t "$HOME" "$package" 2>&1 | grep -v "BUG in find_stowed_path" || true
+            else
+                log_warn "Package directory $package not found, skipping"
+            fi
+        done
+    fi
     
     log_success "Configurations symlinked"
 }
+
 
 # ===== POST-INSTALL SETUP =====
 post_install() {
@@ -494,10 +482,14 @@ minimal_install() {
     install_homebrew
     install_core_tools
     
-    # Only stow essential configs
-    cd "$DOTFILES_ROOT"
-    log_info "Stowing minimal configurations..."
-    stow -v -t "$HOME" zsh git 2>&1 | grep -v "BUG in find_stowed_path" || true
+    # Only stow essential configs (zsh and git)
+    log_step "Stowing minimal configurations..."
+    if [[ -x "$SCRIPTS_DIR/manage-stow.sh" ]]; then
+        bash "$SCRIPTS_DIR/manage-stow.sh" stow zsh git
+    else
+        cd "$DOTFILES_ROOT"
+        stow -v -t "$HOME" zsh git 2>&1 | grep -v "BUG in find_stowed_path" || true
+    fi
     
     post_install
     

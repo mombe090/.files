@@ -288,6 +288,81 @@ nano scripts/config/js.pkg.yml
 
 ### Utility Scripts
 
+#### `manage-stow.sh`
+
+Manage GNU Stow packages for dotfiles (stow/unstow/restow configurations).
+
+```bash
+./scripts/manage-stow.sh [COMMAND] [OPTIONS] [PACKAGES...]
+```
+
+**What it does:**
+
+- Stows (symlinks) dotfiles packages to home directory
+- Manages symlinks for configuration files
+- Supports stow, unstow, and restow operations
+- Auto-detects available packages
+- Shows stow status
+
+**Commands:**
+
+```bash
+stow, -s              Stow packages (create symlinks)
+restow, -r            Re-stow packages (update symlinks)
+unstow, -u            Unstow packages (remove symlinks)
+list, -l              List available packages
+status                Show stow status for default packages
+help, -h              Show help message
+```
+
+**Default Packages:**
+
+- zsh - Zsh shell configuration
+- mise - Mise version manager config
+- zellij - Zellij terminal multiplexer
+- bat - Bat (cat replacement) config
+- nvim - Neovim configuration
+- starship - Starship prompt config
+
+**Examples:**
+
+```bash
+# Stow default packages
+./scripts/manage-stow.sh stow
+
+# Stow specific packages
+./scripts/manage-stow.sh stow zsh nvim git
+
+# Re-stow all defaults (update symlinks after changes)
+./scripts/manage-stow.sh restow
+
+# Unstow a specific package
+./scripts/manage-stow.sh unstow zellij
+
+# List all available packages
+./scripts/manage-stow.sh list
+
+# Show stow status
+./scripts/manage-stow.sh status
+```
+
+**Common workflows:**
+
+```bash
+# After editing dotfiles, update symlinks
+git pull
+./scripts/manage-stow.sh restow
+
+# Install new package
+./scripts/manage-stow.sh stow alacritty
+
+# Remove package symlinks before deletion
+./scripts/manage-stow.sh unstow old-package
+rm -rf old-package
+```
+
+---
+
 #### `backup.sh`
 
 Backup existing configurations before installing dotfiles.
