@@ -2,7 +2,7 @@
 
 ## Overview
 
-Six major improvements implemented today:
+Eight major improvements implemented today:
 
 1. ✅ **Smart ZSH Backup Logic** - Only backs up real files, not symlinks
 2. ✅ **Professional vs Personal JS Packages** - Separate configs for work and personal
@@ -10,6 +10,8 @@ Six major improvements implemented today:
 4. ✅ **Homebrew Skip on Linux** - Automatic skip, no prompts on Linux systems
 5. ✅ **Stow Logic Fix** - Fixed false failure reports in stow operations
 6. ✅ **Stow Hang Fix** - Fixed script hanging after first package
+7. ✅ **JS Packages Hang Fix** - Fixed install-js-packages.sh hanging during installation
+8. ✅ **Stow Backup Delete Fix** - Prevented backup from deleting repository files
 
 ---
 
@@ -225,6 +227,48 @@ fi
 
 ---
 
+## 7. JS Packages Hang Fix
+
+### File: `scripts/install-js-packages.sh`
+
+**Problem:** Script hung during package installation, same as stow script.
+
+**Symptoms:**
+```
+[INFO] Installing: pnpm
+[✓] pnpm installed
+# ← Hangs here, never installs other packages
+```
+
+**Root Cause:** Same `((variable++))` syntax issue:
+```bash
+if bun add -g "$pkg" &> /dev/null; then
+    log_success "$pkg installed"
+    ((installed++))  # ← HUNG HERE
+fi
+```
+
+**Solution:** Changed to explicit arithmetic:
+```bash
+if bun add -g "$pkg" &> /dev/null; then
+    log_success "$pkg installed"
+    installed=$((installed + 1))  # ✅ WORKS
+fi
+```
+
+**Lines Changed:**
+- Line 253: `((skipped++))` → `skipped=$((skipped + 1))`
+- Line 260: `((installed++))` → `installed=$((installed + 1))`
+- Line 263: `((failed++))` → `failed=$((failed + 1))`
+
+**Result:**
+- ✅ All packages install successfully
+- ✅ Loop completes for all packages
+- ✅ Summary displays correctly
+- ✅ Script completes fully
+
+---
+
 ## Files Summary
 
 ### Created
@@ -235,6 +279,7 @@ fi
 | `docs/HOMEBREW_LINUX_SKIP.md` | Homebrew skip documentation |
 | `docs/STOW_FIX_JAN_29_2026.md` | Stow logic fix documentation |
 | `docs/STOW_HANG_FIX_JAN_29_2026.md` | Stow hang fix documentation |
+| `docs/JS_PACKAGES_HANG_FIX_JAN_29_2026.md` | JS packages hang fix documentation |
 | `ARCHITECTURE.md` | Architecture documentation (from earlier) |
 | `docs/SIMPLIFIED_ARCHITECTURE.md` | Visual architecture guide (from earlier) |
 | `docs/COMPLETION_SUMMARY.md` | Earlier completion summary |
@@ -243,7 +288,7 @@ fi
 | File | Changes |
 |------|---------|
 | `scripts/manage-stow.sh` | Smart ZSH backup + stow fixes (logic & hang) |
-| `scripts/install-js-packages.sh` | Professional/personal split |
+| `scripts/install-js-packages.sh` | Professional/personal split + hang fix |
 | `scripts/config/js.pkg.yml` | Professional packages only |
 | `install.sh` | Personal tools + Homebrew skip |
 | `scripts/docs/INSTALL_JS_PACKAGES_GUIDE.md` | Complete rewrite |

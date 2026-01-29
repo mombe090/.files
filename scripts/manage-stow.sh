@@ -111,7 +111,25 @@ backup_conflicts() {
         local target="$HOME/$file"
         
         # Skip if target doesn't exist
-        [[ ! -e "$target" ]] && continue
+        [[ ! -e "$target" ]] && [[ ! -L "$target" ]] && continue
+        
+        # Check if any parent directory is a symlink to our dotfiles
+        # This prevents backing up files that are already in dotfiles via parent symlink
+        local parent_dir="$target"
+        local is_already_stowed=false
+        while [[ "$parent_dir" != "$HOME" ]] && [[ "$parent_dir" != "/" ]]; do
+            parent_dir=$(dirname "$parent_dir")
+            if [[ -L "$parent_dir" ]]; then
+                local parent_resolved=$(readlink -f "$parent_dir" 2>/dev/null || echo "")
+                if [[ "$parent_resolved" == *"$DOTFILES_ROOT/$pkg"* ]]; then
+                    is_already_stowed=true
+                    break
+                fi
+            fi
+        done
+        
+        # Skip if file is already stowed via parent directory symlink
+        [[ "$is_already_stowed" == true ]] && continue
         
         # If target is a symlink, check where it points
         if [[ -L "$target" ]]; then
