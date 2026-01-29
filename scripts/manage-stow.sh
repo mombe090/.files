@@ -23,6 +23,7 @@ log_success() { echo -e "${GREEN}[✓]${NC} ${BOLD}$1${NC}"; }
 # Default packages to stow
 DEFAULT_PACKAGES=(
     "zsh"
+    "bash"
     "mise"
     "zellij"
     "bat"
