@@ -120,29 +120,6 @@ backup_configs() {
     fi
 }
 
-# ===== INSTALL MISE =====
-install_mise() {
-    log_step "Installing mise..."
-    
-    if command -v mise &> /dev/null; then
-        log_warn "mise already installed ($(mise --version))"
-        return 0
-    fi
-    
-    bash "$SCRIPTS_DIR/install-mise.sh"
-    
-    # Activate mise in current shell
-    if [[ -f "$HOME/.local/bin/mise" ]]; then
-        export PATH="$HOME/.local/bin:$PATH"
-        eval "$(mise activate bash)"
-    elif [[ -f "/usr/local/bin/mise" ]]; then
-        export PATH="/usr/local/bin:$PATH"
-        eval "$(mise activate bash)"
-    fi
-    
-    log_success "mise installed"
-}
-
 # ===== INSTALL PACKAGE =====
 # Tries mise first, falls back to OS package manager
 install_package() {
@@ -202,17 +179,28 @@ install_package() {
     log_success "$package installed"
 }
 
-# ===== INSTALL HOMEBREW (macOS only) =====
+# ===== INSTALL HOMEBREW =====
 install_homebrew() {
+    log_step "Installing Homebrew..."
     if [[ -x "$SCRIPTS_DIR/install-homebrew.sh" ]]; then
         bash "$SCRIPTS_DIR/install-homebrew.sh"
+    else
+        log_warn "install-homebrew.sh not found or not executable"
     fi
 }
 
 # ===== INSTALL MISE =====
 install_mise() {
+    log_step "Installing mise..."
     if [[ -x "$SCRIPTS_DIR/install-mise.sh" ]]; then
         bash "$SCRIPTS_DIR/install-mise.sh"
+        
+        # Activate mise in current shell session for subsequent commands
+        if command -v mise &> /dev/null; then
+            eval "$(mise activate bash)" 2>/dev/null || true
+        fi
+    else
+        log_warn "install-mise.sh not found or not executable"
     fi
 }
 
@@ -261,8 +249,11 @@ install_optional_tools() {
 
 # ===== INSTALL DOTNET =====
 install_dotnet() {
+    log_step "Installing .NET SDK..."
     if [[ -x "$SCRIPTS_DIR/install-dotnet.sh" ]]; then
         AUTO_INSTALL=true bash "$SCRIPTS_DIR/install-dotnet.sh"
+    else
+        log_warn "install-dotnet.sh not found or not executable"
     fi
 }
 
@@ -280,8 +271,14 @@ install_mise_tools() {
 
 # ===== STOW CONFIGURATIONS =====
 stow_configs() {
+    log_step "Stowing configurations..."
     if [[ -x "$SCRIPTS_DIR/manage-stow.sh" ]]; then
         bash "$SCRIPTS_DIR/manage-stow.sh" stow
+    else
+        log_warn "manage-stow.sh not found or not executable"
+        log_info "Falling back to manual stow..."
+        cd "$DOTFILES_ROOT"
+        stow -v -t "$HOME" zsh mise zellij bat nvim starship 2>&1 | grep -v "BUG in find_stowed_path" || true
     fi
 }
 
@@ -314,10 +311,13 @@ EOF
         log_info "Created ~/.envrc for direnv"
     fi
     
-    # Install JavaScript/TypeScript packages via bun
+    # Install JavaScript/TypeScript packages via bun (if available)
     echo ""
+    log_info "Installing JavaScript/TypeScript packages..."
     if [[ -x "$SCRIPTS_DIR/install-js-packages.sh" ]]; then
         AUTO_CONFIRM=true bash "$SCRIPTS_DIR/install-js-packages.sh" --yes || true
+    else
+        log_warn "install-js-packages.sh not found or not executable"
     fi
     
     echo ""
