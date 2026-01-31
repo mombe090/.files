@@ -17,13 +17,6 @@
 #  - cloud: Cloud platform CLIs and tools
 
 essentials:
-  - id: Microsoft.PowerShell
-    name: PowerShell 7
-    category: essentials
-    
-  - id: Git.Git
-    name: Git
-    category: essentials
     
   - id: Microsoft.WindowsTerminal
     name: Windows Terminal
@@ -46,26 +39,11 @@ development:
     name: Python 3.12
     category: development
     
-  - id: Python.Python.3.11
-    name: Python 3.11
-    category: development
-    
   - id: OpenJS.NodeJS.LTS
     name: Node.js LTS
     category: development
-    
-  - id: GoLang.Go
-    name: Go Programming Language
-    category: development
-    
-  - id: Rustlang.Rust.GNU
-    name: Rust (GNU)
-    category: development
 
 productivity:
-  - id: Notion.Notion
-    name: Notion
-    category: productivity
     
   - id: Obsidian.Obsidian
     name: Obsidian
@@ -74,32 +52,21 @@ productivity:
   - id: Microsoft.PowerToys
     name: PowerToys
     category: productivity
-    
-  - id: ShareX.ShareX
-    name: ShareX
-    category: productivity
 
-security:
-  - id: Bitwarden.Bitwarden
-    name: Bitwarden
-    category: security
-    
-  - id: Yubico.Authenticator
-    name: Yubico Authenticator
-    category: security
+security: [] # Handled by company policies
 
 cloud:
   - id: Microsoft.Azure.CLI
     name: Azure CLI
     category: cloud
     
-  - id: Amazon.AWSCLI
-    name: AWS CLI
-    category: cloud
+#  - id: Amazon.AWSCLI
+#    name: AWS CLI
+#    category: cloud
     
-  - id: Google.CloudSDK
-    name: Google Cloud SDK
-    category: cloud
+#  - id: Google.CloudSDK
+#    name: Google Cloud SDK
+#    category: cloud
     
   - id: Kubernetes.kubectl
     name: kubectl
@@ -138,16 +105,8 @@ tools:
     name: fzf (fuzzy finder)
     category: tools
     
-  - id: Schniz.fnm
-    name: fnm (Node version manager)
-    category: tools
-    
   - id: jqlang.jq
     name: jq (JSON processor)
-    category: tools
-    
-  - id: stedolan.jq
-    name: jq
     category: tools
     
   - id: ajeetdsouza.zoxide

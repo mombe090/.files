@@ -9,13 +9,6 @@
 # =============================================================================
 
 essentials:
-  - id: powershell-core
-    name: PowerShell 7
-    category: essentials
-    
-  - id: git
-    name: Git
-    category: essentials
     
   - id: microsoft-windows-terminal
     name: Windows Terminal
@@ -41,20 +34,8 @@ development:
   - id: nodejs-lts
     name: Node.js LTS
     category: development
-    
-  - id: golang
-    name: Go Programming Language
-    category: development
-    
-  - id: rust
-    name: Rust
-    category: development
 
 productivity:
-  - id: notion
-    name: Notion
-    category: productivity
-    
   - id: obsidian
     name: Obsidian
     category: productivity
@@ -62,28 +43,21 @@ productivity:
   - id: powertoys
     name: PowerToys
     category: productivity
-    
-  - id: sharex
-    name: ShareX
-    category: productivity
 
-security:
-  - id: bitwarden
-    name: Bitwarden
-    category: security
+security: [] # Handled by company policies
 
 cloud:
   - id: azure-cli
     name: Azure CLI
     category: cloud
     
-  - id: awscli
-    name: AWS CLI
-    category: cloud
-    
-  - id: gcloudsdk
-    name: Google Cloud SDK
-    category: cloud
+#  - id: awscli
+#    name: AWS CLI
+#    category: cloud
+#
+#  - id: gcloudsdk
+#    name: Google Cloud SDK
+#    category: cloud
     
   - id: kubernetes-cli
     name: kubectl
@@ -116,10 +90,6 @@ tools:
     
   - id: fzf
     name: fzf (fuzzy finder)
-    category: tools
-    
-  - id: jq
-    name: jq (JSON processor)
     category: tools
     
   - id: zoxide
