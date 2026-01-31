@@ -52,6 +52,30 @@ development:
   - id: bun
     name: Bun
     category: development
+    
+  - id: mingw
+    name: MinGW
+    category: development
+    
+  - id: openjdk21
+    name: OpenJDK 21
+    category: development
+    
+  - id: openjdk
+    name: OpenJDK 25 (Latest)
+    category: development
+    
+  - id: lua
+    name: Lua 5.1
+    category: development
+    
+  - id: luarocks
+    name: LuaRocks
+    category: development
+    
+  - id: neovim
+    name: Neovim
+    category: development
 
 productivity:
   - id: obsidian
@@ -60,6 +84,14 @@ productivity:
     
   - id: powertoys
     name: PowerToys
+    category: productivity
+    
+  - id: autohotkey
+    name: AutoHotkey
+    category: productivity
+    
+  - id: adobereader
+    name: Adobe Acrobat Reader
     category: productivity
 
 security: [] # Handled by company policies
@@ -79,6 +111,14 @@ cloud:
     
   - id: kubernetes-cli
     name: kubectl
+    category: cloud
+    
+  - id: kubectx
+    name: kubectx
+    category: cloud
+    
+  - id: kubens
+    name: kubens
     category: cloud
     
   - id: kubernetes-helm
@@ -112,4 +152,12 @@ tools:
     
   - id: zoxide
     name: zoxide (smarter cd)
+    category: tools
+    
+  - id: lazygit
+    name: LazyGit
+    category: tools
+    
+  - id: win32yank
+    name: win32yank (Clipboard for WSL)
     category: tools

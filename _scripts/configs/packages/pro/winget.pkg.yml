@@ -44,4 +44,16 @@ tools:
   - id: jqlang.jq
     name: jq (JSON processor)
     category: tools
+    
+  - id: Task.Task
+    name: Task (Taskfile runner)
+    category: tools
+    
+  - id: GitHub.cli
+    name: GitHub CLI
+    category: tools
+    
+  - id: GitHub.GitHubCopilot
+    name: GitHub Copilot CLI
+    category: tools
 # Other tools are handled by Chocolatey
