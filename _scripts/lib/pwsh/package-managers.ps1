@@ -434,6 +434,71 @@ function Install-Chocolatey {
 
 <#
 .SYNOPSIS
+    Check if a package has updates available.
+
+.DESCRIPTION
+    Checks if a newer version of the package is available.
+
+.PARAMETER PackageName
+    The name/ID of the package to check.
+
+.PARAMETER PackageManager
+    Package manager to use ('winget', 'choco', or 'auto'). Default: 'auto'
+
+.EXAMPLE
+    Test-PackageUpdateAvailable -PackageName "git"
+
+.OUTPUTS
+    Boolean - $true if update available, $false otherwise
+#>
+function Test-PackageUpdateAvailable {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$PackageName,
+
+        [ValidateSet('winget', 'choco', 'auto')]
+        [string]$PackageManager = 'auto'
+    )
+
+    $pm = if ($PackageManager -eq 'auto') {
+        Get-PackageManager
+    }
+    else {
+        $PackageManager
+    }
+
+    if (-not $pm) {
+        return $false
+    }
+
+    try {
+        switch ($pm) {
+            'winget' {
+                $result = winget upgrade --id $PackageName --exact 2>&1 | Out-String
+                # If "No applicable update found" or package is not in the list, no update available
+                if ($result -match "No applicable update found" -or $result -match "No installed package found") {
+                    return $false
+                }
+                # If package appears in upgrade list, update is available
+                return $result -match $PackageName
+            }
+
+            'choco' {
+                $result = choco outdated $PackageName --limit-output 2>&1 | Out-String
+                # Choco outdated returns package info if outdated, empty if up-to-date
+                return ($result -match $PackageName)
+            }
+        }
+    }
+    catch {
+        return $false
+    }
+
+    return $false
+}
+
+<#
+.SYNOPSIS
     Get list of installed packages.
 
 .DESCRIPTION

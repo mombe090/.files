@@ -178,27 +178,38 @@ foreach ($configFile in $configFiles) {
         if ($isInstalled) {
             Write-Info "  Already installed, checking for updates..."
             
-            # Try to upgrade
-            $upgraded = $false
-            if ($pm -eq 'choco') {
-                choco upgrade $package.Id -y --limit-output 2>&1 | Out-Null
-                if ($LASTEXITCODE -eq 0) {
-                    $upgraded = $true
-                }
-            }
-            elseif ($pm -eq 'winget') {
-                winget upgrade --id $package.Id --silent --accept-source-agreements 2>&1 | Out-Null
-                if ($LASTEXITCODE -eq 0) {
-                    $upgraded = $true
-                }
-            }
+            # Check if update is available
+            $updateAvailable = Test-PackageUpdateAvailable -PackageName $package.Id -PackageManager $pm
             
-            if ($upgraded) {
-                Write-Success "  Updated to latest version"
-                $totalInstalled++
+            if ($updateAvailable) {
+                Write-Info "  Update available, upgrading..."
+                
+                # Try to upgrade
+                $upgraded = $false
+                if ($pm -eq 'choco') {
+                    choco upgrade $package.Id -y --limit-output 2>&1 | Out-Null
+                    if ($LASTEXITCODE -eq 0) {
+                        $upgraded = $true
+                    }
+                }
+                elseif ($pm -eq 'winget') {
+                    winget upgrade --id $package.Id --silent --accept-source-agreements --accept-package-agreements 2>&1 | Out-Null
+                    if ($LASTEXITCODE -eq 0) {
+                        $upgraded = $true
+                    }
+                }
+                
+                if ($upgraded) {
+                    Write-Success "  Updated to latest version"
+                    $totalInstalled++
+                }
+                else {
+                    Write-Warn "  Upgrade failed"
+                    $totalFailed++
+                }
             }
             else {
-                Write-Info "  Already up-to-date"
+                Write-Success "  Already at latest version"
                 $totalSkipped++
             }
         }
