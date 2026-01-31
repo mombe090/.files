@@ -1,17 +1,69 @@
 # =============================================================================
-# Colored Logging Functions for PowerShell
+# Colored Logging Functions for PowerShell (Catppuccin Mocha Theme)
 # =============================================================================
-# This module provides colored console output for better readability.
+# This module provides colored console output using Catppuccin Mocha colors.
 #
 # Functions:
-#   - Write-Info: Informational messages (Cyan)
-#   - Write-Step: Step/progress messages (Blue)
+#   - Write-Info: Informational messages (Sky Blue)
+#   - Write-Step: Step/progress messages (Lavender)
 #   - Write-Success: Success messages (Green)
-#   - Write-Warn: Warning messages (Yellow)
-#   - Write-Error: Error messages (Red)
-#   - Write-Header: Section headers (Magenta)
-#   - Write-Debug: Debug messages (Gray)
+#   - Write-Warn: Warning messages (Yellow/Peach)
+#   - Write-ErrorMsg: Error messages (Red)
+#   - Write-Header: Section headers (Mauve)
+#   - Write-DebugMsg: Debug messages (Overlay0)
+#
+# Catppuccin Mocha Colors:
+#   https://github.com/catppuccin/catppuccin
 # =============================================================================
+
+# Check if terminal supports RGB colors
+$SupportsRGB = $host.UI.SupportsVirtualTerminal -and ($PSVersionTable.PSVersion.Major -ge 6)
+
+# Catppuccin Mocha Color Palette
+$Script:CatppuccinMocha = @{
+    Rosewater = if ($SupportsRGB) { "`e[38;2;245;224;220m" } else { "White" }
+    Flamingo  = if ($SupportsRGB) { "`e[38;2;242;205;205m" } else { "White" }
+    Pink      = if ($SupportsRGB) { "`e[38;2;245;194;231m" } else { "Magenta" }
+    Mauve     = if ($SupportsRGB) { "`e[38;2;203;166;247m" } else { "Magenta" }
+    Red       = if ($SupportsRGB) { "`e[38;2;243;139;168m" } else { "Red" }
+    Maroon    = if ($SupportsRGB) { "`e[38;2;235;160;172m" } else { "Red" }
+    Peach     = if ($SupportsRGB) { "`e[38;2;250;179;135m" } else { "Yellow" }
+    Yellow    = if ($SupportsRGB) { "`e[38;2;249;226;175m" } else { "Yellow" }
+    Green     = if ($SupportsRGB) { "`e[38;2;166;227;161m" } else { "Green" }
+    Teal      = if ($SupportsRGB) { "`e[38;2;148;226;213m" } else { "Cyan" }
+    Sky       = if ($SupportsRGB) { "`e[38;2;137;220;235m" } else { "Cyan" }
+    Sapphire  = if ($SupportsRGB) { "`e[38;2;116;199;236m" } else { "Blue" }
+    Blue      = if ($SupportsRGB) { "`e[38;2;137;180;250m" } else { "Blue" }
+    Lavender  = if ($SupportsRGB) { "`e[38;2;180;190;254m" } else { "Blue" }
+    Text      = if ($SupportsRGB) { "`e[38;2;205;214;244m" } else { "White" }
+    Subtext1  = if ($SupportsRGB) { "`e[38;2;186;194;222m" } else { "Gray" }
+    Subtext0  = if ($SupportsRGB) { "`e[38;2;166;173;200m" } else { "Gray" }
+    Overlay2  = if ($SupportsRGB) { "`e[38;2;147;153;178m" } else { "Gray" }
+    Overlay1  = if ($SupportsRGB) { "`e[38;2;127;132;156m" } else { "Gray" }
+    Overlay0  = if ($SupportsRGB) { "`e[38;2;108;112;134m" } else { "DarkGray" }
+    Surface2  = if ($SupportsRGB) { "`e[38;2;88;91;112m" } else { "DarkGray" }
+    Surface1  = if ($SupportsRGB) { "`e[38;2;69;71;90m" } else { "DarkGray" }
+    Surface0  = if ($SupportsRGB) { "`e[38;2;49;50;68m" } else { "Black" }
+    Base      = if ($SupportsRGB) { "`e[38;2;30;30;46m" } else { "Black" }
+    Mantle    = if ($SupportsRGB) { "`e[38;2;24;24;37m" } else { "Black" }
+    Crust     = if ($SupportsRGB) { "`e[38;2;17;17;27m" } else { "Black" }
+    Reset     = if ($SupportsRGB) { "`e[0m" } else { "" }
+}
+
+# Helper function to write colored text with RGB support
+function Write-ColoredText {
+    param(
+        [string]$Text,
+        [string]$Color
+    )
+    
+    if ($SupportsRGB) {
+        Write-Host "$Color$Text$($Script:CatppuccinMocha.Reset)" -NoNewline
+    } else {
+        Write-Host $Text -ForegroundColor $Color -NoNewline
+    }
+    Write-Host ""  # Newline
+}
 
 <#
 .SYNOPSIS
@@ -32,7 +84,7 @@ function Write-Info {
         [string]$Message
     )
 
-    Write-Host "[INFO] $Message" -ForegroundColor Cyan
+    Write-ColoredText "[INFO] $Message" -Color $Script:CatppuccinMocha.Sky
 }
 
 <#
@@ -54,7 +106,7 @@ function Write-Step {
         [string]$Message
     )
 
-    Write-Host "  → $Message" -ForegroundColor Blue
+    Write-ColoredText "  → $Message" -Color $Script:CatppuccinMocha.Lavender
 }
 
 <#
@@ -76,7 +128,7 @@ function Write-Success {
         [string]$Message
     )
 
-    Write-Host "[✓] $Message" -ForegroundColor Green
+    Write-ColoredText "[✓] $Message" -Color $Script:CatppuccinMocha.Green
 }
 
 <#
@@ -98,7 +150,7 @@ function Write-Warn {
         [string]$Message
     )
 
-    Write-Host "[!] $Message" -ForegroundColor Yellow
+    Write-ColoredText "[!] $Message" -Color $Script:CatppuccinMocha.Peach
 }
 
 <#
@@ -120,7 +172,7 @@ function Write-ErrorMsg {
         [string]$Message
     )
 
-    Write-Host "[✗] $Message" -ForegroundColor Red
+    Write-ColoredText "[✗] $Message" -Color $Script:CatppuccinMocha.Red
 }
 
 <#
@@ -144,9 +196,9 @@ function Write-Header {
 
     $border = "=" * ($Message.Length + 4)
     Write-Host ""
-    Write-Host $border -ForegroundColor Magenta
-    Write-Host "  $Message" -ForegroundColor Magenta
-    Write-Host $border -ForegroundColor Magenta
+    Write-ColoredText $border -Color $Script:CatppuccinMocha.Mauve
+    Write-ColoredText "  $Message" -Color $Script:CatppuccinMocha.Mauve
+    Write-ColoredText $border -Color $Script:CatppuccinMocha.Mauve
     Write-Host ""
 }
 
@@ -170,7 +222,7 @@ function Write-DebugMsg {
     )
 
     if ($DebugPreference -ne 'SilentlyContinue') {
-        Write-Host "[DEBUG] $Message" -ForegroundColor Gray
+        Write-ColoredText "[DEBUG] $Message" -Color $Script:CatppuccinMocha.Overlay0
     }
 }
 
@@ -193,6 +245,10 @@ function Write-Prompt {
         [string]$Message
     )
 
-    Write-Host $Message -ForegroundColor White -NoNewline
+    if ($SupportsRGB) {
+        Write-Host "$($Script:CatppuccinMocha.Text)$Message$($Script:CatppuccinMocha.Reset)" -NoNewline
+    } else {
+        Write-Host $Message -ForegroundColor White -NoNewline
+    }
 }
 
