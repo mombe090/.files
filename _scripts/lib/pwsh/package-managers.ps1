@@ -142,8 +142,9 @@ function Install-Package {
                     $args += '--limit-output'
                 }
 
-                $process = Start-Process -FilePath "choco" -ArgumentList $args -NoNewWindow -Wait -PassThru -Verb RunAs
-                return $process.ExitCode -eq 0
+                # Run choco directly (requires admin privileges)
+                & choco @args
+                return $LASTEXITCODE -eq 0
             }
         }
     }
@@ -264,8 +265,8 @@ function Update-Package {
             }
 
             'choco' {
-                $process = Start-Process -FilePath "choco" -ArgumentList @('upgrade', $PackageName, '-y') -NoNewWindow -Wait -PassThru -Verb RunAs
-                return $process.ExitCode -eq 0
+                & choco upgrade $PackageName -y
+                return $LASTEXITCODE -eq 0
             }
         }
     }
@@ -327,8 +328,8 @@ function Uninstall-Package {
             }
 
             'choco' {
-                $process = Start-Process -FilePath "choco" -ArgumentList @('uninstall', $PackageName, '-y') -NoNewWindow -Wait -PassThru -Verb RunAs
-                return $process.ExitCode -eq 0
+                & choco uninstall $PackageName -y
+                return $LASTEXITCODE -eq 0
             }
         }
     }
