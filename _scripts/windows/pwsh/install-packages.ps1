@@ -42,41 +42,64 @@ Write-Info "System: $($sysInfo.OS.ProductName) ($($sysInfo.Architecture))"
 Write-Info "PowerShell: $($sysInfo.PowerShell.Version)"
 Write-Info "Admin: $($sysInfo.IsAdmin)"
 
-# Ensure package manager is available
+# Check available package managers
 Write-Step "Checking package managers..."
-$pm = Get-PackageManager -Preferred $PackageManager
 
-if (-not $pm) {
-    Write-Info "No package manager found. Installing winget..."
-    if (-not (Install-WinGet)) {
-        Write-ErrorMsg "Failed to install package manager. Exiting."
-        exit 1
-    }
-    $pm = 'winget'
+$hasWinget = Test-Command "winget"
+$hasChoco = Test-Command "choco"
+
+if (-not $hasWinget -and -not $hasChoco) {
+    Write-ErrorMsg "No package manager found. Please run install.ps1 first."
+    exit 1
 }
 
-Write-Success "Using package manager: $pm"
+$availableManagers = @()
+if ($hasChoco) { $availableManagers += "choco" }
+if ($hasWinget) { $availableManagers += "winget" }
 
-# Determine config files to use
+Write-Success "Available package managers: $($availableManagers -join ', ')"
+
+# Determine config files to use - run both choco and winget if available
 $configFiles = @()
 
-if ($Type -eq 'pro' -or $Type -eq 'all') {
-    $configFiles += "$ConfigDir\pro\$pm.pkg.yml"
+# Prioritize choco, then winget
+$packageManagers = @()
+if (Test-Command "choco") {
+    $packageManagers += 'choco'
+}
+if (Test-Command "winget") {
+    $packageManagers += 'winget'
 }
 
-if ($Type -eq 'perso' -or $Type -eq 'all') {
-    $configFiles += "$ConfigDir\perso\$pm.pkg.yml"
-}
-
-# Verify config files exist
-foreach ($config in $configFiles) {
-    if (-not (Test-Path $config)) {
-        Write-ErrorMsg "Config file not found: $config"
-        exit 1
+# Build config file list for each package manager
+foreach ($pkgMgr in $packageManagers) {
+    if ($Type -eq 'pro' -or $Type -eq 'all') {
+        $configPath = "$ConfigDir\pro\$pkgMgr.pkg.yml"
+        if (Test-Path $configPath) {
+            $configFiles += [PSCustomObject]@{
+                Path = $configPath
+                PackageManager = $pkgMgr
+            }
+        }
+    }
+    
+    if ($Type -eq 'perso' -or $Type -eq 'all') {
+        $configPath = "$ConfigDir\perso\$pkgMgr.pkg.yml"
+        if (Test-Path $configPath) {
+            $configFiles += [PSCustomObject]@{
+                Path = $configPath
+                PackageManager = $pkgMgr
+            }
+        }
     }
 }
 
-Write-Info "Config files: $($configFiles -join ', ')"
+if ($configFiles.Count -eq 0) {
+    Write-ErrorMsg "No config files found"
+    exit 1
+}
+
+Write-Info "Will process $($configFiles.Count) config file(s) using: $($packageManagers -join ', ')"
 
 # Parse and install packages
 $totalInstalled = 0
@@ -84,10 +107,11 @@ $totalFailed = 0
 $totalSkipped = 0
 
 foreach ($configFile in $configFiles) {
-    Write-Header "Processing: $(Split-Path $configFile -Leaf)"
+    $pm = $configFile.PackageManager
+    Write-Header "Processing: $(Split-Path $configFile.Path -Leaf) [$pm]"
     
     # Read config
-    $configContent = Get-Content -Path $configFile -Raw
+    $configContent = Get-Content -Path $configFile.Path -Raw
     $lines = $configContent -split "`n"
     
     $packages = @()

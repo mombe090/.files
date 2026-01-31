@@ -78,34 +78,74 @@ if (-not $Type) {
 
 Write-Header "Installing: $Type packages"
 
-# Step 1: Ensure package manager
+# Step 1: Ensure package managers
 if (-not $SkipPackages) {
-    Write-Header "Step 1: Package Manager"
+    Write-Header "Step 1: Package Managers"
     
-    $pm = Get-PackageManager
-    
-    if (-not $pm) {
-        Write-Info "No package manager found. Attempting to install Chocolatey..."
+    # Check for winget
+    $hasWinget = Test-Command "winget"
+    if (-not $hasWinget) {
+        Write-Info "Installing winget..."
+        & "$ScriptRoot\installers\pwsh\winget.ps1"
         
-        # Try to install Chocolatey first (preferred)
-        . "$ScriptRoot\lib\pwsh\package-managers.ps1"
-        if (Install-Chocolatey) {
-            $pm = 'choco'
+        if ($LASTEXITCODE -eq 0) {
+            $hasWinget = $true
+            Write-Success "winget installed"
         }
         else {
-            Write-Info "Chocolatey installation failed. Trying winget..."
-            & "$ScriptRoot\installers\pwsh\winget.ps1"
-            
-            if ($LASTEXITCODE -ne 0) {
-                Write-ErrorMsg "Failed to install package manager"
-                exit 1
-            }
-            
-            $pm = 'winget'
+            Write-Warn "Failed to install winget"
         }
     }
+    else {
+        Write-Success "winget: already installed"
+    }
     
-    Write-Success "Using: $pm"
+    # Check for Chocolatey
+    $hasChoco = Test-Command "choco"
+    if (-not $hasChoco) {
+        Write-Info "Installing Chocolatey..."
+        
+        # Try to install via winget first
+        if ($hasWinget) {
+            Write-Info "Attempting to install Chocolatey via winget..."
+            winget install --id Chocolatey.Chocolatey --silent --accept-source-agreements --accept-package-agreements 2>&1 | Out-Null
+            
+            # Refresh environment to pick up choco
+            $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
+            
+            $hasChoco = Test-Command "choco"
+        }
+        
+        # Fallback to PowerShell install script
+        if (-not $hasChoco) {
+            Write-Info "Installing Chocolatey via PowerShell script..."
+            if (Install-Chocolatey) {
+                $hasChoco = $true
+                Write-Success "Chocolatey installed"
+            }
+            else {
+                Write-Warn "Failed to install Chocolatey"
+            }
+        }
+        else {
+            Write-Success "Chocolatey installed via winget"
+        }
+    }
+    else {
+        Write-Success "Chocolatey: already installed"
+    }
+    
+    # Verify at least one package manager is available
+    if (-not $hasWinget -and -not $hasChoco) {
+        Write-ErrorMsg "No package manager available. Installation cannot continue."
+        exit 1
+    }
+    
+    $installedManagers = @()
+    if ($hasChoco) { $installedManagers += "choco" }
+    if ($hasWinget) { $installedManagers += "winget" }
+    
+    Write-Success "Available package managers: $($installedManagers -join ', ')"
 }
 
 # Step 2: Install packages
