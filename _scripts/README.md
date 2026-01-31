@@ -15,7 +15,17 @@ winget install Git.Git
 pwsh
 ```
 
-**Step 2: Clone and Run**
+**Step 2: Enable Script Execution (Required)**
+
+```powershell
+# Allow running local scripts (required for install/uninstall)
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+# Verify it's set
+Get-ExecutionPolicy -List
+```
+
+**Step 3: Clone and Run**
 
 ```powershell
 # Clone the repository
@@ -25,6 +35,18 @@ git clone <your-repo-url> .files
 # Run the installer
 cd .files/_scripts
 .\install.ps1
+```
+
+**Alternative: Bypass Execution Policy (One-Time)**
+
+If you don't want to change the execution policy permanently:
+
+```powershell
+# Run installer with bypass (one-time)
+powershell -ExecutionPolicy Bypass -File .\install.ps1
+
+# Or for uninstall
+powershell -ExecutionPolicy Bypass -File .\uninstall.ps1
 ```
 
 That's it! The installer will guide you through the rest.
@@ -115,6 +137,9 @@ cd .files/_scripts
 # Open PowerShell 7 (pwsh, not powershell)
 pwsh
 
+# Enable script execution if not already done
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
 # Navigate to scripts directory
 cd ~/.files/_scripts
 
@@ -125,6 +150,41 @@ cd ~/.files/_scripts
 .\install.ps1 -Type pro           # Work packages only
 .\install.ps1 -Type perso         # Personal packages only
 .\install.ps1 -Type all           # Everything
+```
+
+**If you get "scripts is disabled" error:**
+
+```powershell
+# Option 1: Set execution policy (recommended)
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+# Option 2: Bypass for single execution
+powershell -ExecutionPolicy Bypass -File .\install.ps1 -Type pro
+```
+
+### Uninstallation
+
+To uninstall packages and modules:
+
+```powershell
+# Navigate to scripts directory
+cd ~/.files/_scripts
+
+# Interactive menu
+.\uninstall.ps1
+
+# Or specify what to uninstall
+.\uninstall.ps1 -Type pro -Force           # Uninstall pro packages
+.\uninstall.ps1 -Type perso -Force         # Uninstall personal packages
+.\uninstall.ps1 -Type all -Force           # Uninstall all packages
+.\uninstall.ps1 -UninstallModules -Force   # Only uninstall PowerShell modules
+```
+
+**If you get execution policy error:**
+
+```powershell
+# Bypass for uninstall
+powershell -ExecutionPolicy Bypass -File .\uninstall.ps1 -Type pro -Force
 ```
 
 ### What Gets Installed
@@ -284,6 +344,40 @@ We don't modify the Windows registry directly in our scripts. All registry chang
 
 ## 🐛 Troubleshooting
 
+### Scripts Won't Run (Execution Policy) ⚠️ COMMON ISSUE
+
+**Error:** "cannot be loaded because running scripts is disabled on this system"
+
+**This is the most common issue!** Windows blocks PowerShell scripts by default for security.
+
+**Solution (Recommended):**
+
+```powershell
+# Check current execution policy
+Get-ExecutionPolicy
+
+# Set execution policy for current user (safe, recommended)
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+# Verify it's set correctly
+Get-ExecutionPolicy -List
+```
+
+**Quick Fix (One-Time Bypass):**
+
+```powershell
+# For install
+powershell -ExecutionPolicy Bypass -File .\install.ps1 -Type pro
+
+# For uninstall
+powershell -ExecutionPolicy Bypass -File .\uninstall.ps1 -Type pro -Force
+```
+
+**What each policy means:**
+- `Restricted` (default) - No scripts allowed
+- `RemoteSigned` (recommended) - Downloaded scripts must be signed, local scripts OK
+- `Bypass` - Temporary override for single command
+
 ### PowerShell Version Error
 
 **Error:** "This script requires PowerShell 7 or higher"
@@ -345,23 +439,6 @@ Install-Module -Name PowerShellGet -Force -Scope CurrentUser
 - Check your internet connection
 - Try running with `-Verbose` flag
 - Manually install the package to see detailed errors
-
-### Scripts Won't Run (Execution Policy)
-
-**Error:** "cannot be loaded because running scripts is disabled"
-
-**Solution:**
-
-```powershell
-# Check current execution policy
-Get-ExecutionPolicy
-
-# Set execution policy for current user (recommended)
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-
-# Or bypass for a single script
-powershell -ExecutionPolicy Bypass -File .\install.ps1
-```
 
 ## 📚 Libraries Reference
 
