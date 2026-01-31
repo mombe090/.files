@@ -28,8 +28,8 @@ essentials:
     name: Visual Studio Code
     category: essentials
     
-  - id: IntelliJIDEA
-    name: IntelliJ IDEA
+  - id: intellijidea-ultimate
+    name: IntelliJ IDEA Ultimate Edition
     category: essentials
     
   - id: 7zip
