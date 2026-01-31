@@ -1,10 +1,10 @@
-# Nushell
+# Nushell Configuration
 
-A new type of shell that works with structured data.
+Modern shell with structured data pipelines and powerful scripting capabilities.
 
 ## Overview
 
-Nushell (Nu) is a modern, cross-platform shell written in Rust that brings a fresh approach to shell scripting. Unlike traditional shells that work with raw text streams, Nushell treats data as structured information, making it easier to work with files, APIs, databases, and system commands.
+[Nushell](https://www.nushell.sh/) is a new kind of shell that operates on structured data. It treats everything as structured data (like tables), making it easier to work with output from commands, APIs, and files.
 
 ## Key Features
 
@@ -17,111 +17,208 @@ Nushell (Nu) is a modern, cross-platform shell written in Rust that brings a fre
 
 ## Installation
 
-### macOS / Linux
+### Automated Installation
 
-**Using Homebrew:**
+Use the provided script to install Nushell:
 
+```bash
+./scripts/install-nushell.sh
+```
+
+**macOS**: Installs via Homebrew
+**Linux**: Downloads and installs the latest binary release to `~/.local/bin`
+
+### Manual Installation
+
+**macOS:**
 ```bash
 brew install nushell
 ```
 
-**Using Nix:**
+**Linux:**
+Download from [Nushell releases](https://github.com/nushell/nushell/releases)
 
-```bash
-nix profile install nixpkgs#nushell
-```
+**Linux:**
+Download from [Nushell releases](https://github.com/nushell/nushell/releases)
 
-### Windows
+## Configuration Files
 
-**Using winget:**
+After stowing (`./scripts/manage-stow.sh stow nushell`), the following files will be symlinked:
 
-```powershell
-winget install nushell
-```
+- `~/.config/nushell/env.nu` - Environment configuration (runs first)
+- `~/.config/nushell/config.nu` - Shell configuration (runs second)
 
-### Other Methods
+## Features
 
-- Download pre-built binaries from [GitHub Releases](https://github.com/nushell/nushell/releases)
-- Install via package managers: See [Repology](https://repology.org/project/nushell/versions) for all available packages
-- Build from source: Clone the [repository](https://github.com/nushell/nushell) and run `cargo install --path .`
+### Environment (`env.nu`)
 
-## Quick Start
+- **Editor**: Configured to use `nvim`
+- **PATH Management**: Automatically includes:
+  - `~/.local/bin`
+  - `~/.venv/bin` (Python UV tools)
+  - `~/.bun/bin`
+  - `~/.cargo/bin`
+- **Mise Integration**: Automatically activates mise-managed tools
+- **Homebrew Integration**: Auto-detects Apple Silicon vs Intel macOS
 
-After installation, launch Nushell by typing:
+### Shell Configuration (`config.nu`)
+
+- **Edit Mode**: Vi keybindings by default
+- **History**: SQLite-based with 100k entries
+- **Completions**: Case-insensitive, quick, partial matching
+- **Shell Integration**: OSC sequences for better terminal integration
+- **Color Scheme**: Carefully chosen colors for readability
+- **Table Display**: Rounded borders, auto-wrapping
+
+### Aliases
+
+**Basic Navigation:**
+- `ll` → `ls -l`
+- `la` → `ls -a`
+- `lla` → `ls -la`
+- `..` → `cd ..`
+- `...` → `cd ../..`
+
+**Git:**
+- `g` → `git`
+- `gs` → `git status`
+- `ga` → `git add`
+- `gc` → `git commit`
+- `gp` → `git push`
+- `gl` → `git pull`
+
+**Modern Tools** (if installed):
+- `cat` → `bat` (syntax highlighting)
+- `ls` → `eza --icons` (better ls)
+
+### Custom Commands
+
+- `dotfiles` - Jump to ~/.files directory
+- `nu-config` - Edit config.nu
+- `nu-env` - Edit env.nu
+- `nu-reload` - Reload Nushell configuration
+
+## Usage
+
+### Starting Nushell
 
 ```bash
 nu
 ```
 
-### Basic Examples
+### Structured Data Examples
 
-**List files as structured data:**
-
-```nushell
-ls | where type == "dir" | sort-by size
-```
-
-**Work with JSON data:**
+### Structured Data Examples
 
 ```nushell
-open data.json | get items | where price > 100
+# List files as a table
+ls | where size > 1mb | sort-by modified
+
+# Work with JSON
+curl https://api.github.com/repos/nushell/nushell | from json | get stargazers_count
+
+# Pipeline operations
+ps | where cpu > 10 | sort-by cpu | reverse | first 10
+
+# CSV manipulation
+open data.csv | where age > 25 | sort-by name | save filtered.csv
 ```
 
-**Fetch data from APIs:**
+### Custom Commands
 
 ```nushell
-http get https://api.github.com/repos/nushell/nushell | get stargazers_count
+# Jump to dotfiles
+dotfiles
+
+# Edit Nushell config
+nu-config
+
+# Reload configuration
+nu-reload
 ```
 
-**Process CSV files:**
+## Keybindings
+
+**Vi Mode** (default):
+- `Tab` - Completion menu
+- `Ctrl+R` - History search
+- `Ctrl+L` - Clear screen
+- Normal vi motions work (hjkl, w, b, etc.)
+
+**Insert Mode:**
+- Default insert mode keybindings
+- `Esc` to enter normal mode
+
+## Directory Structure
+
+```
+nushell/
+└── .config/
+    └── nushell/
+        ├── env.nu        # Environment configuration
+        └── config.nu     # Shell configuration
+```
+
+## Troubleshooting
+
+### Command not found after installation
+
+**Linux users**: Ensure `~/.local/bin` is in your PATH:
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+Add to your `.bashrc` or `.zshrc` for persistence.
+
+### Mise not activating
+
+The `env.nu` includes mise activation. If it doesn't work:
 
 ```nushell
-open data.csv | where status == "active" | select name email | save filtered.csv
+# Check if mise is available
+which mise
+
+# Manually activate
+mise activate nu | save ~/.config/nushell/mise.nu
+source ~/.config/nushell/mise.nu
 ```
 
-## Configuration
+### Config changes not applied
 
-Nushell stores its configuration files in the standard config directory:
-
-- **Linux/macOS**: `~/.config/nushell/`
-- **Windows**: `%APPDATA%\nushell\`
-
-Main configuration files:
-
-- `config.nu` - Main Nushell configuration
-- `env.nu` - Environment variables and startup commands
-
-To locate your config path in Nu:
+Reload configuration:
 
 ```nushell
-$nu.config-path
+nu-reload
 ```
 
-Default configurations are available at the [sample_config](https://github.com/nushell/nushell/tree/main/crates/nu-utils/src/default_files) directory.
+Or restart Nushell:
 
-## Documentation
+```bash
+exit
+nu
+```
+
+## Documentation and Resources
+
+## Documentation and Resources
 
 - **[The Nushell Book](https://www.nushell.sh/book/)** - Comprehensive guide and tutorials
 - **[Command Reference](https://www.nushell.sh/commands/)** - Complete list of built-in commands
 - **[Cookbook](https://www.nushell.sh/cookbook/)** - Practical examples and recipes
 - **[Language Guide](https://www.nushell.sh/lang-guide/)** - In-depth language reference
+- **[Discord](https://discord.gg/NtAbbGn)** - Join the Nushell community
+- **[GitHub](https://github.com/nushell/nushell)** - Source code and issues
 
-## Community
+## Tips
 
-- **Discord**: [Join the Nushell Discord](https://discord.gg/NtAbbGn)
-- **GitHub**: [nushell/nushell](https://github.com/nushell/nushell)
-- **Website**: [www.nushell.sh](https://www.nushell.sh/)
+1. **View as Table**: Most command outputs are automatically formatted as tables
+2. **Column Selection**: Use `select column1 column2` to pick specific columns
+3. **Filtering**: Use `where condition` to filter rows
+4. **Data Formats**: Built-in support for JSON, YAML, TOML, CSV, XML
+5. **Type System**: Everything has a type - use `describe` to see it
 
-## Philosophy
+## Version
 
-Nushell follows these core principles:
+Tested with Nushell 0.99+
 
-1. **Cross-platform first** - Commands work the same everywhere
-2. **Structured data** - Treat everything as typed, structured information
-3. **Modern usability** - Contemporary UX expectations (autocomplete, syntax highlighting, etc.)
-4. **Compatibility** - Works alongside existing platform tools
-5. **Functional approach** - Pipelines transform data without mutation
-
-## License
-
-Nushell is released under the [MIT License](https://github.com/nushell/nushell/blob/main/LICENSE).
