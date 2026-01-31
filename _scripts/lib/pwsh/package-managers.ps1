@@ -487,14 +487,3 @@ function Get-PackageList {
     return @()
 }
 
-# Export functions
-Export-ModuleMember -Function @(
-    'Get-PackageManager',
-    'Install-Package',
-    'Test-PackageInstalled',
-    'Update-Package',
-    'Uninstall-Package',
-    'Install-WinGet',
-    'Install-Chocolatey',
-    'Get-PackageList'
-)

@@ -235,16 +235,3 @@ function Get-AppData {
     return $env:APPDATA
 }
 
-# Export functions
-Export-ModuleMember -Function @(
-    'Get-WindowsVersion',
-    'Test-IsAdmin',
-    'Get-Architecture',
-    'Get-PowerShellVersion',
-    'Test-IsWindowsTerminal',
-    'Get-SystemInfo',
-    'Assert-IsAdmin',
-    'Get-HomeDirectory',
-    'Get-LocalAppData',
-    'Get-AppData'
-)

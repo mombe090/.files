@@ -285,12 +285,3 @@ function New-DirectorySafe {
     return Get-Item $Path
 }
 
-# Export functions
-Export-ModuleMember -Function @(
-    'Test-Command',
-    'Invoke-WithRetry',
-    'New-Backup',
-    'New-SafeSymlink',
-    'Test-PathSafe',
-    'New-DirectorySafe'
-)

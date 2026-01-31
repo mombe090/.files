@@ -38,12 +38,8 @@ essentials:
     category: essentials
 
 development:
-  - id: Microsoft.DotNet.SDK.8
-    name: .NET 8 SDK
-    category: development
-    
-  - id: Microsoft.DotNet.SDK.9
-    name: .NET 9 SDK
+  - id: Microsoft.DotNet.SDK.10
+    name: .NET 10 SDK
     category: development
     
   - id: Python.Python.3.12
