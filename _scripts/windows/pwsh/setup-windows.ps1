@@ -51,12 +51,12 @@ foreach ($module in $modules) {
 # Summary
 Write-Header "Setup Complete!"
 Write-Success "PowerShell modules installed"
-Write-Info ""
+Write-Host ""
 Write-Info "Modules installed:"
 Write-Info "  • PSReadLine - Better command-line editing with IntelliSense"
 Write-Info "  • Terminal-Icons - Colorful file/folder icons"
 Write-Info "  • posh-git - Git status in your PowerShell prompt"
-Write-Info ""
+Write-Host ""
 Write-Info "Restart your terminal to use the new modules"
 
 exit 0
