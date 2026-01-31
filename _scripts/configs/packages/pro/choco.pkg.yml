@@ -1,0 +1,127 @@
+# =============================================================================
+# Chocolatey - Professional Packages (Fallback)
+# =============================================================================
+# Work-safe packages for professional development environments.
+# Used as fallback when winget is not available.
+#
+# Usage:
+#   Install all: scripts/windows/install-packages.ps1 -Type pro -PackageManager choco
+# =============================================================================
+
+essentials:
+  - id: powershell-core
+    name: PowerShell 7
+    category: essentials
+    
+  - id: git
+    name: Git
+    category: essentials
+    
+  - id: microsoft-windows-terminal
+    name: Windows Terminal
+    category: essentials
+    
+  - id: vscode
+    name: Visual Studio Code
+    category: essentials
+    
+  - id: 7zip
+    name: 7-Zip
+    category: essentials
+
+development:
+  - id: dotnet-sdk
+    name: .NET SDK
+    category: development
+    
+  - id: python
+    name: Python
+    category: development
+    
+  - id: nodejs-lts
+    name: Node.js LTS
+    category: development
+    
+  - id: golang
+    name: Go Programming Language
+    category: development
+    
+  - id: rust
+    name: Rust
+    category: development
+
+productivity:
+  - id: notion
+    name: Notion
+    category: productivity
+    
+  - id: obsidian
+    name: Obsidian
+    category: productivity
+    
+  - id: powertoys
+    name: PowerToys
+    category: productivity
+    
+  - id: sharex
+    name: ShareX
+    category: productivity
+
+security:
+  - id: bitwarden
+    name: Bitwarden
+    category: security
+
+cloud:
+  - id: azure-cli
+    name: Azure CLI
+    category: cloud
+    
+  - id: awscli
+    name: AWS CLI
+    category: cloud
+    
+  - id: gcloudsdk
+    name: Google Cloud SDK
+    category: cloud
+    
+  - id: kubernetes-cli
+    name: kubectl
+    category: cloud
+    
+  - id: kubernetes-helm
+    name: Helm
+    category: cloud
+    
+  - id: terraform
+    name: Terraform
+    category: cloud
+
+tools:
+  - id: oh-my-posh
+    name: Oh My Posh
+    category: tools
+    
+  - id: bat
+    name: bat (cat clone)
+    category: tools
+    
+  - id: fd
+    name: fd (find clone)
+    category: tools
+    
+  - id: ripgrep
+    name: ripgrep
+    category: tools
+    
+  - id: fzf
+    name: fzf (fuzzy finder)
+    category: tools
+    
+  - id: jq
+    name: jq (JSON processor)
+    category: tools
+    
+  - id: zoxide
+    name: zoxide (smarter cd)
+    category: tools

@@ -1,0 +1,78 @@
+# =============================================================================
+# Windows Package Manager (winget) - Personal Packages
+# =============================================================================
+# Personal packages for home/personal use.
+# Includes gaming, media, and personal productivity tools.
+#
+# Usage:
+#   Install all: scripts/windows/install-packages.ps1 -Type perso
+# =============================================================================
+
+gaming:
+  - id: Valve.Steam
+    name: Steam
+    category: gaming
+    
+  - id: EpicGames.EpicGamesLauncher
+    name: Epic Games Launcher
+    category: gaming
+    
+  - id: Discord.Discord
+    name: Discord
+    category: gaming
+
+media:
+  - id: VideoLAN.VLC
+    name: VLC Media Player
+    category: media
+    
+  - id: Spotify.Spotify
+    name: Spotify
+    category: media
+    
+  - id: OBSProject.OBSStudio
+    name: OBS Studio
+    category: media
+    
+  - id: Audacity.Audacity
+    name: Audacity
+    category: media
+
+browsers:
+  - id: Google.Chrome
+    name: Google Chrome
+    category: browsers
+    
+  - id: Mozilla.Firefox
+    name: Mozilla Firefox
+    category: browsers
+    
+  - id: Brave.Brave
+    name: Brave Browser
+    category: browsers
+
+communication:
+  - id: SlackTechnologies.Slack
+    name: Slack
+    category: communication
+    
+  - id: Zoom.Zoom
+    name: Zoom
+    category: communication
+    
+  - id: Microsoft.Teams
+    name: Microsoft Teams
+    category: communication
+
+utilities:
+  - id: WinDirStat.WinDirStat
+    name: WinDirStat
+    category: utilities
+    
+  - id: Lexikos.AutoHotkey
+    name: AutoHotkey
+    category: utilities
+    
+  - id: voidtools.Everything
+    name: Everything (search)
+    category: utilities

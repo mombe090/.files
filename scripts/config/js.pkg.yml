@@ -44,4 +44,4 @@ packages:
 
   # AI Tools
   - opencode-ai
-  - @github/copilot
+  - "@github/copilot"
