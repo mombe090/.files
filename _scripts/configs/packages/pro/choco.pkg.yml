@@ -86,8 +86,8 @@ cloud:
     category: cloud
 
 tools:
-  - id: oh-my-posh
-    name: Oh My Posh
+  - id: starship
+    name: Starship
     category: tools
     
   - id: bat
