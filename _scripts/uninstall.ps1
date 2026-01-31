@@ -83,6 +83,11 @@ if (-not $Type -and -not $UninstallModules) {
     }
 }
 
+# Auto-enable UninstallPackages if Type is specified
+if ($Type -and -not $UninstallModules) {
+    $UninstallPackages = $true
+}
+
 # Confirmation
 if (-not $Force) {
     Write-Host ""
