@@ -198,13 +198,16 @@ function Test-PackageInstalled {
     try {
         switch ($pm) {
             'winget' {
-                $result = winget list --id $PackageName --exact 2>&1
+                $result = winget list --id $PackageName --exact 2>&1 | Out-String
                 return $result -match $PackageName
             }
 
             'choco' {
-                $result = choco list --local-only $PackageName --exact 2>&1
-                return $result -match "1 packages installed"
+                # Use --limit-output for machine-readable format: package|version
+                $result = choco list --local-only --limit-output --exact $PackageName 2>&1 | Out-String
+                # If package is installed, choco returns: packagename|version
+                # If not installed, returns empty
+                return ($result.Trim() -ne '' -and $result -match $PackageName)
             }
         }
     }
@@ -484,9 +487,13 @@ function Test-PackageUpdateAvailable {
             }
 
             'choco' {
-                $result = choco outdated $PackageName --limit-output 2>&1 | Out-String
-                # Choco outdated returns package info if outdated, empty if up-to-date
-                return ($result -match $PackageName)
+                # Use --limit-output for machine-readable format
+                # Choco outdated returns: packagename|currentversion|availableversion|pinned
+                # Returns empty if package is up-to-date
+                $result = choco outdated --limit-output --exact $PackageName 2>&1 | Out-String
+                # If result contains package name, update is available
+                $hasUpdate = ($result.Trim() -ne '' -and $result -match $PackageName)
+                return $hasUpdate
             }
         }
     }
