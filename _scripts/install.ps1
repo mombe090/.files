@@ -5,15 +5,21 @@
 # Installs: packages, PowerShell modules.
 #
 # Usage:
-#   .\install.ps1                    # Interactive menu
-#   .\install.ps1 -Type pro          # Professional packages only
-#   .\install.ps1 -Type perso        # Personal packages only
+#   .\install.ps1                              # Interactive menu
+#   .\install.ps1 -Type pro                    # Professional packages only
+#   .\install.ps1 -Type perso                  # Personal packages only
+#   .\install.ps1 -Type pro -PackageManager choco    # Only Chocolatey packages
+#   .\install.ps1 -Type pro -PackageManager winget   # Only winget packages
 # =============================================================================
 
 param(
     [Parameter(Mandatory = $false)]
     [ValidateSet('pro', 'perso', 'all')]
     [string]$Type = '',
+
+    [Parameter(Mandatory = $false)]
+    [ValidateSet('auto', 'choco', 'winget', 'both')]
+    [string]$PackageManager = 'both',
 
     [switch]$SkipPackages,
     [switch]$SkipModules
@@ -152,10 +158,54 @@ if (-not $SkipPackages) {
 if (-not $SkipPackages) {
     Write-Header "Step 2: Installing Packages"
     
-    & "$ScriptRoot\windows\pwsh\install-packages.ps1" -Type $Type
+    # Determine which package managers to use
+    $managersToUse = @()
     
-    if ($LASTEXITCODE -ne 0) {
-        Write-Warn "Some packages failed to install"
+    switch ($PackageManager) {
+        'choco' {
+            if ($hasChoco) {
+                $managersToUse += 'choco'
+            } else {
+                Write-Warn "Chocolatey requested but not available"
+            }
+        }
+        'winget' {
+            if ($hasWinget) {
+                $managersToUse += 'winget'
+            } else {
+                Write-Warn "winget requested but not available"
+            }
+        }
+        'both' {
+            # Default: run choco first, then winget
+            if ($hasChoco) { $managersToUse += 'choco' }
+            if ($hasWinget) { $managersToUse += 'winget' }
+        }
+        'auto' {
+            # Auto: use whatever is available, prefer choco
+            if ($hasChoco) { 
+                $managersToUse += 'choco' 
+            } elseif ($hasWinget) { 
+                $managersToUse += 'winget' 
+            }
+        }
+    }
+    
+    if ($managersToUse.Count -eq 0) {
+        Write-ErrorMsg "No package managers available for installation"
+        exit 1
+    }
+    
+    Write-Info "Using package managers: $($managersToUse -join ', ')"
+    
+    # Install packages using selected managers
+    foreach ($pm in $managersToUse) {
+        Write-Info "Installing packages via $pm..."
+        & "$ScriptRoot\windows\pwsh\install-packages.ps1" -Type $Type -PackageManager $pm
+        
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warn "Some $pm packages failed to install"
+        }
     }
 }
 

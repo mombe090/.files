@@ -59,16 +59,33 @@ if ($hasWinget) { $availableManagers += "winget" }
 
 Write-Success "Available package managers: $($availableManagers -join ', ')"
 
-# Determine config files to use - run both choco and winget if available
+# Determine config files to use based on PackageManager parameter
 $configFiles = @()
 
-# Prioritize choco, then winget
+# Determine which package managers to process
 $packageManagers = @()
-if (Test-Command "choco") {
-    $packageManagers += 'choco'
-}
-if (Test-Command "winget") {
-    $packageManagers += 'winget'
+switch ($PackageManager) {
+    'choco' {
+        if ($hasChoco) {
+            $packageManagers += 'choco'
+        } else {
+            Write-ErrorMsg "Chocolatey requested but not available"
+            exit 1
+        }
+    }
+    'winget' {
+        if ($hasWinget) {
+            $packageManagers += 'winget'
+        } else {
+            Write-ErrorMsg "winget requested but not available"
+            exit 1
+        }
+    }
+    'auto' {
+        # Auto: use both if available, prioritize choco
+        if ($hasChoco) { $packageManagers += 'choco' }
+        if ($hasWinget) { $packageManagers += 'winget' }
+    }
 }
 
 # Build config file list for each package manager
