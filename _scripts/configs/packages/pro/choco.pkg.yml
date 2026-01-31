@@ -1,14 +1,28 @@
 # =============================================================================
-# Chocolatey - Professional Packages (Fallback)
+# Chocolatey - Professional Packages (Primary)
 # =============================================================================
 # Work-safe packages for professional development environments.
-# Used as fallback when winget is not available.
+# Chocolatey is the preferred package manager for this setup.
 #
 # Usage:
-#   Install all: scripts/windows/install-packages.ps1 -Type pro -PackageManager choco
+#   Install all: scripts/windows/install-packages.ps1 -Type pro
 # =============================================================================
 
 essentials:
+  - id: powershell-core
+    name: PowerShell 7
+    category: essentials
+    uninstallable: true
+    
+  - id: git
+    name: Git
+    category: essentials
+    uninstallable: true
+    
+  - id: microsoft-windows-terminal
+    name: Windows Terminal
+    category: essentials
+    uninstallable: true
     
   - id: vscode
     name: Visual Studio Code

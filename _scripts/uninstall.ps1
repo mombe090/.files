@@ -125,27 +125,57 @@ if ($UninstallPackages -and $Type) {
     # Parse YAML (simple parsing for our structure)
     $content = Get-Content $configPath -Raw
     $packages = @()
+    $currentPackage = $null
     
-    # Extract package IDs (very simple YAML parsing)
+    # Extract package IDs and flags (simple YAML parsing)
     $content -split "`n" | ForEach-Object {
-        if ($_ -match '^\s*-\s*id:\s*(.+)$') {
-            $packages += $matches[1].Trim()
+        $line = $_.Trim()
+        
+        if ($line -match '^\s*-\s*id:\s*(.+)$') {
+            # Save previous package if exists
+            if ($currentPackage) {
+                $packages += $currentPackage
+            }
+            
+            $currentPackage = [PSCustomObject]@{
+                Id = $matches[1].Trim()
+                Uninstallable = $false
+            }
+        }
+        elseif ($line -match '^\s*uninstallable:\s*(.+)$') {
+            $uninstallableValue = $matches[1].Trim()
+            if ($currentPackage) {
+                $currentPackage.Uninstallable = ($uninstallableValue -eq 'true')
+            }
         }
     }
     
-    Write-Info "Found $($packages.Count) package(s) to uninstall"
+    # Add last package
+    if ($currentPackage) {
+        $packages += $currentPackage
+    }
+    
+    # Filter out uninstallable packages
+    $packagesToUninstall = $packages | Where-Object { -not $_.Uninstallable }
+    $skippedUninstallable = ($packages | Where-Object { $_.Uninstallable }).Count
+    
+    if ($skippedUninstallable -gt 0) {
+        Write-Info "Skipping $skippedUninstallable protected package(s) (PowerShell, Git, etc.)"
+    }
+    
+    Write-Info "Found $($packagesToUninstall.Count) package(s) to uninstall"
     Write-Host ""
     
     $uninstalled = 0
     $failed = 0
     $skipped = 0
     
-    foreach ($pkg in $packages) {
-        Write-Step "Uninstalling: $pkg"
+    foreach ($pkg in $packagesToUninstall) {
+        Write-Step "Uninstalling: $($pkg.Id)"
         
         try {
             if ($pm -eq 'winget') {
-                $result = winget uninstall --id $pkg --silent --accept-source-agreements 2>&1
+                $result = winget uninstall --id $pkg.Id --silent --accept-source-agreements 2>&1
                 if ($LASTEXITCODE -eq 0) {
                     Write-Success "  Uninstalled"
                     $uninstalled++
@@ -160,7 +190,7 @@ if ($UninstallPackages -and $Type) {
                 }
             }
             elseif ($pm -eq 'choco') {
-                choco uninstall $pkg -y --limit-output 2>&1 | Out-Null
+                choco uninstall $pkg.Id -y --limit-output 2>&1 | Out-Null
                 if ($LASTEXITCODE -eq 0) {
                     Write-Success "  Uninstalled"
                     $uninstalled++

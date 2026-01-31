@@ -92,6 +92,7 @@ foreach ($configFile in $configFiles) {
     
     $packages = @()
     $currentCategory = ""
+    $currentPackage = $null
     
     foreach ($line in $lines) {
         $line = $line.Trim()
@@ -109,12 +110,30 @@ foreach ($configFile in $configFiles) {
         
         # Package entry
         if ($line -match '^\s*-\s*id:\s*(.+)$') {
+            # Save previous package if exists
+            if ($currentPackage) {
+                $packages += $currentPackage
+            }
+            
             $packageId = $matches[1].Trim()
-            $packages += [PSCustomObject]@{
+            $currentPackage = [PSCustomObject]@{
                 Id = $packageId
                 Category = $currentCategory
+                Uninstallable = $false
             }
         }
+        # Uninstallable flag
+        elseif ($line -match '^\s*uninstallable:\s*(.+)$') {
+            $uninstallableValue = $matches[1].Trim()
+            if ($currentPackage) {
+                $currentPackage.Uninstallable = ($uninstallableValue -eq 'true')
+            }
+        }
+    }
+    
+    # Add last package
+    if ($currentPackage) {
+        $packages += $currentPackage
     }
     
     Write-Info "Found $($packages.Count) package(s)"
@@ -130,20 +149,45 @@ foreach ($configFile in $configFiles) {
         Write-Step "[$($package.Category)] $($package.Id)"
         
         # Check if already installed
-        if (Test-PackageInstalled -PackageName $package.Id -PackageManager $pm) {
-            Write-Warn "  Already installed, skipping"
-            $totalSkipped++
-            continue
-        }
+        $isInstalled = Test-PackageInstalled -PackageName $package.Id -PackageManager $pm
         
-        # Install
-        if (Install-Package -PackageName $package.Id -PackageManager $pm) {
-            Write-Success "  Installed successfully"
-            $totalInstalled++
+        if ($isInstalled) {
+            Write-Info "  Already installed, checking for updates..."
+            
+            # Try to upgrade
+            $upgraded = $false
+            if ($pm -eq 'choco') {
+                choco upgrade $package.Id -y --limit-output 2>&1 | Out-Null
+                if ($LASTEXITCODE -eq 0) {
+                    $upgraded = $true
+                }
+            }
+            elseif ($pm -eq 'winget') {
+                winget upgrade --id $package.Id --silent --accept-source-agreements 2>&1 | Out-Null
+                if ($LASTEXITCODE -eq 0) {
+                    $upgraded = $true
+                }
+            }
+            
+            if ($upgraded) {
+                Write-Success "  Updated to latest version"
+                $totalInstalled++
+            }
+            else {
+                Write-Info "  Already up-to-date"
+                $totalSkipped++
+            }
         }
         else {
-            Write-ErrorMsg "  Installation failed"
-            $totalFailed++
+            # Install
+            if (Install-Package -PackageName $package.Id -PackageManager $pm) {
+                Write-Success "  Installed successfully"
+                $totalInstalled++
+            }
+            else {
+                Write-ErrorMsg "  Installation failed"
+                $totalFailed++
+            }
         }
     }
 }

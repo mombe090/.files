@@ -16,95 +16,26 @@
 #  - security: Security and privacy tools
 #  - cloud: Cloud platform CLIs and tools
 
-essentials:
-    
-  - id: Microsoft.VisualStudioCode
-    name: Visual Studio Code
-    category: essentials
-    
-  - id: 7zip.7zip
-    name: 7-Zip
-    category: essentials
+essentials: []
+# Essentials are handled by Chocolatey
 
-development:
-  - id: Microsoft.DotNet.SDK.10
-    name: .NET 10 SDK
-    category: development
-    
-  - id: Python.Python.3.12
-    name: Python 3.12
-    category: development
-    
-  - id: OpenJS.NodeJS.LTS
-    name: Node.js LTS
-    category: development
+development: []
+# Development tools are handled by Chocolatey
 
-productivity:
-    
-  - id: Obsidian.Obsidian
-    name: Obsidian
-    category: productivity
-    
-  - id: Microsoft.PowerToys
-    name: PowerToys
-    category: productivity
+productivity: []
+# Productivity apps are handled by Chocolatey
 
 security: [] # Handled by company policies
 
-cloud:
-  - id: Microsoft.Azure.CLI
-    name: Azure CLI
-    category: cloud
-    
-#  - id: Amazon.AWSCLI
-#    name: AWS CLI
-#    category: cloud
-    
-#  - id: Google.CloudSDK
-#    name: Google Cloud SDK
-#    category: cloud
-    
-  - id: Kubernetes.kubectl
-    name: kubectl
-    category: cloud
-    
-  - id: Helm.Helm
-    name: Helm
-    category: cloud
-    
-  - id: Hashicorp.Terraform
-    name: Terraform
-    category: cloud
+cloud: []
+# Cloud tools are handled by Chocolatey
 
 tools:
-  - id: JanDeDobbeleer.OhMyPosh
-    name: Oh My Posh
-    category: tools
-    
-  - id: sharkdp.bat
-    name: bat (cat clone)
-    category: tools
-    
-  - id: sharkdp.fd
-    name: fd (find clone)
-    category: tools
-    
-  - id: BurntSushi.ripgrep.MSVC
-    name: ripgrep
-    category: tools
-    
   - id: eza-community.eza
     name: eza (ls clone)
-    category: tools
-    
-  - id: junegunn.fzf
-    name: fzf (fuzzy finder)
     category: tools
     
   - id: jqlang.jq
     name: jq (JSON processor)
     category: tools
-    
-  - id: ajeetdsouza.zoxide
-    name: zoxide (smarter cd)
-    category: tools
+# Other tools are handled by Chocolatey

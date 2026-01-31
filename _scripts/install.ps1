@@ -85,15 +85,24 @@ if (-not $SkipPackages) {
     $pm = Get-PackageManager
     
     if (-not $pm) {
-        Write-Info "Installing winget..."
-        & "$ScriptRoot\installers\pwsh\winget.ps1"
+        Write-Info "No package manager found. Attempting to install Chocolatey..."
         
-        if ($LASTEXITCODE -ne 0) {
-            Write-ErrorMsg "Failed to install package manager"
-            exit 1
+        # Try to install Chocolatey first (preferred)
+        . "$ScriptRoot\lib\pwsh\package-managers.ps1"
+        if (Install-Chocolatey) {
+            $pm = 'choco'
         }
-        
-        $pm = 'winget'
+        else {
+            Write-Info "Chocolatey installation failed. Trying winget..."
+            & "$ScriptRoot\installers\pwsh\winget.ps1"
+            
+            if ($LASTEXITCODE -ne 0) {
+                Write-ErrorMsg "Failed to install package manager"
+                exit 1
+            }
+            
+            $pm = 'winget'
+        }
     }
     
     Write-Success "Using: $pm"

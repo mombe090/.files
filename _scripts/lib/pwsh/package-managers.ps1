@@ -23,14 +23,14 @@
     Detect available package manager.
 
 .DESCRIPTION
-    Checks for winget (preferred) and chocolatey, returns the best available option.
+    Checks for chocolatey (preferred) and winget, returns the best available option.
 
 .PARAMETER Preferred
-    Preferred package manager ('winget' or 'choco'). Default: 'winget'
+    Preferred package manager ('winget' or 'choco'). Default: 'auto' (prefers choco)
 
 .EXAMPLE
     Get-PackageManager
-    Get-PackageManager -Preferred 'choco'
+    Get-PackageManager -Preferred 'winget'
 
 .OUTPUTS
     String - 'winget', 'choco', or $null if none available
@@ -45,12 +45,12 @@ function Get-PackageManager {
     $hasChoco = Test-Command "choco"
 
     if ($Preferred -eq 'auto') {
-        # Prefer winget if available
-        if ($hasWinget) {
-            return 'winget'
-        }
-        elseif ($hasChoco) {
+        # Prefer choco if available
+        if ($hasChoco) {
             return 'choco'
+        }
+        elseif ($hasWinget) {
+            return 'winget'
         }
         else {
             return $null
