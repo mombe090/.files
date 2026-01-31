@@ -10,10 +10,6 @@
 
 essentials:
     
-  - id: microsoft-windows-terminal
-    name: Windows Terminal
-    category: essentials
-    
   - id: vscode
     name: Visual Studio Code
     category: essentials
