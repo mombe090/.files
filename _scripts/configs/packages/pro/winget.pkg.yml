@@ -16,8 +16,14 @@
 #  - security: Security and privacy tools
 #  - cloud: Cloud platform CLIs and tools
 
-essentials: []
-# Essentials are handled by Chocolatey
+essentials:
+  - id: Google.Chrome
+    name: Google Chrome
+    category: essentials
+    
+  - id: wez.wezterm
+    name: WezTerm
+    category: essentials
 
 development: []
 # Development tools are handled by Chocolatey

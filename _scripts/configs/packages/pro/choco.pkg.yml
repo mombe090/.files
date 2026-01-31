@@ -44,6 +44,10 @@ development:
   - id: nodejs-lts
     name: Node.js LTS
     category: development
+    
+  - id: bun
+    name: Bun
+    category: development
 
 productivity:
   - id: obsidian
