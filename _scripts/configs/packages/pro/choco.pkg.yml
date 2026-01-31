@@ -28,8 +28,8 @@ essentials:
     name: Visual Studio Code
     category: essentials
     
-  - id: intellijidea-community
-    name: IntelliJ IDEA Community
+  - id: IntelliJIDEA
+    name: IntelliJ IDEA
     category: essentials
     
   - id: 7zip
