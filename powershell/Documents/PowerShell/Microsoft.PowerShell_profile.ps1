@@ -1,0 +1,120 @@
+# PowerShell Profile
+# Location: $PROFILE (Documents\PowerShell\Microsoft.PowerShell_profile.ps1)
+
+# =============================================================================
+# Starship Prompt
+# =============================================================================
+
+if (Get-Command starship -ErrorAction SilentlyContinue) {
+    Invoke-Expression (&starship init powershell)
+    
+    # Set Starship config location
+    $env:STARSHIP_CONFIG = "$env:USERPROFILE\.config\starship.toml"
+}
+
+# =============================================================================
+# Environment Variables
+# =============================================================================
+
+$env:EDITOR = "nvim"
+$env:VISUAL = "nvim"
+
+# =============================================================================
+# PSReadLine Configuration
+# =============================================================================
+
+# Import PSReadLine if available
+if (Get-Module -ListAvailable -Name PSReadLine) {
+    Import-Module PSReadLine
+    
+    # Vi mode
+    Set-PSReadLineOption -EditMode Vi
+    
+    # History search
+    Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
+    Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
+    
+    # Tab completion
+    Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
+    
+    # Colors
+    Set-PSReadLineOption -Colors @{
+        Command   = 'Cyan'
+        Parameter = 'Green'
+        String    = 'Yellow'
+        Comment   = 'DarkGray'
+    }
+}
+
+# =============================================================================
+# Aliases
+# =============================================================================
+
+# File operations
+Set-Alias -Name ll -Value Get-ChildItem
+Set-Alias -Name l -Value Get-ChildItem
+Set-Alias -Name c -Value Clear-Host
+
+# Editor
+if (Get-Command nvim -ErrorAction SilentlyContinue) {
+    Set-Alias -Name v -Value nvim
+}
+
+# Git aliases (if git is installed)
+if (Get-Command git -ErrorAction SilentlyContinue) {
+    function gst { git status }
+    function gp { git push origin HEAD }
+    function gpu { git pull origin }
+    function gco { param($branch) git checkout $branch }
+    function gb { git branch }
+    function gba { git branch -a }
+    function gadd { param($file) git add $file }
+    function gc { param($message) git commit -m $message }
+    function gca { param($message) git commit -a -m $message }
+    function gdiff { git diff }
+    function glog { git log --graph --oneline --decorate }
+}
+
+# Kubernetes aliases (if kubectl is installed)
+if (Get-Command kubectl -ErrorAction SilentlyContinue) {
+    Set-Alias -Name k -Value kubectl
+    
+    function kg { param($resource) kubectl get $resource }
+    function kd { param($resource, $name) kubectl describe $resource $name }
+    function kl { param($pod) kubectl logs -f $pod }
+    function kgpo { kubectl get pods }
+    function kgd { kubectl get deployments }
+    function ke { param($pod) kubectl exec -it $pod -- sh }
+}
+
+# =============================================================================
+# Utilities
+# =============================================================================
+
+# Enhanced cd with ls
+function cx {
+    param([string]$Path)
+    Set-Location $Path
+    Get-ChildItem
+}
+
+# Update PATH
+function Add-ToPath {
+    param([string]$Path)
+    if (Test-Path $Path) {
+        $env:Path = "$Path;$env:Path"
+    }
+}
+
+# Add common paths
+Add-ToPath "$env:USERPROFILE\.local\bin"
+Add-ToPath "$env:USERPROFILE\.bun\bin"
+Add-ToPath "$env:USERPROFILE\.cargo\bin"
+
+# =============================================================================
+# Welcome Message
+# =============================================================================
+
+# Clear host and show minimal info
+Clear-Host
+Write-Host "PowerShell $($PSVersionTable.PSVersion) with Starship" -ForegroundColor Cyan
