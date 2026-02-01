@@ -60,6 +60,42 @@ if (-not (Test-BunInstalled)) {
 $bunVersion = bun --version 2>&1
 Write-Success "Bun is installed: v$bunVersion"
 
+# Ensure Bun global bin directory is in PATH
+Write-Step "Checking Bun global bin path..."
+
+# Bun installs global packages to: %USERPROFILE%\.bun\bin on Windows
+$bunGlobalBin = Join-Path $env:USERPROFILE ".bun\bin"
+
+if (Test-Path $bunGlobalBin) {
+    $currentPath = [Environment]::GetEnvironmentVariable("Path", "User")
+    
+    if ($currentPath -notlike "*$bunGlobalBin*") {
+        Write-Info "Adding Bun global bin to user PATH..."
+        
+        try {
+            $newPath = "$currentPath;$bunGlobalBin"
+            [Environment]::SetEnvironmentVariable("Path", $newPath, "User")
+            
+            # Also update current session PATH
+            $env:Path = "$env:Path;$bunGlobalBin"
+            
+            Write-Success "Bun global bin added to PATH: $bunGlobalBin"
+            Write-Warn "Note: New terminal sessions will have this path automatically."
+        }
+        catch {
+            Write-Warn "Could not add Bun global bin to PATH: $_"
+            Write-Info "You may need to manually add: $bunGlobalBin"
+        }
+    }
+    else {
+        Write-Success "Bun global bin already in PATH: $bunGlobalBin"
+    }
+}
+else {
+    Write-Info "Bun global bin directory will be created on first global package install"
+    Write-Info "Expected location: $bunGlobalBin"
+}
+
 # Build config file list
 $configFiles = @()
 
