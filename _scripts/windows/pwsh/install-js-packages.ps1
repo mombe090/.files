@@ -130,7 +130,7 @@ foreach ($configFile in $configFiles) {
             
             # Extract package ID, handling quotes for scoped packages
             $packageId = $matches[1].Trim()
-            $packageId = $packageId -replace '^["\']|["\']$', ''  # Remove surrounding quotes
+            $packageId = $packageId -replace '^["'']|["'']$', ''  # Remove surrounding quotes
             
             $currentPackage = [PSCustomObject]@{
                 Id = $packageId
