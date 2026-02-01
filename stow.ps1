@@ -308,6 +308,13 @@ function Invoke-UnstowPackage {
     
     foreach ($item in $items) {
         $relativePath = $item.FullName.Substring($packagePath.Length + 1)
+        
+        # Strip leading .config/ if target is already ~/.config
+        # This prevents .config/.config/app duplication
+        if ($TargetDir -match '\.config$' -and $relativePath -match '^\.config\\') {
+            $relativePath = $relativePath.Substring(8) # Remove ".config\"
+        }
+        
         $targetPath = Join-Path $TargetDir $relativePath
 
         Write-Step "Unlinking: $relativePath"
