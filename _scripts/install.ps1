@@ -307,6 +307,6 @@ Write-Host "  • Set Windows Terminal default to PowerShell 7" -ForegroundColor
 Write-Host "  • Install fonts manually via package manager if needed" -ForegroundColor White
 Write-Host "    winget install: Cascadia.Fonts, JetBrains.JetBrainsMono" -ForegroundColor Gray
 Write-Host ""
-Write-Success "Done! 🎉"
+Write-Success "Done!"
 
 exit 0
