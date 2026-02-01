@@ -13,7 +13,7 @@ end
 
 -- Window Config
 config.initial_cols = 165
-config.initial_rows = 44
+config.initial_rows = 36
 
 -- =============================================================================
 -- Appearance
@@ -24,7 +24,7 @@ config.color_scheme = 'Catppuccin Mocha'
 
 -- Font configuration
 config.font = wezterm.font('CaskaydiaMono Nerd Font', { weight = 'Regular' })
-config.font_size = 18.0
+config.font_size = 16.0
 
 -- Window appearance
 config.window_background_opacity = 1.0
@@ -78,47 +78,6 @@ end
 -- =============================================================================
 -- Key Bindings
 -- =============================================================================
-
-config.keys = {
-  -- Split panes
-  {
-    key = 'd',
-    mods = 'CTRL|SHIFT',
-    action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' },
-  },
-  {
-    key = 'D',
-    mods = 'CTRL|SHIFT',
-    action = wezterm.action.SplitVertical { domain = 'CurrentPaneDomain' },
-  },
-  -- Close pane
-  {
-    key = 'w',
-    mods = 'CTRL|SHIFT',
-    action = wezterm.action.CloseCurrentPane { confirm = true },
-  },
-  -- Navigate panes
-  {
-    key = 'LeftArrow',
-    mods = 'CTRL|SHIFT',
-    action = wezterm.action.ActivatePaneDirection 'Left',
-  },
-  {
-    key = 'RightArrow',
-    mods = 'CTRL|SHIFT',
-    action = wezterm.action.ActivatePaneDirection 'Right',
-  },
-  {
-    key = 'UpArrow',
-    mods = 'CTRL|SHIFT',
-    action = wezterm.action.ActivatePaneDirection 'Up',
-  },
-  {
-    key = 'DownArrow',
-    mods = 'CTRL|SHIFT',
-    action = wezterm.action.ActivatePaneDirection 'Down',
-  },
-}
 
 -- =============================================================================
 -- Return Configuration
