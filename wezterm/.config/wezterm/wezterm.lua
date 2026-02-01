@@ -28,7 +28,7 @@ config.font_size = 11.0
 
 -- Window appearance
 config.window_background_opacity = 0.95
-config.window_decorations = 'NONE'
+config.window_decorations = 'TITLE'
 config.enable_tab_bar = true
 config.hide_tab_bar_if_only_one_tab = true
 config.use_fancy_tab_bar = false
