@@ -14,7 +14,16 @@ cd C:\Users\yayam\.files\_scripts
 .\install.ps1 -Type pro
 ```
 
-### 3. Stow Dotfiles
+### 3. Install LazyVim (Optional)
+```powershell
+cd C:\Users\yayam\.files\_scripts\windows\pwsh
+.\Install-LazyVim.ps1
+
+# Or skip backup if you don't have existing config
+.\Install-LazyVim.ps1 -SkipBackup
+```
+
+### 4. Stow Dotfiles
 ```powershell
 cd C:\Users\yayam\.files
 
@@ -52,6 +61,15 @@ nu
 4. No OpenGL errors (using WebGpu)
 ```
 
+### Test Neovim/LazyVim (if installed)
+```powershell
+nvim
+
+# On first launch, LazyVim will install plugins automatically
+# Run health check: :LazyHealth
+# Press <leader>l to open Lazy plugin manager
+```
+
 ## Quick Commands
 
 ### Package Management
@@ -65,6 +83,10 @@ nu
 # Install JS/Bun packages
 cd _scripts\windows\pwsh
 .\install-js-packages.ps1 -Type pro
+
+# Install LazyVim
+cd _scripts\windows\pwsh
+.\Install-LazyVim.ps1
 ```
 
 ### Stow Management

@@ -286,6 +286,83 @@ nano scripts/config/js.pkg.yml
 
 ---
 
+---
+
+#### `install-lazyvim.sh`
+
+Install [LazyVim](https://www.lazyvim.org/) - A Neovim distribution with pre-configured plugins and LSP support.
+
+```bash
+./scripts/install-lazyvim.sh [OPTIONS]
+```
+
+**What it does:**
+
+- Backs up existing Neovim configuration
+- Clones the LazyVim starter template
+- Removes .git folder for customization
+- Checks for required and optional dependencies
+
+**Prerequisites:**
+
+- Neovim (>= 0.9.0)
+- Git
+- Optional: ripgrep, fd, lazygit (recommended for full features)
+
+**Options:**
+
+```bash
+--no-backup    Skip backing up existing configuration
+--force        Force reinstall even if already installed
+--help         Show help message
+```
+
+**Examples:**
+
+```bash
+# Install with backup (recommended)
+./scripts/install-lazyvim.sh
+
+# Install without backup
+./scripts/install-lazyvim.sh --no-backup
+
+# Force reinstall
+./scripts/install-lazyvim.sh --force
+```
+
+**After installation:**
+
+```bash
+# Start Neovim
+nvim
+
+# LazyVim will automatically install plugins on first launch
+# Run health check
+:LazyHealth
+
+# Open Lazy plugin manager
+# Press <leader>l
+```
+
+**Configuration location:**
+
+- Config: `~/.config/nvim`
+- Backup: `~/.config/nvim.bak`
+- Data: `~/.local/share/nvim`
+- State: `~/.local/state/nvim`
+
+**Key features:**
+
+- Pre-configured LSP, treesitter, completion
+- File explorer, fuzzy finder, git integration
+- Beautiful UI with statusline and bufferline
+- Extensive keymaps (<leader> = space by default)
+- Easy customization via lua config
+
+**Documentation:** https://www.lazyvim.org/
+
+---
+
 ### Utility Scripts
 
 #### `manage-stow.sh`

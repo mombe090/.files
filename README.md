@@ -342,6 +342,7 @@ Utility scripts in `scripts/`:
 - **`install-stow.sh`** - Install GNU Stow
 - **`install-dotnet.sh`** - Install .NET SDK/Runtime (cross-platform)
 - **`install-js-packages.sh`** - Install JS/TS packages globally via bun
+- **`install-lazyvim.sh`** - Install LazyVim Neovim distribution
 - **`install-modern-fonts.sh`** - Install modern Nerd Fonts (CascadiaMono, JetBrainsMono, VictorMono)
 - **`manage-stow.sh`** - Manage stow packages (stow/unstow/restow)
 - **`check-dotnet.sh`** - Diagnostic tool for .NET PATH issues
@@ -361,6 +362,7 @@ PowerShell scripts in `_scripts/`:
 - **`windows/pwsh/install-js-packages.ps1`** - Bun global package installer
 - **`windows/pwsh/setup-windows.ps1`** - PowerShell modules installer
 - **`windows/pwsh/Install-ModernFonts.ps1`** - Nerd Fonts installer
+- **`windows/pwsh/Install-LazyVim.ps1`** - LazyVim Neovim distribution installer
 
 Package configurations in `_scripts/configs/packages/`:
 - **`pro/choco.pkg.yml`** - Professional Chocolatey packages
