@@ -302,11 +302,158 @@ packages:
 # Install PowerShell modules only
 .\windows\pwsh\setup-windows.ps1
 
+# Install JavaScript packages only (requires Bun)
+.\windows\pwsh\install-js-packages.ps1 -Type pro
+
 # Install WinGet
 .\installers\pwsh\winget.ps1
 
 # Install Chocolatey
 .\installers\pwsh\choco.ps1
+```
+
+## 📦 JavaScript Packages (Bun)
+
+Install global JavaScript/TypeScript development tools using Bun package manager.
+
+### Prerequisites
+
+Bun must be installed first (included in professional packages):
+
+```powershell
+# Bun is installed automatically with professional packages
+.\install.ps1 -Type pro
+
+# Or install Bun manually via Chocolatey
+choco install bun -y
+```
+
+### Quick Start
+
+```powershell
+# Install all JavaScript packages (TypeScript, ESLint, Prettier, etc.)
+.\windows\pwsh\install-js-packages.ps1 -Type pro
+
+# Install only development category
+.\windows\pwsh\install-js-packages.ps1 -Type pro -Category development
+
+# Force reinstall/upgrade all packages
+.\windows\pwsh\install-js-packages.ps1 -Type pro -Force
+```
+
+### What Gets Installed
+
+**Professional JavaScript Packages (`pro`):**
+
+- **TypeScript** - TypeScript compiler and language server
+- **TSX** - TypeScript runner (Node.js alternative)
+- **Prettier** - Opinionated code formatter
+- **ESLint** - JavaScript/TypeScript linter
+- **markdownlint-cli2** - Markdown linting tool
+- **@qetza/replacetokens** - Token replacement utility
+
+All packages are installed globally via Bun (`bun add --global`).
+
+### Configuration
+
+Packages are defined in YAML files:
+
+- `configs/packages/pro/js.pkg.yml` - Professional JavaScript packages
+- `configs/packages/perso/js.pkg.yml` - Personal JavaScript packages (optional)
+
+### Adding Custom Packages
+
+Edit `configs/packages/pro/js.pkg.yml`:
+
+```yaml
+development:
+  - id: package-name
+    name: Package Display Name
+    category: development
+    
+  - id: "@scope/package-name"
+    name: Scoped Package
+    category: development
+```
+
+**Note:** Scoped packages (e.g., `@qetza/replacetokens`) are fully supported.
+
+### Usage Examples
+
+After installation, these tools are available globally:
+
+```powershell
+# TypeScript compiler
+tsc --version
+
+# TypeScript runner
+tsx --version
+
+# Code formatter
+prettier --version
+
+# Linter
+eslint --version
+
+# Markdown linter
+markdownlint-cli2 --version
+
+# Token replacement
+replacetokens --version
+```
+
+### Advanced Options
+
+```powershell
+# Install from custom config directory
+.\windows\pwsh\install-js-packages.ps1 -ConfigDir "C:\custom\path"
+
+# Install all packages (pro + personal)
+.\windows\pwsh\install-js-packages.ps1 -Type all
+
+# View detailed help
+Get-Help .\windows\pwsh\install-js-packages.ps1 -Detailed
+```
+
+### Verifying Installation
+
+```powershell
+# List globally installed Bun packages
+bun pm ls --global
+
+# Check specific package
+bun pm ls --global | Select-String "typescript"
+```
+
+### Troubleshooting
+
+**Bun not found:**
+
+```powershell
+# Verify Bun is installed
+bun --version
+
+# If not installed, install via Chocolatey
+choco install bun -y
+
+# Restart your terminal after installation
+```
+
+**Package installation fails:**
+
+```powershell
+# Try forcing reinstall
+.\windows\pwsh\install-js-packages.ps1 -Type pro -Force
+
+# Or install manually
+bun add --global typescript
+```
+
+**Scoped package issues:**
+
+```powershell
+# Scoped packages use @ symbol and may need quotes in some contexts
+bun add --global "@qetza/replacetokens"
 ```
 
 ## 📝 Notes
