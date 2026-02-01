@@ -261,11 +261,17 @@ code .files\wezterm\.config\wezterm\wezterm.lua
 
 ### Permission Errors
 
-Creating symlinks on Windows requires Developer Mode or Administrator privileges.
+Creating symlinks on Windows requires either Developer Mode OR Administrator privileges.
 
-**Enable Developer Mode:**
+**Option 1: Enable Developer Mode (Recommended)**
 1. Settings → Privacy & Security → For developers
 2. Turn on "Developer Mode"
+3. No UAC prompts needed for stow operations
+
+**Option 2: Run with Administrator Privileges**
+- Run PowerShell as Administrator before using stow.ps1
+- You'll see UAC prompts for each symlink creation
+- Less convenient but works if Developer Mode cannot be enabled
 
 ### Symlink Already Exists
 
