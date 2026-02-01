@@ -19,12 +19,13 @@ These dotfiles aim to provide a **clean, efficient, and customizable development
 
 - Linux [debian based, rehat based, arch base and nix os],
 - macOS
+- Windows (native PowerShell/Nushell support)
 - Windows with WSL
 
 Includes configurations for:
 
-- Shell (`zsh` and some `bash`, but mainly using `zsh` with `zinit`), next is to pick `nushell`.
-- Terminal and multiplexer (`alacritty`, `ghostty` and `zellij`)
+- Shell (`zsh` and some `bash`, but mainly using `zsh` with `zinit`). Windows native support for `PowerShell 7` and `Nushell`.
+- Terminal and multiplexer (`alacritty`, `ghostty`, `wezterm` and `zellij`)
 - Editor (`Neovim`, `Vscode` and `Intellij`)
 - Tiling window manager (`hyprland`)
 - Omarchy Customization
@@ -127,6 +128,8 @@ The install script will attempt to install these via mise or your system package
 
 ## Installation
 
+### Linux & macOS
+
 ### Quick Start
 
 ```bash
@@ -140,16 +143,54 @@ cd ~/.dotfiles
 ./install.sh
 ```
 
-The install script will:
+### Windows (Native PowerShell/Nushell)
 
-1. ✅ Automatically backup your existing configurations
-2. ✅ Detect your operating system
-3. ✅ Install required dependencies
-4. ✅ Install essential build tools (gcc, make, cmake, development libraries)
-5. ✅ Install mise and modern CLI tools
-6. ✅ Install modern Nerd Fonts for terminal icons
-7. ✅ Create symlinks using GNU Stow
-8. ✅ Set up shell configurations
+See **[_scripts/windows/QUICK-START.md](_scripts/windows/QUICK-START.md)** for detailed Windows installation guide.
+
+**Quick Setup:**
+
+```powershell
+# 1. Clone repository
+git clone https://github.com/mombe090/.files.git C:\Users\<username>\.files
+
+# 2. Install fonts (as Administrator)
+cd C:\Users\<username>\.files\_scripts\windows\pwsh
+Start-Process pwsh -ArgumentList '-NoProfile -ExecutionPolicy Bypass -File .\Install-ModernFonts.ps1' -Verb RunAs
+
+# 3. Install packages
+cd C:\Users\<username>\.files\_scripts
+.\install.ps1 -Type pro
+
+# 4. Stow dotfiles
+cd C:\Users\<username>\.files
+.\stow.ps1 wezterm
+.\stow.ps1 nu
+.\stow.ps1 starship
+.\stow.ps1 powershell -Target C:\Users\<username>
+
+# 5. Restart terminal to see Starship prompt
+```
+
+**What you get on Windows:**
+- 🪟 **PowerShell 7** with Starship prompt and custom aliases
+- 🐚 **Nushell** with Starship prompt and custom configurations
+- 🖥️ **WezTerm** terminal with WebGpu rendering and Catppuccin theme
+- 🔤 **Nerd Fonts** (CascadiaMono, JetBrainsMono) for icon support
+- 📦 **Package managers**: Chocolatey (primary), winget (fallback), Bun (JavaScript)
+- 🔧 **Development tools**: Git, VSCode, IntelliJ, Neovim, kubectl, Terraform, Docker, and more
+
+**Windows Documentation:**
+- **[QUICK-START.md](_scripts/windows/QUICK-START.md)** - Quick reference guide
+- **[TESTING.md](TESTING.md)** - Comprehensive testing guide
+- **[_scripts/README.md](_scripts/README.md)** - Script documentation
+
+---
+
+### Post-Installation (Linux & macOS)
+
+After installation:
+
+```bash
 
 ### Installation Options
 
@@ -175,55 +216,7 @@ Choose from:
 ./install.sh --minimal
 ```
 
-### Post-Installation
-
-After installation:
-
-```bash
-# 1. Restart your shell or source the config
-source ~/.zshrc
-
-# 2. Edit your personal git information
-nano ~/.gitconfig.local
-# Add your name and email
-
-# 3. Install mise tools (if using mise)
-mise install
-
-# 4. Verify installation
-which zsh bat eza fzf
-```
-
-### Manual Backup (Optional)
-
-The install script backs up automatically, but you can also backup manually:
-
-```bash
-# Use the backup script
-./scripts/backup.sh
-
-# Or manual backup
-cp ~/.zshrc ~/.zshrc.backup
-cp -r ~/.config/ ~/.config.backup
-```
-
-### Customization
-
-> **Note:** Fork this repository to customize for your needs.
-
-1. Fork on GitHub
-2. Clone your fork: `git clone https://github.com/<your-username>/.files.git ~/.dotfiles`
-3. Make changes
-4. Run `./install.sh` to apply
-
-### Uninstallation
-
-To remove dotfiles and restore backups:
-
-```bash
-cd ~/.dotfiles
-./scripts/uninstall.sh
-```
+---
 
 ## Features
 
@@ -231,12 +224,20 @@ These dotfiles include:
 
 ### Shell Configuration
 
+**Linux & macOS:**
 - ⚡ **Zsh** with [Zinit](https://github.com/zdharma-continuum/zinit) plugin manager
 - 🎨 **Starship** prompt with custom configuration
 - 📝 Custom aliases for git, kubernetes, terraform, and more
 - 🔍 **fzf** integration for fuzzy finding
 - 📂 **zoxide** for smart directory jumping
 - 🔧 Modular configuration split into logical files
+
+**Windows:**
+- 🪟 **PowerShell 7** with custom profile and Starship prompt
+- 🐚 **Nushell** with Starship prompt and vi mode
+- 📝 Git and Kubernetes aliases in both shells
+- 🎨 Catppuccin-inspired color themes
+- 🔧 Enhanced commands (cx for cd + ls)
 
 ### Development Tools
 
@@ -247,7 +248,7 @@ These dotfiles include:
 
 ### Terminal & Editor
 
-- 🖥️  **Alacritty** and **Ghostty** terminal configurations
+- 🖥️  **Alacritty**, **Ghostty**, and **WezTerm** terminal configurations
 - ✏️  **Neovim** with [LazyVim](https://www.lazyvim.org/) distribution
 - 🪟 **Zellij** terminal multiplexer configuration
 - 🎨 Consistent **Catppuccin** theme across all tools
@@ -325,9 +326,12 @@ These dotfiles include:
 | ------------ | ---------------------------- | ---------------------------- |
 | **alacritty**| GPU-accelerated terminal     | `alacritty/.config/`         |
 | **ghostty**  | Modern terminal emulator     | `ghostty/.config/`           |
+| **wezterm**  | GPU-accelerated terminal     | `wezterm/.config/wezterm/`   |
 | **zellij**   | Terminal multiplexer         | `zellij/.config/`            |
 
 ## Scripts
+
+### Linux & macOS Scripts
 
 Utility scripts in `scripts/`:
 
@@ -345,6 +349,26 @@ Utility scripts in `scripts/`:
 - **`uninstall.sh`** - Remove dotfiles and restore backups
 
 For detailed documentation, see: [scripts/README.md](scripts/README.md)
+
+### Windows Scripts
+
+PowerShell scripts in `_scripts/`:
+
+- **`install.ps1`** - Main installer (Chocolatey/winget packages)
+- **`uninstall.ps1`** - Uninstaller for all packages
+- **`stow.ps1`** - GNU Stow-like symlink manager for Windows
+- **`windows/pwsh/install-packages.ps1`** - System package installer
+- **`windows/pwsh/install-js-packages.ps1`** - Bun global package installer
+- **`windows/pwsh/setup-windows.ps1`** - PowerShell modules installer
+- **`windows/pwsh/Install-ModernFonts.ps1`** - Nerd Fonts installer
+
+Package configurations in `_scripts/configs/packages/`:
+- **`pro/choco.pkg.yml`** - Professional Chocolatey packages
+- **`pro/winget.pkg.yml`** - Professional winget packages
+- **`pro/js.pkg.yml`** - Professional JavaScript packages
+- **`perso/js.pkg.yml`** - Personal JavaScript packages
+
+For detailed documentation, see: [_scripts/windows/QUICK-START.md](_scripts/windows/QUICK-START.md)
 
 ## Documentation
 
@@ -364,8 +388,10 @@ For detailed documentation, see: [scripts/README.md](scripts/README.md)
 
 ### Installation Guides
 
-- **[INSTALLATION_FLOW.md](INSTALLATION_FLOW.md)** - Visual installation flow diagram
-- **[scripts/README.md](scripts/README.md)** - Detailed script documentation
+- **[INSTALLATION_FLOW.md](INSTALLATION_FLOW.md)** - Visual installation flow diagram (Linux/macOS)
+- **[scripts/README.md](scripts/README.md)** - Detailed script documentation (Linux/macOS)
+- **[_scripts/windows/QUICK-START.md](_scripts/windows/QUICK-START.md)** - Windows quick start guide
+- **[TESTING.md](TESTING.md)** - Windows testing and verification guide
 
 ### Troubleshooting Guides
 
