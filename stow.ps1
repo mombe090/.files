@@ -236,7 +236,6 @@ function Invoke-StowPackage {
     Write-Header "Stowing package: $PackageName"
     Write-Info "Source: $packagePath"
     Write-Info "Target: $TargetDir"
-    Write-Verbose "TargetDir matches .config: $($TargetDir -match '\.config$')"
 
     $success = $true
     $linkCount = 0
@@ -244,13 +243,11 @@ function Invoke-StowPackage {
     # Recursively process all files and directories
     Get-ChildItem -Path $packagePath -Recurse -Force | ForEach-Object {
         $relativePath = $_.FullName.Substring($packagePath.Length + 1)
-        $originalPath = $relativePath
         
         # Strip leading .config/ if target is already ~/.config
         # This prevents .config/.config/app duplication
         if ($TargetDir -match '\.config$' -and $relativePath -match '^\.config\\') {
             $relativePath = $relativePath.Substring(8) # Remove ".config\"
-            Write-Verbose "Stripped .config/ prefix: [$originalPath] -> [$relativePath]"
         }
         
         $targetPath = Join-Path $TargetDir $relativePath
