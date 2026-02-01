@@ -354,6 +354,15 @@ choco install bun -y
 
 All packages are installed globally via Bun (`bun add --global`).
 
+**Automatic PATH Configuration:**
+
+The installation script automatically:
+- Checks if Bun's global bin directory (`%USERPROFILE%\.bun\bin`) is in your PATH
+- Adds it to your user PATH if missing
+- Updates the current PowerShell session for immediate use
+
+After installation, you may need to restart your terminal for new sessions to pick up the PATH changes.
+
 ### Configuration
 
 Packages are defined in YAML files:
