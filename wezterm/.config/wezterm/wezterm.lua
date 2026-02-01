@@ -12,7 +12,7 @@ if wezterm.config_builder then
 end
 
 -- Window Config
-config.initial_cols = 165
+config.initial_cols = 144
 config.initial_rows = 36
 
 -- =============================================================================
@@ -47,14 +47,14 @@ config.window_padding = {
 
 -- Rendering backend for Windows
 -- WebGpu uses DirectX 12 - best for Windows 11
-if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
-  config.front_end = 'WebGpu'
-  config.webgpu_power_preference = 'HighPerformance'
-  
-  -- Better font rendering on Windows
-  config.freetype_load_target = 'Normal'
-  config.freetype_render_target = 'HorizontalLcd'
-end
+-- if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
+--   config.front_end = 'WebGpu'
+--   config.webgpu_power_preference = 'HighPerformance'
+--
+--   -- Better font rendering on Windows
+--   config.freetype_load_target = 'Normal'
+--   config.freetype_render_target = 'HorizontalLcd'
+-- end
 
 -- =============================================================================
 -- Behavior
