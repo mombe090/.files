@@ -1,0 +1,29 @@
+# =============================================================================
+# Bun - JavaScript Packages (Personal)
+# =============================================================================
+# Personal JavaScript packages installed globally using Bun package manager.
+#
+# Note: Professional packages are always installed first to establish baseline.
+#       This file contains additional personal/development tools.
+#
+# Requires: Bun to be installed (via chocolatey)
+#
+# Usage:
+#   Install all: _scripts/windows/pwsh/install-js-packages.ps1 -Type perso
+#   (This will install pro packages first, then perso packages)
+# =============================================================================
+
+development:
+  - id: opencode-ai
+    name: OpenCode CLI
+    category: development
+
+  - id: claude  
+    name: OpenCode CLI
+    category: development
+
+tools: []
+
+productivity: []
+
+security: []

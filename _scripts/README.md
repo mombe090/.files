@@ -166,6 +166,13 @@ This ensures:
 - ✅ Personal packages can depend on professional packages
 - ✅ Consistent environment across installations
 
+**Installation Steps:**
+
+1. **Package Managers** - Install/verify Chocolatey and winget
+2. **System Packages** - Install applications (Git, VSCode, etc.)
+3. **JavaScript Packages** - Install global JS tools via Bun (TypeScript, ESLint, etc.)
+4. **PowerShell Modules** - Install PowerShell enhancements
+
 ```
 
 **If you get "scripts is disabled" error:**
@@ -346,8 +353,14 @@ choco install bun -y
 
 ### Quick Start
 
+**Note:** JavaScript packages are now automatically installed when you run the main installer!
+
 ```powershell
-# Install all JavaScript packages (TypeScript, ESLint, Prettier, etc.)
+# Automatic installation (recommended)
+.\install.ps1 -Type pro          # Installs pro JS packages automatically
+.\install.ps1 -Type perso        # Installs pro + perso JS packages automatically
+
+# Manual installation (if needed)
 .\windows\pwsh\install-js-packages.ps1 -Type pro
 
 # Install only development category
@@ -367,6 +380,12 @@ choco install bun -y
 - **ESLint** - JavaScript/TypeScript linter
 - **markdownlint-cli2** - Markdown linting tool
 - **@qetza/replacetokens** - Token replacement utility
+
+**Personal JavaScript Packages (`perso`):**
+
+- **opencode** - OpenCode CLI tool
+
+**Note:** When installing with `-Type perso` or `-Type all`, professional packages are installed first, then personal packages are added on top.
 
 All packages are installed globally via Bun (`bun add --global`).
 

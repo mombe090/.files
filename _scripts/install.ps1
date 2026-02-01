@@ -237,9 +237,43 @@ if (-not $SkipPackages) {
     }
 }
 
-# Step 3: Install PowerShell modules
+# Step 3: Install JavaScript packages (via Bun)
+if (-not $SkipPackages) {
+    Write-Header "Step 3: JavaScript Packages (Bun)"
+    
+    # Check if Bun is installed (should be from pro packages)
+    $hasBun = Test-Command "bun"
+    
+    if ($hasBun) {
+        Write-Success "Bun detected, installing JavaScript packages..."
+        
+        # Install JS packages following same order as system packages
+        foreach ($installType in $installOrder) {
+            # Check if JS package config exists for this type
+            $jsConfigPath = "$ScriptRoot\configs\packages\$installType\js.pkg.yml"
+            
+            if (Test-Path $jsConfigPath) {
+                Write-Info "Installing $installType JavaScript packages..."
+                & "$ScriptRoot\windows\pwsh\install-js-packages.ps1" -Type $installType
+                
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Warn "Some JavaScript packages failed to install"
+                }
+            }
+            else {
+                Write-Info "No JavaScript packages configured for $installType (file not found: $jsConfigPath)"
+            }
+        }
+    }
+    else {
+        Write-Warn "Bun not found, skipping JavaScript packages"
+        Write-Info "To install JavaScript packages, first install Bun with professional packages"
+    }
+}
+
+# Step 4: Install PowerShell modules
 if (-not $SkipModules) {
-    Write-Header "Step 3: PowerShell Modules"
+    Write-Header "Step 4: PowerShell Modules"
     
     & "$ScriptRoot\windows\pwsh\setup-windows.ps1"
     
