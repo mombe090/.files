@@ -8,39 +8,10 @@
 #   Install all: scripts/windows/install-packages.ps1 -Type perso -PackageManager choco
 # =============================================================================
 
-media:
-  - id: vlc
-    name: VLC Media Player
-    category: media
-    
-  - id: obs-studio
-    name: OBS Studio
-    category: media
-    
-  - id: audacity
-    name: Audacity
-    category: media
+media: []
 
-browsers:
-  - id: googlechrome
-    name: Google Chrome
-    category: browsers
-    
-  - id: firefox
-    name: Mozilla Firefox
-    category: browsers
-    
-  - id: brave
-    name: Brave Browser
-    category: browsers
+browsers: []
 
-communication:
-  - id: slack
-    name: Slack
-    category: communication
-    
-  - id: zoom
-    name: Zoom
-    category: communication
+communication: []
 
 utilities: []
