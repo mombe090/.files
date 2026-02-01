@@ -38,6 +38,16 @@ config.window_padding = {
 }
 
 -- =============================================================================
+-- GPU & Rendering
+-- =============================================================================
+
+-- Use WebGpu for modern Windows systems (fixes OpenGL issues)
+if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
+  config.front_end = 'WebGpu'
+  config.webgpu_power_preference = 'HighPerformance'
+end
+
+-- =============================================================================
 -- Behavior
 -- =============================================================================
 
