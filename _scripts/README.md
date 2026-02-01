@@ -148,8 +148,24 @@ cd ~/.files/_scripts
 
 # Or specify package type directly
 .\install.ps1 -Type pro           # Work packages only
-.\install.ps1 -Type perso         # Personal packages only
-.\install.ps1 -Type all           # Everything
+.\install.ps1 -Type perso         # Personal + professional packages
+.\install.ps1 -Type all           # Everything (pro first, then perso)
+```
+
+**Important: Installation Order**
+
+To prevent package conflicts and duplicates:
+
+- **`-Type pro`**: Installs only professional packages
+- **`-Type perso`**: Installs professional packages FIRST, then personal packages
+- **`-Type all`**: Same as perso (installs pro first, then perso)
+
+This ensures:
+- ✅ Professional baseline is always established first
+- ✅ No duplicate packages between pro and perso
+- ✅ Personal packages can depend on professional packages
+- ✅ Consistent environment across installations
+
 ```
 
 **If you get "scripts is disabled" error:**
