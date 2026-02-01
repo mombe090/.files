@@ -12,8 +12,8 @@ if wezterm.config_builder then
 end
 
 -- Window Config
-config.initial_cols = 180
-config.initial_rows = 28
+config.initial_cols = 165
+config.initial_rows = 56
 
 -- =============================================================================
 -- Appearance
