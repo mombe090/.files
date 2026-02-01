@@ -45,10 +45,15 @@ config.window_padding = {
 -- GPU & Rendering
 -- =============================================================================
 
--- Use WebGpu for modern Windows systems (fixes OpenGL issues)
+-- Rendering backend for Windows
+-- WebGpu uses DirectX 12 - best for Windows 11
 if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
   config.front_end = 'WebGpu'
   config.webgpu_power_preference = 'HighPerformance'
+  
+  -- Better font rendering on Windows
+  config.freetype_load_target = 'Normal'
+  config.freetype_render_target = 'HorizontalLcd'
 end
 
 -- =============================================================================
