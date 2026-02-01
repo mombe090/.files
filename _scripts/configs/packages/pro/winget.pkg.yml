@@ -56,4 +56,8 @@ tools:
   - id: GitHub.GitHubCopilot
     name: GitHub Copilot CLI
     category: tools
+    
+  - id: Nushell.Nushell
+    name: Nushell
+    category: tools
 # Other tools are handled by Chocolatey
