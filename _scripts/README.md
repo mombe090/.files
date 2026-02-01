@@ -368,9 +368,11 @@ packages:
 .\windows\pwsh\install-js-packages.ps1 -Type pro
 
 # Manage dotfiles with symlinks (like GNU Stow)
-.\windows\pwsh\stow.ps1 -Stow wezterm
-.\windows\pwsh\stow.ps1 -Unstow wezterm
-.\windows\pwsh\stow.ps1 -ListPackages
+# Run from .files root directory
+cd ..
+.\stow.ps1 wezterm           # Stow wezterm
+.\stow.ps1 -Unstow wezterm   # Unstow wezterm
+.\stow.ps1 -ListPackages     # List packages
 
 # Install WinGet
 .\installers\pwsh\winget.ps1

@@ -4,7 +4,7 @@
 # A PowerShell implementation of GNU Stow for managing dotfiles on Windows.
 #
 # Usage:
-#   cd _scripts/windows/pwsh
+#   cd ~/.files
 #   .\stow.ps1 wezterm                     # Stow wezterm (default action)
 #   .\stow.ps1 -Stow wezterm               # Create symlinks in ~/.config for wezterm
 #   .\stow.ps1 -Unstow wezterm             # Remove symlinks for wezterm package
@@ -12,10 +12,10 @@
 #   .\stow.ps1 -Stow wezterm -Target $env:USERPROFILE  # Custom target directory
 #   .\stow.ps1 -ListPackages               # List all available packages
 #
-# Package Structure (from .files root):
-#   .files/wezterm/.config/wezterm/wezterm.lua   -> ~/.config/wezterm/wezterm.lua
-#   .files/nvim/.config/nvim/init.lua            -> ~/.config/nvim/init.lua
-#   .files/git/.gitconfig                        -> ~/.gitconfig
+# Package Structure:
+#   wezterm/.config/wezterm/wezterm.lua   -> ~/.config/wezterm/wezterm.lua
+#   nvim/.config/nvim/init.lua            -> ~/.config/nvim/init.lua
+#   git/.gitconfig                        -> ~/.gitconfig
 # =============================================================================
 
 param(
@@ -50,11 +50,10 @@ param(
 # Determine script root and package directory
 $ScriptRoot = if ($PSScriptRoot) { $PSScriptRoot } else { Get-Location }
 if (-not $PackageDir) {
-    # Default: .files root directory (where packages are)
-    # Script is at: .files/_scripts/windows/pwsh/stow.ps1
+    # Default: Same directory as script (.files root)
+    # Script is at: .files/stow.ps1
     # Packages are at: .files/wezterm/, .files/nvim/, etc.
-    # Go up 3 levels: pwsh -> windows -> _scripts -> .files
-    $PackageDir = Split-Path (Split-Path (Split-Path $ScriptRoot -Parent) -Parent) -Parent
+    $PackageDir = $ScriptRoot
     
     # Verify this is the .files directory
     if ((Split-Path $PackageDir -Leaf) -ne '.files') {
@@ -74,9 +73,9 @@ if (-not $Target) {
 }
 
 # Import libraries
-# Script is at: _scripts/windows/pwsh/stow.ps1
-# Libraries are at: _scripts/lib/pwsh/
-$libPath = Join-Path (Split-Path (Split-Path $ScriptRoot -Parent) -Parent) "lib\pwsh"
+# Script is at: .files/stow.ps1
+# Libraries are at: .files/_scripts/lib/pwsh/
+$libPath = Join-Path $ScriptRoot "_scripts\lib\pwsh"
 . "$libPath\colors.ps1"
 . "$libPath\common.ps1"
 

@@ -27,17 +27,16 @@ Organize your config files in a package directory:
 │   └── .config/
 │       └── nvim/
 │           └── init.lua
+├── stow.ps1
 └── _scripts/
-    └── windows/
-        └── pwsh/
-            └── stow.ps1
+    └── ...
 ```
 
 ### 2. Stow the Package
 
 ```powershell
-cd .files\_scripts\windows\pwsh
-.\stow.ps1 -Stow wezterm
+cd .files
+.\stow.ps1 wezterm
 ```
 
 This creates:
@@ -141,7 +140,7 @@ mkdir -p .files\wezterm\.config\wezterm
 code .files\wezterm\.config\wezterm\wezterm.lua
 
 # Stow it
-cd .files\_scripts\windows\pwsh
+cd .files
 .\stow.ps1 -Stow wezterm
 ```
 
@@ -239,7 +238,7 @@ On a new machine:
 ```powershell
 # Clone dotfiles
 git clone https://github.com/yourusername/.files.git
-cd .files\_scripts\windows\pwsh
+cd .files
 
 # Stow everything
 .\stow.ps1 -Stow wezterm
