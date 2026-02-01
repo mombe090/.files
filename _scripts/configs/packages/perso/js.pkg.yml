@@ -18,8 +18,8 @@ development:
     name: OpenCode CLI
     category: development
 
-  - id: claude  
-    name: OpenCode CLI
+  - id: @anthropic-ai/claude-code
+    name: ClaudeCode CLI
     category: development
 
 tools: []
