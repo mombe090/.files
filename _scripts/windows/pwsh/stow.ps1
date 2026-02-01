@@ -5,6 +5,7 @@
 #
 # Usage:
 #   cd _scripts/windows/pwsh
+#   .\stow.ps1 wezterm                     # Stow wezterm (default action)
 #   .\stow.ps1 -Stow wezterm               # Create symlinks in ~/.config for wezterm
 #   .\stow.ps1 -Unstow wezterm             # Remove symlinks for wezterm package
 #   .\stow.ps1 -Restow wezterm             # Remove and recreate symlinks
@@ -12,13 +13,13 @@
 #   .\stow.ps1 -ListPackages               # List all available packages
 #
 # Package Structure (from .files root):
-#   wezterm/.config/wezterm/wezterm.lua   -> ~/.config/wezterm/wezterm.lua
-#   nvim/.config/nvim/init.lua            -> ~/.config/nvim/init.lua
-#   git/.gitconfig                        -> ~/.gitconfig
+#   .files/wezterm/.config/wezterm/wezterm.lua   -> ~/.config/wezterm/wezterm.lua
+#   .files/nvim/.config/nvim/init.lua            -> ~/.config/nvim/init.lua
+#   .files/git/.gitconfig                        -> ~/.gitconfig
 # =============================================================================
 
 param(
-    [Parameter(Mandatory = $false)]
+    [Parameter(Position = 0, Mandatory = $false)]
     [string]$Stow,
 
     [Parameter(Mandatory = $false)]
@@ -37,22 +38,29 @@ param(
     [switch]$DryRun,
 
     [Parameter(Mandatory = $false)]
-    [switch]$Verbose,
-
-    [Parameter(Mandatory = $false)]
     [switch]$ListPackages,
 
     [Parameter(Mandatory = $false)]
     [switch]$Force
 )
 
+# Use PowerShell's built-in Verbose preference
+# Access via $VerbosePreference or use Write-Verbose
+
 # Determine script root and package directory
 $ScriptRoot = if ($PSScriptRoot) { $PSScriptRoot } else { Get-Location }
 if (-not $PackageDir) {
-    # Default: look for packages in root .files directory
+    # Default: .files root directory (where packages are)
     # Script is at: .files/_scripts/windows/pwsh/stow.ps1
-    # Packages are at: .files/*/
+    # Packages are at: .files/wezterm/, .files/nvim/, etc.
+    # Go up 3 levels: pwsh -> windows -> _scripts -> .files
     $PackageDir = Split-Path (Split-Path (Split-Path $ScriptRoot -Parent) -Parent) -Parent
+    
+    # Verify this is the .files directory
+    if ((Split-Path $PackageDir -Leaf) -ne '.files') {
+        Write-Warn "Warning: Expected package directory to be '.files', but found: $(Split-Path $PackageDir -Leaf)"
+        Write-Info "Package directory: $PackageDir"
+    }
 }
 
 # Default target is ~/.config (like XDG on Linux)
@@ -117,9 +125,7 @@ function New-SymbolicLink {
             if ((Get-Item $Link).LinkType -eq "SymbolicLink") {
                 $existingTarget = (Get-Item $Link).Target
                 if ($existingTarget -eq $Target) {
-                    if ($Verbose) {
-                        Write-Success "  Link already exists and points to correct target: $Link"
-                    }
+                    Write-Verbose "Link already exists and points to correct target: $Link"
                     return $true
                 }
                 else {
@@ -184,9 +190,7 @@ function Remove-SymbolicLink {
             }
         }
         else {
-            if ($Verbose) {
-                Write-Info "  Symlink does not exist, skipping: $Link"
-            }
+            Write-Verbose "Symlink does not exist, skipping: $Link"
             return $true
         }
     }
@@ -244,9 +248,7 @@ function Invoke-StowPackage {
 
         if ($_.PSIsContainer) {
             # Create directory symlink or ensure directory exists
-            if ($Verbose) {
-                Write-Step "Processing directory: $relativePath"
-            }
+            Write-Verbose "Processing directory: $relativePath"
         }
         else {
             # Create file symlink
@@ -337,9 +339,7 @@ if ($ListPackages) {
 
     foreach ($pkg in $packages) {
         Write-Info "  $($pkg.Name)"
-        if ($Verbose) {
-            Write-Host "    Path: $($pkg.Path)" -ForegroundColor Gray
-        }
+        Write-Verbose "Package path: $($pkg.Path)"
     }
     
     Write-Success "Found $($packages.Count) package(s)"
