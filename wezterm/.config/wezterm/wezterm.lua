@@ -19,7 +19,7 @@ end
 config.color_scheme = 'Catppuccin Mocha'
 
 -- Font configuration
-config.font = wezterm.font('CaskaydiaCove Nerd Font', { weight = 'Regular' })
+config.font = wezterm.font('CaskaydiaMono Nerd Font', { weight = 'Regular' })
 config.font_size = 11.0
 
 -- Window appearance
