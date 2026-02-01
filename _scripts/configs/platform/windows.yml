@@ -22,19 +22,19 @@ windows_terminal:
   appearance:
     theme: "dark"
     use_acrylic: true
-    acrylic_opacity: 0.85
+    acrylic_opacity: 0.95
     
   profiles:
     powershell:
       font_face: "CascadiaMono Nerd Font"
-      font_size: 11
+      font_size: 14
       color_scheme: "One Half Dark"
-      background_opacity: 0.85
+      background_opacity: 0.95
       use_acrylic: true
       
     cmd:
       font_face: "CascadiaMono Nerd Font"
-      font_size: 11
+      font_size: 14
       
 powershell:
   modules:

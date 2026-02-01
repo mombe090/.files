@@ -8,26 +8,9 @@
 #   Install all: scripts/windows/install-packages.ps1 -Type perso
 # =============================================================================
 
-gaming:
-  - id: Valve.Steam
-    name: Steam
-    category: gaming
-    
-  - id: EpicGames.EpicGamesLauncher
-    name: Epic Games Launcher
-    category: gaming
-    
-  - id: Discord.Discord
-    name: Discord
-    category: gaming
-
 media:
   - id: VideoLAN.VLC
     name: VLC Media Player
-    category: media
-    
-  - id: Spotify.Spotify
-    name: Spotify
     category: media
     
   - id: OBSProject.OBSStudio
@@ -59,20 +42,5 @@ communication:
   - id: Zoom.Zoom
     name: Zoom
     category: communication
-    
-  - id: Microsoft.Teams
-    name: Microsoft Teams
-    category: communication
 
-utilities:
-  - id: WinDirStat.WinDirStat
-    name: WinDirStat
-    category: utilities
-    
-  - id: Lexikos.AutoHotkey
-    name: AutoHotkey
-    category: utilities
-    
-  - id: voidtools.Everything
-    name: Everything (search)
-    category: utilities
+utilities: []

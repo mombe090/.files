@@ -8,26 +8,9 @@
 #   Install all: scripts/windows/install-packages.ps1 -Type perso -PackageManager choco
 # =============================================================================
 
-gaming:
-  - id: steam
-    name: Steam
-    category: gaming
-    
-  - id: epicgameslauncher
-    name: Epic Games Launcher
-    category: gaming
-    
-  - id: discord
-    name: Discord
-    category: gaming
-
 media:
   - id: vlc
     name: VLC Media Player
-    category: media
-    
-  - id: spotify
-    name: Spotify
     category: media
     
   - id: obs-studio
@@ -59,20 +42,5 @@ communication:
   - id: zoom
     name: Zoom
     category: communication
-    
-  - id: microsoft-teams
-    name: Microsoft Teams
-    category: communication
 
-utilities:
-  - id: windirstat
-    name: WinDirStat
-    category: utilities
-    
-  - id: autohotkey
-    name: AutoHotkey
-    category: utilities
-    
-  - id: everything
-    name: Everything (search)
-    category: utilities
+utilities: []
