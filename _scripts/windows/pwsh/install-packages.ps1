@@ -24,7 +24,10 @@ param(
     [string]$PackageManager = 'auto',
 
     [Parameter(Mandatory = $false)]
-    [string]$ConfigDir = "$PSScriptRoot\..\..\configs\packages"
+    [string]$ConfigDir = "$PSScriptRoot\..\..\configs\packages",
+
+    [Parameter(Mandatory = $false)]
+    [switch]$CheckUpdate
 )
 
 # Import libraries
@@ -211,40 +214,48 @@ foreach ($configFile in $configFiles) {
         $isInstalled = Test-PackageInstalled -PackageName $package.Id -PackageManager $pm
         
         if ($isInstalled) {
-            Write-Info "  Already installed, checking for updates..."
-            
-            # Check if update is available
-            $updateAvailable = Test-PackageUpdateAvailable -PackageName $package.Id -PackageManager $pm
-            
-            if ($updateAvailable) {
-                Write-Info "  Update available, upgrading..."
+            # Only check for updates if CheckUpdate flag is set
+            if ($CheckUpdate) {
+                Write-Info "  Already installed, checking for updates..."
                 
-                # Try to upgrade
-                $upgraded = $false
-                if ($pm -eq 'choco') {
-                    choco upgrade $package.Id -y --limit-output 2>&1 | Out-Null
-                    if ($LASTEXITCODE -eq 0) {
-                        $upgraded = $true
-                    }
-                }
-                elseif ($pm -eq 'winget') {
-                    winget upgrade --id $package.Id --silent --accept-source-agreements --accept-package-agreements 2>&1 | Out-Null
-                    if ($LASTEXITCODE -eq 0) {
-                        $upgraded = $true
-                    }
-                }
+                # Check if update is available
+                $updateAvailable = Test-PackageUpdateAvailable -PackageName $package.Id -PackageManager $pm
                 
-                if ($upgraded) {
-                    Write-Success "  Updated to latest version"
-                    $totalInstalled++
+                if ($updateAvailable) {
+                    Write-Info "  Update available, upgrading..."
+                    
+                    # Try to upgrade
+                    $upgraded = $false
+                    if ($pm -eq 'choco') {
+                        choco upgrade $package.Id -y --limit-output 2>&1 | Out-Null
+                        if ($LASTEXITCODE -eq 0) {
+                            $upgraded = $true
+                        }
+                    }
+                    elseif ($pm -eq 'winget') {
+                        winget upgrade --id $package.Id --silent --accept-source-agreements --accept-package-agreements 2>&1 | Out-Null
+                        if ($LASTEXITCODE -eq 0) {
+                            $upgraded = $true
+                        }
+                    }
+                    
+                    if ($upgraded) {
+                        Write-Success "  Updated to latest version"
+                        $totalInstalled++
+                    }
+                    else {
+                        Write-Warn "  Upgrade failed"
+                        $totalFailed++
+                    }
                 }
                 else {
-                    Write-Warn "  Upgrade failed"
-                    $totalFailed++
+                    Write-Success "  Already at latest version"
+                    $totalSkipped++
                 }
             }
             else {
-                Write-Success "  Already at latest version"
+                # Skip update check - just skip already installed packages
+                Write-Success "  Already installed (skipping update check)"
                 $totalSkipped++
             }
         }

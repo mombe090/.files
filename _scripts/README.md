@@ -150,6 +150,10 @@ cd ~/.files/_scripts
 .\install.ps1 -Type pro           # Work packages only
 .\install.ps1 -Type perso         # Personal + professional packages
 .\install.ps1 -Type all           # Everything (pro first, then perso)
+
+# Check for updates and upgrade existing packages
+.\install.ps1 -Type pro -CheckUpdate     # Update all pro packages
+.\install.ps1 -Type perso -CheckUpdate   # Update all packages
 ```
 
 **Important: Installation Order**
@@ -165,6 +169,24 @@ This ensures:
 - ✅ No duplicate packages between pro and perso
 - ✅ Personal packages can depend on professional packages
 - ✅ Consistent environment across installations
+
+**Update Checking:**
+
+By default, already-installed packages are **skipped** (no update check). To check for and install updates:
+
+```powershell
+# Check for updates and upgrade all packages
+.\install.ps1 -Type pro -CheckUpdate
+
+# Update specific package type
+.\install.ps1 -Type perso -CheckUpdate
+```
+
+**Benefits of default behavior (no update checking):**
+- ✅ Faster installations (skips version checking for installed packages)
+- ✅ Doesn't require internet for already-installed packages
+- ✅ Predictable behavior (no unexpected updates)
+- ✅ Use `-CheckUpdate` when you explicitly want to upgrade
 
 **Installation Steps:**
 
@@ -314,6 +336,23 @@ packages:
 
 # Install professional packages, skip modules
 .\install.ps1 -Type pro -SkipModules
+```
+
+### Update Checking
+
+```powershell
+# Default behavior: Skip update check for installed packages (faster)
+.\install.ps1 -Type pro
+
+# Check for updates and upgrade installed packages
+.\install.ps1 -Type pro -CheckUpdate
+.\install.ps1 -Type perso -CheckUpdate
+
+# Update only system packages (skip JS packages)
+.\windows\pwsh\install-packages.ps1 -Type pro -CheckUpdate
+
+# Update only JavaScript packages
+.\windows\pwsh\install-js-packages.ps1 -Type pro -CheckUpdate
 ```
 
 ### Individual Scripts

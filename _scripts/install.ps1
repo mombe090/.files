@@ -22,7 +22,8 @@ param(
     [string]$PackageManager = 'both',
 
     [switch]$SkipPackages,
-    [switch]$SkipModules
+    [switch]$SkipModules,
+    [switch]$CheckUpdate
 )
 
 # Determine script root
@@ -228,7 +229,14 @@ if (-not $SkipPackages) {
         
         foreach ($pm in $managersToUse) {
             Write-Info "Installing $installType packages via $pm..."
-            & "$ScriptRoot\windows\pwsh\install-packages.ps1" -Type $installType -PackageManager $pm
+            
+            # Pass CheckUpdate flag if specified
+            if ($CheckUpdate) {
+                & "$ScriptRoot\windows\pwsh\install-packages.ps1" -Type $installType -PackageManager $pm -CheckUpdate
+            }
+            else {
+                & "$ScriptRoot\windows\pwsh\install-packages.ps1" -Type $installType -PackageManager $pm
+            }
             
             if ($LASTEXITCODE -ne 0) {
                 Write-Warn "Some $pm packages failed to install"
@@ -254,7 +262,14 @@ if (-not $SkipPackages) {
             
             if (Test-Path $jsConfigPath) {
                 Write-Info "Installing $installType JavaScript packages..."
-                & "$ScriptRoot\windows\pwsh\install-js-packages.ps1" -Type $installType
+                
+                # Pass CheckUpdate flag if specified
+                if ($CheckUpdate) {
+                    & "$ScriptRoot\windows\pwsh\install-js-packages.ps1" -Type $installType -CheckUpdate
+                }
+                else {
+                    & "$ScriptRoot\windows\pwsh\install-js-packages.ps1" -Type $installType
+                }
                 
                 if ($LASTEXITCODE -ne 0) {
                     Write-Warn "Some JavaScript packages failed to install"

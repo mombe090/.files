@@ -23,6 +23,9 @@ param(
     [switch]$Force,
 
     [Parameter(Mandatory = $false)]
+    [switch]$CheckUpdate,
+
+    [Parameter(Mandatory = $false)]
     [string]$ConfigDir = "$PSScriptRoot\..\..\configs\packages"
 )
 
@@ -216,9 +219,25 @@ foreach ($configFile in $configFiles) {
             $isInstalled = Test-BunPackageInstalled -PackageName $package.Id
             
             if ($isInstalled) {
-                Write-Info "  Already installed"
-                Write-Success "  Skipping (use -Force to reinstall)"
-                $totalSkipped++
+                # Only check for updates if CheckUpdate flag is set
+                if ($CheckUpdate) {
+                    Write-Info "  Already installed, upgrading to latest version..."
+                    
+                    # Install/upgrade with Bun (bun add --global will upgrade if newer version available)
+                    if (Install-BunPackage -PackageName $package.Id) {
+                        Write-Success "  Upgraded to latest version"
+                        $totalInstalled++
+                    }
+                    else {
+                        Write-Warn "  Upgrade failed"
+                        $totalFailed++
+                    }
+                }
+                else {
+                    # Skip update check - just skip already installed packages
+                    Write-Success "  Already installed (skipping update check, use -CheckUpdate to upgrade)"
+                    $totalSkipped++
+                }
                 continue
             }
         }
