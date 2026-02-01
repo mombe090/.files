@@ -1,0 +1,42 @@
+# =============================================================================
+# Bun - JavaScript Packages (Professional)
+# =============================================================================
+# JavaScript packages installed globally using Bun package manager.
+#
+# Requires: Bun to be installed (via chocolatey)
+#
+# Usage:
+#   Install all: _scripts/windows/pwsh/install-js-packages.ps1 -Type pro
+#   Install category: _scripts/windows/pwsh/install-js-packages.ps1 -Type pro -Category development
+# =============================================================================
+
+development:
+  - id: typescript
+    name: TypeScript
+    category: development
+    
+  - id: tsx
+    name: TSX (TypeScript Runner)
+    category: development
+    
+  - id: prettier
+    name: Prettier
+    category: development
+    
+  - id: eslint
+    name: ESLint
+    category: development
+    
+  - id: markdownlint-cli2
+    name: Markdownlint CLI 2
+    category: development
+    
+  - id: "@qetza/replacetokens"
+    name: Replace Tokens
+    category: development
+
+tools: []
+
+productivity: []
+
+security: []

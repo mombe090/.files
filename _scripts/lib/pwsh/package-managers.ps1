@@ -560,3 +560,172 @@ function Get-PackageList {
     return @()
 }
 
+# =============================================================================
+# Bun Package Manager Functions
+# =============================================================================
+
+<#
+.SYNOPSIS
+    Check if Bun is installed.
+
+.DESCRIPTION
+    Checks if the Bun executable is available in the system PATH.
+
+.EXAMPLE
+    Test-BunInstalled
+
+.OUTPUTS
+    Boolean - $true if Bun is installed, $false otherwise
+#>
+function Test-BunInstalled {
+    return Test-Command "bun"
+}
+
+<#
+.SYNOPSIS
+    Install a global Bun package.
+
+.DESCRIPTION
+    Installs a JavaScript package globally using Bun.
+    Supports both regular packages (e.g., 'typescript') and scoped packages (e.g., '@qetza/replacetokens').
+
+.PARAMETER PackageName
+    The npm package name (e.g., 'typescript' or '@qetza/replacetokens')
+
+.EXAMPLE
+    Install-BunPackage -PackageName "typescript"
+    Install-BunPackage -PackageName "@qetza/replacetokens"
+
+.OUTPUTS
+    Boolean - $true if successful, $false otherwise
+#>
+function Install-BunPackage {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$PackageName
+    )
+
+    try {
+        # Install package globally
+        # Use --silent to reduce output noise
+        $output = bun add --global $PackageName 2>&1
+        
+        # Check exit code
+        if ($LASTEXITCODE -eq 0) {
+            return $true
+        }
+        else {
+            Write-Debug "Bun install failed with exit code $LASTEXITCODE"
+            Write-Debug "Output: $output"
+            return $false
+        }
+    }
+    catch {
+        Write-Debug "Exception during Bun package installation: $_"
+        return $false
+    }
+}
+
+<#
+.SYNOPSIS
+    Check if a Bun global package is installed.
+
+.DESCRIPTION
+    Checks if a JavaScript package is installed globally via Bun.
+
+.PARAMETER PackageName
+    The npm package name to check
+
+.EXAMPLE
+    Test-BunPackageInstalled -PackageName "typescript"
+
+.OUTPUTS
+    Boolean - $true if installed, $false otherwise
+#>
+function Test-BunPackageInstalled {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$PackageName
+    )
+
+    try {
+        # List global packages
+        $output = bun pm ls --global 2>&1 | Out-String
+        
+        # Check if package name appears in the output
+        # Handle scoped packages like @qetza/replacetokens
+        $escapedName = [regex]::Escape($PackageName)
+        return $output -match $escapedName
+    }
+    catch {
+        Write-Debug "Exception checking Bun package: $_"
+        return $false
+    }
+}
+
+<#
+.SYNOPSIS
+    Get list of globally installed Bun packages.
+
+.DESCRIPTION
+    Returns a list of all JavaScript packages installed globally via Bun.
+
+.EXAMPLE
+    Get-BunPackageList
+
+.OUTPUTS
+    String array - List of installed packages
+#>
+function Get-BunPackageList {
+    try {
+        $output = bun pm ls --global 2>&1
+        return $output
+    }
+    catch {
+        Write-ErrorMsg "Failed to get Bun package list: $_"
+        return @()
+    }
+}
+
+<#
+.SYNOPSIS
+    Uninstall a global Bun package.
+
+.DESCRIPTION
+    Removes a globally installed JavaScript package using Bun.
+
+.PARAMETER PackageName
+    The npm package name to uninstall
+
+.EXAMPLE
+    Uninstall-BunPackage -PackageName "typescript"
+
+.OUTPUTS
+    Boolean - $true if successful, $false otherwise
+#>
+function Uninstall-BunPackage {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$PackageName
+    )
+
+    try {
+        # Remove package globally
+        $output = bun remove --global $PackageName 2>&1
+        
+        # Check exit code
+        if ($LASTEXITCODE -eq 0) {
+            return $true
+        }
+        else {
+            Write-Debug "Bun uninstall failed with exit code $LASTEXITCODE"
+            Write-Debug "Output: $output"
+            return $false
+        }
+    }
+    catch {
+        Write-Debug "Exception during Bun package uninstallation: $_"
+        return $false
+    }
+}
+
