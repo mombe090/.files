@@ -24,10 +24,10 @@ config.color_scheme = 'Catppuccin Mocha'
 
 -- Font configuration
 config.font = wezterm.font('CaskaydiaMono Nerd Font', { weight = 'Regular' })
-config.font_size = 11.0
+config.font_size = 18.0
 
 -- Window appearance
--- config.window_background_opacity = 0.95
+config.window_background_opacity = 1.0
 config.window_decorations = 'RESIZE'
 config.enable_tab_bar = true
 config.hide_tab_bar_if_only_one_tab = true
