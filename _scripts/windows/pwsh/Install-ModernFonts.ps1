@@ -19,8 +19,7 @@ param(
 )
 
 # Import color functions
-$scriptRoot = Split-Path -Parent $PSScriptRoot
-$libPath = Join-Path $scriptRoot "lib\pwsh"
+$libPath = Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) "lib\pwsh"
 . (Join-Path $libPath "colors.ps1")
 
 # =============================================================================
