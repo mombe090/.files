@@ -367,12 +367,19 @@ packages:
 # Install JavaScript packages only (requires Bun)
 .\windows\pwsh\install-js-packages.ps1 -Type pro
 
+# Manage dotfiles with symlinks (like GNU Stow)
+.\windows\pwsh\stow.ps1 -Stow wezterm
+.\windows\pwsh\stow.ps1 -Unstow wezterm
+.\windows\pwsh\stow.ps1 -ListPackages
+
 # Install WinGet
 .\installers\pwsh\winget.ps1
 
 # Install Chocolatey
 .\installers\pwsh\choco.ps1
 ```
+
+For more information on managing dotfiles with stow, see [STOW_GUIDE.md](STOW_GUIDE.md).
 
 ## 📦 JavaScript Packages (Bun)
 
