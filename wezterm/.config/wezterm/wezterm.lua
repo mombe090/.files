@@ -13,7 +13,7 @@ end
 
 -- Window Config
 config.initial_cols = 165
-config.initial_rows = 56
+config.initial_rows = 44
 
 -- =============================================================================
 -- Appearance
@@ -28,10 +28,10 @@ config.font_size = 11.0
 
 -- Window appearance
 config.window_background_opacity = 0.95
-config.window_decorations = 'RESIZE'
-config.enable_tab_bar = true
-config.hide_tab_bar_if_only_one_tab = false
-config.use_fancy_tab_bar = true
+config.window_decorations = 'NONE'
+config.enable_tab_bar = false
+config.hide_tab_bar_if_only_one_tab = true
+config.use_fancy_tab_bar = false
 
 -- Window padding
 config.window_padding = {
