@@ -89,23 +89,40 @@ switch ($PackageManager) {
 }
 
 # Build config file list for each package manager
+# Note: Order matters! Pro packages are always processed first to prevent duplicates
 foreach ($pkgMgr in $packageManagers) {
-    if ($Type -eq 'pro' -or $Type -eq 'all') {
+    # Always process professional packages first (when perso or all is requested)
+    if ($Type -eq 'perso' -or $Type -eq 'all') {
+        # For perso/all: Install pro packages first to establish baseline
         $configPath = "$ConfigDir\pro\$pkgMgr.pkg.yml"
         if (Test-Path $configPath) {
             $configFiles += [PSCustomObject]@{
                 Path = $configPath
                 PackageManager = $pkgMgr
+                Type = 'pro'
+            }
+        }
+    }
+    elseif ($Type -eq 'pro') {
+        # For pro-only: Just install pro packages
+        $configPath = "$ConfigDir\pro\$pkgMgr.pkg.yml"
+        if (Test-Path $configPath) {
+            $configFiles += [PSCustomObject]@{
+                Path = $configPath
+                PackageManager = $pkgMgr
+                Type = 'pro'
             }
         }
     }
     
+    # Then add personal packages if requested
     if ($Type -eq 'perso' -or $Type -eq 'all') {
         $configPath = "$ConfigDir\perso\$pkgMgr.pkg.yml"
         if (Test-Path $configPath) {
             $configFiles += [PSCustomObject]@{
                 Path = $configPath
                 PackageManager = $pkgMgr
+                Type = 'perso'
             }
         }
     }
@@ -125,7 +142,8 @@ $totalSkipped = 0
 
 foreach ($configFile in $configFiles) {
     $pm = $configFile.PackageManager
-    Write-Header "Processing: $(Split-Path $configFile.Path -Leaf) [$pm]"
+    $pkgType = $configFile.Type
+    Write-Header "Processing: $(Split-Path $configFile.Path -Leaf) [$pkgType/$pm]"
     
     # Read config
     $configContent = Get-Content -Path $configFile.Path -Raw

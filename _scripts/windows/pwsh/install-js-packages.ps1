@@ -97,15 +97,26 @@ else {
 }
 
 # Build config file list
+# Note: Order matters! Pro packages are always processed first to prevent duplicates
 $configFiles = @()
 
-if ($Type -eq 'pro' -or $Type -eq 'all') {
+# Always process professional packages first (when perso or all is requested)
+if ($Type -eq 'perso' -or $Type -eq 'all') {
+    # For perso/all: Install pro packages first to establish baseline
+    $configPath = "$ConfigDir\pro\js.pkg.yml"
+    if (Test-Path $configPath) {
+        $configFiles += $configPath
+    }
+}
+elseif ($Type -eq 'pro') {
+    # For pro-only: Just install pro packages
     $configPath = "$ConfigDir\pro\js.pkg.yml"
     if (Test-Path $configPath) {
         $configFiles += $configPath
     }
 }
 
+# Then add personal packages if requested
 if ($Type -eq 'perso' -or $Type -eq 'all') {
     $configPath = "$ConfigDir\perso\js.pkg.yml"
     if (Test-Path $configPath) {

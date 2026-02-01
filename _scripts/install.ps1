@@ -198,13 +198,41 @@ if (-not $SkipPackages) {
     
     Write-Info "Using package managers: $($managersToUse -join ', ')"
     
-    # Install packages using selected managers
-    foreach ($pm in $managersToUse) {
-        Write-Info "Installing packages via $pm..."
-        & "$ScriptRoot\windows\pwsh\install-packages.ps1" -Type $Type -PackageManager $pm
+    # Determine installation order to prevent duplicates
+    # Personal and All installations should always install Pro packages first
+    $installOrder = @()
+    
+    if ($Type -eq 'perso' -or $Type -eq 'all') {
+        # Always install pro packages first to establish baseline
+        $installOrder += 'pro'
+    }
+    
+    if ($Type -eq 'perso') {
+        # Then install personal packages (non-duplicates only)
+        $installOrder += 'perso'
+    }
+    elseif ($Type -eq 'pro') {
+        # Just pro packages
+        $installOrder += 'pro'
+    }
+    # Note: 'all' is handled by adding 'pro' above, perso will be added next
+    
+    if ($Type -eq 'all') {
+        # Add perso after pro for 'all' type
+        $installOrder += 'perso'
+    }
+    
+    # Install packages using selected managers in proper order
+    foreach ($installType in $installOrder) {
+        Write-Header "Installing $installType packages"
         
-        if ($LASTEXITCODE -ne 0) {
-            Write-Warn "Some $pm packages failed to install"
+        foreach ($pm in $managersToUse) {
+            Write-Info "Installing $installType packages via $pm..."
+            & "$ScriptRoot\windows\pwsh\install-packages.ps1" -Type $installType -PackageManager $pm
+            
+            if ($LASTEXITCODE -ne 0) {
+                Write-Warn "Some $pm packages failed to install"
+            }
         }
     }
 }
