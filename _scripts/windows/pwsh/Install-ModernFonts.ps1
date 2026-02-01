@@ -221,7 +221,7 @@ if (-not $release) {
 
 Write-Info "Fonts folder: $FontsFolder"
 Write-Info "Temp folder: $TempDir"
-Write-Info ""
+Write-Host ""
 
 # Install each font
 $successCount = 0
@@ -231,7 +231,7 @@ foreach ($fontName in $FontNames) {
     if (Install-NerdFont -FontName $fontName -Release $release) {
         $successCount++
     }
-    Write-Info ""
+    Write-Host ""
 }
 
 # Cleanup temp directory
