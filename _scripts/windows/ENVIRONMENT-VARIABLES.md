@@ -76,6 +76,21 @@ cd C:\Users\<username>\.files\_scripts\windows\pwsh
 
 **When to use:** Multi-user system where all users need these variables
 
+## Quick Test
+
+Verify everything is working with the automated test script:
+
+```powershell
+cd C:\Users\<username>\.files\_scripts\windows\pwsh
+.\Test-EnvironmentVariables.ps1
+```
+
+This will check:
+- ✓ All XDG variables are set correctly
+- ✓ Directories exist (or show how to create them)
+- ✓ PowerShell profile configures the variables
+- ✓ Optional: Check if variables are persisted
+
 ## Verification
 
 ### Check Current Session Variables
