@@ -27,13 +27,18 @@ cd C:\Users\yayam\.files\_scripts\windows\pwsh
 ```powershell
 cd C:\Users\yayam\.files
 
-# Terminal and shell configs
+# Terminal and shell configs (to ~/.config)
 .\stow.ps1 wezterm
 .\stow.ps1 nu
 .\stow.ps1 starship
 
 # PowerShell profile (to home directory)
 .\stow.ps1 powershell -Target C:\Users\yayam
+
+# Optional: Neovim config (to $env:LOCALAPPDATA)
+# Note: LazyVim installer already created config at $env:LOCALAPPDATA\nvim
+# Only stow if you want to version control your custom config
+# .\stow.ps1 nvim
 ```
 
 ## Verification

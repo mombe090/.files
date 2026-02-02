@@ -12,10 +12,16 @@
 #   .\stow.ps1 -Stow wezterm -Target $env:USERPROFILE  # Custom target directory
 #   .\stow.ps1 -ListPackages               # List all available packages
 #
-# Package Structure:
+# Package Structure (XDG-style):
 #   wezterm/.config/wezterm/wezterm.lua   -> ~/.config/wezterm/wezterm.lua
-#   nvim/.config/nvim/init.lua            -> ~/.config/nvim/init.lua
 #   git/.gitconfig                        -> ~/.gitconfig
+#
+# Package Structure (LOCALAPPDATA-style for Windows apps):
+#   nvim/.local/nvim/init.lua             -> $env:LOCALAPPDATA/nvim/init.lua
+#
+# Packages using LOCALAPPDATA (detected by .local/ prefix):
+#   - nvim: Neovim configuration
+#   - Add more as needed
 # =============================================================================
 
 param(
@@ -244,13 +250,23 @@ function Invoke-StowPackage {
     Get-ChildItem -Path $packagePath -Recurse -Force | ForEach-Object {
         $relativePath = $_.FullName.Substring($packagePath.Length + 1)
         
-        # Strip leading .config/ if target is already ~/.config
+        # Determine the actual target directory based on path prefix
+        $actualTargetDir = $TargetDir
+        
+        # Strip leading .config/ if target is already ~/.config (XDG-style)
         # This prevents .config/.config/app duplication
         if ($TargetDir -match '\.config$' -and $relativePath -match '^\.config\\') {
             $relativePath = $relativePath.Substring(8) # Remove ".config\"
         }
+        # Strip leading .local/ and use $env:LOCALAPPDATA instead (Windows-style)
+        # Example: nvim/.local/nvim/init.lua -> $env:LOCALAPPDATA/nvim/init.lua
+        elseif ($relativePath -match '^\.local\\') {
+            $relativePath = $relativePath.Substring(7) # Remove ".local\"
+            $actualTargetDir = $env:LOCALAPPDATA
+            Write-Verbose "Using LOCALAPPDATA for: $relativePath"
+        }
         
-        $targetPath = Join-Path $TargetDir $relativePath
+        $targetPath = Join-Path $actualTargetDir $relativePath
 
         if ($_.PSIsContainer) {
             # Create directory symlink or ensure directory exists
@@ -306,13 +322,23 @@ function Invoke-UnstowPackage {
     foreach ($item in $items) {
         $relativePath = $item.FullName.Substring($packagePath.Length + 1)
         
-        # Strip leading .config/ if target is already ~/.config
+        # Determine the actual target directory based on path prefix
+        $actualTargetDir = $TargetDir
+        
+        # Strip leading .config/ if target is already ~/.config (XDG-style)
         # This prevents .config/.config/app duplication
         if ($TargetDir -match '\.config$' -and $relativePath -match '^\.config\\') {
             $relativePath = $relativePath.Substring(8) # Remove ".config\"
         }
+        # Strip leading .local/ and use $env:LOCALAPPDATA instead (Windows-style)
+        # Example: nvim/.local/nvim/init.lua -> $env:LOCALAPPDATA/nvim/init.lua
+        elseif ($relativePath -match '^\.local\\') {
+            $relativePath = $relativePath.Substring(7) # Remove ".local\"
+            $actualTargetDir = $env:LOCALAPPDATA
+            Write-Verbose "Using LOCALAPPDATA for: $relativePath"
+        }
         
-        $targetPath = Join-Path $TargetDir $relativePath
+        $targetPath = Join-Path $actualTargetDir $relativePath
 
         Write-Step "Unlinking: $relativePath"
         
