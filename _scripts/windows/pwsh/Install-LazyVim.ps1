@@ -41,9 +41,22 @@ param(
 )
 
 # Import helper functions
-# Navigate from _scripts/windows/pwsh to _scripts/lib/pwsh
-$scriptsRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+# Get the script directory and navigate to lib
+if ($PSScriptRoot) {
+    # Running as a script file
+    $scriptsRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+} else {
+    # Fallback for interactive/testing
+    $scriptsRoot = Split-Path -Parent (Split-Path -Parent (Get-Location))
+}
 $libPath = Join-Path $scriptsRoot "lib" "pwsh"
+
+if (-not (Test-Path $libPath)) {
+    Write-Error "Cannot find library files at: $libPath"
+    Write-Error "Expected structure: _scripts/lib/pwsh/colors.ps1"
+    exit 1
+}
+
 . (Join-Path $libPath "colors.ps1")
 . (Join-Path $libPath "common.ps1")
 
