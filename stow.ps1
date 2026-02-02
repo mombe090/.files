@@ -251,19 +251,24 @@ function Invoke-StowPackage {
         $relativePath = $_.FullName.Substring($packagePath.Length + 1)
         
         # Determine the actual target directory based on path prefix
-        $actualTargetDir = $TargetDir
-        
-        # Strip leading .config/ if target is already ~/.config (XDG-style)
-        # This prevents .config/.config/app duplication
-        if ($TargetDir -match '\.config$' -and $relativePath -match '^\.config\\') {
-            $relativePath = $relativePath.Substring(8) # Remove ".config\"
-        }
-        # Strip leading .local/ and use $env:LOCALAPPDATA instead (Windows-style)
-        # Example: nvim/.local/nvim/init.lua -> $env:LOCALAPPDATA/nvim/init.lua
-        elseif ($relativePath -match '^\.local\\') {
+        # Check .local/ FIRST (before .config/) to ensure proper precedence
+        if ($relativePath -match '^\.local\\') {
+            # Strip .local\ prefix and use $env:LOCALAPPDATA (Windows-style)
+            # Example: nvim/.local/nvim/init.lua -> $env:LOCALAPPDATA/nvim/init.lua
             $relativePath = $relativePath.Substring(7) # Remove ".local\"
             $actualTargetDir = $env:LOCALAPPDATA
-            Write-Verbose "Using LOCALAPPDATA for: $relativePath"
+            Write-Verbose "Using LOCALAPPDATA for: $relativePath -> $actualTargetDir\$relativePath"
+        }
+        elseif ($TargetDir -match '\.config$' -and $relativePath -match '^\.config\\') {
+            # Strip leading .config/ if target is already ~/.config (XDG-style)
+            # This prevents .config/.config/app duplication
+            $relativePath = $relativePath.Substring(8) # Remove ".config\"
+            $actualTargetDir = $TargetDir
+            Write-Verbose "Using .config for: $relativePath -> $actualTargetDir\$relativePath"
+        }
+        else {
+            # No special prefix, use target as-is
+            $actualTargetDir = $TargetDir
         }
         
         $targetPath = Join-Path $actualTargetDir $relativePath
@@ -323,19 +328,25 @@ function Invoke-UnstowPackage {
         $relativePath = $item.FullName.Substring($packagePath.Length + 1)
         
         # Determine the actual target directory based on path prefix
-        $actualTargetDir = $TargetDir
+        # Check .local/ FIRST to ensure proper precedence over .config/
+        # This prevents incorrect paths like LOCALAPPDATA\.config\app
         
-        # Strip leading .config/ if target is already ~/.config (XDG-style)
-        # This prevents .config/.config/app duplication
-        if ($TargetDir -match '\.config$' -and $relativePath -match '^\.config\\') {
-            $relativePath = $relativePath.Substring(8) # Remove ".config\"
-        }
         # Strip leading .local/ and use $env:LOCALAPPDATA instead (Windows-style)
         # Example: nvim/.local/nvim/init.lua -> $env:LOCALAPPDATA/nvim/init.lua
-        elseif ($relativePath -match '^\.local\\') {
+        if ($relativePath -match '^\.local\\') {
             $relativePath = $relativePath.Substring(7) # Remove ".local\"
             $actualTargetDir = $env:LOCALAPPDATA
-            Write-Verbose "Using LOCALAPPDATA for: $relativePath"
+            Write-Verbose "Using LOCALAPPDATA for unstow: $relativePath -> $actualTargetDir"
+        }
+        # Strip leading .config/ if target is already ~/.config (XDG-style)
+        # This prevents .config/.config/app duplication
+        elseif ($TargetDir -match '\.config$' -and $relativePath -match '^\.config\\') {
+            $relativePath = $relativePath.Substring(8) # Remove ".config\"
+            $actualTargetDir = $TargetDir
+            Write-Verbose "Using target .config for unstow: $relativePath -> $actualTargetDir"
+        }
+        else {
+            $actualTargetDir = $TargetDir
         }
         
         $targetPath = Join-Path $actualTargetDir $relativePath
