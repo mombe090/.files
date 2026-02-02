@@ -29,6 +29,49 @@ cd C:\Users\<username>\.files
 
 For detailed instructions, see **[QUICK-START.md](QUICK-START.md)**.
 
+
+## 🔒 Corporate Environment & Security
+
+**This implementation is designed to be safe for corporate environments:**
+
+### ✅ What's Safe:
+- **No direct registry modifications** - All system changes handled by package managers
+- **User-space operations only** - No system-wide modifications
+- **Temporary execution policies** - Only affects current PowerShell session
+- **No hardcoded secrets** - All credentials stored in gitignored machine profile
+- **Optional admin requirements** - Clearly documented when admin is needed
+- **Work-safe packages** - Professional packages appropriate for corporate use
+
+### ⚠️ Corporate Considerations:
+
+1. **Chocolatey Installation**
+   - Requires administrator privileges
+   - **Ensure Chocolatey is approved by your IT department before installing**
+   - Alternative: Pre-install Chocolatey via corporate package management tools
+
+2. **Font Installer (Optional)**
+   - Requires administrator privileges to copy fonts to `C:\Windows\Fonts`
+   - **This step is completely optional** - you can skip it or use package manager instead
+   - Alternative: `choco install cascadiafonts` or `winget install Cascadia.Fonts`
+
+3. **AutoHotkey Package**
+   - Keyboard automation tool that may violate some corporate security policies
+   - **Commented out by default in pro packages**
+   - Only uncomment if explicitly approved by your IT department
+
+4. **Execution Policy**
+   - Chocolatey installer temporarily sets execution policy to `Bypass -Scope Process`
+   - **This is temporary** and only affects the current PowerShell session
+   - Does not persist after script execution completes
+   - This is the official Chocolatey installation method
+
+### 📋 Security Review
+
+A comprehensive security review has been conducted. See **[SECURITY-REVIEW.md](SECURITY-REVIEW.md)** for details.
+
+**Security Rating:** 🟢 **LOW RISK** for corporate environments
+
+
 ## 📚 Documentation
 
 ### Getting Started

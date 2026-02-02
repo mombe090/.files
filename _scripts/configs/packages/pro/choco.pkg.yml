@@ -86,9 +86,11 @@ productivity:
     name: PowerToys
     category: productivity
     
-  - id: autohotkey
-    name: AutoHotkey
-    category: productivity
+  # NOTE: AutoHotkey is a keyboard automation tool that may violate some corporate
+  # security policies. Uncomment only if approved by your IT department.
+  # - id: autohotkey
+  #   name: AutoHotkey
+  #   category: productivity
     
   - id: adobereader
     name: Adobe Acrobat Reader
