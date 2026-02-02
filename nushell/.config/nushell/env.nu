@@ -27,6 +27,24 @@ $env.NU_PLUGIN_DIRS = [
     ($nu.default-config-dir | path join 'plugins')
 ]
 
+# =============================================================================
+# XDG Base Directory Specification (Cross-Platform)
+# =============================================================================
+
+if $nu.os-info.name == 'windows' {
+    # Windows: Set XDG paths for cross-platform compatibility
+    $env.XDG_CONFIG_HOME = ($env.USERPROFILE | path join ".config")
+    $env.XDG_DATA_HOME = ($env.USERPROFILE | path join ".local" "share")
+    $env.XDG_CACHE_HOME = ($env.USERPROFILE | path join ".cache")
+    $env.XDG_STATE_HOME = ($env.USERPROFILE | path join ".local" "state")
+} else {
+    # Linux/macOS: Set XDG paths if not already set
+    $env.XDG_CONFIG_HOME = ($env.XDG_CONFIG_HOME? | default ($env.HOME | path join ".config"))
+    $env.XDG_DATA_HOME = ($env.XDG_DATA_HOME? | default ($env.HOME | path join ".local" "share"))
+    $env.XDG_CACHE_HOME = ($env.XDG_CACHE_HOME? | default ($env.HOME | path join ".cache"))
+    $env.XDG_STATE_HOME = ($env.XDG_STATE_HOME? | default ($env.HOME | path join ".local" "state"))
+}
+
 # Add local bin directories to PATH
 use std "path add"
 
