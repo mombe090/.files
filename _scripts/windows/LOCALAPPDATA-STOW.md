@@ -127,21 +127,31 @@ To create a new package for a Windows app:
 
 ### Path Resolution Logic
 
+The script checks path prefixes in the following order (precedence matters!):
+
 ```powershell
-# In Invoke-StowPackage function:
+# In Invoke-StowPackage and Invoke-UnstowPackage functions:
+# 1. Check .local/ FIRST (highest precedence)
 if ($relativePath -match '^\.local\\') {
     # Strip .local\ prefix (7 characters)
     $relativePath = $relativePath.Substring(7)
     # Use LOCALAPPDATA instead of default target
     $actualTargetDir = $env:LOCALAPPDATA
 }
+# 2. Then check .config/ (lower precedence)
 elseif ($TargetDir -match '\.config$' -and $relativePath -match '^\.config\\') {
     # Strip .config\ prefix (8 characters)
     $relativePath = $relativePath.Substring(8)
     # Use default target (already ~/.config)
     $actualTargetDir = $TargetDir
 }
+# 3. Default - use target as-is
+else {
+    $actualTargetDir = $TargetDir
+}
 ```
+
+**Important**: The `.local/` check must come BEFORE `.config/` to prevent incorrect path construction like `C:\Users\<user>\AppData\Local\.config\app\` (which would be wrong). By checking `.local/` first, we ensure Windows-style paths go directly to `LOCALAPPDATA` without any `.config` interference.
 
 ### Advantages
 
@@ -249,6 +259,28 @@ $env:LOCALAPPDATA
 # Or manually remove conflicts first
 Remove-Item $env:LOCALAPPDATA\nvim\init.lua
 ```
+
+### Verify correct LOCALAPPDATA paths
+
+If you suspect symlinks are being created in the wrong location (e.g., `LOCALAPPDATA\.config\nvim` instead of `LOCALAPPDATA\nvim`):
+
+```powershell
+# 1. Dry run with verbose to see where symlinks will be created
+.\stow.ps1 -Stow nvim -DryRun -Verbose
+
+# Look for lines like:
+# "Using LOCALAPPDATA for: nvim\init.lua -> C:\Users\<user>\AppData\Local\nvim\init.lua"
+# NOT: "... -> C:\Users\<user>\AppData\Local\.config\nvim\init.lua"
+
+# 2. Check actual symlink targets
+Get-ChildItem $env:LOCALAPPDATA\nvim -Recurse | Where-Object { $_.LinkType -eq 'SymbolicLink' } | Select-Object FullName, Target
+
+# 3. If paths are wrong, unstow and restow
+.\stow.ps1 -Unstow nvim
+.\stow.ps1 -Stow nvim -Verbose
+```
+
+**Expected behavior**: Files in `.local/nvim/` should map to `$env:LOCALAPPDATA\nvim\`, NOT `$env:LOCALAPPDATA\.config\nvim\`.
 
 ## See Also
 
