@@ -72,4 +72,8 @@ tools:
   - id: Nushell.Nushell
     name: Nushell
     category: tools
+    
+  - id: equalsraf.win32yank
+    name: win32yank (Windows clipboard tool)
+    category: tools
 # Other tools are handled by Chocolatey
