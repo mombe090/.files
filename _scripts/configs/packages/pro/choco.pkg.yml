@@ -171,7 +171,3 @@ tools:
   - id: lazygit
     name: LazyGit
     category: tools
-    
-  - id: win32yank
-    name: win32yank (Clipboard for WSL)
-    category: tools
