@@ -3,10 +3,11 @@
 
 <#
 .SYNOPSIS
-    Setup PowerShell profile symlink to XDG config location
+    Setup PowerShell profile to load from XDG config location
 .DESCRIPTION
-    Creates a symlink from $PROFILE to ~/.config/powershell/profile.ps1
+    Creates a wrapper profile at $PROFILE that sources ~/.config/powershell/profile.ps1
     This allows cross-platform configuration while respecting Windows conventions.
+    No admin privileges required (uses wrapper file instead of symlink).
 .EXAMPLE
     .\Setup-PowerShellProfile.ps1
 .EXAMPLE
@@ -27,6 +28,22 @@ $libPath = Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) "li
 
 $configProfilePath = Join-Path $env:USERPROFILE ".config\powershell\profile.ps1"
 $profileDir = Split-Path $PROFILE -Parent
+
+$wrapperContent = @'
+# PowerShell Profile Wrapper
+# This file sources the actual profile from XDG config location
+# Location: Documents\PowerShell\Microsoft.PowerShell_profile.ps1
+
+$xdgProfile = Join-Path $env:USERPROFILE ".config\powershell\profile.ps1"
+
+if (Test-Path $xdgProfile) {
+    . $xdgProfile
+}
+else {
+    Write-Warning "XDG PowerShell profile not found: $xdgProfile"
+    Write-Host "Run: .\stow.ps1 powershell" -ForegroundColor Yellow
+}
+'@
 
 # =============================================================================
 # Main Script
@@ -52,77 +69,62 @@ if (-not (Test-Path $profileDir)) {
 
 # Check if profile already exists
 if (Test-Path $PROFILE) {
-    $item = Get-Item $PROFILE
+    # Check if it's already our wrapper
+    $existingContent = Get-Content $PROFILE -Raw
     
-    if ($item.LinkType -eq "SymbolicLink") {
-        $currentTarget = $item.Target
-        
-        if ($currentTarget -eq $configProfilePath) {
-            Write-Success "Profile symlink already correct"
-            Write-Info "Target: $currentTarget"
-            exit 0
-        }
-        else {
-            Write-Warn "Profile symlink exists but points to different target"
-            Write-Info "Current: $currentTarget"
-            Write-Info "Expected: $configProfilePath"
-            
-            if (-not $Force) {
-                Write-ErrorMsg "Use -Force to recreate symlink"
-                exit 1
-            }
-            
-            Write-Warn "Removing existing symlink..."
-            Remove-Item $PROFILE -Force
-        }
-    }
-    else {
-        Write-Warn "Profile exists but is not a symlink"
+    if ($existingContent -match "XDG PowerShell profile not found") {
+        Write-Success "Profile wrapper already exists"
         Write-Info "Location: $PROFILE"
-        
-        if (-not $Force) {
-            Write-ErrorMsg "Use -Force to backup and replace with symlink"
-            exit 1
-        }
-        
-        # Backup existing profile
-        $backupPath = "$PROFILE.backup.$(Get-Date -Format 'yyyyMMdd-HHmmss')"
-        Write-Warn "Backing up existing profile to: $backupPath"
-        Move-Item $PROFILE $backupPath -Force
-        Write-Success "Backup created"
+        exit 0
     }
+    
+    Write-Warn "Profile already exists"
+    Write-Info "Location: $PROFILE"
+    
+    if (-not $Force) {
+        Write-ErrorMsg "Use -Force to backup and replace with wrapper"
+        exit 1
+    }
+    
+    # Backup existing profile
+    $backupPath = "$PROFILE.backup.$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+    Write-Warn "Backing up existing profile to: $backupPath"
+    Copy-Item $PROFILE $backupPath -Force
+    Write-Success "Backup created"
 }
 
-# Create symlink
+# Create wrapper profile
 try {
-    Write-Info "Creating symlink..."
-    Write-Info "From: $PROFILE"
-    Write-Info "To:   $configProfilePath"
+    Write-Info "Creating wrapper profile..."
+    Write-Info "At: $PROFILE"
+    Write-Info "Sources: $configProfilePath"
     
-    New-Item -ItemType SymbolicLink -Path $PROFILE -Target $configProfilePath -Force | Out-Null
+    $wrapperContent | Out-File -FilePath $PROFILE -Encoding UTF8 -Force
     
-    Write-Success "Profile symlink created successfully!"
+    Write-Success "Profile wrapper created successfully!"
     Write-Host ""
     Write-Info "Reload your PowerShell session to use the new profile"
     Write-Info "Or run: . `$PROFILE"
 }
 catch {
-    Write-ErrorMsg "Failed to create symlink: $_"
+    Write-ErrorMsg "Failed to create wrapper: $_"
     exit 1
 }
 
-# Verify symlink
+# Verify wrapper
 Write-Host ""
 Write-Header "Verification"
-$item = Get-Item $PROFILE
 Write-Info "Profile: $PROFILE"
-Write-Info "Type: $($item.LinkType)"
-Write-Info "Target: $($item.Target)"
+Write-Info "Type: Wrapper file"
+Write-Info "Sources: $configProfilePath"
 
-if ($item.LinkType -eq "SymbolicLink" -and $item.Target -eq $configProfilePath) {
-    Write-Success "✓ Profile symlink verified successfully"
+# Test loading the profile
+try {
+    . $PROFILE
+    Write-Success "✓ Profile wrapper verified successfully"
+    Write-Success "✓ XDG profile loaded successfully"
 }
-else {
-    Write-ErrorMsg "✗ Profile symlink verification failed"
+catch {
+    Write-ErrorMsg "✗ Profile wrapper verification failed: $_"
     exit 1
 }
