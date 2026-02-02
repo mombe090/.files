@@ -29,6 +29,9 @@ DEFAULT_PACKAGES=(
     "bat"
     "nvim"
     "starship"
+    "wezterm"
+    "nushell"
+    "powershell"
 )
 
 # All available packages (auto-detect from directories)

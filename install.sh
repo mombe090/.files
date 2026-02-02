@@ -315,7 +315,7 @@ stow_configs() {
         log_warn "manage-stow.sh not found or not executable"
         log_info "Falling back to manual stow..."
         cd "$DOTFILES_ROOT"
-        stow -v -t "$HOME" zsh mise zellij bat nvim starship 2>&1 | grep -v "BUG in find_stowed_path" || true
+        stow -v -t "$HOME" zsh bash mise zellij bat nvim starship wezterm nushell powershell 2>&1 | grep -v "BUG in find_stowed_path" || true
     fi
 }
 
