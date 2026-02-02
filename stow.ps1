@@ -388,7 +388,7 @@ if ($ListPackages) {
 # Validate that at least one action is specified
 if (-not $Stow -and -not $Unstow -and -not $Restow) {
     Write-ErrorMsg "No action specified. Use -Stow, -Unstow, or -Restow"
-    Write-Info ""
+    Write-Host ""
     Write-Info "Usage examples:"
     Write-Info "  .\stow.ps1 -Stow wezterm"
     Write-Info "  .\stow.ps1 -Unstow wezterm"
