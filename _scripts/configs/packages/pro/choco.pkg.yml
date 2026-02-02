@@ -132,6 +132,18 @@ cloud:
     category: cloud
 
 tools:
+  - id: wget
+    name: wget (HTTP downloader)
+    category: tools
+    
+  - id: zip
+    name: zip (Info-ZIP)
+    category: tools
+    
+  - id: unzip
+    name: unzip (Info-ZIP)
+    category: tools
+    
   - id: starship
     name: Starship
     category: tools

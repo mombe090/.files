@@ -37,6 +37,18 @@ cloud: []
 # Cloud tools are handled by Chocolatey
 
 tools:
+  - id: JernejSimoncic.Wget
+    name: wget (HTTP downloader)
+    category: tools
+    
+  - id: GnuWin32.Zip
+    name: zip (Info-ZIP)
+    category: tools
+    
+  - id: GnuWin32.UnZip
+    name: unzip (Info-ZIP)
+    category: tools
+    
   - id: eza-community.eza
     name: eza (ls clone)
     category: tools
