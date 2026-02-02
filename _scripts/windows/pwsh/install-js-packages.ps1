@@ -49,11 +49,11 @@ Write-Step "Checking for Bun..."
 
 if (-not (Test-BunInstalled)) {
     Write-ErrorMsg "Bun is not installed!"
-    Write-Info ""
+    Write-Host ""
     Write-Info "Bun is required to install JavaScript packages globally."
     Write-Info "Please install Bun first by running:"
     Write-Info "  .\install.ps1 -Type pro"
-    Write-Info ""
+    Write-Host ""
     Write-Info "Or install Bun manually:"
     Write-Info "  choco install bun -y"
     exit 1

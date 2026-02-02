@@ -50,14 +50,14 @@ Write-Step "Installing PowerShell 7..."
 
 if (Install-Package -PackageName $packageName -PackageManager $pm) {
     Write-Success "PowerShell 7 installed successfully!"
-    Write-Info ""
+    Write-Host ""
     Write-Info "To use PowerShell 7, run: pwsh"
     Write-Info "Or set it as default in Windows Terminal"
     exit 0
 }
 else {
     Write-ErrorMsg "Failed to install PowerShell 7"
-    Write-Info ""
+    Write-Host ""
     Write-Info "Manual installation:"
     Write-Info "Visit: https://aka.ms/powershell-release?tag=stable"
     exit 1

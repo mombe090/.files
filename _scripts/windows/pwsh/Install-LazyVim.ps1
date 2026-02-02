@@ -174,7 +174,7 @@ function Test-Dependencies {
     }
 
     if ($missingRequired.Count -gt 0) {
-        Write-Error ""
+        Write-Host ""
         Write-Error "Missing required dependencies: $($missingRequired -join ', ')"
         Write-Info "Install them using:"
         Write-Info "  choco install neovim git"
@@ -182,7 +182,7 @@ function Test-Dependencies {
     }
 
     if ($missingOptional.Count -gt 0) {
-        Write-Warning ""
+        Write-Host ""
         Write-Warning "Missing optional dependencies: $($missingOptional -join ', ')"
         Write-Info "For the best experience, install them using:"
         Write-Info "  choco install ripgrep fd lazygit"

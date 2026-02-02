@@ -63,7 +63,7 @@ try {
 }
 catch {
     Write-ErrorMsg "Failed to install winget: $_"
-    Write-Info ""
+    Write-Host ""
     Write-Info "Manual installation options:"
     Write-Info "1. Install from Microsoft Store: https://aka.ms/getwinget"
     Write-Info "2. Download App Installer from: https://github.com/microsoft/winget-cli/releases"

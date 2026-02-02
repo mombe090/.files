@@ -79,7 +79,7 @@ try {
 }
 catch {
     Write-ErrorMsg "Failed to install Chocolatey: $_"
-    Write-Info ""
+    Write-Host ""
     Write-Info "Manual installation:"
     Write-Info "Visit: https://chocolatey.org/install"
     exit 1
