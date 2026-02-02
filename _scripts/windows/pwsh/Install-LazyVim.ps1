@@ -41,8 +41,9 @@ param(
 )
 
 # Import helper functions
-$scriptRoot = Split-Path -Parent $PSScriptRoot
-$libPath = Join-Path $scriptRoot "lib" "pwsh"
+# Navigate from _scripts/windows/pwsh to _scripts/lib/pwsh
+$scriptsRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$libPath = Join-Path $scriptsRoot "lib" "pwsh"
 . (Join-Path $libPath "colors.ps1")
 . (Join-Path $libPath "common.ps1")
 
