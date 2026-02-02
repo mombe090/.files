@@ -140,6 +140,19 @@ cd _scripts\windows\pwsh
 ### Need to refresh PATH?
 → Run `refreshenv` or restart terminal
 
+## Testing & Verification
+
+To verify that the stow.ps1 LOCALAPPDATA support is working correctly:
+
+```powershell
+cd C:\Users\yayam\.files\_scripts\windows\pwsh
+.\Test-StowLocalAppData.ps1
+```
+
+This automated test will verify that `.local/` prefixed files are correctly routed to `$env:LOCALAPPDATA` without incorrect `.config` paths.
+
 ## Full Documentation
 
-See `TESTING.md` for comprehensive testing guide.
+- **[TESTING-STOW.md](TESTING-STOW.md)** - Comprehensive testing guide for stow.ps1 LOCALAPPDATA support
+- **[LOCALAPPDATA-STOW.md](LOCALAPPDATA-STOW.md)** - Detailed documentation on .local/ and .config/ path routing
+- **[Test-StowLocalAppData.ps1](_scripts/windows/pwsh/Test-StowLocalAppData.ps1)** - Automated test script for validation
