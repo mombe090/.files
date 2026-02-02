@@ -2,6 +2,22 @@
 
 ## One-Time Setup
 
+### 0. Environment Variables (Automatic)
+
+XDG environment variables are automatically set when you open PowerShell via your profile:
+- `XDG_CONFIG_HOME` → `$env:USERPROFILE\.config`
+- `XDG_DATA_HOME` → `$env:USERPROFILE\.local\share`
+- `XDG_CACHE_HOME` → `$env:USERPROFILE\.cache`
+- `XDG_STATE_HOME` → `$env:USERPROFILE\.local\state`
+
+**Optional: Persist system-wide** (available in all applications, not just PowerShell):
+```powershell
+cd C:\Users\yayam\.files\_scripts\windows\pwsh
+.\Set-EnvironmentVariables.ps1 -Persist
+```
+
+See [ENVIRONMENT-VARIABLES.md](_scripts/windows/ENVIRONMENT-VARIABLES.md) for details.
+
 ### 1. Install Fonts (Run as Admin)
 ```powershell
 cd C:\Users\yayam\.files\_scripts\windows\pwsh
@@ -153,6 +169,8 @@ This automated test will verify that `.local/` prefixed files are correctly rout
 
 ## Full Documentation
 
+- **[ENVIRONMENT-VARIABLES.md](ENVIRONMENT-VARIABLES.md)** - XDG environment variables setup and usage
 - **[TESTING-STOW.md](TESTING-STOW.md)** - Comprehensive testing guide for stow.ps1 LOCALAPPDATA support
 - **[LOCALAPPDATA-STOW.md](LOCALAPPDATA-STOW.md)** - Detailed documentation on .local/ and .config/ path routing
+- **[Set-EnvironmentVariables.ps1](_scripts/windows/pwsh/Set-EnvironmentVariables.ps1)** - Script to set XDG variables
 - **[Test-StowLocalAppData.ps1](_scripts/windows/pwsh/Test-StowLocalAppData.ps1)** - Automated test script for validation

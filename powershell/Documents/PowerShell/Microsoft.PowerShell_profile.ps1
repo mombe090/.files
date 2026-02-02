@@ -16,6 +16,13 @@ if (Get-Command starship -ErrorAction SilentlyContinue) {
 # Environment Variables
 # =============================================================================
 
+# XDG Base Directory specification (cross-platform compatibility)
+$env:XDG_CONFIG_HOME = "$env:USERPROFILE\.config"
+$env:XDG_DATA_HOME = "$env:USERPROFILE\.local\share"
+$env:XDG_CACHE_HOME = "$env:USERPROFILE\.cache"
+$env:XDG_STATE_HOME = "$env:USERPROFILE\.local\state"
+
+# Editor
 $env:EDITOR = "nvim"
 $env:VISUAL = "nvim"
 
