@@ -10,7 +10,10 @@ if (Get-Command starship -ErrorAction SilentlyContinue) {
     Invoke-Expression (&starship init powershell)
     
     # Set Starship config location
-    $env:STARSHIP_CONFIG = "$env:USERPROFILE\.config\starship.toml"
+    $env:STARSHIP_CONFIG = "$env:USERPROFILE\.config\starship\starship.toml"
+    
+    # Set shell name for Starship prompt
+    $env:STARSHIP_SHELL = "pwsh"
 }
 
 # =============================================================================

@@ -408,7 +408,7 @@ source ~/.config/nushell/env.nu
 
 # Load Starship prompt (if initialized)
 if ('~/.cache/starship/init.nu' | path exists) {
-    use ~/.cache/starship/init.nu
+    source ~/.cache/starship/init.nu
 }
 
 # Load Zoxide (if initialized)

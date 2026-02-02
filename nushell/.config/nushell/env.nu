@@ -82,6 +82,9 @@ if (which starship | is-not-empty) {
     } else {
         $env.STARSHIP_CONFIG = ($env.HOME | path join ".config" "starship" "starship.toml")
     }
+    
+    # Set shell name for Starship prompt
+    $env.STARSHIP_SHELL = "nu"
 }
 
 # =============================================================================

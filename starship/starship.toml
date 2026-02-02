@@ -2,7 +2,7 @@
 
 add_newline = true
 command_timeout = 1000
-format = """$os$username$hostname$kubernetes$directory$git_branch$git_status\n"""
+format = """$os$username$hostname$env_var$kubernetes$directory$git_branch$git_status\n"""
 
 # Drop ugly default prompt characters
 
@@ -83,4 +83,11 @@ deleted = '[󰍶 deleted=${count}](red) '
 
 [kubernetes]
 format = '[󱃾 $context\[$namespace\]](bold blue) '
+disabled = false
+
+# Shows current shell name
+# Uses env_var module to detect shell based on shell-specific variables
+
+[env_var.STARSHIP_SHELL]
+format = "[$env_value](bold cyan) "
 disabled = false
