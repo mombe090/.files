@@ -2,7 +2,122 @@
 
 All notable changes to this dotfiles repository will be documented in this file.
 
-## [Unreleased] - 2026-01-29
+## [Unreleased] - 2026-02-02
+
+### v3.0 - Windows Dotfiles Support
+
+#### Added
+
+- **Windows PowerShell 7 Support** - Native Windows dotfiles with XDG-style paths
+  - Restructured PowerShell configs to use `.config/powershell/` (matching Linux)
+  - Created wrapper-based profile loader (no admin/symlink required)
+  - Setup script: `_scripts/windows/pwsh/Setup-PowerShellProfile.ps1`
+  - 260+ Oh My Zsh-style git aliases in PowerShell
+  - XDG environment variables automatically set on Windows
+  - Starship prompt integration
+  - Machine-specific profile support
+
+- **Windows Package Management System**
+  - Package installer supporting Chocolatey, Winget, and Bun
+  - Script: `_scripts/windows/install-packages.ps1`
+  - Professional packages (54 packages):
+    - Essentials: PowerShell 7, Git, VSCode, IntelliJ, 7-Zip
+    - Development: .NET SDK, Python, Node.js, Bun, Java, Lua, Neovim
+    - Cloud: Azure CLI, kubectl, kubectx, Helm, Terraform
+    - Tools: Starship, bat, fd, ripgrep, fzf, zoxide, lazygit, wget, zip, unzip
+  - Personal packages (placeholder for media, gaming, browsers)
+  - Automatic package existence checking (skips installed packages)
+  - YAML-based package configuration
+  - JavaScript packages via Bun (TypeScript, pnpm, yarn, etc.)
+
+- **Windows-Compatible Stow System** (`stow.ps1`)
+  - PowerShell implementation of GNU Stow
+  - Intelligent path routing:
+    - `.local/` prefix → `$env:LOCALAPPDATA`
+    - `.config/` prefix → `$env:USERPROFILE\.config`
+  - Symlink creation for dotfiles
+  - Dry-run mode for testing
+  - Stow/unstow/restow operations
+  - Package listing functionality
+
+- **Nushell Windows Support**
+  - Consolidated configs from `nu/` to `nushell/` (consistency)
+  - Added XDG environment variables to `env.nu` for Windows
+  - Cross-platform compatibility maintained
+  - Git aliases and Kubernetes aliases included
+
+- **Windows-Specific Utilities**
+  - `Install-ModernFonts.ps1` - Nerd Fonts installer (CascadiaMono, JetBrainsMono)
+  - `Install-LazyVim.ps1` - LazyVim distribution installer
+  - `Test-StowLocalAppData.ps1` - Test stow path routing
+  - `Test-EnvironmentVariables.ps1` - Verify XDG variables
+
+- **Comprehensive Windows Documentation**
+  - `_scripts/windows/README.md` - Complete Windows guide (466 lines)
+  - `_scripts/windows/QUICK-START.md` - Quick reference guide
+  - `_scripts/windows/SECURITY-REVIEW.md` - Security audit (500+ lines)
+  - `_scripts/windows/ENVIRONMENT-VARIABLES.md` - XDG variables guide
+  - `_scripts/windows/MACHINE-PROFILE.md` - Machine-specific customization
+  - `_scripts/windows/LOCALAPPDATA-STOW.md` - Path routing documentation
+  - `_scripts/windows/TESTING-STOW.md` - Stow testing guide
+  - `_scripts/windows/NEXT-STEPS.md` - Testing checklist
+
+#### Security
+
+- **Corporate Environment Safety Review** ✅
+  - Zero registry modifications
+  - Zero hardcoded secrets
+  - All user-space operations
+  - Temporary execution policies (Process scope only)
+  - AutoHotkey removed from default packages (security concern)
+  - Security rating: **LOW RISK** for corporate environments
+  - Detailed audit in `SECURITY-REVIEW.md`
+
+#### Changed
+
+- **Consolidated Nushell folder structure**
+  - Moved `nu/.config/nushell/*` → `nushell/.config/nushell/`
+  - Deleted old `nu/` directory
+  - Updated all documentation references
+  - Consistency: All packages use singular names (wezterm, nushell, starship, powershell)
+
+- **PowerShell profile architecture**
+  - **Before**: `powershell/Documents/PowerShell/Microsoft.PowerShell_profile.ps1`
+  - **After**: `powershell/.config/powershell/profile.ps1`
+  - Uses wrapper file at `$PROFILE` that sources XDG profile
+  - No symlink required (no admin privileges needed)
+  - Cross-platform path structure
+
+- **WezTerm configuration enhanced**
+  - Improved window settings for Windows
+  - Launch menu for PowerShell 7, Nushell, WSL
+  - WebGpu rendering configuration
+  - Catppuccin Mocha theme
+
+#### Documentation
+
+- **Updated main README** with Windows support information
+- **Created Git aliases reference** (`_scripts/GIT-ALIASES.md`)
+  - Documents all 260+ git aliases
+  - Grouped by functionality
+  - Usage examples and descriptions
+
+#### Commits (Branch: feat/windows-dotfiles-installer)
+
+```
+32ecabc feat: add wget, zip, and unzip to professional packages
+41a400f feat: add XDG environment variables to Nushell for Windows
+d55e82b refactor: use wrapper file instead of symlink for PowerShell profile
+f32bbdb refactor: restructure PowerShell to use XDG-style paths like Linux
+ed79b69 feat: enhance wezterm configuration with improved window settings
+df340f8 security: add comprehensive security review and corporate safety measures
+74ae6d2 docs: add comprehensive Windows dotfiles README
+0a1d1ab refactor: consolidate Nushell configs from nu/ to nushell/
+```
+
+---
+
+## [Released] - 2026-01-29
 
 ### v2.1 - Modern Fonts & Critical Bug Fixes
 
