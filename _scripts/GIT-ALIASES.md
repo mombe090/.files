@@ -376,4 +376,4 @@ gstp                   # Pop stash
 
 - [Oh My Zsh Git Plugin Documentation](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git)
 - [PowerShell git-aliases.ps1](../powershell/Documents/PowerShell/git-aliases.ps1)
-- [Nushell git-aliases.nu](../nu/.config/nushell/git-aliases.nu)
+- [Nushell git-aliases.nu](../nushell/.config/nushell/git-aliases.nu)

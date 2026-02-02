@@ -41,7 +41,7 @@ cd C:\Users\yayam\.files
 
 # Terminal and shell configs (to ~/.config)
 .\stow.ps1 wezterm
-.\stow.ps1 nu
+.\stow.ps1 nushell
 .\stow.ps1 starship
 
 # PowerShell profile (to home directory)

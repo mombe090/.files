@@ -164,7 +164,7 @@ cd C:\Users\<username>\.files\_scripts
 # 4. Stow dotfiles
 cd C:\Users\<username>\.files
 .\stow.ps1 wezterm
-.\stow.ps1 nu
+.\stow.ps1 nushell
 .\stow.ps1 starship
 .\stow.ps1 powershell -Target C:\Users\<username>
 
