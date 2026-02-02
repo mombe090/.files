@@ -116,3 +116,15 @@ Add-ToPath "$env:USERPROFILE\.cargo\bin"
 # Clear host and show minimal info
 Clear-Host
 Write-Host "PowerShell $($PSVersionTable.PSVersion) with Starship" -ForegroundColor Cyan
+
+# =============================================================================
+# Load Machine-Specific Profile (if exists)
+# =============================================================================
+
+# Load profile.ps1 from user profile directory for machine-specific customizations
+$machineProfilePath = Join-Path $env:USERPROFILE "profile.ps1"
+if (Test-Path $machineProfilePath) {
+    Write-Host "Loading machine-specific profile..." -ForegroundColor Yellow
+    . $machineProfilePath
+    Write-Host "Machine-specific profile loaded" -ForegroundColor Green
+}

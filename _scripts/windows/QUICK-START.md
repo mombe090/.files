@@ -53,6 +53,20 @@ cd C:\Users\yayam\.files
 # .\stow.ps1 nvim
 ```
 
+### 5. Machine-Specific Profile (Optional)
+
+For machine-specific customizations (secrets, paths, etc.):
+
+```powershell
+# Copy template to user profile directory
+Copy-Item "_scripts\windows\profile.ps1.template" "$env:USERPROFILE\profile.ps1"
+
+# Edit for this machine
+code $env:USERPROFILE\profile.ps1
+```
+
+See [MACHINE-PROFILE.md](MACHINE-PROFILE.md) for details.
+
 ## Verification
 
 ### Test PowerShell with Starship
@@ -165,7 +179,9 @@ This automated test will verify that `.local/` prefixed files are correctly rout
 
 ## Full Documentation
 
+- **[MACHINE-PROFILE.md](MACHINE-PROFILE.md)** - Machine-specific PowerShell profile customizations
 - **[ENVIRONMENT-VARIABLES.md](ENVIRONMENT-VARIABLES.md)** - XDG environment variables (automatic via profile)
 - **[TESTING-STOW.md](TESTING-STOW.md)** - Comprehensive testing guide for stow.ps1 LOCALAPPDATA support
 - **[LOCALAPPDATA-STOW.md](LOCALAPPDATA-STOW.md)** - Detailed documentation on .local/ and .config/ path routing
+- **[GIT-ALIASES.md](../GIT-ALIASES.md)** - Oh My Zsh-style git aliases reference (260+ aliases)
 - **[Test-StowLocalAppData.ps1](_scripts/windows/pwsh/Test-StowLocalAppData.ps1)** - Automated test script for validation

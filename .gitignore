@@ -15,3 +15,11 @@ node_modules/
 
 # Backup location tracking
 .dotfiles-backup-location
+
+# Machine-specific PowerShell profile (user profile directory)
+# This would only be an issue if tracking entire home directory
+# profile.ps1 in Documents/PowerShell is tracked (main profile)
+# profile.ps1 in $env:USERPROFILE is NOT tracked (machine-specific)
+**/profile.ps1
+!powershell/**/profile.ps1
+!_scripts/**/profile.ps1.template
