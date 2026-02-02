@@ -179,6 +179,7 @@ This automated test will verify that `.local/` prefixed files are correctly rout
 
 ## Full Documentation
 
+- **[README.md](README.md)** - Comprehensive Windows dotfiles guide (start here!)
 - **[MACHINE-PROFILE.md](MACHINE-PROFILE.md)** - Machine-specific PowerShell profile customizations
 - **[ENVIRONMENT-VARIABLES.md](ENVIRONMENT-VARIABLES.md)** - XDG environment variables (automatic via profile)
 - **[TESTING-STOW.md](TESTING-STOW.md)** - Comprehensive testing guide for stow.ps1 LOCALAPPDATA support
