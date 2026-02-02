@@ -67,19 +67,10 @@ if (Get-Command nvim -ErrorAction SilentlyContinue) {
     Set-Alias -Name v -Value nvim
 }
 
-# Git aliases (if git is installed)
-if (Get-Command git -ErrorAction SilentlyContinue) {
-    function gst { git status }
-    function gp { git push origin HEAD }
-    function gpu { git pull origin }
-    function gco { param($branch) git checkout $branch }
-    function gb { git branch }
-    function gba { git branch -a }
-    function gadd { param($file) git add $file }
-    function gc { param($message) git commit -m $message }
-    function gca { param($message) git commit -a -m $message }
-    function gdiff { git diff }
-    function glog { git log --graph --oneline --decorate }
+# Git aliases (Oh My Zsh style)
+$gitAliasesPath = Join-Path (Split-Path $PROFILE -Parent) "git-aliases.ps1"
+if (Test-Path $gitAliasesPath) {
+    . $gitAliasesPath
 }
 
 # Kubernetes aliases (if kubectl is installed)
