@@ -1,5 +1,6 @@
 # PowerShell Profile
-# Location: $PROFILE (Documents\PowerShell\Microsoft.PowerShell_profile.ps1)
+# Stowed location: ~/.config/powershell/profile.ps1
+# Symlinked to: $PROFILE
 
 # =============================================================================
 # Starship Prompt
@@ -68,7 +69,7 @@ if (Get-Command nvim -ErrorAction SilentlyContinue) {
 }
 
 # Git aliases (Oh My Zsh style)
-$gitAliasesPath = Join-Path (Split-Path $PROFILE -Parent) "git-aliases.ps1"
+$gitAliasesPath = Join-Path $env:XDG_CONFIG_HOME "powershell\git-aliases.ps1"
 if (Test-Path $gitAliasesPath) {
     . $gitAliasesPath
 }

@@ -22,7 +22,10 @@ cd C:\Users\<username>\.files
 .\stow.ps1 wezterm
 .\stow.ps1 nushell
 .\stow.ps1 starship
-.\stow.ps1 powershell -Target C:\Users\<username>
+.\stow.ps1 powershell
+cd _scripts\windows\pwsh
+.\Setup-PowerShellProfile.ps1
+
 
 # 5. Restart terminal to see Starship prompt
 ```

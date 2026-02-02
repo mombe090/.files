@@ -44,15 +44,16 @@ cd C:\Users\yayam\.files
 .\stow.ps1 nushell
 .\stow.ps1 starship
 
-# PowerShell profile (to home directory)
-.\stow.ps1 powershell -Target C:\Users\yayam
+# PowerShell profile (to ~/.config, then symlink to $PROFILE)
+.\stow.ps1 powershell
+cd _scripts\windows\pwsh
+.\Setup-PowerShellProfile.ps1
 
 # Optional: Neovim config (to $env:LOCALAPPDATA)
 # Note: LazyVim installer already created config at $env:LOCALAPPDATA\nvim
 # Only stow if you want to version control your custom config
 # .\stow.ps1 nvim
 ```
-
 ### 5. Machine-Specific Profile (Optional)
 
 For machine-specific customizations (secrets, paths, etc.):
