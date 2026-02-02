@@ -186,7 +186,7 @@ function Test-Dependencies {
         Write-Warning "Missing optional dependencies: $($missingOptional -join ', ')"
         Write-Info "For the best experience, install them using:"
         Write-Info "  choco install ripgrep fd lazygit"
-        Write-Info ""
+        Write-Host ""
     }
 
     return $true
@@ -196,7 +196,7 @@ function Test-Dependencies {
 function Install-LazyVim {
     Write-Header "LazyVim Installation Script"
     Write-Info "Installing LazyVim Neovim distribution..."
-    Write-Info ""
+    Write-Host ""
 
     # Check dependencies
     if (-not (Test-Dependencies)) {
@@ -236,31 +236,31 @@ function Install-LazyVim {
     }
 
     # Success message
-    Write-Success ""
+    Write-Host ""
     Write-Success "╔════════════════════════════════════════════════════════════════════╗"
     Write-Success "║           LazyVim installed successfully! 🎉                       ║"
     Write-Success "╚════════════════════════════════════════════════════════════════════╝"
-    Write-Info ""
+    Write-Host ""
     Write-Info "Next steps:"
     Write-Info "  1. Start Neovim: nvim"
     Write-Info "  2. LazyVim will automatically install plugins on first launch"
     Write-Info "  3. Run health check: :LazyHealth"
     Write-Info "  4. Customize your config in: $nvimConfigPath"
-    Write-Info ""
+    Write-Host ""
     Write-Info "Configuration location:"
     Write-Info "  Config: $nvimConfigPath"
     if (-not $SkipBackup -and (Test-Path $nvimBackupPath)) {
         Write-Info "  Backup: $nvimBackupPath"
     }
-    Write-Info ""
+    Write-Host ""
     Write-Info "Recommended plugins to explore:"
     Write-Info "  - Press <leader>l to open Lazy plugin manager"
     Write-Info "  - Press <leader>e to open file explorer"
     Write-Info "  - Press <leader>ff to find files"
     Write-Info "  - Press <leader>sg to search in files (grep)"
-    Write-Info ""
+    Write-Host ""
     Write-Info "Documentation: https://www.lazyvim.org/"
-    Write-Info ""
+    Write-Host ""
 }
 
 # Run installation
