@@ -34,6 +34,10 @@ development:
   - id: "@qetza/replacetokens"
     name: Replace Tokens
     category: development
+    
+  - id: tree-sitter-cli
+    name: Tree-sitter CLI
+    category: development
 
 tools: []
 

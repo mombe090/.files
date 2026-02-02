@@ -12,6 +12,7 @@ packages:
   - tsx
   - ts-node
   - "@types/node"
+  - tree-sitter-cli
   
   # Linting & Formatting
   - eslint
