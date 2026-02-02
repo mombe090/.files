@@ -53,6 +53,14 @@ development:
     name: Bun
     category: development
     
+  - id: golang
+    name: Go Programming Language
+    category: development
+    
+  - id: rust
+    name: Rust (includes cargo)
+    category: development
+    
   - id: mingw
     name: MinGW
     category: development
@@ -142,6 +150,10 @@ tools:
     
   - id: unzip
     name: unzip (Info-ZIP)
+    category: tools
+    
+  - id: gzip
+    name: gzip (GNU compression)
     category: tools
     
   - id: starship
