@@ -11,8 +11,8 @@ tasks:
     cmds:
       - direnv allow
       - |
-        replacetokens \
-          --sources '.' \
+        bunx replacetokens \
+          --sources '.env.local' \
           --token-pattern 'default' \
           --encoding 'utf-8' \
           --use-env \
