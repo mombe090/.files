@@ -15,7 +15,7 @@ tasks:
     cmds:
       - |
         replacetokens \
-          --sources '../.config/*' \
+          --sources './' \
           --token-pattern 'default' \
           --encoding 'utf-8' \
           --use-env \
