@@ -1,5 +1,8 @@
 version: 3
 
+dotenv:
+  - .envrc
+
 tasks:
   default:
     desc: Show available tasks
@@ -12,7 +15,6 @@ tasks:
       # USERNAME is native on Windows; on Unix fall back to USER
       USERNAME: '{{if .USERNAME}}{{.USERNAME}}{{else}}{{env "USER"}}{{end}}'
     cmds:
-      - direnv allow
       - |
         bunx replacetokens \
           --sources "nushell/.config/nushell/**/*.nu" \
