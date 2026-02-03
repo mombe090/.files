@@ -13,7 +13,7 @@ tasks:
   replacetokens:
     desc: Replace tokens in tfvars templates using environment variables
     cmds:
-      - direnv allow
+      - direnv allow ~/.envrc
       - |
         replacetokens \
           --sources '../.config/*' \
