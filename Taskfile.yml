@@ -15,7 +15,7 @@ tasks:
     cmds:
       - direnv allow
       - |
-        npx replacetokens \
+        replacetokens \
           --sources '~/.config/' \
           --token-pattern 'default' \
           --encoding 'utf-8' \
