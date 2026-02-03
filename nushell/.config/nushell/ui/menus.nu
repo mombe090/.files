@@ -1,6 +1,6 @@
 # Nushell Menus Configuration
 
-export def menus [] {
+export def get_menus [] {
     [
         {
             name: completion_menu

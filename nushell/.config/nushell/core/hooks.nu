@@ -1,6 +1,6 @@
 # Nushell Hooks Configuration
 
-export def hooks [] {
+export def get_hooks [] {
     {
         pre_prompt: [{||
             # Direnv integration (if installed)

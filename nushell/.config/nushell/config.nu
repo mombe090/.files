@@ -129,9 +129,9 @@ $env.config = {
         plugins: {}
     }
     
-    hooks: (hooks hooks)
-    menus: (menus menus)
-    keybindings: (keybindings keybindings)
+    hooks: (hooks get_hooks)
+    menus: (menus get_menus)
+    keybindings: (keybindings get_keybindings)
 }
 
 # =============================================================================

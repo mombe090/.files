@@ -1,6 +1,6 @@
 # Nushell Keybindings Configuration
 
-export def keybindings [] {
+export def get_keybindings [] {
     [
         {
             name: completion_menu
