@@ -4,7 +4,7 @@
 set -e
 
 DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPTS_DIR="$DOTFILES_ROOT/scripts"
+SCRIPTS_DIR="$DOTFILES_ROOT/_scripts/linux/sh"
 
 # Colors
 GREEN='\033[0;32m'
@@ -190,8 +190,8 @@ install_homebrew() {
     fi
     
     log_step "Installing Homebrew..."
-    if [[ -x "$SCRIPTS_DIR/install-homebrew.sh" ]]; then
-        bash "$SCRIPTS_DIR/install-homebrew.sh"
+    if [[ -x "$SCRIPTS_DIR/installers/install-homebrew.sh" ]]; then
+        bash "$SCRIPTS_DIR/installers/install-homebrew.sh"
     else
         log_warn "install-homebrew.sh not found or not executable"
     fi
@@ -200,8 +200,8 @@ install_homebrew() {
 # ===== INSTALL MISE =====
 install_mise() {
     log_step "Installing mise..."
-    if [[ -x "$SCRIPTS_DIR/install-mise.sh" ]]; then
-        bash "$SCRIPTS_DIR/install-mise.sh"
+    if [[ -x "$SCRIPTS_DIR/installers/install-mise.sh" ]]; then
+        bash "$SCRIPTS_DIR/installers/install-mise.sh"
         
         # Activate mise in current shell session for subsequent commands
         if command -v mise &> /dev/null; then
@@ -215,8 +215,8 @@ install_mise() {
 # ===== INSTALL ESSENTIAL BUILD TOOLS =====
 install_essentials() {
     log_step "Installing essential build tools..."
-    if [[ -x "$SCRIPTS_DIR/install-essentials.sh" ]]; then
-        bash "$SCRIPTS_DIR/install-essentials.sh"
+    if [[ -x "$SCRIPTS_DIR/installers/install-essentials.sh" ]]; then
+        bash "$SCRIPTS_DIR/installers/install-essentials.sh"
     else
         log_warn "install-essentials.sh not found or not executable"
     fi
@@ -226,12 +226,12 @@ install_essentials() {
 install_core_tools() {
     log_step "Installing core tools..."
     
-    if [[ -x "$SCRIPTS_DIR/install-zsh.sh" ]]; then
-        bash "$SCRIPTS_DIR/install-zsh.sh"
+    if [[ -x "$SCRIPTS_DIR/installers/install-zsh.sh" ]]; then
+        bash "$SCRIPTS_DIR/installers/install-zsh.sh"
     fi
     
-    if [[ -x "$SCRIPTS_DIR/install-stow.sh" ]]; then
-        bash "$SCRIPTS_DIR/install-stow.sh"
+    if [[ -x "$SCRIPTS_DIR/installers/install-stow.sh" ]]; then
+        bash "$SCRIPTS_DIR/installers/install-stow.sh"
     fi
     
     log_success "Core tools installed"
@@ -268,8 +268,8 @@ install_optional_tools() {
 # ===== INSTALL DOTNET =====
 install_dotnet() {
     log_step "Installing .NET SDK..."
-    if [[ -x "$SCRIPTS_DIR/install-dotnet.sh" ]]; then
-        AUTO_INSTALL=true bash "$SCRIPTS_DIR/install-dotnet.sh"
+    if [[ -x "$SCRIPTS_DIR/installers/install-dotnet.sh" ]]; then
+        AUTO_INSTALL=true bash "$SCRIPTS_DIR/installers/install-dotnet.sh"
     else
         log_warn "install-dotnet.sh not found or not executable"
     fi
@@ -281,14 +281,14 @@ install_personal_tools() {
     echo ""
     
     # Clawdbot CLI - Optional personal tool
-    if [[ -x "$SCRIPTS_DIR/install-clawdbot.sh" ]]; then
+    if [[ -x "$SCRIPTS_DIR/installers/install-clawdbot.sh" ]]; then
         log_info "Installing Clawdbot CLI..."
-        bash "$SCRIPTS_DIR/install-clawdbot.sh" || log_warn "Failed to install clawdbot (optional)"
+        bash "$SCRIPTS_DIR/installers/install-clawdbot.sh" || log_warn "Failed to install clawdbot (optional)"
     fi
     
     # Add more personal tools here in the future
-    # if [[ -x "$SCRIPTS_DIR/install-xyz.sh" ]]; then
-    #     bash "$SCRIPTS_DIR/install-xyz.sh" || log_warn "Failed to install xyz (optional)"
+    # if [[ -x "$SCRIPTS_DIR/installers/install-xyz.sh" ]]; then
+    #     bash "$SCRIPTS_DIR/installers/install-xyz.sh" || log_warn "Failed to install xyz (optional)"
     # fi
     
     log_success "Personal tools installation complete"
@@ -309,8 +309,8 @@ install_mise_tools() {
 # ===== STOW CONFIGURATIONS =====
 stow_configs() {
     log_step "Stowing configurations..."
-    if [[ -x "$SCRIPTS_DIR/manage-stow.sh" ]]; then
-        bash "$SCRIPTS_DIR/manage-stow.sh" stow
+    if [[ -x "$SCRIPTS_DIR/tools/manage-stow.sh" ]]; then
+        bash "$SCRIPTS_DIR/tools/manage-stow.sh" stow
     else
         log_warn "manage-stow.sh not found or not executable"
         log_info "Falling back to manual stow..."
@@ -323,8 +323,8 @@ stow_configs() {
 # ===== INSTALL MODERN FONTS =====
 install_modern_fonts() {
     log_step "Installing modern fonts..."
-    if [[ -x "$SCRIPTS_DIR/install-modern-fonts.sh" ]]; then
-        bash "$SCRIPTS_DIR/install-modern-fonts.sh"
+    if [[ -x "$SCRIPTS_DIR/installers/install-modern-fonts.sh" ]]; then
+        bash "$SCRIPTS_DIR/installers/install-modern-fonts.sh"
     else
         log_warn "install-modern-fonts.sh not found or not executable"
     fi
@@ -361,8 +361,8 @@ EOF
     # Install JavaScript/TypeScript packages via bun (if available)
     echo ""
     log_info "Installing JavaScript/TypeScript packages..."
-    if [[ -x "$SCRIPTS_DIR/install-js-packages.sh" ]]; then
-        AUTO_CONFIRM=true bash "$SCRIPTS_DIR/install-js-packages.sh" --yes || true
+    if [[ -x "$SCRIPTS_DIR/installers/install-js-packages.sh" ]]; then
+        AUTO_CONFIRM=true bash "$SCRIPTS_DIR/installers/install-js-packages.sh" --yes || true
     else
         log_warn "install-js-packages.sh not found or not executable"
     fi
@@ -447,8 +447,8 @@ minimal_install() {
     
     # Only stow essential configs (zsh and git)
     log_step "Stowing minimal configurations..."
-    if [[ -x "$SCRIPTS_DIR/manage-stow.sh" ]]; then
-        bash "$SCRIPTS_DIR/manage-stow.sh" stow zsh git
+    if [[ -x "$SCRIPTS_DIR/tools/manage-stow.sh" ]]; then
+        bash "$SCRIPTS_DIR/tools/manage-stow.sh" stow zsh git
     else
         cd "$DOTFILES_ROOT"
         stow -v -t "$HOME" zsh git 2>&1 | grep -v "BUG in find_stowed_path" || true
@@ -559,20 +559,20 @@ show_completion_message() {
     echo "     echo \$PATH | grep '.bun/bin'  # Should show ~/.bun/bin"
     echo ""
     echo "  7. Install/update JavaScript packages:"
-    echo "     ./scripts/install-js-packages.sh           # Professional packages only"
-    echo "     ./scripts/install-js-packages.sh --personal # Personal packages"
-    echo "     ./scripts/install-js-packages.sh --all      # Both pro & personal"
+    echo "     ./_scripts/linux/sh/installers/install-js-packages.sh           # Professional packages only"
+    echo "     ./_scripts/linux/sh/installers/install-js-packages.sh --personal # Personal packages"
+    echo "     ./_scripts/linux/sh/installers/install-js-packages.sh --all      # Both pro & personal"
     echo ""
     echo "  8. Install modern fonts (if not already installed):"
-    echo "     ./scripts/install-modern-fonts.sh           # CascadiaMono, JetBrainsMono, VictorMono"
-    echo "     ./scripts/install-modern-fonts.sh --list    # List installed fonts"
+    echo "     ./_scripts/linux/sh/installers/install-modern-fonts.sh           # CascadiaMono, JetBrainsMono, VictorMono"
+    echo "     ./_scripts/linux/sh/installers/install-modern-fonts.sh --list    # List installed fonts"
     echo ""
     echo "  9. Install essential build tools (if not already installed):"
-    echo "     ./scripts/install-essentials.sh             # gcc, make, cmake, dev libraries"
-    echo "     ./scripts/install-essentials.sh --list      # List installed tools"
+    echo "     ./_scripts/linux/sh/installers/install-essentials.sh             # gcc, make, cmake, dev libraries"
+    echo "     ./_scripts/linux/sh/installers/install-essentials.sh --list      # List installed tools"
     echo ""
     echo "  10. Optional: Install personal tools (not included by default):"
-    echo "      ./scripts/install-clawdbot.sh              # Clawdbot CLI"
+    echo "      ./_scripts/linux/sh/installers/install-clawdbot.sh              # Clawdbot CLI"
     echo ""
     
     if [[ -f "$HOME/.dotfiles-backup-location" ]]; then
@@ -583,7 +583,7 @@ show_completion_message() {
     
     echo "For troubleshooting:"
     echo "  - .NET issues: cat $DOTFILES_ROOT/DOTNET_TROUBLESHOOTING.md"
-    echo "  - JS packages: cat $DOTFILES_ROOT/scripts/INSTALL_JS_PACKAGES_GUIDE.md"
+    echo "  - JS packages: cat $DOTFILES_ROOT/_scripts/linux/docs/INSTALL_JS_PACKAGES_GUIDE.md"
     echo "  - General help: cat $DOTFILES_ROOT/README.md"
     echo ""
 }

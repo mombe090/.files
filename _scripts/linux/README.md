@@ -1,10 +1,26 @@
-# Installation Scripts
+# Linux Scripts
 
-Collection of utility scripts for setting up and managing dotfiles.
+This directory contains all Linux/macOS shell scripts for the dotfiles repository.
 
-## Available Scripts
+## Directory Structure
 
-### Core Installation Scripts
+```
+_scripts/linux/
+├── sh/
+│   ├── installers/      # Installation scripts (install-*.sh)
+│   ├── tools/           # Utility scripts (manage-stow, backup, etc.)
+│   └── checkers/        # Validation scripts (check-*.sh)
+├── config/              # Configuration files for installers
+├── docs/                # Documentation
+├── README.md            # This file
+└── MANAGE_STOW_GUIDE.md # Stow management guide
+```
+
+## Scripts Organization
+
+### Installers (`sh/installers/`)
+
+Installation scripts for various tools and applications:
 
 #### `install-mise.sh`
 
