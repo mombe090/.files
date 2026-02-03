@@ -6,6 +6,9 @@
 # Import Modules
 # =============================================================================
 
+# Standard library
+use std/config *
+
 # UI Components
 use ~/.config/nushell/ui/theme.nu
 use ~/.config/nushell/ui/menus.nu
@@ -133,6 +136,22 @@ $env.config = {
     menus: (menus get_menus)
     keybindings: (keybindings get_keybindings)
 }
+
+# =============================================================================
+# Direnv Integration
+# =============================================================================
+# Appended to env_change.PWD so direnv only runs on directory change, not every prompt.
+# Uses the stdlib env-conversions helper to correctly re-split PATH after direnv modifies it.
+
+$env.config.hooks.env_change.PWD ++= [{||
+    if (which direnv | is-empty) {
+        return
+    }
+
+    direnv export json | from json | default {} | load-env
+    # direnv flattens PATH to a string — convert it back to a list
+    $env.PATH = do (env-conversions).path.from_string $env.PATH
+}]
 
 # =============================================================================
 # Initialize External Tools & Aliases
