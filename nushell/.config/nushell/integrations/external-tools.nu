@@ -1,9 +1,11 @@
 # External Tools Integration for Nushell
 # Manages initialization of starship, carapace, atuin, and zoxide
 #
-# Note: `source` requires a parse-time constant path — plain variables are not
-# allowed.  On the Windows branches we therefore inline the interpolated path
-# string directly in each `source` call rather than going through a `let`.
+# Note: nushell's `source` only accepts bare literal paths at parse time —
+# no variables, no string interpolation.  nushell parses every branch of an
+# if/else regardless of which one runs, so any `source $dynamic` anywhere
+# in the file will fail.  Windows support with dynamic USERNAME paths is not
+# possible in a single file; use a dedicated Windows config if needed.
 
 # =============================================================================
 # Starship Prompt
@@ -11,13 +13,7 @@
 
 export def init_starship [] {
     try {
-        if $nu.os-info.name == 'windows' {
-            if not ($"C:/Users/#{USERNAME}#.cache/starship/init.nu" | path exists) {
-                mkdir $"C:/Users/#{USERNAME}#.cache/starship"
-                starship init nu | save --force $"C:/Users/#{USERNAME}#.cache/starship/init.nu"
-            }
-            source $"C:/Users/#{USERNAME}#.cache/starship/init.nu"
-        } else {
+        if (which starship | is-not-empty) {
             if not ("~/.cache/starship/init.nu" | path exists) {
                 mkdir --full-path ~/.cache/starship
                 starship init nu | save --force ~/.cache/starship/init.nu
@@ -33,13 +29,7 @@ export def init_starship [] {
 
 export def init_carapace [] {
     try {
-        if $nu.os-info.name == 'windows' {
-            if not ($"C:/Users/#{USERNAME}#.cache/carapace/init.nu" | path exists) {
-                mkdir $"C:/Users/#{USERNAME}#.cache/carapace"
-                carapace _carapace nushell | save --force $"C:/Users/#{USERNAME}#.cache/carapace/init.nu"
-            }
-            source $"C:/Users/#{USERNAME}#.cache/carapace/init.nu"
-        } else {
+        if (which carapace | is-not-empty) {
             mkdir --full-path ~/.cache/carapace
             carapace _carapace nushell | save --force ~/.cache/carapace/init.nu
             source ~/.cache/carapace/init.nu
@@ -53,13 +43,7 @@ export def init_carapace [] {
 
 export def init_atuin [] {
     try {
-        if $nu.os-info.name == 'windows' {
-            if not ($"C:/Users/#{USERNAME}#.cache/atuin/init.nu" | path exists) {
-                mkdir $"C:/Users/#{USERNAME}#.cache/atuin"
-                atuin init nu | save --force $"C:/Users/#{USERNAME}#.cache/atuin/init.nu"
-            }
-            source $"C:/Users/#{USERNAME}#.cache/atuin/init.nu"
-        } else {
+        if (which atuin | is-not-empty) {
             if not ("~/.local/share/atuin/init.nu" | path exists) {
                 atuin init nu | save --force ~/.local/share/atuin/init.nu
             }
@@ -74,13 +58,7 @@ export def init_atuin [] {
 
 export def init_zoxide [] {
     try {
-        if $nu.os-info.name == 'windows' {
-            if not ($"C:/Users/#{USERNAME}#.cache/zoxide/init.nu" | path exists) {
-                mkdir $"C:/Users/#{USERNAME}#.cache/zoxide"
-                zoxide init nushell | save --force $"C:/Users/#{USERNAME}#.cache/zoxide/init.nu"
-            }
-            source $"C:/Users/#{USERNAME}#.cache/zoxide/init.nu"
-        } else {
+        if (which zoxide | is-not-empty) {
             if not ("~/.cache/zoxide/init.nu" | path exists) {
                 mkdir --full-path ~/.cache/zoxide
                 zoxide init nushell | save --force ~/.cache/zoxide/init.nu
