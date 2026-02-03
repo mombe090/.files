@@ -71,12 +71,12 @@ When stowed:
 2. **Stow UV package** (creates ~/pyproject.toml):
    ```bash
    cd ~/.files
-   ./scripts/manage-stow.sh stow uv
+   ./_scripts/linux/sh/tools/manage-stow.sh stow uv
    ```
 
 3. **Create venv and install Python packages**:
    ```bash
-   ./scripts/install-uv-tools.sh install
+   ./_scripts/linux/sh/installers/install-uv-tools.sh install
    # or manually:
    cd ~
    uv venv          # Creates ~/.venv
@@ -155,8 +155,8 @@ The stow command creates these symlinks, making the configuration and package li
 ```bash
 # Initial setup
 cd ~/.files
-./scripts/manage-stow.sh stow uv
-./scripts/install-uv-tools.sh install
+./_scripts/linux/sh/tools/manage-stow.sh stow uv
+./_scripts/linux/sh/installers/install-uv-tools.sh install
 
 # Add a new package
 echo 'requests>=2.31.0' >> ~/pyproject.toml  # Add to dependencies
@@ -166,8 +166,8 @@ cd ~ && uv sync                               # Install
 cd ~ && uv sync --upgrade
 
 # Install with extras
-./scripts/install-uv-tools.sh install data   # Data science tools
-./scripts/install-uv-tools.sh install aws    # AWS/Azure tools
+./_scripts/linux/sh/installers/install-uv-tools.sh install data   # Data science tools
+./_scripts/linux/sh/installers/install-uv-tools.sh install aws    # AWS/Azure tools
 ```
 
 ## Comparison: uv pip vs uv venv + sync

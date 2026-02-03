@@ -123,7 +123,7 @@ df340f8 security: add comprehensive security review and corporate safety measure
 
 #### Added
 
-- **`scripts/install-essentials.sh`** - Install essential build tools and dependencies 🔨
+- **`_scripts/linux/sh/installers/install-essentials.sh`** - Install essential build tools and dependencies 🔨
   - Installs C/C++ compilers (gcc, g++, clang on some platforms)
   - Installs build tools (make, cmake, pkg-config)
   - Installs development libraries:
@@ -142,7 +142,7 @@ df340f8 security: add comprehensive security review and corporate safety measure
   - Summary statistics (installed/already installed/failed)
   - Tested on Ubuntu 25.04 (ARM64)
 
-- **`scripts/install-modern-fonts.sh`** - Install modern Nerd Fonts for development ✨
+- **`_scripts/linux/sh/installers/install-modern-fonts.sh`** - Install modern Nerd Fonts for development ✨
   - Automatically downloads and installs Nerd Fonts
   - Fonts included:
     - **CascadiaMono Nerd Font** v3.4.0 (Cascadia Code + icons)
@@ -180,16 +180,16 @@ df340f8 security: add comprehensive security review and corporate safety measure
   - **Root cause**: `((counter++))` syntax caused infinite hangs
   - **Solution**: Changed to `counter=$((counter + 1))` pattern
   - **Files affected**:
-    - `scripts/manage-stow.sh` - Fixed stow/unstow operations hanging
-    - `scripts/install-js-packages.sh` - Fixed package installation hanging
-    - `scripts/install-modern-fonts.sh` - Fixed font installation hanging
+    - `_scripts/linux/sh/tools/manage-stow.sh` - Fixed stow/unstow operations hanging
+    - `_scripts/linux/sh/installers/install-js-packages.sh` - Fixed package installation hanging
+    - `_scripts/linux/sh/installers/install-modern-fonts.sh` - Fixed font installation hanging
   - Scripts now complete successfully and show summary statistics
 
 - **CRITICAL: Fixed stow backup deleting repository files** 🐛
   - **Root cause**: Backup function followed parent directory symlinks
   - **Impact**: Running stow operations deleted actual dotfiles repo files
   - **Solution**: Added parent directory symlink detection in `backup_conflicts()`
-  - **File**: `scripts/manage-stow.sh`
+  - **File**: `_scripts/linux/sh/tools/manage-stow.sh`
   - Now safely backs up only actual files, not symlink-linked repo files
 
 - **Fixed bun/mise integration issues** 🔧
@@ -208,11 +208,11 @@ df340f8 security: add comprehensive security review and corporate safety measure
   - `bash/.bash_profile` - Bash login config
   - Ensures bun and other mise tools work in bash scripts
 
-- **`scripts/manage-stow.sh`** - Enhanced default packages
+- **`_scripts/linux/sh/tools/manage-stow.sh`** - Enhanced default packages
   - Added `bash` to `DEFAULT_PACKAGES` array
   - Now stows: zsh, bash, mise, zellij, bat, nvim, starship
 
-- **`scripts/install-js-packages.sh`** - Added mise activation
+- **`_scripts/linux/sh/installers/install-js-packages.sh`** - Added mise activation
   - Script now activates mise internally for bun access
   - Works in non-interactive shells and SSH sessions
   - No longer depends on shell profile being sourced
@@ -303,7 +303,7 @@ df340f8 security: add comprehensive security review and corporate safety measure
 
 ### Added
 
-- **`scripts/manage-stow.sh`** - Centralized GNU Stow package management
+- **`_scripts/linux/sh/tools/manage-stow.sh`** - Centralized GNU Stow package management
   - Stow/unstow/restow operations for dotfiles packages
   - Default packages: zsh, mise, zellij, bat, nvim, starship
   - **Auto-backup conflicting files before stowing** ✨
@@ -318,8 +318,8 @@ df340f8 security: add comprehensive security review and corporate safety measure
   - Better error handling and user feedback
   - Summary statistics (stowed/failed/skipped)
 
-- **`scripts/install-js-packages.sh`** - Install JavaScript/TypeScript packages globally via bun
-  - Reads package list from YAML config file (`scripts/config/js.pkg.yml`)
+- **`_scripts/linux/sh/installers/install-js-packages.sh`** - Install JavaScript/TypeScript packages globally via bun
+  - Reads package list from YAML config file (`_scripts/linux/config/js.pkg.yml`)
   - Supports install, list, and update operations
   - Interactive confirmation (can skip with `--yes` flag)
   - Auto-creates default config with common packages
@@ -327,13 +327,13 @@ df340f8 security: add comprehensive security review and corporate safety measure
   - Tracks installed/failed/skipped packages
   - Default packages: TypeScript, ESLint, Prettier, Vite, Vitest, and more
 
-- **`scripts/config/js.pkg.yml`** - Package list configuration
+- **`_scripts/linux/config/js.pkg.yml`** - Package list configuration
   - YAML format for easy editing
   - Pre-configured with common JavaScript/TypeScript tools
   - Organized by category (package managers, build tools, testing, etc.)
   - Optional packages section for framework CLIs
 
-- **`scripts/check-dotnet.sh`** - New diagnostic tool for .NET installation issues
+- **`_scripts/linux/sh/checkers/check-dotnet.sh`** - New diagnostic tool for .NET installation issues
   - Checks if dotnet is in PATH
   - Searches for dotnet binary in common locations (/usr/bin, /usr/local/bin, ~/.dotnet)
   - Shows installed .NET packages (OS-specific: apt/brew/yum/pacman)
@@ -362,8 +362,8 @@ df340f8 security: add comprehensive security review and corporate safety measure
 
 ### Changed
 
-- **`scripts/install-js-packages.sh`** - Install JavaScript/TypeScript packages globally via bun
-  - Reads package list from YAML config file (`scripts/config/js.pkg.yml`)
+- **`_scripts/linux/sh/installers/install-js-packages.sh`** - Install JavaScript/TypeScript packages globally via bun
+  - Reads package list from YAML config file (`_scripts/linux/config/js.pkg.yml`)
   - Supports install, list, and update operations
   - Interactive confirmation (can skip with `--yes` flag)
   - Auto-creates default config with common packages
@@ -371,13 +371,13 @@ df340f8 security: add comprehensive security review and corporate safety measure
   - Tracks installed/failed/skipped packages
   - Default packages: TypeScript, ESLint, Prettier, Vite, Vitest, and more
 
-- **`scripts/config/js.pkg.yml`** - Package list configuration
+- **`_scripts/linux/config/js.pkg.yml`** - Package list configuration
   - YAML format for easy editing
   - Pre-configured with common JavaScript/TypeScript tools
   - Organized by category (package managers, build tools, testing, etc.)
   - Optional packages section for framework CLIs
 
-- **`scripts/check-dotnet.sh`** - New diagnostic tool for .NET installation issues
+- **`_scripts/linux/sh/checkers/check-dotnet.sh`** - New diagnostic tool for .NET installation issues
   - Checks if dotnet is in PATH
   - Searches for dotnet binary in common locations (/usr/bin, /usr/local/bin, ~/.dotnet)
   - Shows installed .NET packages (OS-specific: apt/brew/yum/pacman)
@@ -416,13 +416,13 @@ df340f8 security: add comprehensive security review and corporate safety measure
     - Single responsibility: just call the script
     - Script handles all bun detection, messaging, and installation
 
-- **`scripts/install-js-packages.sh`** - Improved messaging
+- **`_scripts/linux/sh/installers/install-js-packages.sh`** - Improved messaging
   - Changed "error" to "warning" when bun not found
   - More helpful instructions for post-install
   - Graceful exit when bun unavailable (exit 0 instead of exit 1)
   - Better suited for automated installation flows
 
-- **`scripts/install-dotnet.sh`** - Updated default .NET version from 8.0 to 10.0
+- **`_scripts/linux/sh/installers/install-dotnet.sh`** - Updated default .NET version from 8.0 to 10.0
   - Default installation now uses .NET 10 (latest stable)
   - Updated help documentation and examples
   - Improved verification with better PATH troubleshooting
@@ -437,7 +437,7 @@ df340f8 security: add comprehensive security review and corporate safety measure
 
 ### Added
 
-- **`scripts/check-dotnet.sh`** - New diagnostic tool for .NET installation issues
+- **`_scripts/linux/sh/checkers/check-dotnet.sh`** - New diagnostic tool for .NET installation issues
   - Checks if dotnet is in PATH
   - Searches for dotnet binary in common locations (/usr/bin, /usr/local/bin, ~/.dotnet)
   - Shows installed .NET packages (OS-specific: apt/brew/yum/pacman)
@@ -460,7 +460,7 @@ df340f8 security: add comprehensive security review and corporate safety measure
 
 ### Documentation
 
-- **`scripts/README.md`** - Updated .NET installation docs
+- **`_scripts/linux/README.md`** - Updated .NET installation docs
   - Changed default version from 8.0 to 10.0
   - Added check-dotnet.sh documentation
   - Better post-installation instructions
@@ -483,12 +483,12 @@ df340f8 security: add comprehensive security review and corporate safety measure
 
 #### Utility Scripts
 
-- **`scripts/backup.sh`** - Backup existing dotfiles
+- **`_scripts/linux/sh/tools/backup.sh`** - Backup existing dotfiles
   - Timestamped backup directories
   - Skips symlinks automatically
   - Tracks backup location for easy restore
   
-- **`scripts/uninstall.sh`** - Uninstall dotfiles and restore backups
+- **`_scripts/linux/sh/tools/uninstall.sh`** - Uninstall dotfiles and restore backups
   - Removes all stow symlinks
   - Optional backup restoration
   - Optional Zinit cleanup
@@ -517,7 +517,7 @@ df340f8 security: add comprehensive security review and corporate safety measure
   - Contributing guidelines
   - Detailed tools table with descriptions
   
-- Updated **`scripts/README.md`** with:
+- Updated **`_scripts/linux/README.md`** with:
   - Documentation for all scripts
   - Usage examples
   - Common commands reference
@@ -575,7 +575,7 @@ If you're updating from an older version:
 
 1. **Backup your current setup:**
    ```bash
-   ./scripts/backup.sh
+   ./_scripts/linux/sh/tools/backup.sh
    ```
 
 2. **Pull the latest changes:**

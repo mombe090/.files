@@ -81,7 +81,7 @@ Run the diagnostic script:
 
 ```bash
 cd ~/.files
-./scripts/check-dotnet.sh
+./_scripts/linux/sh/checkers/check-dotnet.sh
 ```
 
 This will:
@@ -135,5 +135,5 @@ cat ~/.files/DOTNET_TROUBLESHOOTING.md
 Or open an issue with the output of:
 
 ```bash
-./scripts/check-dotnet.sh
+./_scripts/linux/sh/checkers/check-dotnet.sh
 ```

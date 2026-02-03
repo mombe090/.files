@@ -101,7 +101,7 @@ For compiling software from source and building native extensions:
 - Development libraries: OpenSSL, libffi, readline, zlib, SQLite, ncurses, etc.
 - Python development headers and pip
 
-Use `./scripts/install-essentials.sh` to install these automatically.
+Use `./_scripts/linux/sh/installers/install-essentials.sh` to install these automatically.
 
 ### Optional (Recommended)
 
@@ -333,23 +333,32 @@ These dotfiles include:
 
 ### Linux & macOS Scripts
 
-Utility scripts in `scripts/`:
+Shell scripts organized in `_scripts/linux/sh/`:
 
+**Installers** (`installers/`):
 - **`install-homebrew.sh`** - Install Homebrew (macOS)
 - **`install-mise.sh`** - Install mise version manager
 - **`install-essentials.sh`** - Install essential build tools (gcc, make, cmake, dev libraries)
+- **`install-docker.sh`** - Install Docker Engine (Ubuntu only)
 - **`install-zsh.sh`** - Install and set zsh as default
 - **`install-stow.sh`** - Install GNU Stow
 - **`install-dotnet.sh`** - Install .NET SDK/Runtime (cross-platform)
+- **`install-nushell.sh`** - Install Nushell shell
 - **`install-js-packages.sh`** - Install JS/TS packages globally via bun
 - **`install-lazyvim.sh`** - Install LazyVim Neovim distribution
-- **`install-modern-fonts.sh`** - Install modern Nerd Fonts (CascadiaMono, JetBrainsMono, VictorMono)
+- **`install-modern-fonts.sh`** - Install modern Nerd Fonts
+- **`install-uv-tools.sh`** - Install UV Python tools
+- **`install-clawdbot.sh`** - Install Clawdbot CLI (optional)
+
+**Tools** (`tools/`):
 - **`manage-stow.sh`** - Manage stow packages (stow/unstow/restow)
-- **`check-dotnet.sh`** - Diagnostic tool for .NET PATH issues
 - **`backup.sh`** - Backup existing configurations
 - **`uninstall.sh`** - Remove dotfiles and restore backups
 
-For detailed documentation, see: [scripts/README.md](scripts/README.md)
+**Checkers** (`checkers/`):
+- **`check-dotnet.sh`** - Diagnostic tool for .NET PATH issues
+
+For detailed documentation, see: [_scripts/linux/README.md](_scripts/linux/README.md)
 
 ### Windows Scripts
 
@@ -391,7 +400,7 @@ For detailed documentation, see: [_scripts/windows/QUICK-START.md](_scripts/wind
 ### Installation Guides
 
 - **[INSTALLATION_FLOW.md](INSTALLATION_FLOW.md)** - Visual installation flow diagram (Linux/macOS)
-- **[scripts/README.md](scripts/README.md)** - Detailed script documentation (Linux/macOS)
+- **[_scripts/linux/README.md](_scripts/linux/README.md)** - Detailed script documentation (Linux/macOS)
 - **[_scripts/windows/QUICK-START.md](_scripts/windows/QUICK-START.md)** - Windows quick start guide
 - **[TESTING.md](TESTING.md)** - Windows testing and verification guide
 
@@ -399,8 +408,8 @@ For detailed documentation, see: [_scripts/windows/QUICK-START.md](_scripts/wind
 
 - **[DOTNET_TROUBLESHOOTING.md](DOTNET_TROUBLESHOOTING.md)** - .NET SDK PATH issues
 - **[VM_DOTNET_FIX.md](VM_DOTNET_FIX.md)** - .NET fixes for VMs
-- **[scripts/INSTALL_JS_PACKAGES_GUIDE.md](scripts/INSTALL_JS_PACKAGES_GUIDE.md)** - JavaScript package installation
-- **[scripts/MANAGE_STOW_GUIDE.md](scripts/MANAGE_STOW_GUIDE.md)** - GNU Stow management
+- **[_scripts/linux/docs/INSTALL_JS_PACKAGES_GUIDE.md](_scripts/linux/docs/INSTALL_JS_PACKAGES_GUIDE.md)** - JavaScript package installation
+- **[_scripts/linux/MANAGE_STOW_GUIDE.md](_scripts/linux/MANAGE_STOW_GUIDE.md)** - GNU Stow management
 
 ### Changelog
 
@@ -419,7 +428,7 @@ source ~/.zshrc
 
 ```bash
 # Backup and remove conflicting files first
-./scripts/backup.sh
+./_scripts/linux/sh/tools/backup.sh
 rm ~/.zshrc
 cd ~/.dotfiles && stow zsh
 ```

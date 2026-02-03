@@ -31,14 +31,14 @@ During **post_install** (step 10), the script:
    ```
 
 2. **If bun available:**
-   - Runs `./scripts/install-js-packages.sh --yes`
-   - Reads packages from `scripts/config/js.pkg.yml`
+   - Runs `./_scripts/linux/sh/installers/install-js-packages.sh --yes`
+   - Reads packages from `_scripts/linux/config/js.pkg.yml`
    - Installs all packages globally
    - Shows summary (installed/failed/skipped)
 
 3. **If bun NOT available:**
    - Skips JavaScript packages
-   - Shows message: "Install bun and run: ./scripts/install-js-packages.sh"
+   - Shows message: "Install bun and run: ./_scripts/linux/sh/installers/install-js-packages.sh"
 
 ### Non-Blocking Behavior
 
@@ -107,7 +107,7 @@ source ~/.bashrc
 
 # Then install JS packages
 cd ~/.files
-./scripts/install-js-packages.sh
+./_scripts/linux/sh/installers/install-js-packages.sh
 ```
 
 ---
@@ -122,7 +122,7 @@ cd ~/.files
 [INFO] Created ~/.env for environment variables
 [INFO] Created ~/.envrc for direnv
 [STEP] Installing JavaScript/TypeScript packages...
-[STEP] Reading package list from: /path/to/scripts/config/js.pkg.yml
+[STEP] Reading package list from: /path/to/_scripts/linux/config/js.pkg.yml
 [INFO] Found 25 packages to install
 [INFO] Installing: typescript
 [✓] typescript installed
@@ -141,7 +141,7 @@ cd ~/.files
 [INFO] Created ~/.env for environment variables
 [INFO] Created ~/.envrc for direnv
 [INFO] bun not available, skipping JavaScript packages installation
-[INFO] Install bun and run: ./scripts/install-js-packages.sh
+[INFO] Install bun and run: ./_scripts/linux/sh/installers/install-js-packages.sh
 [✓] Post-install setup complete
 ```
 
@@ -155,16 +155,16 @@ You can always run the JavaScript packages installer separately:
 cd ~/.files
 
 # Interactive (asks for confirmation)
-./scripts/install-js-packages.sh
+./_scripts/linux/sh/installers/install-js-packages.sh
 
 # Automatic (no prompts)
-./scripts/install-js-packages.sh --yes
+./_scripts/linux/sh/installers/install-js-packages.sh --yes
 
 # Update all packages
-./scripts/install-js-packages.sh --update
+./_scripts/linux/sh/installers/install-js-packages.sh --update
 
 # List installed packages
-./scripts/install-js-packages.sh --list
+./_scripts/linux/sh/installers/install-js-packages.sh --list
 ```
 
 ---
@@ -174,7 +174,7 @@ cd ~/.files
 Before or after installation, edit the config:
 
 ```bash
-nano scripts/config/js.pkg.yml
+nano _scripts/linux/config/js.pkg.yml
 ```
 
 Add/remove packages:
@@ -189,7 +189,7 @@ packages:
 Then run:
 
 ```bash
-./scripts/install-js-packages.sh
+./_scripts/linux/sh/installers/install-js-packages.sh
 ```
 
 It will skip already-installed packages and only install new ones.

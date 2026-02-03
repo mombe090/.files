@@ -2,7 +2,7 @@
 
 ## Problem: "command not found: dotnet" After Installation
 
-If you've installed .NET using `./install.sh` or `./scripts/install-dotnet.sh` but get "command not found" when running `dotnet`, this is almost always a PATH issue.
+If you've installed .NET using `./install.sh` or `./_scripts/linux/sh/installers/install-dotnet.sh` but get "command not found" when running `dotnet`, this is almost always a PATH issue.
 
 ---
 
@@ -46,7 +46,7 @@ dotnet --version
 We've created a comprehensive diagnostic tool:
 
 ```bash
-./scripts/check-dotnet.sh
+./_scripts/linux/sh/checkers/check-dotnet.sh
 ```
 
 This will:
@@ -202,10 +202,10 @@ After `yum/dnf install`, check:
 
 ```bash
 # 1. Check what's installed
-./scripts/check-dotnet.sh
+./_scripts/linux/sh/checkers/check-dotnet.sh
 
 # 2. If nothing found, reinstall
-./scripts/install-dotnet.sh --version 10.0
+./_scripts/linux/sh/installers/install-dotnet.sh --version 10.0
 
 # 3. Watch for error messages during installation
 # Look for:
@@ -254,7 +254,7 @@ dotnet --version
 
 If none of these solutions work:
 
-1. Run the diagnostic: `./scripts/check-dotnet.sh` and save output
+1. Run the diagnostic: `./_scripts/linux/sh/checkers/check-dotnet.sh` and save output
 2. Check installation logs for errors
 3. Note your OS version: `cat /etc/os-release` or `sw_vers` (macOS)
 4. Create an issue with:
@@ -287,10 +287,10 @@ source ~/.zshrc  # or ~/.bashrc
 hash -r
 
 # Run diagnostics
-./scripts/check-dotnet.sh
+./_scripts/linux/sh/checkers/check-dotnet.sh
 
 # Reinstall .NET 10
-./scripts/install-dotnet.sh --version 10.0
+./_scripts/linux/sh/installers/install-dotnet.sh --version 10.0
 
 # Manual install to home directory
 curl -fsSL https://dot.net/v1/dotnet-install.sh | bash -s -- --channel 10.0

@@ -8,7 +8,7 @@ This dotfiles repository follows a **simplified, delegated architecture** where 
 
 ### 1. Single Responsibility
 - **install.sh**: Orchestrator only - no business logic, just calls scripts
-- **scripts/*.sh**: Self-contained scripts that handle all their own logic
+- **_scripts/linux/sh/\*.sh**: Self-contained scripts that handle all their own logic
 
 ### 2. No Duplicate Checks
 - Scripts handle their own checks (OS detection, tool availability, etc.)
@@ -25,14 +25,14 @@ This dotfiles repository follows a **simplified, delegated architecture** where 
 install.sh (Orchestrator)
 ├── check_prerequisites()     → Checks only git & curl (required everywhere)
 ├── backup_configs()          → Backs up existing dotfiles
-├── install_homebrew()        → Delegates to scripts/install-homebrew.sh
-├── install_mise()            → Delegates to scripts/install-mise.sh
-├── install_core_tools()      → Delegates to install-zsh.sh & install-stow.sh
+├── install_homebrew()        → Delegates to _scripts/linux/sh/installers/install-homebrew.sh
+├── install_mise()            → Delegates to _scripts/linux/sh/installers/install-mise.sh
+├── install_core_tools()      → Uses install_package() helper for mise/brew tools
 ├── install_optional_tools()  → Uses install_package() helper for mise/brew tools
-├── install_dotnet()          → Delegates to scripts/install-dotnet.sh
+├── install_dotnet()          → Delegates to _scripts/linux/sh/installers/install-dotnet.sh
 ├── install_mise_tools()      → Runs 'mise install' if mise available
-├── stow_configs()            → Delegates to scripts/manage-stow.sh
-└── post_install()            → Creates config files, delegates to install-js-packages.sh
+├── stow_configs()            → Delegates to _scripts/linux/sh/tools/manage-stow.sh
+└── post_install()            → Creates config files, delegates to _scripts/linux/sh/installers/install-js-packages.sh
 ```
 
 ## Script Responsibilities
@@ -83,7 +83,7 @@ install.sh (Orchestrator)
 
 #### install-js-packages.sh
 **Purpose**: Install JavaScript/TypeScript packages globally via bun
-- Reads package list from `scripts/config/js.pkg.yml`
+- Reads package list from `_scripts/linux/config/js.pkg.yml`
 - Checks if bun is available (exits gracefully if not)
 - Installs packages with `bun install -g`
 - Commands: install, list, update
@@ -152,7 +152,7 @@ Defines tools and versions to install via mise:
 - Node.js, Python, Go, Rust, etc.
 - Automatically installed when running `mise install`
 
-### JavaScript Packages (`scripts/config/js.pkg.yml`)
+### JavaScript Packages (`_scripts/linux/config/js.pkg.yml`)
 Defines JavaScript/TypeScript packages to install globally:
 - 25+ packages: TypeScript, ESLint, Prettier, Vite, etc.
 - Installed via `bun install -g` in post_install()
@@ -225,23 +225,25 @@ log_step()    # Major installation steps (blue, bold)
 ### Syntax Check
 ```bash
 bash -n install.sh
-bash -n scripts/*.sh
+bash -n _scripts/linux/sh/installers/*.sh
+bash -n _scripts/linux/sh/tools/*.sh
+bash -n _scripts/linux/sh/checkers/*.sh
 ```
 
 ### Dry Run (Check Only)
 ```bash
 # Check what would be installed without installing
 ./install.sh --help
-./scripts/manage-stow.sh status
+./_scripts/linux/sh/tools/manage-stow.sh status
 ```
 
 ### Individual Script Testing
 ```bash
 # Test individual scripts
-./scripts/install-dotnet.sh
-./scripts/install-js-packages.sh install
-./scripts/manage-stow.sh stow
-./scripts/check-dotnet.sh
+./_scripts/linux/sh/installers/install-dotnet.sh
+./_scripts/linux/sh/installers/install-js-packages.sh install
+./_scripts/linux/sh/tools/manage-stow.sh stow
+./_scripts/linux/sh/checkers/check-dotnet.sh
 ```
 
 ## Troubleshooting
@@ -250,16 +252,16 @@ bash -n scripts/*.sh
 
 #### 1. .NET not in PATH
 ```bash
-./scripts/check-dotnet.sh  # Diagnostic tool
-source ~/.zshrc            # Reload shell
+./_scripts/linux/sh/checkers/check-dotnet.sh  # Diagnostic tool
+source ~/.zshrc                                # Reload shell
 ```
 
 #### 2. Stow conflicts
 ```bash
 # Manual backup & stow
-./scripts/manage-stow.sh unstow
+./_scripts/linux/sh/tools/manage-stow.sh unstow
 # Fix conflicts
-./scripts/manage-stow.sh stow  # Auto-backups conflicts
+./_scripts/linux/sh/tools/manage-stow.sh stow  # Auto-backups conflicts
 ```
 
 #### 3. Missing bun (JS packages)
@@ -267,7 +269,7 @@ source ~/.zshrc            # Reload shell
 # Install bun first
 curl -fsSL https://bun.sh/install | bash
 # Then install JS packages
-./scripts/install-js-packages.sh install
+./_scripts/linux/sh/installers/install-js-packages.sh install
 ```
 
 ## Future Improvements

@@ -53,7 +53,7 @@
 [INFO] bun detected (version: 1.1.38)
 [INFO] Installing JavaScript/TypeScript packages globally...
 
-[STEP] Reading package list from: /home/user/.files/scripts/config/js.pkg.yml
+[STEP] Reading package list from: /home/user/.files/_scripts/linux/config/js.pkg.yml
 [INFO] Found 25 packages to install
 
 [INFO] Installing: typescript
@@ -95,7 +95,7 @@ Summary:
 [INFO] To install JS packages later:
   1. Install bun: curl -fsSL https://bun.sh/install | bash
   2. Restart shell: exec $SHELL -l
-  3. Run: ./scripts/install-js-packages.sh
+  3. Run: ./_scripts/linux/sh/installers/install-js-packages.sh
 
 [✓] Post-install setup complete
 ```
@@ -154,7 +154,7 @@ exec $SHELL -l
 
 # Install JS packages manually
 cd ~/.files
-./scripts/install-js-packages.sh
+./_scripts/linux/sh/installers/install-js-packages.sh
 ```
 
 ---
@@ -186,7 +186,7 @@ The output should appear right after:
 
 If you don't see this line, check the logs or run manually:
 ```bash
-./scripts/install-js-packages.sh --yes
+./_scripts/linux/sh/installers/install-js-packages.sh --yes
 ```
 
 ### "Installation failed with errors"
@@ -197,17 +197,17 @@ Check the error messages and run diagnostics:
 bun --version
 
 # Check config file exists
-cat scripts/config/js.pkg.yml
+cat _scripts/linux/config/js.pkg.yml
 
 # Try manual installation
-./scripts/install-js-packages.sh
+./_scripts/linux/sh/installers/install-js-packages.sh
 ```
 
 ---
 
 ## What Gets Installed
 
-Default packages from `scripts/config/js.pkg.yml`:
+Default packages from `_scripts/linux/config/js.pkg.yml`:
 
 **Package Managers:**
 - pnpm, yarn
