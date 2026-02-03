@@ -16,7 +16,7 @@ tasks:
       - direnv allow
       - |
         replacetokens \
-          --sources '~/.config/**/' \
+          --sources '../.config/**/' \
           --token-pattern 'default' \
           --encoding 'utf-8' \
           --use-env \
