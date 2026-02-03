@@ -21,7 +21,6 @@ packages:
   # Build tools
   - vite
   - esbuild
-  - tsup
   
   # Testing
   - vitest
@@ -29,20 +28,15 @@ packages:
   
   # Development tools
   - nodemon
-  - concurrently
-  - rimraf
   - dotenv-cli
   
   # CLI tools
   - http-server
   - serve
-  - npm-check-updates
-  - depcheck
   
   # Documentation
   - typedoc
   - jsdoc
 
   # AI Tools
-  - opencode-ai
   - "@github/copilot"
