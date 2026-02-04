@@ -21,6 +21,7 @@ repos:
       args: ["--maxkb=2000"]
     - id: check-merge-conflict
     - id: check-yaml
+      exclude: mkdocs\.yml$  # MkDocs uses Python-specific YAML tags
     - id: detect-aws-credentials
       args:
         - --allow-missing-credentials
