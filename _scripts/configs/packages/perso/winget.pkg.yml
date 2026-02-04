@@ -1,0 +1,17 @@
+# =============================================================================
+# Windows Package Manager (winget) - Personal Packages
+# =============================================================================
+# Personal packages for home/personal use.
+# Add your personal tools, games, media apps, etc. here.
+#
+# Usage:
+#   Install all: scripts/windows/install-packages.ps1 -Type perso
+# =============================================================================
+
+media: []
+
+browsers: []
+
+communication: []
+
+utilities: []

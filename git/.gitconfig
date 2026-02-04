@@ -6,10 +6,13 @@
 [pull]
  rebase = true
 [init]
- defaultBranch = master
+ defaultBranch = main
+
 [user]
+ # Personal information moved to ~/.gitconfig.local
+ # Create ~/.gitconfig.local with your name and email
  name = Mamadou Yaya DIALLO
- email = <yayamombeya090@gmail.com>
+ email = yayamombeya090@gmail.com
 [credential "https://github.com"]
  helper =
  helper = !/usr/bin/gh auth git-credential
@@ -32,6 +35,8 @@
 
 [include]
  path = ~/.config/delta/themes/catppuccin.gitconfig
+ # Include local configuration (not tracked in git)
+ path = ~/.gitconfig.local
 
 [delta]
   features = catppuccin-mocha

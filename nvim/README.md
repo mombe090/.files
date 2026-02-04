@@ -17,14 +17,44 @@ LazyVim is a Neovim configuration framework that provides a solid foundation wit
 
 ## Installation
 
+### Linux/macOS
+
+Uses XDG-style configuration in `~/.config/nvim`:
+
 ```bash
+cd ~/.files
 stow nvim
 ```
 
+This will symlink files from `nvim/.config/nvim/` to `~/.config/nvim/`.
+
+### Windows
+
+Uses Windows-style configuration in `$env:LOCALAPPDATA\nvim`:
+
+**Option 1: Install LazyVim directly** (Recommended)
+```powershell
+cd C:\Users\<username>\.files\_scripts\windows\pwsh
+.\Install-LazyVim.ps1
+```
+
+This installs the LazyVim starter template directly to `$env:LOCALAPPDATA\nvim`.
+
+**Option 2: Stow custom config** (For version control)
+```powershell
+# First, copy your customizations to .local/nvim
+# Then stow using the new .local/ prefix support
+cd C:\Users\<username>\.files
+.\stow.ps1 -Stow nvim
+```
+
+The `.local/` prefix tells `stow.ps1` to use `$env:LOCALAPPDATA` instead of `~/.config`.
+
 ## Structure
 
+### Linux/macOS Structure
 ```text
-~/.config/nvim/
+nvim/.config/nvim/
 ├── init.lua              # Entry point
 ├── lua/
 │   ├── config/          # Core configuration
@@ -39,6 +69,16 @@ stow nvim
 │       └── ...
 └── plugin/after/        # Post-load configurations
 ```
+
+### Windows Structure
+```text
+nvim/.local/nvim/
+└── (same structure as above)
+```
+
+**Target locations:**
+- **Linux/macOS**: `~/.config/nvim/`
+- **Windows**: `$env:LOCALAPPDATA\nvim` (e.g., `C:\Users\<username>\AppData\Local\nvim`)
 
 ## Usage
 
@@ -59,9 +99,14 @@ nvim                    # Launch Neovim
 
 ## Customization
 
-Add plugins in `~/.config/nvim/lua/plugins/` following LazyVim conventions.
+Add plugins in `lua/plugins/` following LazyVim conventions.
+
+**Locations:**
+- Linux/macOS: `~/.config/nvim/lua/plugins/`
+- Windows: `$env:LOCALAPPDATA\nvim\lua\plugins\`
 
 ## Documentation
 
 - LazyVim: <https://lazyvim.github.io/>
 - Neovim: <https://neovim.io/doc/>
+

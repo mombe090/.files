@@ -1,0 +1,91 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  //"$schema": "./config.schema.json",
+
+  // Theme configuration
+  "theme": "tokyonight",
+  "model": "anthropic/claude-sonnet-4-5",
+  "small_model": "anthropic/claude-haiku-4-5",
+  "autoupdate": false,
+  "share": "disabled",
+
+  // Tools Config
+
+  "agent": {
+    "plan": {
+      "mode": "primary",
+      "tools": {
+        "write": false,
+        "bash": false,
+        "webfetch": true,
+      },
+      "permission": {
+        "edit": "deny",
+      },
+    },
+    "build": {
+      "permission": {
+        "bash": {
+          "git push": "ask",
+          "az *": "ask",
+        },
+      },
+    },
+
+    "reviewer": {
+      "description": "Reviews code for best practices and potential issues, you can check dotfile for conventional config",
+      "prompt": "You are a Senior Tech code reviewer. Focus on security, performance, standard best practises and maintainability. Use available mcp server to check best practices on code you reviewing.",
+      "tools": {
+        "write": false,
+        "edit": false,
+      },
+    },
+  },
+
+  "formatter": {
+    "prettier": {
+      "disabled": false,
+    },
+  },
+
+  // MCP server
+  "mcp": {
+    "Azure MCP Server": {
+      "type": "local",
+      "command": [
+        "docker",
+        "run",
+        "-i",
+        "--rm",
+        "--volume",
+        "~/.azure:/root/.azure",
+        "mcr.microsoft.com/azure-sdk/azure-mcp:latest",
+      ],
+    },
+    "ms-learn": {
+      "type": "remote",
+      "url": "https://learn.microsoft.com/api/mcp",
+      "enabled": true,
+      "timeout": 10000,
+    },
+    "tf-registry": {
+      "type": "local",
+      "enabled": true,
+      "command": [
+        "docker",
+        "run",
+        "-i",
+        "--rm",
+        "hashicorp/terraform-mcp-server:0.3.0",
+      ],
+    },
+  },
+
+  // TUI
+  "tui": {
+    "scroll_speed": 3,
+    "scroll_acceleration": {
+      "enabled": true,
+    },
+  },
+}

@@ -1,0 +1,5 @@
+# UV Configuration
+# Documentation: https://docs.astral.sh/uv/
+
+# Compile Python files to bytecode after installation
+compile-bytecode = true

@@ -1,0 +1,45 @@
+[alias]
+ co = checkout
+ br = branch
+ ci = commit
+ st = status
+
+[pull]
+ rebase = true
+
+[init]
+ defaultBranch = main
+
+[user]
+ # Set your personal information in ~/.gitconfig.local
+ # name = Your Name
+ # email = your.email@example.com
+
+[credential "https://github.com"]
+ helper =
+ helper = !/usr/bin/gh auth git-credential
+
+[credential "https://gist.github.com"]
+ helper =
+ helper = !/usr/bin/gh auth git-credential
+
+[core]
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true  # use n and N to move between diff sections
+
+[merge]
+    conflictStyle = zdiff3
+
+[include]
+ path = ~/.config/delta/themes/catppuccin.gitconfig
+ # Include local configuration (not tracked in git)
+ path = ~/.gitconfig.local
+
+[delta]
+  features = catppuccin-mocha
+  side-by-side = true

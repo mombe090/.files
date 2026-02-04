@@ -1,0 +1,45 @@
+[project]
+name = "dotfiles-tools"
+version = "1.0.0"
+description = "Global Python tools managed by UV"
+requires-python = ">=3.10"
+dependencies = [
+    # Security & Infrastructure as Code
+    "checkov>=3.0.0",           # IaC security scanner
+    
+    # Development Tools
+    "ty>=0.0.14",              # Static type checker
+    "pytest>=8.0.0",            # Testing framework
+    
+    # DevOps & Cloud
+    "ansible>=10.0.0",           # Configuration management
+    "ansible-lint>=24.0.0",     # Ansible linter
+    
+    # Data & Utilities
+    "httpie>=3.2.0",            # Modern HTTP client
+    "ipython>=8.20.0",          # Enhanced Python REPL
+    "rich>=13.7.0",             # Rich terminal output
+    "pyyaml>=6.0.0",            # YAML parser
+    "toml>=0.10.0",             # TOML parser
+    "jinja2>=3.1.0",            # Template engine
+]
+
+[project.optional-dependencies]
+# Data science tools (install with: uv sync --extra data)
+data = [
+    "pandas>=2.2.0",
+    "numpy>=1.26.0",
+    "matplotlib>=3.8.0",
+]
+
+# Cloud tools (install with: uv sync --extra cloud)
+cloud = [
+    "awscli>=1.32.0",           # AWS CLI
+    "boto3>=1.34.0",            # AWS SDK for Python
+]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false

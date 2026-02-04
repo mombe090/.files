@@ -1,0 +1,92 @@
+# Mise Configuration for Dotfiles
+# Documentation: https://mise.jdx.dev/configuration.html
+
+[settings]
+experimental = true
+verbose = false
+yes = false
+
+# configure `mise install` to always keep the downloaded archive
+always_keep_download = false        # deleted after install by default
+always_keep_install = false         # deleted on failure by default
+
+env_file = '.env'
+
+trusted_config_paths = [
+    '~/.config/mise',
+]
+
+# ===== LANGUAGE RUNTIMES =====
+[tools]
+# Node.js ecosystem
+"node" = "lts"
+"bun" = "latest"
+
+# Python
+"python" = "latest"
+
+# Go
+"go" = "latest"
+
+# Rust
+"rust" = "latest"
+
+# Ruby
+"ruby" = "latest"
+
+# ===== CLI TOOLS =====
+# Modern replacements
+"bat" = "latest"          # cat replacement
+"eza" = "latest"          # ls replacement
+"fd" = "latest"           # find replacement
+"ripgrep" = "latest"      # grep replacement
+"fzf" = "latest"          # fuzzy finder
+"zoxide" = "latest"       # smart cd
+
+# Shell enhancements
+"starship" = "latest"     # shell prompt
+"direnv" = "latest"       # environment switcher
+
+# Terminal multiplexers
+"zellij" = "latest"       # modern multiplexer
+"tmux" = "latest"         # classic multiplexer
+
+# System tools
+"btop" = "latest"         # system monitor
+"jq" = "latest"           # JSON processor
+"yq" = "latest"           # YAML processor
+
+# ===== DEVOPS & CLOUD TOOLS =====
+# Kubernetes
+"kubectl" = "latest"
+"helm" = "latest"
+"aqua:norwoodj/helm-docs" = "latest"   # Generate docs from Helm charts
+"k9s" = "latest"
+"kind" = "latest"
+
+# Infrastructure as Code
+"terraform" = "latest"
+"aqua:terraform-linters/tflint" = "latest"        # Terraform linter
+"aqua:terraform-docs/terraform-docs" = "latest"   # Generate docs from Terraform modules
+"opentofu" = "latest"
+
+# Cloud CLIs
+"awscli" = "latest"
+
+# GitOps
+"argocd" = "latest"
+
+# ===== GIT & VERSION CONTROL =====
+"github-cli" = "latest"   # gh command
+"lazygit" = "latest"      # TUI for git
+
+# ===== EDITOR & DEV TOOLS =====
+"neovim" = "latest"
+"aqua:tree-sitter/tree-sitter" = "latest"
+
+# Python development
+"aqua:astral-sh/ty" = "latest"        # Fast Python linter & formatter
+"uv" = "latest"
+
+"vivid" = "latest"
+"aqua:go-task/task" = "latest"

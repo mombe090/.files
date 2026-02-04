@@ -8,6 +8,7 @@ alias cat='bat'
 if [[ "$OSTYPE" == "darwin"* ]]; then
     alias python='python3'
     alias code="open -a 'Visual Studio Code'"
+    alias 'docker=container'
 fi
 
 # ===== MODERN LS REPLACEMENT (EZA) =====
@@ -30,7 +31,7 @@ alias gca='git commit --amend'
 alias gco='git checkout'
 alias gcb='git checkout -b'
 alias gpa='git push origin --all'
-alias gp='git push origin'
+alias gpo='git push origin'
 alias gp='git push'
 alias gl='git pull'
 alias gst='git status'

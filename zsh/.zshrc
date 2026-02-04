@@ -1,5 +1,11 @@
 autoload -Uz compinit
 
+# ===== MISE CONFIGURATION =====
+# Activate mise if available
+if command -v mise &> /dev/null; then
+  eval "$(mise activate zsh)"
+fi
+
 # ===== ZINIT SETUP =====
 
 # 📁 Set Zinit home directory based on XDG specification
@@ -69,34 +75,12 @@ bindkey -v
 
 # 🎨 Starship prompt
 
+# Set shell name for Starship prompt
+export STARSHIP_SHELL="zsh"
+
 eval "$(starship init zsh)"
 
 # 🎯 Customize the prompt (optional: adds spacing)
 
-PROMPT="${PROMPT}"$'\n\n➡ '
+#PROMPT="${PROMPT}"$'\n\n> '
 
-# Added by LM Studio CLI (lms)
-
-export PATH="$PATH:/Users/mombe090/.lmstudio/bin"
-
-# End of LM Studio CLI section
-
-export MAVEN_OPTS="--add-opens java.base/sun.misc=ALL-UNNAMED"
-
-eval "$(uv generate-shell-completion zsh)"
-export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
-export JAVA_HOME=/opt/homebrew/opt/openjdk@21
-[[ -f "/home/mombe090/.config/zsh/custom/aliases.zsh" ]] && source "/home/mombe090/.config/zsh/custom/aliases.zsh"
-[[ -f "/home/mombe090/.config/zsh/custom/completions-post.zsh" ]] && source "/home/mombe090/.config/zsh/custom/completions-post.zsh"
-[[ -f "/home/mombe090/.config/zsh/custom/completions.zsh" ]] && source "/home/mombe090/.config/zsh/custom/completions.zsh"
-[[ -f "/home/mombe090/.config/zsh/custom/env.zsh" ]] && source "/home/mombe090/.config/zsh/custom/env.zsh"
-[[ -f "/home/mombe090/.config/zsh/custom/fzf.git.zsh" ]] && source "/home/mombe090/.config/zsh/custom/fzf.git.zsh"
-[[ -f "/home/mombe090/.config/zsh/custom/history.zsh" ]] && source "/home/mombe090/.config/zsh/custom/history.zsh"
-[[ -f "/home/mombe090/.config/zsh/custom/Keybindings.zsh" ]] && source "/home/mombe090/.config/zsh/custom/Keybindings.zsh"
-[[ -f "/home/mombe090/.config/zsh/custom/plugins.zsh" ]] && source "/home/mombe090/.config/zsh/custom/plugins.zsh"
-
-export DOTNET_ROOT="$HOME/.dotnet"
-export PATH="$HOME/.dotnet:$PATH"
-export PATH="$PATH:$HOME/.dotnet/tools"
-export PATH="$HOME/.local/bin:$PATH"
-eval "$(/home/mombe090/.local/bin/mise activate zsh)"
