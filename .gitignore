@@ -24,3 +24,4 @@ node_modules/
 !powershell/**/profile.ps1
 !_scripts/**/profile.ps1.template
 nushell/.config/nushell/history.txt
+/site/

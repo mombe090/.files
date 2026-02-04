@@ -128,9 +128,43 @@ The install script will attempt to install these via mise or your system package
 
 ## Installation
 
-### Linux & macOS
+### Quick Start with Just (Recommended)
 
-### Quick Start
+The easiest way to manage these dotfiles is with [`just`](https://github.com/casey/just), a modern command runner:
+
+```bash
+# Clone this repository
+git clone https://github.com/mombe090/.files.git ~/.dotfiles
+cd ~/.dotfiles
+
+# Bootstrap (installs just + basic setup)
+./_scripts/just/bootstrap.sh
+
+# See all available commands
+just --list
+
+# Full installation
+just install_full
+
+# Check system health
+just doctor
+```
+
+**Common Commands:**
+
+```bash
+just install_full        # Install everything
+just install_minimal     # Core tools only
+just update              # Update all (git pull + mise + packages + restow)
+just doctor              # Check system health
+just verify              # Verify installations
+just stow nvim           # Stow specific package
+just mise_upgrade        # Upgrade mise tools
+```
+
+For full documentation, see [specs/just-integration/README.md](specs/just-integration/README.md)
+
+### Linux & macOS (Traditional Method)
 
 ```bash
 # Clone this repository
