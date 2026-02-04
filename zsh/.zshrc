@@ -94,3 +94,9 @@ export JAVA_HOME=/opt/homebrew/opt/openjdk@21
 [[ -f "/home/mombe090/.config/zsh/custom/history.zsh" ]] && source "/home/mombe090/.config/zsh/custom/history.zsh"
 [[ -f "/home/mombe090/.config/zsh/custom/Keybindings.zsh" ]] && source "/home/mombe090/.config/zsh/custom/Keybindings.zsh"
 [[ -f "/home/mombe090/.config/zsh/custom/plugins.zsh" ]] && source "/home/mombe090/.config/zsh/custom/plugins.zsh"
+
+export DOTNET_ROOT="$HOME/.dotnet"
+export PATH="$HOME/.dotnet:$PATH"
+export PATH="$PATH:$HOME/.dotnet/tools"
+export PATH="$HOME/.local/bin:$PATH"
+eval "$(/home/mombe090/.local/bin/mise activate zsh)"
