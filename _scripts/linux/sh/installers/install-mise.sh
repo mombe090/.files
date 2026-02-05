@@ -51,6 +51,8 @@ configure_shell() {
             cat >> "$zshrc" << 'EOF'
 
 # ===== MISE CONFIGURATION =====
+export MISE_HOME="$HOME/.local/share/mise"
+export MISE_CACHE_DIR="$HOME/.cache/mise"
 eval "$(mise activate zsh)"
 EOF
         fi
@@ -65,6 +67,8 @@ EOF
             cat >> "$bashrc" << 'EOF'
 
 # ===== MISE CONFIGURATION =====
+export MISE_HOME="$HOME/.local/share/mise"
+export MISE_CACHE_DIR="$HOME/.cache/mise"
 eval "$(mise activate bash)"
 EOF
         fi

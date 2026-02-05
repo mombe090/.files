@@ -134,6 +134,10 @@ install_package() {
     
     # Try mise first
     if command -v mise &> /dev/null; then
+        export MISE_HOME="$HOME/.local/share/mise"
+        export MISE_CACHE_DIR="$HOME/.cache/mise"
+        mkdir -p "$MISE_HOME" "$MISE_CACHE_DIR"
+
         log_info "Installing $package via mise..."
         if mise use -g "$mise_name@latest" 2>/dev/null; then
             log_success "$package installed via mise"
@@ -203,6 +207,13 @@ install_mise() {
     if [[ -x "$SCRIPTS_DIR/installers/install-mise.sh" ]]; then
         bash "$SCRIPTS_DIR/installers/install-mise.sh"
         
+        # Pin mise data/cache to the current user's home so it never
+        # writes into another user's directory (e.g. /home/ubuntu when
+        # running as yaya1).
+        export MISE_HOME="$HOME/.local/share/mise"
+        export MISE_CACHE_DIR="$HOME/.cache/mise"
+        mkdir -p "$MISE_HOME" "$MISE_CACHE_DIR"
+
         # Activate mise in current shell session for subsequent commands
         if command -v mise &> /dev/null; then
             eval "$(mise activate bash)" 2>/dev/null || true
@@ -299,6 +310,11 @@ install_mise_tools() {
     log_step "Installing tools from mise config..."
     
     if command -v mise &> /dev/null; then
+        # Ensure mise always writes to the current user's home
+        export MISE_HOME="$HOME/.local/share/mise"
+        export MISE_CACHE_DIR="$HOME/.cache/mise"
+        mkdir -p "$MISE_HOME" "$MISE_CACHE_DIR"
+
         mise install
         log_success "Mise tools installed"
     else
