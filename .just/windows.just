@@ -18,25 +18,25 @@ win_install_fonts:
 [windows]
 win_stow PKG:
     @echo "Stowing {{PKG}} on Windows..."
-    @pwsh -NoProfile -ExecutionPolicy Bypass -File {{dotfiles_root}}/stow.ps1 -Stow {{PKG}}
+    @pwsh -NoProfile -ExecutionPolicy Bypass -File {{windows_scripts}}/stow.ps1 -Stow {{PKG}}
 
 # Unstow package on Windows
 [windows]
 win_unstow PKG:
     @echo "Unstowing {{PKG}} on Windows..."
-    @pwsh -NoProfile -ExecutionPolicy Bypass -File {{dotfiles_root}}/stow.ps1 -Unstow {{PKG}}
+    @pwsh -NoProfile -ExecutionPolicy Bypass -File {{windows_scripts}}/stow.ps1 -Unstow {{PKG}}
 
 # Restow package on Windows
 [windows]
 win_restow PKG:
     @echo "Restowing {{PKG}} on Windows..."
-    @pwsh -NoProfile -ExecutionPolicy Bypass -File {{dotfiles_root}}/stow.ps1 -Restow {{PKG}}
+    @pwsh -NoProfile -ExecutionPolicy Bypass -File {{windows_scripts}}/stow.ps1 -Restow {{PKG}}
 
 # List available packages on Windows
 [windows]
 win_stow_list:
     @echo "Available stow packages on Windows..."
-    @pwsh -NoProfile -ExecutionPolicy Bypass -File {{dotfiles_root}}/stow.ps1 -ListPackages
+    @pwsh -NoProfile -ExecutionPolicy Bypass -File {{windows_scripts}}/stow.ps1 -ListPackages
 
 # Setup PowerShell profile
 [windows]

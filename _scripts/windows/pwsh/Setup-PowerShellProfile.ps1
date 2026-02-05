@@ -41,7 +41,7 @@ if (Test-Path $xdgProfile) {
 }
 else {
     Write-Warning "XDG PowerShell profile not found: $xdgProfile"
-    Write-Host "Run: .\stow.ps1 powershell" -ForegroundColor Yellow
+    Write-Host "Run: just win_stow powershell" -ForegroundColor Yellow
 }
 '@
 
@@ -54,7 +54,7 @@ Write-Header "PowerShell Profile Setup"
 # Check if config profile exists
 if (-not (Test-Path $configProfilePath)) {
     Write-ErrorMsg "Config profile not found: $configProfilePath"
-    Write-Info "Please run: .\stow.ps1 powershell"
+    Write-Info "Please run: just win_stow powershell"
     exit 1
 }
 
