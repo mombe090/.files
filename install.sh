@@ -194,7 +194,7 @@ install_homebrew() {
     fi
     
     log_step "Installing Homebrew..."
-    if [[ -x "$SCRIPTS_DIR/installers/install-homebrew.sh" ]]; then
+    if [[ -f "$SCRIPTS_DIR/installers/install-homebrew.sh" ]]; then
         bash "$SCRIPTS_DIR/installers/install-homebrew.sh"
     else
         log_warn "install-homebrew.sh not found or not executable"
@@ -204,7 +204,7 @@ install_homebrew() {
 # ===== INSTALL MISE =====
 install_mise() {
     log_step "Installing mise..."
-    if [[ -x "$SCRIPTS_DIR/installers/install-mise.sh" ]]; then
+    if [[ -f "$SCRIPTS_DIR/installers/install-mise.sh" ]]; then
         bash "$SCRIPTS_DIR/installers/install-mise.sh"
         
         # Pin mise data/cache to the current user's home so it never
@@ -226,7 +226,7 @@ install_mise() {
 # ===== INSTALL ESSENTIAL BUILD TOOLS =====
 install_essentials() {
     log_step "Installing essential build tools..."
-    if [[ -x "$SCRIPTS_DIR/installers/install-essentials.sh" ]]; then
+    if [[ -f "$SCRIPTS_DIR/installers/install-essentials.sh" ]]; then
         bash "$SCRIPTS_DIR/installers/install-essentials.sh"
     else
         log_warn "install-essentials.sh not found or not executable"
@@ -237,12 +237,16 @@ install_essentials() {
 install_core_tools() {
     log_step "Installing core tools..."
     
-    if [[ -x "$SCRIPTS_DIR/installers/install-zsh.sh" ]]; then
+    if [[ -f "$SCRIPTS_DIR/installers/install-zsh.sh" ]]; then
         bash "$SCRIPTS_DIR/installers/install-zsh.sh"
+    else
+        log_warn "install-zsh.sh not found at $SCRIPTS_DIR/installers/"
     fi
     
-    if [[ -x "$SCRIPTS_DIR/installers/install-stow.sh" ]]; then
+    if [[ -f "$SCRIPTS_DIR/installers/install-stow.sh" ]]; then
         bash "$SCRIPTS_DIR/installers/install-stow.sh"
+    else
+        log_warn "install-stow.sh not found at $SCRIPTS_DIR/installers/"
     fi
     
     log_success "Core tools installed"
@@ -279,7 +283,7 @@ install_optional_tools() {
 # ===== INSTALL DOTNET =====
 install_dotnet() {
     log_step "Installing .NET SDK..."
-    if [[ -x "$SCRIPTS_DIR/installers/install-dotnet.sh" ]]; then
+    if [[ -f "$SCRIPTS_DIR/installers/install-dotnet.sh" ]]; then
         AUTO_INSTALL=true bash "$SCRIPTS_DIR/installers/install-dotnet.sh"
     else
         log_warn "install-dotnet.sh not found or not executable"
@@ -292,13 +296,13 @@ install_personal_tools() {
     echo ""
     
     # Clawdbot CLI - Optional personal tool
-    if [[ -x "$SCRIPTS_DIR/installers/install-clawdbot.sh" ]]; then
+    if [[ -f "$SCRIPTS_DIR/installers/install-clawdbot.sh" ]]; then
         log_info "Installing Clawdbot CLI..."
         bash "$SCRIPTS_DIR/installers/install-clawdbot.sh" || log_warn "Failed to install clawdbot (optional)"
     fi
     
     # Add more personal tools here in the future
-    # if [[ -x "$SCRIPTS_DIR/installers/install-xyz.sh" ]]; then
+    # if [[ -f "$SCRIPTS_DIR/installers/install-xyz.sh" ]]; then
     #     bash "$SCRIPTS_DIR/installers/install-xyz.sh" || log_warn "Failed to install xyz (optional)"
     # fi
     
@@ -325,21 +329,32 @@ install_mise_tools() {
 # ===== STOW CONFIGURATIONS =====
 stow_configs() {
     log_step "Stowing configurations..."
-    if [[ -x "$SCRIPTS_DIR/tools/manage-stow.sh" ]]; then
-        bash "$SCRIPTS_DIR/tools/manage-stow.sh" stow
+
+    # stow must be installed before we can symlink anything
+    if ! command -v stow &> /dev/null; then
+        log_error "stow is not installed — skipping config symlinks"
+        log_info "Install stow first:  sudo apt install stow"
+        return 1
+    fi
+
+    local manage_stow="$SCRIPTS_DIR/tools/manage-stow.sh"
+
+    if [[ -f "$manage_stow" ]]; then
+        bash "$manage_stow" stow
     else
-        log_warn "manage-stow.sh not found or not executable"
-        log_info "Falling back to manual stow..."
+        log_warn "manage-stow.sh not found at $manage_stow, falling back to manual stow..."
         cd "$DOTFILES_ROOT"
         stow -v -t "$HOME" zsh bash mise zellij bat nvim starship wezterm nushell powershell 2>&1 | grep -v "BUG in find_stowed_path" || true
     fi
+
+    log_success "Stow complete"
 }
 
 
 # ===== INSTALL MODERN FONTS =====
 install_modern_fonts() {
     log_step "Installing modern fonts..."
-    if [[ -x "$SCRIPTS_DIR/installers/install-modern-fonts.sh" ]]; then
+    if [[ -f "$SCRIPTS_DIR/installers/install-modern-fonts.sh" ]]; then
         bash "$SCRIPTS_DIR/installers/install-modern-fonts.sh"
     else
         log_warn "install-modern-fonts.sh not found or not executable"
@@ -377,7 +392,7 @@ EOF
     # Install JavaScript/TypeScript packages via bun (if available)
     echo ""
     log_info "Installing JavaScript/TypeScript packages..."
-    if [[ -x "$SCRIPTS_DIR/installers/install-js-packages.sh" ]]; then
+    if [[ -f "$SCRIPTS_DIR/installers/install-js-packages.sh" ]]; then
         AUTO_CONFIRM=true bash "$SCRIPTS_DIR/installers/install-js-packages.sh" --yes || true
     else
         log_warn "install-js-packages.sh not found or not executable"
@@ -463,7 +478,7 @@ minimal_install() {
     
     # Only stow essential configs (zsh and git)
     log_step "Stowing minimal configurations..."
-    if [[ -x "$SCRIPTS_DIR/tools/manage-stow.sh" ]]; then
+    if [[ -f "$SCRIPTS_DIR/tools/manage-stow.sh" ]]; then
         bash "$SCRIPTS_DIR/tools/manage-stow.sh" stow zsh git
     else
         cd "$DOTFILES_ROOT"
