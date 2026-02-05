@@ -18,12 +18,19 @@ install_mise() {
 
     log_info "Installing mise..."
 
-    # Try global installation (requires sudo)
-    if [[ $EUID -eq 0 ]] || sudo -n true 2>/dev/null; then
+    # Try global installation (requires sudo or root)
+    if [[ $EUID -eq 0 ]]; then
+        # Running as root, no sudo needed
+        log_info "Installing globally to /usr/local/bin (running as root)..."
+        curl https://mise.run | MISE_INSTALL_PATH=/usr/local/bin/mise sh
+        export PATH="/usr/local/bin:$PATH"
+    elif sudo -n true 2>/dev/null; then
+        # Can use sudo without password
         log_info "Installing globally to /usr/local/bin..."
         curl https://mise.run | sudo MISE_INSTALL_PATH=/usr/local/bin/mise sh
         export PATH="/usr/local/bin:$PATH"
     else
+        # No sudo access
         log_warn "No sudo access, installing to ~/.local/bin..."
         curl https://mise.run | sh
         export PATH="$HOME/.local/bin:$PATH"

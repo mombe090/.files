@@ -93,8 +93,8 @@ install_via_binary() {
     INSTALL_DIR="/usr/local/bin"
     log_info "Installing to $INSTALL_DIR"
 
-    # Check if we need sudo
-    if [ -w "$INSTALL_DIR" ]; then
+    # Check if we need sudo (or are root)
+    if [ -w "$INSTALL_DIR" ] || [ "$EUID" -eq 0 ]; then
         mv "$TEMP_DIR/just" "$INSTALL_DIR/just"
         chmod +x "$INSTALL_DIR/just"
     else
@@ -111,7 +111,11 @@ install_via_apt() {
     # Only use as fallback if binary download fails
     if command -v apt &> /dev/null; then
         log_warn "Installing via apt (may be outdated version)..."
-        sudo apt-get update -qq && sudo apt-get install -y -qq just
+        if [ "$EUID" -eq 0 ]; then
+            apt-get update -qq && apt-get install -y -qq just
+        else
+            sudo apt-get update -qq && sudo apt-get install -y -qq just
+        fi
         return 0
     fi
     return 1
