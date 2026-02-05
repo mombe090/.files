@@ -73,6 +73,7 @@ DESCRIPTION:
     Installs essential development tools:
     - curl (required for downloads)
     - git (required for version control)
+    - yq (YAML parser for package configs)
     - Essential packages (stow, zsh, build-essential, etc.)
     - Just command runner (modern task runner)
 
@@ -167,6 +168,7 @@ if [[ "$AUTO_YES" != "true" ]]; then
     echo -e "${BOLD}This script will install:${NC}"
     echo "  • curl (if not installed)"
     echo "  • git (if not installed)"
+    echo "  • yq - YAML parser (if not installed)"
     echo "  • Essential development packages (via install-packages.sh)"
     echo "  • Just command runner (latest version)"
     echo ""
@@ -245,6 +247,67 @@ else
     log_success "git installed"
 fi
 
+# Install yq (YAML parser - required for install-packages.sh)
+if has_command yq; then
+    YQ_VERSION=$(yq --version 2>&1 || echo "unknown")
+    if [[ "$YQ_VERSION" =~ "mikefarah" ]]; then
+        log_success "yq already installed (mikefarah's version)"
+    else
+        log_warn "Found python yq, but need mikefarah's yq"
+        log_step "Installing mikefarah's yq..."
+        case "$PM" in
+            brew)
+                brew install yq
+                ;;
+            apt)
+                sudo apt-get update -qq
+                sudo apt-get install -y yq || {
+                    log_warn "APT installation failed, trying snap..."
+                    sudo snap install yq
+                }
+                ;;
+            dnf)
+                sudo dnf install -y yq
+                ;;
+            pacman)
+                sudo pacman -S --noconfirm yq
+                ;;
+            *)
+                log_error "Please install yq manually"
+                log_info "Visit: https://github.com/mikefarah/yq"
+                exit 1
+                ;;
+        esac
+        log_success "yq installed"
+    fi
+else
+    log_step "Installing yq (YAML parser)..."
+    case "$PM" in
+        brew)
+            brew install yq
+            ;;
+        apt)
+            sudo apt-get update -qq
+            sudo apt-get install -y yq || {
+                log_warn "APT installation failed, trying snap..."
+                sudo snap install yq
+            }
+            ;;
+        dnf)
+            sudo dnf install -y yq
+            ;;
+        pacman)
+            sudo pacman -S --noconfirm yq
+            ;;
+        *)
+            log_error "Please install yq manually"
+            log_info "Visit: https://github.com/mikefarah/yq"
+            exit 1
+            ;;
+    esac
+    log_success "yq installed"
+fi
+
 # =============================================================================
 # Install Essential Packages
 # =============================================================================
@@ -303,6 +366,7 @@ log_header "Bootstrap Complete! 🎉"
 echo -e "${GREEN}Essential tools installed:${NC}"
 echo "  ✓ curl"
 echo "  ✓ git"
+echo "  ✓ yq"
 echo "  ✓ Essential development packages"
 echo "  ✓ just"
 echo ""

@@ -123,13 +123,76 @@ check_dependencies() {
         log_error "Missing required dependencies: ${missing[*]}"
         log_info "Installing yq..."
 
-        # Install yq based on OS
+        # Install yq based on OS - try package manager first, then mise
         if is_macos; then
-            brew install yq
-        elif has_command mise; then
-            mise install yq@latest
+            if has_command brew; then
+                brew install yq
+            else
+                log_error "Homebrew not found. Please install yq manually"
+                log_info "Visit: https://github.com/mikefarah/yq"
+                exit 1
+            fi
+        elif is_linux; then
+            local pm
+            pm=$(get_package_manager)
+
+            case "$pm" in
+                apt)
+                    log_info "Installing yq via APT..."
+                    sudo apt-get update -qq
+                    sudo apt-get install -y yq || {
+                        log_warning "APT installation failed, trying snap..."
+                        sudo snap install yq || {
+                            log_warning "Snap installation failed, trying mise..."
+                            if has_command mise; then
+                                mise install yq@latest
+                            else
+                                log_error "All installation methods failed"
+                                log_info "Visit: https://github.com/mikefarah/yq"
+                                exit 1
+                            fi
+                        }
+                    }
+                    ;;
+                dnf)
+                    log_info "Installing yq via DNF..."
+                    sudo dnf install -y yq || {
+                        log_warning "DNF installation failed, trying mise..."
+                        if has_command mise; then
+                            mise install yq@latest
+                        else
+                            log_error "DNF installation failed and mise not available"
+                            log_info "Visit: https://github.com/mikefarah/yq"
+                            exit 1
+                        fi
+                    }
+                    ;;
+                pacman)
+                    log_info "Installing yq via Pacman..."
+                    sudo pacman -S --noconfirm yq || {
+                        log_warning "Pacman installation failed, trying mise..."
+                        if has_command mise; then
+                            mise install yq@latest
+                        else
+                            log_error "Pacman installation failed and mise not available"
+                            log_info "Visit: https://github.com/mikefarah/yq"
+                            exit 1
+                        fi
+                    }
+                    ;;
+                *)
+                    log_warning "Unsupported package manager: $pm, trying mise..."
+                    if has_command mise; then
+                        mise install yq@latest
+                    else
+                        log_error "Please install 'yq' manually"
+                        log_info "Visit: https://github.com/mikefarah/yq"
+                        exit 1
+                    fi
+                    ;;
+            esac
         else
-            log_error "Please install 'yq' manually"
+            log_error "Unsupported OS for automatic yq installation"
             log_info "Visit: https://github.com/mikefarah/yq"
             exit 1
         fi
