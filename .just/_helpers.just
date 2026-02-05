@@ -25,13 +25,13 @@ home := env_var_or_default("HOME", env_var_or_default("USERPROFILE", ""))
 config_dir := home / ".config"
 stow_target := config_dir
 
-# Colors for output
-color_reset := "\033[0m"
-color_green := "\033[0;32m"
-color_blue := "\033[0;34m"
-color_yellow := "\033[1;33m"
-color_red := "\033[0;31m"
-color_bold := "\033[1m"
+# Colors for output — \u{1b} is the ESC character (U+001B)
+color_reset := "\u{1b}[0m"
+color_green := "\u{1b}[0;32m"
+color_blue := "\u{1b}[0;34m"
+color_yellow := "\u{1b}[1;33m"
+color_red := "\u{1b}[0;31m"
+color_bold := "\u{1b}[1m"
 
 # Helper function to print colored messages
 @_log_info msg:
