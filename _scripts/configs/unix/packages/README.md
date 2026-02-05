@@ -6,14 +6,12 @@ This directory contains YAML-based package configurations for Unix-like systems.
 
 ## Directory Structure
 
-```
+```text
 unix/packages/
 ├── README.md                    # This file
 ├── pro/                         # Professional/work-safe packages
 │   ├── brew.pkg.yml            # macOS Homebrew
 │   ├── apt.pkg.yml             # Debian/Ubuntu
-│   ├── dnf.pkg.yml             # Fedora/RHEL
-│   ├── pacman.pkg.yml          # Arch Linux
 │   └── mise.pkg.yml            # Mise version manager
 ├── perso/                       # Personal packages (includes pro + personal)
 │   ├── brew.pkg.yml            # macOS Homebrew
@@ -30,22 +28,43 @@ unix/packages/
 ### Professional (pro/)
 
 Work-safe packages suitable for company/work computers:
+
 - Essential development tools
 - Standard language runtimes
 - Common DevOps tools
 - No experimental or personal tools
 
+**Supported Systems:**
+
+- macOS (Homebrew)
+- Ubuntu/Debian (APT)
+
 ### Personal (perso/)
 
 All professional packages PLUS personal additions:
+
 - Experimental runtimes (Deno, Bun)
 - Additional cloud tools
 - Personal productivity tools
 - Media/entertainment tools
 
+**Supported Systems:**
+
+- macOS (Homebrew)
+- Ubuntu/Debian (APT)
+- Fedora/RHEL (DNF)
+- Arch Linux (Pacman)
+
 ## Configuration Files
 
 ### Package Managers
+
+**Professional packages (`pro/`):**
+
+- **`brew.pkg.yml`** - macOS Homebrew packages
+- **`apt.pkg.yml`** - Debian/Ubuntu APT packages
+
+**Personal packages (`perso/`):**
 
 - **`brew.pkg.yml`** - macOS Homebrew packages
 - **`apt.pkg.yml`** - Debian/Ubuntu APT packages

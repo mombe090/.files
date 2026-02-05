@@ -60,7 +60,10 @@ OPTIONS:
 
 PACKAGE TYPES:
     pro                   Professional/work-safe packages for company PCs
+                          Supported: macOS (Homebrew), Ubuntu/Debian (APT)
     perso                 Personal packages (includes pro + personal tools)
+                          Supported: macOS (Homebrew), Ubuntu/Debian (APT),
+                                    Fedora/RHEL (DNF), Arch Linux (Pacman)
 
 CATEGORIES:
     essentials            Core utilities (git, curl, stow, etc.)
@@ -152,9 +155,21 @@ detect_config_file() {
                     echo "$type_dir/apt.pkg.yml"
                     ;;
                 dnf)
+                    if [[ "$PACKAGE_TYPE" == "pro" ]]; then
+                        log_error "DNF package manager not supported for professional packages"
+                        log_info "Professional packages are limited to macOS (Homebrew) and Ubuntu/Debian (APT)"
+                        log_info "Use --perso for personal packages on Fedora/RHEL systems"
+                        exit 1
+                    fi
                     echo "$type_dir/dnf.pkg.yml"
                     ;;
                 pacman)
+                    if [[ "$PACKAGE_TYPE" == "pro" ]]; then
+                        log_error "Pacman package manager not supported for professional packages"
+                        log_info "Professional packages are limited to macOS (Homebrew) and Ubuntu/Debian (APT)"
+                        log_info "Use --perso for personal packages on Arch Linux systems"
+                        exit 1
+                    fi
                     echo "$type_dir/pacman.pkg.yml"
                     ;;
                 *)
