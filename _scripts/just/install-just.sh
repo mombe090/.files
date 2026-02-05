@@ -73,7 +73,8 @@ install_via_binary() {
             ;;
     esac
 
-    BINARY_NAME="just-${ARCH}-${PLATFORM}"
+    # Binary filename includes version number
+    BINARY_NAME="just-${JUST_VERSION}-${ARCH}-${PLATFORM}"
     DOWNLOAD_URL="https://github.com/casey/just/releases/download/${JUST_VERSION}/${BINARY_NAME}.tar.gz"
 
     log_info "Downloading: $BINARY_NAME"
@@ -88,24 +89,18 @@ install_via_binary() {
         return 1
     fi
 
-    # Install to /usr/local/bin if we have permission, otherwise ~/.local/bin
-    if [ -w "/usr/local/bin" ] || sudo -n true 2>/dev/null; then
-        INSTALL_DIR="/usr/local/bin"
-        log_info "Installing to $INSTALL_DIR (requires sudo)"
-        sudo mv "$TEMP_DIR/just" "$INSTALL_DIR/just"
-        sudo chmod +x "$INSTALL_DIR/just"
-    else
-        INSTALL_DIR="$HOME/.local/bin"
-        log_info "Installing to $INSTALL_DIR"
-        mkdir -p "$INSTALL_DIR"
+    # Always install to /usr/local/bin (preferred for system-wide tools)
+    INSTALL_DIR="/usr/local/bin"
+    log_info "Installing to $INSTALL_DIR"
+
+    # Check if we need sudo
+    if [ -w "$INSTALL_DIR" ]; then
         mv "$TEMP_DIR/just" "$INSTALL_DIR/just"
         chmod +x "$INSTALL_DIR/just"
-
-        if [[ ":$PATH:" != *":$INSTALL_DIR:"* ]]; then
-            log_warn "Add $INSTALL_DIR to your PATH"
-            log_info "Add this to your ~/.zshrc or ~/.bashrc:"
-            echo "    export PATH=\"$INSTALL_DIR:\$PATH\""
-        fi
+    else
+        log_info "Requires sudo for $INSTALL_DIR"
+        sudo mv "$TEMP_DIR/just" "$INSTALL_DIR/just"
+        sudo chmod +x "$INSTALL_DIR/just"
     fi
 
     return 0
