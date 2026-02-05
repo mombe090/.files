@@ -8,13 +8,14 @@ This is a collection of my personal dotfiles and configurations to set up quickl
 
 ### Unix (Linux/macOS)
 
-**Method 1: Bootstrap (Recommended for new machines)**
+#### Method 1: Bootstrap (Recommended for new machines)
+
 ```bash
 # 1. Clone the repository
 git clone https://github.com/mombe090/.files.git ~/.dotfiles
 cd ~/.dotfiles
 
-# 2. Run bootstrap (installs curl, git, just)
+# 2. Run bootstrap (installs mise, yq, just, essential packages)
 bash _scripts/bootstrap.sh
 
 # 3. Install dotfiles
@@ -23,7 +24,16 @@ just install_full                 # Full installation
 just install_minimal              # Minimal installation
 ```
 
-**Method 2: Direct installation**
+**What bootstrap installs:**
+
+- ✅ mise (version manager) → `/usr/local/bin/mise`
+- ✅ yq v4.x (YAML parser) via mise
+- ✅ just v1.46.0 (command runner) → `/usr/local/bin/just`
+- ✅ Essential packages (build-essential, gcc, make, cmake, etc.)
+- ✅ Utilities: sudo, jq, wget (if not installed)
+
+#### Method 2: Direct installation
+
 ```bash
 # 1. Clone the repository
 git clone https://github.com/mombe090/.files.git ~/.dotfiles
@@ -96,8 +106,11 @@ The fastest way to set up a new machine with essential tools and Just command ru
 git clone https://github.com/mombe090/.files.git ~/.dotfiles
 cd ~/.dotfiles
 
-# Run bootstrap (installs curl, git, just)
+# Run bootstrap (interactive - will prompt for confirmation)
 bash _scripts/bootstrap.sh
+
+# Or non-interactive (auto-accepts all prompts)
+yes | bash _scripts/bootstrap.sh
 
 # See all available commands
 just --list
@@ -113,11 +126,27 @@ just doctor
 ```
 
 **What bootstrap.sh does:**
-- ✅ Detects your OS (macOS, Ubuntu, Fedora, Arch, etc.)
-- ✅ Installs essential tools: `curl`, `git`
-- ✅ Installs latest `just` binary (not outdated apt version)
-- ✅ Sets up PATH if needed
-- ✅ Interactive or non-interactive mode (`--yes` flag)
+
+- ✅ Detects your OS (macOS, Ubuntu, Debian, Fedora, Arch, etc.)
+- ✅ Installs essential tools: `curl`, `git` (if not already installed)
+- ✅ Installs **mise** version manager globally to `/usr/local/bin`
+- ✅ Installs essential utilities: `sudo`, `jq`, `wget` (if needed)
+- ✅ Installs **yq** v4.x (YAML parser) via mise (not the outdated apt version)
+- ✅ Installs essential development packages from YAML configs
+- ✅ Installs **just v1.46.0** from GitHub releases (not outdated apt v1.21.0)
+- ✅ Verifies installations with comprehensive diagnostics
+- ✅ Works in containers running as root (no sudo required)
+- ✅ Handles PATH setup and bash hash clearing automatically
+
+**Bootstrap Installation Order:**
+
+1. `curl` (if not installed)
+2. `git` (if not installed)
+3. `mise` → `/usr/local/bin/mise`
+4. `sudo`, `jq`, `wget` (if not installed)
+5. `yq` via mise (mikefarah's yq v4.x)
+6. Essential packages (build-essential, gcc, make, etc.)
+7. `just` v1.46.0 → `/usr/local/bin/just`
 
 ### Method 2: Just Command Runner (Already Have Essentials)
 
@@ -173,6 +202,7 @@ bash _scripts/install.sh --minimal  # Minimal installation
 ```
 
 **Installation Process:**
+
 1. Detects your OS (macOS, Debian, RHEL, Arch, NixOS)
 2. Installs package managers (Homebrew for macOS, uses native PM for Linux)
 3. Installs mise (universal tool version manager)
@@ -203,6 +233,7 @@ cd $HOME\.dotfiles\_scripts
 ```
 
 **Installation Process:**
+
 1. Installs package managers (WinGet + Chocolatey)
 2. Installs system packages (Git, VSCode, Docker, etc.)
 3. Installs JavaScript packages via Bun
@@ -210,6 +241,7 @@ cd $HOME\.dotfiles\_scripts
 5. Sets up PowerShell/Nushell profiles with Starship prompt
 
 **Windows Package Types:**
+
 - **Pro**: Professional development tools (Git, Docker, kubectl, Terraform, VSCode, etc.)
 - **Perso**: Professional + personal tools (VLC, Discord, Spotify, etc.)
 
@@ -228,6 +260,7 @@ bash _scripts/omarchy/install.sh --dry-run
 ```
 
 **Omarchy Features:**
+
 - Non-destructive injection-based configuration
 - Comprehensive backups before changes
 - Modular phases (preflight/packages/config/themes/post-install)
@@ -266,8 +299,9 @@ Platform-organized automation scripts:
 
 ```text
 _scripts/
+├── bootstrap.sh        # Main entry point for new machine setup
 ├── unix/               # Unix-like systems (Linux/macOS)
-│   ├── installers/     # Tool installation scripts (13)
+│   ├── installers/     # Tool installation scripts (14)
 │   ├── tools/          # Utility scripts (4)
 │   ├── checkers/       # Validation scripts (1)
 │   └── lib/            # Shared shell libraries (5)
@@ -283,8 +317,19 @@ _scripts/
 │   └── lib/            # PowerShell libraries (4)
 ├── omarchy/            # Omarchy Linux specialized installer
 ├── just/               # Just command runner bootstrap
+│   └── install-just.sh # Installs just v1.46.0 from GitHub releases
 └── configs/            # Configuration files (YAML)
-    ├── unix/packages/  # Unix package configs (2)
+    ├── unix/packages/  # Unix package configs
+    │   ├── pro/        # Professional packages (macOS + Ubuntu/Debian only)
+    │   │   ├── apt.pkg.yml      # APT packages (9 categories)
+    │   │   ├── brew.pkg.yml     # Homebrew packages (9 categories)
+    │   │   └── mise.pkg.yml     # Mise tools
+    │   └── perso/      # Personal packages (all platforms + distros)
+    │       ├── apt.pkg.yml      # APT packages
+    │       ├── brew.pkg.yml     # Homebrew packages
+    │       ├── dnf.pkg.yml      # DNF packages (Fedora/RHEL)
+    │       ├── pacman.pkg.yml   # Pacman packages (Arch)
+    │       └── mise.pkg.yml     # Mise tools
     └── windows/
         ├── packages/   # Windows package configs (6)
         └── platform/   # Platform config (1)
@@ -294,32 +339,61 @@ _scripts/
 
 ## Dependencies
 
-### Required
+### Automatic Installation (via Bootstrap)
 
-These are automatically installed by the install script:
+The `bootstrap.sh` script automatically installs these essential tools:
+
+#### Phase 1: Prerequisites
+
+- **git** - Version control (if not installed)
+- **curl** - Download tool (if not installed)
+
+#### Phase 2: Core Tools
+
+- **mise** v2024+ - Universal tool version manager
+  - Installed globally to `/usr/local/bin/mise`
+  - Environment: `MISE_DATA_DIR="$HOME/.local/share/mise"`
+  - Environment: `MISE_CACHE_DIR="$HOME/.cache/mise"`
+
+#### Phase 3: Utilities
+
+- **sudo** - Privilege escalation (Linux containers)
+- **jq** - JSON processor
+- **wget** - File downloader
+
+#### Phase 4: YAML Tools
+
+- **yq** v4.x - YAML parser (mikefarah's version via mise)
+  - ⚠️ Ubuntu's apt provides Python yq v3.x (wrong version)
+  - ✅ Bootstrap installs mikefarah's yq v4.x via mise
+
+#### Phase 5: Essential Packages
+
+- **build-essential** - Compiler toolchain (Debian/Ubuntu)
+- **gcc/g++** - C/C++ compilers
+- **make** - Build automation
+- **cmake** - Cross-platform build system
+- Development libraries: OpenSSL, libffi, readline, zlib, SQLite, ncurses
+
+#### Phase 6: Command Runner
+
+- **just** v1.46.0 - Task runner
+  - Downloaded from GitHub releases (not apt)
+  - Installed to `/usr/local/bin/just`
+  - ⚠️ Ubuntu apt provides v1.21.0 (outdated)
+
+### Manual Installation (Without Bootstrap)
+
+If you skip bootstrap and use direct installation:
 
 - **git** - Version control
 - **curl** - Download tool
-- **zsh** - Shell
-- **stow** - Symlink manager
+- **zsh** - Shell (installed by main installer)
+- **stow** - Symlink manager (installed by main installer)
 
-### Build Essentials (Optional but Recommended)
+### Optional but Recommended (Installed Automatically)
 
-For compiling software from source and building native extensions:
-
-- **build-essential** (Debian) / **base-devel** (Arch) / **Development Tools** (RHEL)
-- **gcc/g++** - C/C++ compilers
-- **make** - Build automation tool
-- **cmake** - Cross-platform build system
-- **pkg-config** - Package configuration tool
-- Development libraries: OpenSSL, libffi, readline, zlib, SQLite, ncurses, etc.
-- Python development headers and pip
-
-Use `bash _scripts/unix/installers/install-essentials.sh` to install these automatically.
-
-### Optional (Recommended)
-
-The install script will attempt to install these via mise or your system package manager:
+Bootstrap and the main installer will install these via mise or your system package manager:
 
 - **mise** - Universal tool version manager (preferred)
 - **bat** - Modern cat replacement with syntax highlighting
@@ -349,6 +423,7 @@ These dotfiles include:
 ### Shell Configuration
 
 **Linux & macOS:**
+
 - ⚡ **Zsh** with [Zinit](https://github.com/zdharma-continuum/zinit) plugin manager
 - 🎨 **Starship** prompt with custom configuration
 - 📝 Custom aliases for git, kubernetes, terraform, and more
@@ -357,6 +432,7 @@ These dotfiles include:
 - 🔧 Modular configuration split into logical files
 
 **Windows:**
+
 - 🪟 **PowerShell 7** with custom profile and Starship prompt
 - 🐚 **Nushell** with Starship prompt and vi mode
 - 📝 Git and Kubernetes aliases in both shells
@@ -470,6 +546,7 @@ Located in `_scripts/unix/`, using Bash with **shared libraries** to eliminate c
 - **`package-managers.sh`** - Package manager abstraction (install_package, update_packages, etc.)
 
 **Usage in scripts:**
+
 ```bash
 source "$DOTFILES_ROOT/_scripts/unix/lib/init.sh"  # Load all libraries
 log_info "Installing package..."
@@ -478,8 +555,13 @@ install_package git  # Automatically uses correct PM for your OS
 
 #### Installers (`installers/`)
 
+- **`install-packages.sh`** - YAML-based package installer (NEW)
+  - Parses package configs from `_scripts/configs/unix/packages/`
+  - Supports: APT, Homebrew, DNF, Pacman, Mise
+  - Flags: `--pro`, `--perso`, `--minimal`, `--category <name>`, `--dry-run`
+  - Categories: essentials, development, build_tools, libraries, cloud, fonts, shell_tools, monitoring, runtimes
 - **`install-homebrew.sh`** - Install Homebrew (macOS)
-- **`install-mise.sh`** - Install mise version manager
+- **`install-mise.sh`** - Install mise version manager globally
 - **`install-essentials.sh`** - Install build tools (gcc, make, cmake, dev libraries)
 - **`install-docker.sh`** - Install Docker Engine (Ubuntu)
 - **`install-zsh.sh`** - Install and set zsh as default shell
@@ -546,17 +628,50 @@ YAML package configurations in `_scripts/configs/`:
 
 #### Unix Configs (`unix/packages/`)
 
-- **`js.pkg.yml`** - JavaScript packages for Unix
-- **`uv-tools.pkg.yml`** - UV Python tools
+**Professional** (`pro/` - macOS + Ubuntu/Debian only):
+
+- **`apt.pkg.yml`** - APT packages (9 categories)
+- **`brew.pkg.yml`** - Homebrew packages (9 categories)
+- **`mise.pkg.yml`** - Mise tools (node, python, rust, etc.)
+
+**Personal** (`perso/` - all platforms + distros):
+
+- **`apt.pkg.yml`** - APT packages (Ubuntu/Debian)
+- **`brew.pkg.yml`** - Homebrew packages (macOS)
+- **`dnf.pkg.yml`** - DNF packages (Fedora/RHEL)
+- **`pacman.pkg.yml`** - Pacman packages (Arch Linux)
+- **`mise.pkg.yml`** - Mise tools
+
+**Package Categories:**
+
+1. `essentials` - Core tools (git, curl, wget, stow, zsh)
+2. `development` - Dev tools (neovim, ripgrep, fd, fzf)
+3. `build_tools` - Compilers and build systems (gcc, make, cmake)
+4. `libraries` - Development libraries (openssl, libffi, zlib)
+5. `cloud` - Cloud CLIs (aws-cli, azure-cli, gcloud)
+6. `fonts` - Nerd Fonts for terminal icons
+7. `shell_tools` - Shell enhancements (bat, eza, zoxide, starship)
+8. `monitoring` - System monitors (btop, htop)
+9. `runtimes` - Language runtimes and interpreters
+
+**Package Parser Features:**
+
+- Auto-detects OS and package manager
+- Supports minimal mode (essentials only)
+- Category filtering: `--category essentials`
+- Dry-run mode: `--dry-run`
+- Profile selection: `--pro` or `--perso`
 
 #### Windows Configs (`windows/packages/`)
 
 **Professional** (`pro/`):
+
 - **`choco.pkg.yml`** - Professional Chocolatey packages
 - **`winget.pkg.yml`** - Professional WinGet packages
 - **`js.pkg.yml`** - Professional JavaScript packages
 
 **Personal** (`perso/`):
+
 - **`choco.pkg.yml`** - Personal Chocolatey packages
 - **`winget.pkg.yml`** - Personal WinGet packages
 - **`js.pkg.yml`** - Personal JavaScript packages
@@ -573,6 +688,7 @@ Specialized installer for [Omarchy Linux](https://omarchy.org) (Arch-based):
 - Modular phases: `preflight/`, `packages/`, `config/`, `themes/`, `post-install/`
 
 For detailed documentation:
+
 - **Unix**: [_scripts/unix/README.md](_scripts/unix/README.md) (if exists)
 - **Windows**: [_scripts/windows/QUICK-START.md](_scripts/windows/QUICK-START.md)
 
@@ -611,6 +727,55 @@ For detailed documentation:
 - **[CHANGELOG.md](CHANGELOG.md)** - Version history and changes
 
 ## Troubleshooting
+
+### Bootstrap Issues
+
+#### Just command not found after bootstrap
+
+If `just --version` fails after bootstrap, try:
+
+```bash
+# Clear bash hash and update PATH
+hash -r
+export PATH="/usr/local/bin:$PATH"
+just --version
+```
+
+**Root cause**: Bash may cache the old location if just was previously installed via apt.
+
+#### YQ not working (wrong version)
+
+Ubuntu's apt provides Python yq v3.x, but we need mikefarah's yq v4.x:
+
+```bash
+# Remove apt version
+sudo apt remove yq
+
+# Install via mise
+mise install yq@latest
+mise use -g yq@latest
+
+# Verify
+yq --version  # Should show: yq (https://github.com/mikefarah/yq/) version v4.x
+```
+
+#### Mise not in PATH
+
+Ensure mise shims are in PATH:
+
+```bash
+export PATH="$HOME/.local/share/mise/shims:$HOME/.local/bin:$PATH"
+eval "$(mise activate bash)"  # or zsh
+```
+
+Add to your shell config permanently:
+
+```bash
+# For zsh: ~/.zshrc
+# For bash: ~/.bashrc
+export PATH="$HOME/.local/share/mise/shims:$HOME/.local/bin:$PATH"
+eval "$(mise activate $(basename $SHELL))"
+```
 
 ### Zinit not loading plugins
 
