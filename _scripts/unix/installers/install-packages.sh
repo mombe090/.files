@@ -138,20 +138,17 @@ check_dependencies() {
 
             case "$pm" in
                 apt)
-                    log_info "Installing yq via APT..."
-                    sudo apt-get update -qq
-                    sudo apt-get install -y yq || {
-                        log_warning "APT installation failed, trying snap..."
-                        sudo snap install yq || {
-                            log_warning "Snap installation failed, trying mise..."
-                            if has_command mise; then
-                                mise install yq@latest
-                            else
-                                log_error "All installation methods failed"
-                                log_info "Visit: https://github.com/mikefarah/yq"
-                                exit 1
-                            fi
-                        }
+                    # Ubuntu's apt has old python yq v3.x - use snap instead
+                    log_info "Installing yq via snap (apt has incompatible python yq)..."
+                    sudo snap install yq || {
+                        log_warning "Snap installation failed, trying mise..."
+                        if has_command mise; then
+                            mise install yq@latest
+                        else
+                            log_error "All installation methods failed"
+                            log_info "Visit: https://github.com/mikefarah/yq"
+                            exit 1
+                        fi
                     }
                     ;;
                 dnf)

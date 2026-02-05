@@ -248,28 +248,29 @@ else
 fi
 
 # Install yq (YAML parser - required for install-packages.sh)
+# NOTE: Need mikefarah's yq v4.x, not python yq v3.x
 if has_command yq; then
     YQ_VERSION=$(yq --version 2>&1 || echo "unknown")
     if [[ "$YQ_VERSION" =~ "mikefarah" ]]; then
         log_success "yq already installed (mikefarah's version)"
     else
-        log_warn "Found python yq, but need mikefarah's yq"
+        log_warn "Found incompatible yq version (need mikefarah's yq v4.x)"
         log_step "Installing mikefarah's yq..."
         case "$PM" in
             brew)
                 brew install yq
                 ;;
             apt)
-                sudo apt-get update -qq
-                sudo apt-get install -y yq || {
-                    log_warn "APT installation failed, trying snap..."
-                    sudo snap install yq
-                }
+                # Ubuntu's apt has old python yq - use snap instead
+                log_info "Installing via snap (apt has incompatible python yq)..."
+                sudo snap install yq
                 ;;
             dnf)
+                # Fedora has correct version in repos
                 sudo dnf install -y yq
                 ;;
             pacman)
+                # Arch has correct version in repos
                 sudo pacman -S --noconfirm yq
                 ;;
             *)
@@ -287,11 +288,9 @@ else
             brew install yq
             ;;
         apt)
-            sudo apt-get update -qq
-            sudo apt-get install -y yq || {
-                log_warn "APT installation failed, trying snap..."
-                sudo snap install yq
-            }
+            # Ubuntu's apt has old python yq - use snap instead
+            log_info "Installing via snap (apt has incompatible python yq)..."
+            sudo snap install yq
             ;;
         dnf)
             sudo dnf install -y yq
