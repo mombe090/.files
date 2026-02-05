@@ -46,10 +46,75 @@ install_via_brew() {
     return 1
 }
 
+install_via_binary() {
+    # Download latest binary from GitHub releases (preferred method for latest version)
+    log_info "Installing latest binary from GitHub releases..."
+    
+    # Detect architecture
+    ARCH=$(uname -m)
+    case "$ARCH" in
+        x86_64)  ARCH="x86_64" ;;
+        aarch64) ARCH="aarch64" ;;
+        arm64)   ARCH="aarch64" ;;
+        *)
+            log_warn "Unsupported architecture: $ARCH"
+            return 1
+            ;;
+    esac
+    
+    # Detect OS for binary naming
+    case "$OS" in
+        linux) PLATFORM="unknown-linux-musl" ;;
+        macos) PLATFORM="apple-darwin" ;;
+        *)
+            log_warn "Unsupported OS for binary install: $OS"
+            return 1
+            ;;
+    esac
+    
+    BINARY_NAME="just-${ARCH}-${PLATFORM}"
+    DOWNLOAD_URL="https://github.com/casey/just/releases/latest/download/${BINARY_NAME}.tar.gz"
+    
+    log_info "Downloading: $BINARY_NAME"
+    
+    # Create temp directory
+    TEMP_DIR=$(mktemp -d)
+    trap "rm -rf '$TEMP_DIR'" EXIT
+    
+    # Download and extract
+    if ! curl -fsSL "$DOWNLOAD_URL" | tar -xz -C "$TEMP_DIR"; then
+        log_warn "Failed to download binary"
+        return 1
+    fi
+    
+    # Install to /usr/local/bin if we have permission, otherwise ~/.local/bin
+    if [ -w "/usr/local/bin" ] || sudo -n true 2>/dev/null; then
+        INSTALL_DIR="/usr/local/bin"
+        log_info "Installing to $INSTALL_DIR (requires sudo)"
+        sudo mv "$TEMP_DIR/just" "$INSTALL_DIR/just"
+        sudo chmod +x "$INSTALL_DIR/just"
+    else
+        INSTALL_DIR="$HOME/.local/bin"
+        log_info "Installing to $INSTALL_DIR"
+        mkdir -p "$INSTALL_DIR"
+        mv "$TEMP_DIR/just" "$INSTALL_DIR/just"
+        chmod +x "$INSTALL_DIR/just"
+        
+        if [[ ":$PATH:" != *":$INSTALL_DIR:"* ]]; then
+            log_warn "Add $INSTALL_DIR to your PATH"
+            log_info "Add this to your ~/.zshrc or ~/.bashrc:"
+            echo "    export PATH=\"$INSTALL_DIR:\$PATH\""
+        fi
+    fi
+    
+    return 0
+}
+
 install_via_apt() {
-    # just is available in the universe repo on Ubuntu 22.04+
+    # WARNING: apt version may be outdated (e.g., 1.21.0 vs latest 1.46.0)
+    # Only use as fallback if binary download fails
     if command -v apt &> /dev/null; then
-        log_info "Installing via apt..."
+        log_warn "Installing via apt (may be outdated version)..."
         sudo apt-get update -qq && sudo apt-get install -y -qq just
         return 0
     fi
@@ -80,13 +145,15 @@ install_via_script() {
 }
 
 # =============================================================================
-# Install — prefer native package manager, fall back to official script
+# Install — prefer latest binary, fall back to brew/apt/script
 # =============================================================================
 
 if [ "$OS" = "macos" ]; then
-    install_via_brew || install_via_script
+    # macOS: Try brew first (usually up-to-date), then binary, then script
+    install_via_brew || install_via_binary || install_via_script
 else
-    install_via_apt || install_via_script
+    # Linux: Try binary first (latest), then apt (may be old), then script
+    install_via_binary || install_via_apt || install_via_script
 fi
 
 # Verify installation

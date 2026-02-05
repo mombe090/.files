@@ -504,10 +504,10 @@ export MISE_HOME="$HOME/.local/share/mise"
 
 ### Color Variables
 
-Use Unicode escape sequences in Just recipes:
+Use Unicode escape sequences in Just recipes (requires Just 1.14.0+):
 
 ```just
-# ✅ CORRECT
+# ✅ CORRECT (Just 1.14.0+, October 2023)
 reset := "\u{1b}[0m"
 bold := "\u{1b}[1m"
 red := "\u{1b}[31m"
@@ -515,6 +515,12 @@ red := "\u{1b}[31m"
 # ❌ WRONG - Invalid in Just
 reset := "\033[0m"
 ```
+
+**Installation Note**: The `_scripts/just/install-just.sh` script downloads the **latest binary** from GitHub releases to ensure modern Just features work. On Linux, it prefers the binary over apt (which may have outdated versions like 1.21.0).
+
+**Installation order**:
+- **macOS**: brew → binary → script
+- **Linux**: binary → apt → script
 
 ### Recipe Organization
 

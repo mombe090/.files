@@ -26,6 +26,7 @@ config_dir := home / ".config"
 stow_target := config_dir
 
 # Colors for output — \u{1b} is the ESC character (U+001B)
+# Requires Just 1.14.0+ (October 2023) for Unicode escape sequences
 color_reset := "\u{1b}[0m"
 color_green := "\u{1b}[0;32m"
 color_blue := "\u{1b}[0;34m"
