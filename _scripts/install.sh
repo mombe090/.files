@@ -3,6 +3,16 @@
 # Prioritizes mise, falls back to OS package managers
 set -e
 
+# ---------------------------------------------------------------------------
+# Ensure HOME points to the actual current user, not a stale value left over
+# from sudo / su without a login shell.  getent is POSIX-portable on Linux.
+# ---------------------------------------------------------------------------
+REAL_HOME=$(getent passwd "$(whoami)" | cut -d: -f6)
+if [[ "$HOME" != "$REAL_HOME" ]]; then
+    echo "[WARN] HOME was $HOME, correcting to $REAL_HOME"
+    export HOME="$REAL_HOME"
+fi
+
 DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SCRIPTS_DIR="$DOTFILES_ROOT/_scripts/linux/sh"
 
