@@ -54,76 +54,76 @@ install_component COMP:
 [macos]
 install_homebrew:
     @just _log_step "Installing Homebrew..."
-    @{{installers}}/install-homebrew.sh
+    @bash {{installers}}/install-homebrew.sh
 
 # Install mise version manager
 [unix]
 install_mise:
     @just _log_step "Installing mise..."
-    @{{installers}}/install-mise.sh
+    @bash {{installers}}/install-mise.sh
 
 # Install essential build tools (gcc, make, cmake, etc.)
 [unix]
 install_essentials:
     @just _log_step "Installing essential build tools..."
-    @{{installers}}/install-essentials.sh
+    @bash {{installers}}/install-essentials.sh
 
 # Install zsh shell
 [unix]
 install_zsh:
     @just _log_step "Installing zsh..."
-    @{{installers}}/install-zsh.sh
+    @bash {{installers}}/install-zsh.sh
 
 # Install GNU Stow
 [unix]
 install_stow:
     @just _log_step "Installing GNU Stow..."
-    @{{installers}}/install-stow.sh
+    @bash {{installers}}/install-stow.sh
 
 # Install modern Nerd Fonts
 [unix]
 install_fonts:
     @just _log_step "Installing modern fonts..."
-    @{{installers}}/install-modern-fonts.sh
+    @bash {{installers}}/install-modern-fonts.sh
 
 # Install .NET SDK
 [unix]
 install_dotnet:
     @just _log_step "Installing .NET SDK..."
-    @AUTO_INSTALL=true {{installers}}/install-dotnet.sh
+    @AUTO_INSTALL=true bash {{installers}}/install-dotnet.sh
 
 # Install Docker Engine (Ubuntu only)
 [linux]
 install_docker:
     @just _log_step "Installing Docker..."
-    @{{installers}}/install-docker.sh
+    @bash {{installers}}/install-docker.sh
 
 # Install JavaScript/TypeScript packages
 [unix]
 install_js_packages TYPE="pro":
     @just _log_step "Installing JavaScript packages ({{TYPE}})..."
-    @AUTO_CONFIRM=true {{installers}}/install-js-packages.sh --{{TYPE}}
+    @AUTO_CONFIRM=true bash {{installers}}/install-js-packages.sh --{{TYPE}}
 
 # Install LazyVim Neovim distribution
 [unix]
 install_lazyvim:
     @just _log_step "Installing LazyVim..."
-    @{{installers}}/install-lazyvim.sh
+    @bash {{installers}}/install-lazyvim.sh
 
 # Install Nushell
 [unix]
 install_nushell:
     @just _log_step "Installing Nushell..."
-    @{{installers}}/install-nushell.sh
+    @bash {{installers}}/install-nushell.sh
 
 # Install UV Python tools
 [unix]
 install_uv_tools:
     @just _log_step "Installing UV tools..."
-    @{{installers}}/install-uv-tools.sh
+    @bash {{installers}}/install-uv-tools.sh
 
 # Install Clawdbot CLI (optional)
 [unix]
 install_clawdbot:
     @just _log_step "Installing Clawdbot CLI..."
-    @{{installers}}/install-clawdbot.sh
+    @bash {{installers}}/install-clawdbot.sh
