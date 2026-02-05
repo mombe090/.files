@@ -456,44 +456,89 @@ fi
 log_header "Installing Just Command Runner"
 
 # Remove old apt version if it exists
-if command -v just &> /dev/null; then
-    CURRENT_VERSION=$(just --version 2>&1 || echo "unknown")
-    if [[ "$CURRENT_VERSION" == *"1.21.0"* ]]; then
-        log_warn "Found old just version (1.21.0 from apt)"
-        log_step "Removing old version..."
-        if command -v apt &> /dev/null; then
-            sudo apt-get remove -y just 2>/dev/null || true
-        fi
+if command -v apt &> /dev/null; then
+    if dpkg -l 2>/dev/null | grep -q "^ii.*just"; then
+        log_warn "Found just installed via apt (likely v1.21.0)"
+        log_step "Removing apt version..."
+        sudo apt-get remove -y just 2>/dev/null || true
+        sudo apt-get autoremove -y 2>/dev/null || true
     fi
 fi
 
+# Remove old binaries and symlinks
+log_step "Cleaning old just installations..."
+if [[ -f /usr/bin/just ]] || [[ -L /usr/bin/just ]]; then
+    log_info "Removing /usr/bin/just"
+    sudo rm -f /usr/bin/just
+fi
+
+# Install just v1.46.0
+log_step "Installing just v1.46.0..."
 if bash "$SCRIPTS_DIR/just/install-just.sh"; then
-    log_success "Just installed successfully"
+    log_success "Just installer completed"
 else
     log_error "Failed to install Just"
     log_info "You can install it manually from: https://github.com/casey/just"
     exit 1
 fi
 
-# Verify just is in PATH and correct version
-hash -r  # Clear bash command hash
-if has_command just; then
-    JUST_VERSION=$(just --version)
+# Verify binary exists
+log_step "Verifying just installation..."
+if [[ ! -f /usr/local/bin/just ]]; then
+    log_error "Binary not found at /usr/local/bin/just"
+    log_info "Installation failed - binary was not copied"
+    exit 1
+fi
+
+# Check binary is executable
+if [[ ! -x /usr/local/bin/just ]]; then
+    log_warn "Binary exists but not executable, fixing..."
+    sudo chmod +x /usr/local/bin/just
+fi
+
+# Ensure /usr/local/bin is in PATH and comes first
+if [[ ":$PATH:" != *":/usr/local/bin:"* ]]; then
+    log_warn "/usr/local/bin not in PATH, adding..."
+    export PATH="/usr/local/bin:$PATH"
+else
+    # Ensure it comes before /usr/bin
+    export PATH="/usr/local/bin:${PATH//:\/usr\/local\/bin/}"
+fi
+
+# Clear bash command hash
+hash -r 2>/dev/null || true
+
+# Verify just is accessible
+if command -v just &>/dev/null; then
+    JUST_VERSION=$(just --version 2>&1)
+    JUST_LOCATION=$(which just 2>&1)
+
     log_success "Just is ready: $JUST_VERSION"
+    log_info "Location: $JUST_LOCATION"
 
     # Verify it's the correct version
     if [[ "$JUST_VERSION" == *"1.46.0"* ]]; then
-        log_success "Correct version installed (1.46.0)"
+        log_success "✓ Correct version (1.46.0)"
     else
-        log_warn "Unexpected version: $JUST_VERSION"
-        log_info "Expected: just 1.46.0"
-        log_info "Check: which just"
+        log_warn "Unexpected version: $JUST_VERSION (expected 1.46.0)"
+    fi
+
+    # Verify it's in the correct location
+    if [[ "$JUST_LOCATION" != "/usr/local/bin/just" ]]; then
+        log_warn "Just found at unexpected location: $JUST_LOCATION"
+        log_info "Expected: /usr/local/bin/just"
+        log_info "This may cause issues. Check your PATH:"
+        log_info "  Current PATH: $PATH"
     fi
 else
-    log_warn "Just installed but not in PATH yet"
-    log_info "/usr/local/bin should be in PATH by default"
-    log_info "Try opening a new terminal or run:"
-    echo "    hash -r    # Refresh command hash table"
+    log_error "Just command not found after installation"
+    log_info "Binary exists at: /usr/local/bin/just"
+    log_info "But command not accessible. Diagnostic info:"
+    echo "  PATH: $PATH"
+    echo "  Hash: $(hash -t just 2>&1 || echo 'not in hash')"
+    echo "  Which: $(which just 2>&1 || echo 'not found')"
+    log_info "Try manually: export PATH=\"/usr/local/bin:\$PATH\" && hash -r"
+    exit 1
 fi
 
 # =============================================================================
