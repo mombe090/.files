@@ -73,6 +73,7 @@ DESCRIPTION:
     Installs essential development tools:
     - curl (required for downloads)
     - git (required for version control)
+    - Essential packages (stow, zsh, build-essential, etc.)
     - Just command runner (modern task runner)
 
     After bootstrap completes, use:
@@ -166,6 +167,7 @@ if [[ "$AUTO_YES" != "true" ]]; then
     echo -e "${BOLD}This script will install:${NC}"
     echo "  • curl (if not installed)"
     echo "  • git (if not installed)"
+    echo "  • Essential development packages (via install-packages.sh)"
     echo "  • Just command runner (latest version)"
     echo ""
     echo -e "${YELLOW}Package manager: $PM${NC}"
@@ -244,6 +246,28 @@ else
 fi
 
 # =============================================================================
+# Install Essential Packages
+# =============================================================================
+
+log_header "Installing Essential Packages"
+
+# Check if install-packages.sh exists
+if [[ -f "$SCRIPTS_DIR/unix/installers/install-packages.sh" ]]; then
+    log_step "Installing essential development packages..."
+
+    # Install only essential packages (minimal mode)
+    if bash "$SCRIPTS_DIR/unix/installers/install-packages.sh" --pro --minimal --category essentials; then
+        log_success "Essential packages installed"
+    else
+        log_warn "Some packages may have failed to install"
+        log_info "You can retry with: just packages-minimal"
+    fi
+else
+    log_warn "install-packages.sh not found, skipping package installation"
+    log_info "Essential packages will be installed during full setup"
+fi
+
+# =============================================================================
 # Install Just Command Runner
 # =============================================================================
 
@@ -279,6 +303,7 @@ log_header "Bootstrap Complete! 🎉"
 echo -e "${GREEN}Essential tools installed:${NC}"
 echo "  ✓ curl"
 echo "  ✓ git"
+echo "  ✓ Essential development packages"
 echo "  ✓ just"
 echo ""
 
