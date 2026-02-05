@@ -14,19 +14,6 @@
 #   - get_home_dir: Get correct user home directory
 # =============================================================================
 
-<#
-.SYNOPSIS
-    Detect the operating system type.
-
-.OUTPUTS
-    String - "macos", "linux", or "unknown"
-
-.EXAMPLE
-    OS=$(detect_os)
-    if [[ "$OS" == "macos" ]]; then
-        # macOS-specific code
-    fi
-#>
 detect_os() {
     case "$OSTYPE" in
         darwin*)  echo "macos" ;;
@@ -35,20 +22,6 @@ detect_os() {
     esac
 }
 
-<#
-.SYNOPSIS
-    Get the Linux distribution ID.
-
-.OUTPUTS
-    String - Distribution ID (ubuntu/debian/fedora/arch/etc) or "unknown"
-
-.EXAMPLE
-    DISTRO=$(get_distro)
-    case "$DISTRO" in
-        ubuntu|debian) apt-get install ... ;;
-        fedora|rhel)   dnf install ... ;;
-    esac
-#>
 get_distro() {
     if [[ -f /etc/os-release ]]; then
         # Source the file and return ID
@@ -59,52 +32,14 @@ get_distro() {
     fi
 }
 
-<#
-.SYNOPSIS
-    Check if running on macOS.
-
-.OUTPUTS
-    Boolean - 0 if macOS, 1 otherwise
-
-.EXAMPLE
-    if is_macos; then
-        brew install package
-    fi
-#>
 is_macos() {
     [[ "$(detect_os)" == "macos" ]]
 }
 
-<#
-.SYNOPSIS
-    Check if running on Linux.
-
-.OUTPUTS
-    Boolean - 0 if Linux, 1 otherwise
-
-.EXAMPLE
-    if is_linux; then
-        apt-get install package
-    fi
-#>
 is_linux() {
     [[ "$(detect_os)" == "linux" ]]
 }
 
-<#
-.SYNOPSIS
-    Detect the available package manager.
-
-.OUTPUTS
-    String - "brew", "apt", "dnf", "yum", "pacman", "zypper", or "unknown"
-
-.EXAMPLE
-    PM=$(get_package_manager)
-    case "$PM" in
-        apt) sudo apt-get install ... ;;
-        brew) brew install ... ;;
-    esac
-#>
 get_package_manager() {
     local os=$(detect_os)
     
@@ -134,36 +69,10 @@ get_package_manager() {
     echo "unknown"
 }
 
-<#
-.SYNOPSIS
-    Check if running as root.
-
-.OUTPUTS
-    Boolean - 0 if root, 1 otherwise
-
-.EXAMPLE
-    if is_root; then
-        echo "Running as root"
-    fi
-#>
 is_root() {
     [[ $EUID -eq 0 ]]
 }
 
-<#
-.SYNOPSIS
-    Get the correct user home directory.
-
-.DESCRIPTION
-    Ensures HOME points to the actual current user's home directory.
-    Fixes issues with stale HOME after using 'su' without '-'.
-
-.OUTPUTS
-    String - User's home directory path
-
-.EXAMPLE
-    HOME=$(get_home_dir)
-#>
 get_home_dir() {
     # Get real home from passwd database
     local real_home
@@ -177,17 +86,6 @@ get_home_dir() {
     echo "$real_home"
 }
 
-<#
-.SYNOPSIS
-    Ensure HOME environment variable is correct.
-
-.DESCRIPTION
-    Corrects HOME if it's stale (happens with 'su' without '-').
-    This function modifies the HOME environment variable directly.
-
-.EXAMPLE
-    ensure_home_correct
-#>
 ensure_home_correct() {
     local real_home
     real_home=$(getent passwd "$(whoami)" | cut -d: -f6)

@@ -13,41 +13,10 @@
 #   - check_internet: Check internet connectivity
 # =============================================================================
 
-<#
-.SYNOPSIS
-    Check if a command exists in PATH.
-
-.PARAMETER cmd
-    The command name to check.
-
-.OUTPUTS
-    Boolean - 0 if command exists, 1 otherwise
-
-.EXAMPLE
-    if has_command git; then
-        echo "Git is installed"
-    fi
-#>
 has_command() {
     command -v "$1" &>/dev/null
 }
 
-<#
-.SYNOPSIS
-    Retry a command multiple times with exponential backoff.
-
-.PARAMETER max_attempts
-    Maximum number of retry attempts (default: 3).
-
-.PARAMETER command...
-    The command and its arguments to execute.
-
-.OUTPUTS
-    Boolean - 0 if command succeeds, 1 if all retries fail
-
-.EXAMPLE
-    retry 5 curl -fsSL https://example.com/file.tar.gz
-#>
 retry() {
     local max_attempts=3
     local attempt=1
@@ -79,23 +48,6 @@ retry() {
     return 1
 }
 
-<#
-.SYNOPSIS
-    Create a timestamped backup of a file.
-
-.PARAMETER file
-    The file to backup.
-
-.PARAMETER backup_dir
-    Optional backup directory (default: same directory as file).
-
-.OUTPUTS
-    String - Path to the backup file
-
-.EXAMPLE
-    backup_file ~/.zshrc
-    backup_file ~/.config/nvim/init.lua ~/.backups/
-#>
 backup_file() {
     local file="$1"
     local backup_dir="${2:-$(dirname "$file")}"
@@ -119,24 +71,6 @@ backup_file() {
     echo "$backup_path"
 }
 
-<#
-.SYNOPSIS
-    Ask for user confirmation.
-
-.PARAMETER message
-    The prompt message to display.
-
-.PARAMETER default
-    Default answer: "y" or "n" (default: "n").
-
-.OUTPUTS
-    Boolean - 0 if user confirms (yes), 1 otherwise (no)
-
-.EXAMPLE
-    if confirm_prompt "Continue with installation?"; then
-        install_package
-    fi
-#>
 confirm_prompt() {
     local message="$1"
     local default="${2:-n}"
@@ -157,19 +91,6 @@ confirm_prompt() {
     esac
 }
 
-<#
-.SYNOPSIS
-    Create directories safely with error checking.
-
-.PARAMETER path
-    The directory path to create.
-
-.OUTPUTS
-    Boolean - 0 if successful, 1 otherwise
-
-.EXAMPLE
-    safe_mkdir ~/.config/nvim
-#>
 safe_mkdir() {
     local path="$1"
     
@@ -187,21 +108,6 @@ safe_mkdir() {
     fi
 }
 
-<#
-.SYNOPSIS
-    Check internet connectivity.
-
-.PARAMETER host
-    Host to ping (default: 8.8.8.8 - Google DNS).
-
-.OUTPUTS
-    Boolean - 0 if internet is reachable, 1 otherwise
-
-.EXAMPLE
-    if check_internet; then
-        echo "Internet is available"
-    fi
-#>
 check_internet() {
     local host="${1:-8.8.8.8}"
     
@@ -218,23 +124,6 @@ check_internet() {
     return 1
 }
 
-<#
-.SYNOPSIS
-    Get the absolute path of the dotfiles repository root.
-
-.DESCRIPTION
-    Resolves the path relative to the calling script's location.
-
-.PARAMETER levels_up
-    Number of levels to go up from the script directory (default: 1).
-
-.OUTPUTS
-    String - Absolute path to dotfiles root
-
-.EXAMPLE
-    # Script is in _scripts/unix/installers/ (3 levels deep)
-    DOTFILES_ROOT=$(get_dotfiles_root 3)
-#>
 get_dotfiles_root() {
     local levels_up="${1:-1}"
     local script_dir="$(cd "$(dirname "${BASH_SOURCE[1]}")" && pwd)"

@@ -14,23 +14,6 @@
 #   - install_with_pacman: Install using pacman (Arch)
 # =============================================================================
 
-<#
-.SYNOPSIS
-    Install a package using the available package manager.
-
-.PARAMETER package_name
-    The name of the package to install.
-
-.PARAMETER pm
-    Optional: specific package manager to use (brew/apt/dnf/yum/pacman).
-
-.OUTPUTS
-    Boolean - 0 if successful, 1 otherwise
-
-.EXAMPLE
-    install_package git
-    install_package git brew  # Force use of Homebrew
-#>
 install_package() {
     local package_name="$1"
     local pm="${2:-$(get_package_manager)}"
@@ -58,24 +41,6 @@ install_package() {
     esac
 }
 
-<#
-.SYNOPSIS
-    Check if a package is installed.
-
-.PARAMETER package_name
-    The name of the package to check.
-
-.PARAMETER pm
-    Optional: specific package manager to use.
-
-.OUTPUTS
-    Boolean - 0 if installed, 1 otherwise
-
-.EXAMPLE
-    if check_package_installed git; then
-        echo "Git is installed"
-    fi
-#>
 check_package_installed() {
     local package_name="$1"
     local pm="${2:-$(get_package_manager)}"
@@ -100,19 +65,6 @@ check_package_installed() {
     esac
 }
 
-<#
-.SYNOPSIS
-    Update all packages using the available package manager.
-
-.PARAMETER pm
-    Optional: specific package manager to use.
-
-.OUTPUTS
-    Boolean - 0 if successful, 1 otherwise
-
-.EXAMPLE
-    update_packages
-#>
 update_packages() {
     local pm="${1:-$(get_package_manager)}"
     

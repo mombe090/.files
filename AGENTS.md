@@ -55,6 +55,48 @@
 
 ### Testing
 
+#### Container Testing (Recommended)
+
+**IMPORTANT**: Always test installation scripts in containers, never on the host system.
+
+**Use existing Ubuntu container:**
+```bash
+# Connect to the running Ubuntu container
+docker exec -it a4597fd2-8f64-4bf8-87d1-be16e727de6b bash
+
+# Inside container, clone and test
+cd /tmp
+git clone /path/to/.files .dotfiles
+cd .dotfiles
+bash _scripts/install.sh --minimal
+```
+
+**Or create a new Ubuntu container:**
+```bash
+# Create fresh Ubuntu 24.04 container
+docker run -it --name dotfiles-test ubuntu:24.04 bash
+
+# Inside container, install git first
+apt update && apt install -y git
+
+# Clone and test
+cd /tmp
+git clone <repo-url> .dotfiles
+cd .dotfiles
+bash _scripts/install.sh --minimal
+```
+
+**Clean up after testing:**
+```bash
+# Exit container
+exit
+
+# Remove test container
+docker rm dotfiles-test
+```
+
+#### Other Testing
+
 - No traditional build system - this is a dotfiles configuration repository
 - Use `pre-commit run --all-files` to run pre-commit hooks (trailing whitespace, secrets detection, YAML validation)
 - Test configurations by symlinking and verifying tool functionality

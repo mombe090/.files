@@ -22,58 +22,42 @@ readonly COLOR_MAGENTA='\033[0;35m'
 readonly COLOR_CYAN='\033[0;36m'
 readonly COLOR_NC='\033[0m'  # No Color
 
-<#
-.SYNOPSIS
-    Print an informational message in green.
-
-.PARAMETER message
-    The message to display.
-
-.EXAMPLE
-    log_info "Installing package..."
-#>
+# =============================================================================
+# log_info - Print an informational message in green
+#
+# Usage: log_info "message"
+# Example: log_info "Installing package..."
+# =============================================================================
 log_info() {
     echo -e "${COLOR_GREEN}[INFO]${COLOR_NC} $1"
 }
 
-<#
-.SYNOPSIS
-    Print a success message in green with a checkmark.
-
-.PARAMETER message
-    The message to display.
-
-.EXAMPLE
-    log_success "Installation complete"
-#>
+# =============================================================================
+# log_success - Print a success message in green with a checkmark
+#
+# Usage: log_success "message"
+# Example: log_success "Installation complete"
+# =============================================================================
 log_success() {
     echo -e "${COLOR_GREEN}[✓]${COLOR_NC} $1"
 }
 
-<#
-.SYNOPSIS
-    Print an error message in red.
-
-.PARAMETER message
-    The message to display.
-
-.EXAMPLE
-    log_error "Failed to install package"
-#>
+# =============================================================================
+# log_error - Print an error message in red to stderr
+#
+# Usage: log_error "message"
+# Example: log_error "Failed to install package"
+# =============================================================================
 log_error() {
     echo -e "${COLOR_RED}[ERROR]${COLOR_NC} $1" >&2
 }
 
-<#
-.SYNOPSIS
-    Print a warning message in yellow.
-
-.PARAMETER message
-    The message to display.
-
-.EXAMPLE
-    log_warning "Package already installed"
-#>
+# =============================================================================
+# log_warning - Print a warning message in yellow
+#
+# Usage: log_warning "message"
+# Example: log_warning "Package already installed"
+# =============================================================================
 log_warning() {
     echo -e "${COLOR_YELLOW}[WARN]${COLOR_NC} $1"
 }
@@ -83,16 +67,12 @@ log_warn() {
     log_warning "$@"
 }
 
-<#
-.SYNOPSIS
-    Print a section header in magenta.
-
-.PARAMETER message
-    The header text to display.
-
-.EXAMPLE
-    log_header "Installing Dependencies"
-#>
+# =============================================================================
+# log_header - Print a section header in magenta with separator lines
+#
+# Usage: log_header "message"
+# Example: log_header "Installing Dependencies"
+# =============================================================================
 log_header() {
     echo ""
     echo -e "${COLOR_MAGENTA}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${COLOR_NC}"
@@ -101,16 +81,12 @@ log_header() {
     echo ""
 }
 
-<#
-.SYNOPSIS
-    Print a step message in blue.
-
-.PARAMETER message
-    The step description to display.
-
-.EXAMPLE
-    log_step "Checking dependencies"
-#>
+# =============================================================================
+# log_step - Print a step message in blue
+#
+# Usage: log_step "message"
+# Example: log_step "Checking dependencies"
+# =============================================================================
 log_step() {
     echo -e "${COLOR_BLUE}[STEP]${COLOR_NC} $1"
 }
