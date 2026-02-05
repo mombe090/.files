@@ -8,6 +8,22 @@ This is a collection of my personal dotfiles and configurations to set up quickl
 
 ### Unix (Linux/macOS)
 
+**Method 1: Bootstrap (Recommended for new machines)**
+```bash
+# 1. Clone the repository
+git clone https://github.com/mombe090/.files.git ~/.dotfiles
+cd ~/.dotfiles
+
+# 2. Run bootstrap (installs curl, git, just)
+bash _scripts/bootstrap.sh
+
+# 3. Install dotfiles
+just install_full                 # Full installation
+# OR
+just install_minimal              # Minimal installation
+```
+
+**Method 2: Direct installation**
 ```bash
 # 1. Clone the repository
 git clone https://github.com/mombe090/.files.git ~/.dotfiles
@@ -15,10 +31,6 @@ cd ~/.dotfiles
 
 # 2. Run the installer (interactive)
 bash _scripts/install.sh
-
-# Or use just command runner (recommended)
-bash _scripts/just/bootstrap.sh  # Install just
-just install_full                 # Full installation
 ```
 
 ### Windows (PowerShell 7+)
@@ -75,15 +87,47 @@ These dotfiles aim to provide a **clean, efficient, and customizable development
 
 ## Installation Methods
 
-### Method 1: Just Command Runner (Recommended)
+### Method 1: Bootstrap (Recommended for New Machines)
 
-The easiest way to manage these dotfiles is with [`just`](https://github.com/casey/just):
+The fastest way to set up a new machine with essential tools and Just command runner:
 
 ```bash
-# Clone and bootstrap
+# Clone the repository
 git clone https://github.com/mombe090/.files.git ~/.dotfiles
 cd ~/.dotfiles
-bash _scripts/just/bootstrap.sh
+
+# Run bootstrap (installs curl, git, just)
+bash _scripts/bootstrap.sh
+
+# See all available commands
+just --list
+
+# Full installation
+just install_full
+
+# Minimal installation (core tools only)
+just install_minimal
+
+# Check system health
+just doctor
+```
+
+**What bootstrap.sh does:**
+- ✅ Detects your OS (macOS, Ubuntu, Fedora, Arch, etc.)
+- ✅ Installs essential tools: `curl`, `git`
+- ✅ Installs latest `just` binary (not outdated apt version)
+- ✅ Sets up PATH if needed
+- ✅ Interactive or non-interactive mode (`--yes` flag)
+
+### Method 2: Just Command Runner (Already Have Essentials)
+
+If you already have curl and git installed:
+
+```bash
+# Clone and install just
+git clone https://github.com/mombe090/.files.git ~/.dotfiles
+cd ~/.dotfiles
+bash _scripts/just/install-just.sh
 
 # See all available commands
 just --list
@@ -111,7 +155,7 @@ just deploy_gitconfig    # Deploy git configuration
 just mise_upgrade        # Upgrade mise tools
 ```
 
-### Method 2: Direct Script Installation
+### Method 3: Direct Script Installation
 
 #### Unix (Linux/macOS)
 
