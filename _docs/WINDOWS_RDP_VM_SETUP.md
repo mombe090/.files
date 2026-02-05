@@ -39,10 +39,10 @@ When connecting to a newly created VM via Windows Remote Desktop (RDP), you must
    ```bash
    # For Ubuntu/Debian (XFCE - lightweight)
    sudo apt install xfce4 xfce4-goodies -y
-   
+
    # Or GNOME (heavier)
    sudo apt install ubuntu-desktop -y
-   
+
    # Or MATE (balanced)
    sudo apt install ubuntu-mate-desktop -y
    ```
@@ -129,7 +129,7 @@ ssh mombe090@192.168.11.196
 # ❌ Permission denied (publickey)
 # or
 # ❌ Connection times out
-# or  
+# or
 # ❌ Authentication failed
 ```
 
@@ -168,21 +168,21 @@ The password RDP session:
      - Computer: `192.168.11.196`
      - User name: `mombe090`
      - ✅ Allow me to save credentials
-   
+
    - **Display Tab**:
      - Resolution: Full screen or custom
      - Colors: True Color (32 bit)
-   
+
    - **Local Resources Tab**:
      - ✅ Printers
      - ✅ Clipboard
      - ✅ Drives (if needed)
-   
+
    - **Experience Tab**:
      - Connection speed: LAN (10 Mbps or higher)
      - ✅ Desktop background
      - ✅ Font smoothing
-   
+
    - **Advanced Tab**:
      - Server authentication: Warn me
 
@@ -336,7 +336,7 @@ Double-click to connect.
 3. **Verify xrdp configuration:**
    ```bash
    sudo nano /etc/xrdp/startwm.sh
-   
+
    # Add before "test -x" line:
    unset DBUS_SESSION_BUS_ADDRESS
    unset XDG_RUNTIME_DIR
@@ -415,7 +415,7 @@ Double-click to connect.
    ```bash
    # On VM, edit xrdp.ini
    sudo nano /etc/xrdp/xrdp.ini
-   
+
    # Set:
    crypt_level=low
    bulk_compression=true
@@ -566,7 +566,7 @@ mstsc /v:192.168.11.196 /w:1920 /h:1080
 
 ## Summary
 
-**KEY TAKEAWAY:** 
+**KEY TAKEAWAY:**
 
 🔑 **ALWAYS use password authentication for the first RDP connection to a new VM.**
 
@@ -588,5 +588,5 @@ This syncs the session and enables all other authentication methods (SSH keys, s
 
 ---
 
-**Last Updated:** January 31, 2026  
+**Last Updated:** January 31, 2026
 **Tested With:** Ubuntu 22.04/24.04, Windows 11, xrdp 0.9.x

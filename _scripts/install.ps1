@@ -65,9 +65,9 @@ if (-not $Type) {
     Write-Host ""
     Write-Host "  Q. Quit" -ForegroundColor Gray
     Write-Host ""
-    
+
     $choice = Read-Host "Select [1-3, Q]"
-    
+
     switch ($choice) {
         "1" { $Type = "pro" }
         "2" { $Type = "perso" }
@@ -88,13 +88,13 @@ Write-Header "Installing: $Type packages"
 # Step 1: Ensure package managers
 if (-not $SkipPackages) {
     Write-Header "Step 1: Package Managers"
-    
+
     # Check for winget
     $hasWinget = Test-Command "winget"
     if (-not $hasWinget) {
         Write-Info "Installing winget..."
         & "$ScriptRoot\_scripts\windows\managers\Install-WinGet.ps1"
-        
+
         if ($LASTEXITCODE -eq 0) {
             $hasWinget = $true
             Write-Success "winget installed"
@@ -106,23 +106,23 @@ if (-not $SkipPackages) {
     else {
         Write-Success "winget: already installed"
     }
-    
+
     # Check for Chocolatey
     $hasChoco = Test-Command "choco"
     if (-not $hasChoco) {
         Write-Info "Installing Chocolatey..."
-        
+
         # Try to install via winget first
         if ($hasWinget) {
             Write-Info "Attempting to install Chocolatey via winget..."
             winget install --id Chocolatey.Chocolatey --silent --accept-source-agreements --accept-package-agreements 2>&1 | Out-Null
-            
+
             # Refresh environment to pick up choco
             $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
-            
+
             $hasChoco = Test-Command "choco"
         }
-        
+
         # Fallback to PowerShell install script
         if (-not $hasChoco) {
             Write-Info "Installing Chocolatey via PowerShell script..."
@@ -141,27 +141,27 @@ if (-not $SkipPackages) {
     else {
         Write-Success "Chocolatey: already installed"
     }
-    
+
     # Verify at least one package manager is available
     if (-not $hasWinget -and -not $hasChoco) {
         Write-ErrorMsg "No package manager available. Installation cannot continue."
         exit 1
     }
-    
+
     $installedManagers = @()
     if ($hasChoco) { $installedManagers += "choco" }
     if ($hasWinget) { $installedManagers += "winget" }
-    
+
     Write-Success "Available package managers: $($installedManagers -join ', ')"
 }
 
 # Step 2: Install packages
 if (-not $SkipPackages) {
     Write-Header "Step 2: Installing Packages"
-    
+
     # Determine which package managers to use
     $managersToUse = @()
-    
+
     switch ($PackageManager) {
         'choco' {
             if ($hasChoco) {
@@ -184,30 +184,30 @@ if (-not $SkipPackages) {
         }
         'auto' {
             # Auto: use whatever is available, prefer choco
-            if ($hasChoco) { 
-                $managersToUse += 'choco' 
-            } elseif ($hasWinget) { 
-                $managersToUse += 'winget' 
+            if ($hasChoco) {
+                $managersToUse += 'choco'
+            } elseif ($hasWinget) {
+                $managersToUse += 'winget'
             }
         }
     }
-    
+
     if ($managersToUse.Count -eq 0) {
         Write-ErrorMsg "No package managers available for installation"
         exit 1
     }
-    
+
     Write-Info "Using package managers: $($managersToUse -join ', ')"
-    
+
     # Determine installation order to prevent duplicates
     # Personal and All installations should always install Pro packages first
     $installOrder = @()
-    
+
     if ($Type -eq 'perso' -or $Type -eq 'all') {
         # Always install pro packages first to establish baseline
         $installOrder += 'pro'
     }
-    
+
     if ($Type -eq 'perso') {
         # Then install personal packages (non-duplicates only)
         $installOrder += 'perso'
@@ -217,19 +217,19 @@ if (-not $SkipPackages) {
         $installOrder += 'pro'
     }
     # Note: 'all' is handled by adding 'pro' above, perso will be added next
-    
+
     if ($Type -eq 'all') {
         # Add perso after pro for 'all' type
         $installOrder += 'perso'
     }
-    
+
     # Install packages using selected managers in proper order
     foreach ($installType in $installOrder) {
         Write-Header "Installing $installType packages"
-        
+
         foreach ($pm in $managersToUse) {
             Write-Info "Installing $installType packages via $pm..."
-            
+
             # Pass CheckUpdate flag if specified
             if ($CheckUpdate) {
                 & "$ScriptRoot\_scripts\windows\installers\Install-Packages.ps1" -Type $installType -PackageManager $pm -CheckUpdate
@@ -237,7 +237,7 @@ if (-not $SkipPackages) {
             else {
                 & "$ScriptRoot\_scripts\windows\installers\Install-Packages.ps1" -Type $installType -PackageManager $pm
             }
-            
+
             if ($LASTEXITCODE -ne 0) {
                 Write-Warn "Some $pm packages failed to install"
             }
@@ -248,21 +248,21 @@ if (-not $SkipPackages) {
 # Step 3: Install JavaScript packages (via Bun)
 if (-not $SkipPackages) {
     Write-Header "Step 3: JavaScript Packages (Bun)"
-    
+
     # Check if Bun is installed (should be from pro packages)
     $hasBun = Test-Command "bun"
-    
+
     if ($hasBun) {
         Write-Success "Bun detected, installing JavaScript packages..."
-        
+
         # Install JS packages following same order as system packages
         foreach ($installType in $installOrder) {
             # Check if JS package config exists for this type
             $jsConfigPath = "$ScriptRoot\_scripts\configs\windows\packages\$installType\js.pkg.yml"
-            
+
             if (Test-Path $jsConfigPath) {
                 Write-Info "Installing $installType JavaScript packages..."
-                
+
                 # Pass CheckUpdate flag if specified
                 if ($CheckUpdate) {
                     & "$ScriptRoot\_scripts\windows\installers\Install-JsPackages.ps1" -Type $installType -CheckUpdate
@@ -270,7 +270,7 @@ if (-not $SkipPackages) {
                 else {
                     & "$ScriptRoot\_scripts\windows\installers\Install-JsPackages.ps1" -Type $installType
                 }
-                
+
                 if ($LASTEXITCODE -ne 0) {
                     Write-Warn "Some JavaScript packages failed to install"
                 }
@@ -289,9 +289,9 @@ if (-not $SkipPackages) {
 # Step 4: Install PowerShell modules
 if (-not $SkipModules) {
     Write-Header "Step 4: PowerShell Modules"
-    
+
     & "$ScriptRoot\_scripts\windows\installers\Setup-Windows.ps1"
-    
+
     if ($LASTEXITCODE -ne 0) {
         Write-Warn "Some modules failed to install"
     }

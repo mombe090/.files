@@ -506,6 +506,6 @@ Personal dotfiles - use at your own discretion. No warranty provided.
 
 ---
 
-**Last Updated:** 2026-02-01  
-**Branch:** feat/windows-dotfiles-installer  
+**Last Updated:** 2026-02-01
+**Branch:** feat/windows-dotfiles-installer
 **Status:** ✅ Feature Complete - Ready for Testing

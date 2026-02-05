@@ -14,27 +14,27 @@ development:
   - id: typescript
     name: TypeScript
     category: development
-    
+
   - id: tsx
     name: TSX (TypeScript Runner)
     category: development
-    
+
   - id: prettier
     name: Prettier
     category: development
-    
+
   - id: eslint
     name: ESLint
     category: development
-    
+
   - id: markdownlint-cli2
     name: Markdownlint CLI 2
     category: development
-    
+
   - id: "@qetza/replacetokens"
     name: Replace Tokens
     category: development
-    
+
   - id: tree-sitter-cli
     name: Tree-sitter CLI
     category: development

@@ -31,7 +31,7 @@ detect_os() {
 # Get fonts directory based on OS
 get_fonts_dir() {
     local os=$(detect_os)
-    
+
     if [[ "$os" == "macos" ]]; then
         echo "$HOME/Library/Fonts"
     elif [[ "$os" == "linux" ]]; then
@@ -45,18 +45,18 @@ get_fonts_dir() {
 # Check prerequisites
 check_prerequisites() {
     log_step "Checking prerequisites..."
-    
+
     # Check for required tools
     local missing_tools=()
-    
+
     if ! command -v curl &> /dev/null && ! command -v wget &> /dev/null; then
         missing_tools+=("curl or wget")
     fi
-    
+
     if ! command -v unzip &> /dev/null; then
         missing_tools+=("unzip")
     fi
-    
+
     if [[ ${#missing_tools[@]} -gt 0 ]]; then
         log_error "Missing required tools: ${missing_tools[*]}"
         echo ""
@@ -69,7 +69,7 @@ check_prerequisites() {
         fi
         exit 1
     fi
-    
+
     log_success "All prerequisites met"
 }
 
@@ -77,7 +77,7 @@ check_prerequisites() {
 download_file() {
     local url="$1"
     local output="$2"
-    
+
     if command -v curl &> /dev/null; then
         curl -fsSL "$url" -o "$output"
     elif command -v wget &> /dev/null; then
@@ -93,13 +93,13 @@ install_font() {
     local font_name="$1"
     local font_url="$2"
     local fonts_dir="$3"
-    
+
     log_info "Installing: $font_name"
-    
+
     # Create temporary directory
     local temp_dir=$(mktemp -d)
     local zip_file="$temp_dir/${font_name}.zip"
-    
+
     # Download font
     log_info "Downloading $font_name..."
     if ! download_file "$font_url" "$zip_file"; then
@@ -107,7 +107,7 @@ install_font() {
         rm -rf "$temp_dir"
         return 1
     fi
-    
+
     # Extract fonts
     log_info "Extracting $font_name..."
     unzip -q "$zip_file" -d "$temp_dir/${font_name}" 2>/dev/null || {
@@ -115,17 +115,17 @@ install_font() {
         rm -rf "$temp_dir"
         return 1
     }
-    
+
     # Install font files
     local installed=0
     while IFS= read -r font_file; do
         cp "$font_file" "$fonts_dir/"
         installed=$((installed + 1))
     done < <(find "$temp_dir/${font_name}" -type f \( -name "*.ttf" -o -name "*.otf" \) ! -name "*Windows*" ! -path "*/.*")
-    
+
     # Cleanup
     rm -rf "$temp_dir"
-    
+
     if [[ $installed -gt 0 ]]; then
         log_success "$font_name installed ($installed font files)"
         return 0
@@ -151,19 +151,19 @@ update_font_cache() {
 # List installed fonts
 list_fonts() {
     local fonts_dir="$1"
-    
+
     log_step "Listing installed Nerd Fonts..."
     echo ""
-    
+
     local cascadia_count=$(find "$fonts_dir" -name "*Cascadia*Nerd*" -o -name "*CaskaydiaMono*" 2>/dev/null | wc -l)
     local jetbrains_count=$(find "$fonts_dir" -name "*JetBrains*Nerd*" 2>/dev/null | wc -l)
     local victor_count=$(find "$fonts_dir" -name "*Victor*Mono*" 2>/dev/null | wc -l)
-    
+
     echo "Installed fonts:"
     [[ $cascadia_count -gt 0 ]] && echo "  ✓ CascadiaMono Nerd Font ($cascadia_count variants)"
     [[ $jetbrains_count -gt 0 ]] && echo "  ✓ JetBrainsMono Nerd Font ($jetbrains_count variants)"
     [[ $victor_count -gt 0 ]] && echo "  ✓ VictorMono Font ($victor_count variants)"
-    
+
     if [[ $cascadia_count -eq 0 ]] && [[ $jetbrains_count -eq 0 ]] && [[ $victor_count -eq 0 ]]; then
         echo "  No Nerd Fonts installed yet"
     fi
@@ -173,7 +173,7 @@ list_fonts() {
 # Main installation
 main() {
     local action="${1:-install}"
-    
+
     case "$action" in
         --list|-l)
             local fonts_dir=$(get_fonts_dir)
@@ -198,7 +198,7 @@ Options:
 Examples:
   # Install all fonts
   $(basename "$0")
-  
+
   # List installed fonts
   $(basename "$0") --list
 
@@ -226,27 +226,27 @@ EOF
             exit 1
             ;;
     esac
-    
+
     log_step "Installing modern Nerd Fonts..."
     echo ""
-    
+
     # Check prerequisites
     check_prerequisites
     echo ""
-    
+
     # Get fonts directory
     local fonts_dir=$(get_fonts_dir)
     log_info "Fonts directory: $fonts_dir"
-    
+
     # Create fonts directory if needed
     mkdir -p "$fonts_dir"
     echo ""
-    
+
     # Track installation results
     local total=0
     local success=0
     local failed=0
-    
+
     # Install CascadiaMono Nerd Font
     total=$((total + 1))
     if install_font "CascadiaMono" "$CASCADIA_URL" "$fonts_dir"; then
@@ -255,7 +255,7 @@ EOF
         failed=$((failed + 1))
     fi
     echo ""
-    
+
     # Install JetBrainsMono Nerd Font
     total=$((total + 1))
     if install_font "JetBrainsMono" "$JETBRAINS_URL" "$fonts_dir"; then
@@ -264,7 +264,7 @@ EOF
         failed=$((failed + 1))
     fi
     echo ""
-    
+
     # Install VictorMono Font
     total=$((total + 1))
     if install_font "VictorMono" "$VICTOR_MONO_URL" "$fonts_dir"; then
@@ -273,11 +273,11 @@ EOF
         failed=$((failed + 1))
     fi
     echo ""
-    
+
     # Update font cache on Linux
     update_font_cache "$fonts_dir"
     echo ""
-    
+
     # Summary
     log_success "Font installation complete!"
     echo ""
@@ -286,7 +286,7 @@ EOF
     echo "  ✗ Failed: $failed"
     echo "  Total: $total"
     echo ""
-    
+
     # Next steps
     echo "Next steps:"
     echo ""
@@ -302,7 +302,7 @@ EOF
     echo "  4. Verify icons are displaying:"
     echo "     echo '    '"
     echo ""
-    
+
     if [[ $(detect_os) == "macos" ]]; then
         echo "macOS: Fonts available in all applications immediately"
     else

@@ -609,7 +609,7 @@ function Install-BunPackage {
         # Install package globally
         # Use --silent to reduce output noise
         $output = bun add --global $PackageName 2>&1
-        
+
         # Check exit code
         if ($LASTEXITCODE -eq 0) {
             return $true
@@ -651,7 +651,7 @@ function Test-BunPackageInstalled {
     try {
         # List global packages
         $output = bun pm ls --global 2>&1 | Out-String
-        
+
         # Check if package name appears in the output
         # Handle scoped packages like @qetza/replacetokens
         $escapedName = [regex]::Escape($PackageName)
@@ -712,7 +712,7 @@ function Uninstall-BunPackage {
     try {
         # Remove package globally
         $output = bun remove --global $PackageName 2>&1
-        
+
         # Check exit code
         if ($LASTEXITCODE -eq 0) {
             return $true

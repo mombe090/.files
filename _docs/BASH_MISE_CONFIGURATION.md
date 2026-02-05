@@ -143,14 +143,14 @@ $ bash -l -c "tsc --version"
 Version 5.9.3
 
 # In zsh
-$ zsh -l -c "tsc --version"  
+$ zsh -l -c "tsc --version"
 Version 5.9.3
 ```
 
 ## Files Modified
 
 - ✅ `bash/.bashrc` - NEW
-- ✅ `bash/.bash_profile` - NEW  
+- ✅ `bash/.bash_profile` - NEW
 - ✅ `scripts/manage-stow.sh` - Added bash to defaults
 - ✅ `scripts/install-js-packages.sh` - Uses bash with mise activation
 

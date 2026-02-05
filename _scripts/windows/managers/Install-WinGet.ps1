@@ -18,11 +18,11 @@ Write-Header "WinGet Installer"
 # Check if winget is already installed
 if (Test-Command "winget") {
     Write-Success "winget is already installed"
-    
+
     # Show version
     $version = winget --version
     Write-Info "Version: $version"
-    
+
     Write-Info "To update winget, run: winget upgrade Microsoft.AppInstaller"
     exit 0
 }
@@ -32,22 +32,22 @@ Write-Info "winget not found. Installing via Microsoft.WinGet.Client module..."
 try {
     # Set progress preference for silent operation
     $progressPreference = 'silentlyContinue'
-    
+
     # Install NuGet provider
     Write-Step "Installing NuGet package provider..."
     Install-PackageProvider -Name NuGet -Force -ErrorAction Stop | Out-Null
     Write-Success "NuGet provider installed"
-    
+
     # Install Microsoft.WinGet.Client module
     Write-Step "Installing Microsoft.WinGet.Client module from PSGallery..."
     Install-Module -Name Microsoft.WinGet.Client -Force -Repository PSGallery -ErrorAction Stop | Out-Null
     Write-Success "Microsoft.WinGet.Client module installed"
-    
+
     # Bootstrap winget using Repair-WinGetPackageManager
     Write-Step "Bootstrapping WinGet using Repair-WinGetPackageManager..."
     Repair-WinGetPackageManager -AllUsers -ErrorAction Stop
     Write-Success "WinGet bootstrapped successfully"
-    
+
     # Verify installation
     if (Test-Command "winget") {
         $version = winget --version

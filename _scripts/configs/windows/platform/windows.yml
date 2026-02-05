@@ -12,18 +12,18 @@
 
 windows_terminal:
   default_profile: "PowerShell"
-  
+
   settings:
     copy_on_select: true
     paste_warnings: false
     large_paste_warning: false
     multi_line_paste_warning: false
-    
+
   appearance:
     theme: "dark"
     use_acrylic: true
     acrylic_opacity: 0.95
-    
+
   profiles:
     powershell:
       font_face: "CascadiaMono Nerd Font"
@@ -31,53 +31,53 @@ windows_terminal:
       color_scheme: "One Half Dark"
       background_opacity: 0.95
       use_acrylic: true
-      
+
     cmd:
       font_face: "CascadiaMono Nerd Font"
       font_size: 14
-      
+
 powershell:
   modules:
     - name: "PSReadLine"
       auto_install: true
-      
+
     - name: "Terminal-Icons"
       auto_install: true
-      
+
     - name: "posh-git"
       auto_install: true
-      
+
   settings:
     prediction_source: "HistoryAndPlugin"
     prediction_view_style: "ListView"
     edit_mode: "Windows"
     history_save_style: "SaveIncrementally"
-    
+
   oh_my_posh:
     enabled: true
     theme: "agnoster"
-    
+
 explorer:
   settings:
     show_hidden_files: true
     show_file_extensions: true
     show_full_path_title_bar: true
     hide_folder_merge_conflicts: false
-    
+
   quick_access:
     show_recent_files: false
     show_frequent_folders: false
-    
+
 taskbar:
   settings:
     search_box_mode: 0  # 0 = Hidden, 1 = Icon, 2 = Box
     show_task_view_button: false
     show_people_button: false
-    
+
 system:
   dark_mode: true
   transparency_effects: true
-  
+
   performance:
     disable_transparency: false
     disable_animations: false

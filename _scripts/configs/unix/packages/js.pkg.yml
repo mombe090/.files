@@ -6,34 +6,34 @@ packages:
   # Package managers & tools
   - pnpm
   - yarn
-  
+
   # TypeScript & Type checking
   - typescript
   - tsx
   - ts-node
   - "@types/node"
   - tree-sitter-cli
-  
+
   # Linting & Formatting
   - eslint
   - prettier
-  
+
   # Build tools
   - vite
   - esbuild
-  
+
   # Testing
   - vitest
   - jest
-  
+
   # Development tools
   - nodemon
   - dotenv-cli
-  
+
   # CLI tools
   - http-server
   - serve
-  
+
   # Documentation
   - typedoc
   - jsdoc

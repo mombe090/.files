@@ -36,7 +36,7 @@ check_bun() {
         echo ""
         exit 0
     fi
-    
+
     local bun_version=$(bun --version)
     log_info "Using bun version: $bun_version"
 }
@@ -45,13 +45,13 @@ check_bun() {
 check_config() {
     local config_type="$1"  # "pro" or "personal"
     local config_file=""
-    
+
     if [[ "$config_type" == "personal" ]]; then
         config_file="$CONFIG_FILE_PERSONAL"
     else
         config_file="$CONFIG_FILE_PRO"
     fi
-    
+
     if [[ ! -f "$config_file" ]]; then
         log_warn "Config file not found: $config_file"
         log_info "Creating default config file..."
@@ -61,14 +61,14 @@ check_config() {
         log_info "Edit the file to customize packages, then re-run this script"
         return 1
     fi
-    
+
     echo "$config_file"
 }
 
 # ===== CREATE DEFAULT CONFIG =====
 create_default_config() {
     local config_type="${1:-pro}"  # Default to professional
-    
+
     if [[ "$config_type" == "personal" ]]; then
         # Personal/optional packages
         cat > "$CONFIG_FILE_PERSONAL" << 'EOF'
@@ -81,7 +81,7 @@ packages:
   - vercel
   - netlify-cli
   - firebase-tools
-  
+
   # Personal frameworks/tools
   - next
   - nuxt
@@ -90,12 +90,12 @@ packages:
   - create-react-app
   - gatsby-cli
   - astro
-  
+
   # Personal development
   - ngrok
   - localtunnel
   - pm2
-  
+
   # Add your personal packages here
   # - your-package-name
 
@@ -111,38 +111,38 @@ packages:
   # Package managers & tools
   - pnpm
   - yarn
-  
+
   # TypeScript & Type checking
   - typescript
   - tsx
   - ts-node
   - "@types/node"
-  
+
   # Linting & Formatting
   - eslint
   - prettier
-  
+
   # Build tools
   - vite
   - esbuild
   - tsup
-  
+
   # Testing
   - vitest
   - jest
-  
+
   # Development tools
   - nodemon
   - concurrently
   - rimraf
   - dotenv-cli
-  
+
   # CLI tools
   - http-server
   - serve
   - npm-check-updates
   - depcheck
-  
+
   # Documentation
   - typedoc
   - jsdoc
@@ -154,33 +154,33 @@ EOF
 # ===== PARSE YAML FILE =====
 parse_yaml() {
     local config_file="$1"
-    
+
     # Simple YAML parser for package list
     # Extracts packages from "packages:" section
-    
+
     local in_packages=false
     local packages=()
-    
+
     while IFS= read -r line; do
         # Remove leading/trailing whitespace
         line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-        
+
         # Skip empty lines and comments
         [[ -z "$line" ]] && continue
         [[ "$line" =~ ^# ]] && continue
-        
+
         # Check for packages section
         if [[ "$line" == "packages:" ]]; then
             in_packages=true
             continue
         fi
-        
+
         # Check for optional section (stop parsing packages)
         if [[ "$line" == "optional:" ]]; then
             in_packages=false
             continue
         fi
-        
+
         # Parse package entries (lines starting with -)
         if [[ "$in_packages" == true ]] && [[ "$line" =~ ^-[[:space:]]* ]]; then
             # Extract package name (remove leading -, whitespace, and quotes)
@@ -188,7 +188,7 @@ parse_yaml() {
             [[ -n "$pkg" ]] && packages+=("$pkg")
         fi
     done < "$config_file"
-    
+
     # Return packages as array
     printf '%s\n' "${packages[@]}"
 }
@@ -196,36 +196,36 @@ parse_yaml() {
 # ===== INSTALL PACKAGES =====
 install_packages() {
     local config_type="${1:-pro}"  # Default to professional packages
-    
+
     log_step "Installing $config_type packages..."
-    
+
     # Check config file exists (creates if missing)
     local config_file=$(check_config "$config_type")
     if [[ -z "$config_file" ]]; then
         log_info "Config file was just created. Edit it and re-run this script."
         return 0
     fi
-    
+
     log_info "Reading package list from: $config_file"
-    
+
     # Parse YAML and get packages
     local packages=($(parse_yaml "$config_file"))
-    
+
     if [[ ${#packages[@]} -eq 0 ]]; then
         log_warn "No packages found in config file"
         return 0
     fi
-    
+
     log_info "Found ${#packages[@]} packages to install"
     echo ""
-    
+
     # Show package list
     log_info "Packages:"
     for pkg in "${packages[@]}"; do
         echo "  - $pkg"
     done
     echo ""
-    
+
     # Ask for confirmation unless --yes flag
     if [[ "$AUTO_CONFIRM" != "true" ]]; then
         read -p "Install these $config_type packages globally with bun? [Y/n]: " confirm
@@ -234,24 +234,24 @@ install_packages() {
             return 0
         fi
     fi
-    
+
     log_step "Installing $config_type packages globally..."
     echo ""
-    
+
     local installed=0
     local failed=0
     local skipped=0
-    
+
     for pkg in "${packages[@]}"; do
         log_info "Installing: $pkg"
-        
+
         # Check if already installed
         if bun pm ls -g 2>/dev/null | grep -q "^$pkg@"; then
             log_warn "$pkg is already installed (skipping)"
             skipped=$((skipped + 1))
             continue
         fi
-        
+
         # Install package
         if bun add -g "$pkg" &> /dev/null; then
             log_success "$pkg installed"
@@ -260,10 +260,10 @@ install_packages() {
             log_error "Failed to install $pkg"
             failed=$((failed + 1))
         fi
-        
+
         echo ""
     done
-    
+
     # Summary
     echo ""
     log_success "Installation complete!"
@@ -280,7 +280,7 @@ install_packages() {
 list_packages() {
     log_step "Listing globally installed packages..."
     echo ""
-    
+
     if command -v bun &> /dev/null; then
         bun pm ls -g
     else
@@ -292,34 +292,34 @@ list_packages() {
 # ===== UPDATE ALL PACKAGES =====
 update_packages() {
     local config_type="${1:-pro}"  # Default to professional packages
-    
+
     log_step "Updating $config_type packages..."
     echo ""
-    
+
     # Check config file exists
     local config_file=$(check_config "$config_type")
     if [[ -z "$config_file" ]]; then
         log_info "Config file was just created. Edit it and re-run this script."
         return 0
     fi
-    
+
     # Parse packages from config
     local packages=($(parse_yaml "$config_file"))
-    
+
     if [[ ${#packages[@]} -eq 0 ]]; then
         log_warn "No packages found in config file"
         return 0
     fi
-    
+
     log_info "Updating ${#packages[@]} $config_type packages..."
     echo ""
-    
+
     for pkg in "${packages[@]}"; do
         log_info "Updating: $pkg"
         bun add -g "$pkg@latest" || log_warn "Failed to update $pkg"
         echo ""
     done
-    
+
     log_success "Update complete!"
 }
 
@@ -381,7 +381,7 @@ main() {
     local action="install"
     local config_type="pro"
     local install_all=false
-    
+
     # Parse arguments
     while [[ $# -gt 0 ]]; do
         case $1 in
@@ -429,7 +429,7 @@ main() {
                 ;;
         esac
     done
-    
+
     # Execute action
     case $action in
         install)

@@ -54,7 +54,7 @@ if ($initLua -and $initLua.LinkType -eq 'SymbolicLink') {
     Write-Info "  Path: $($initLua.FullName)"
     Write-Info "  Target: $($initLua.Target)"
     Write-Host ""
-    
+
     # Check path correctness
     if ($initLua.FullName -notmatch '\.config') {
         Write-Success "Path is correct (no .config in LOCALAPPDATA path)"
@@ -73,12 +73,12 @@ Write-Host ""
 
 # Test 5: List all symlinks
 Write-Header "Test 5: All Symlinks in nvim Directory"
-$symlinks = Get-ChildItem $env:LOCALAPPDATA\nvim -Recurse -Force -ErrorAction SilentlyContinue | 
+$symlinks = Get-ChildItem $env:LOCALAPPDATA\nvim -Recurse -Force -ErrorAction SilentlyContinue |
     Where-Object { $_.LinkType -eq 'SymbolicLink' }
 
 if ($symlinks) {
     Write-Success "Found $($symlinks.Count) symlink(s)"
-    
+
     # Check each symlink for .config in path
     $badPaths = $symlinks | Where-Object { $_.FullName -match '\.config' }
     if ($badPaths) {
@@ -90,7 +90,7 @@ if ($symlinks) {
     } else {
         Write-Success "All symlinks have correct paths (no .config in LOCALAPPDATA)"
     }
-    
+
     # Show first 5 symlinks as sample
     Write-Host ""
     Write-Info "Sample symlinks (first 5):"

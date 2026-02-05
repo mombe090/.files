@@ -40,9 +40,9 @@ The machine-specific profile will be loaded automatically on next startup.
 
 1. **Secrets and API Keys**
    ```powershell
-   $env:OPENAI_API_KEY = "sk-..."
-   $env:GITHUB_TOKEN = "ghp_..."
-   $env:AWS_ACCESS_KEY_ID = "..."
+   $env:OPENAI_API_KEY = "sk-..."  # pragma: allowlist secret
+   $env:GITHUB_TOKEN = "ghp_..."  # pragma: allowlist secret
+   $env:AWS_ACCESS_KEY_ID = "..."  # pragma: allowlist secret
    ```
 
 2. **Machine-Specific Paths**

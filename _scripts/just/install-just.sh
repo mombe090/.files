@@ -49,7 +49,7 @@ install_via_brew() {
 install_via_binary() {
     # Download latest binary from GitHub releases (preferred method for latest version)
     log_info "Installing latest binary from GitHub releases..."
-    
+
     # Detect architecture
     ARCH=$(uname -m)
     case "$ARCH" in
@@ -61,7 +61,7 @@ install_via_binary() {
             return 1
             ;;
     esac
-    
+
     # Detect OS for binary naming
     case "$OS" in
         linux) PLATFORM="unknown-linux-musl" ;;
@@ -71,22 +71,22 @@ install_via_binary() {
             return 1
             ;;
     esac
-    
+
     BINARY_NAME="just-${ARCH}-${PLATFORM}"
     DOWNLOAD_URL="https://github.com/casey/just/releases/latest/download/${BINARY_NAME}.tar.gz"
-    
+
     log_info "Downloading: $BINARY_NAME"
-    
+
     # Create temp directory
     TEMP_DIR=$(mktemp -d)
     trap "rm -rf '$TEMP_DIR'" EXIT
-    
+
     # Download and extract
     if ! curl -fsSL "$DOWNLOAD_URL" | tar -xz -C "$TEMP_DIR"; then
         log_warn "Failed to download binary"
         return 1
     fi
-    
+
     # Install to /usr/local/bin if we have permission, otherwise ~/.local/bin
     if [ -w "/usr/local/bin" ] || sudo -n true 2>/dev/null; then
         INSTALL_DIR="/usr/local/bin"
@@ -99,14 +99,14 @@ install_via_binary() {
         mkdir -p "$INSTALL_DIR"
         mv "$TEMP_DIR/just" "$INSTALL_DIR/just"
         chmod +x "$INSTALL_DIR/just"
-        
+
         if [[ ":$PATH:" != *":$INSTALL_DIR:"* ]]; then
             log_warn "Add $INSTALL_DIR to your PATH"
             log_info "Add this to your ~/.zshrc or ~/.bashrc:"
             echo "    export PATH=\"$INSTALL_DIR:\$PATH\""
         fi
     fi
-    
+
     return 0
 }
 

@@ -60,7 +60,7 @@ install_zsh() {
 # ===== SET DEFAULT SHELL =====
 set_default_shell() {
     local current_shell=$(basename "$SHELL")
-    
+
     if [[ "$current_shell" == "zsh" ]]; then
         log_warn "zsh already default shell"
         return 0

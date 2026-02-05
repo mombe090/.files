@@ -71,21 +71,21 @@ if (-not (Test-Path $profileDir)) {
 if (Test-Path $PROFILE) {
     # Check if it's already our wrapper
     $existingContent = Get-Content $PROFILE -Raw
-    
+
     if ($existingContent -match "XDG PowerShell profile not found") {
         Write-Success "Profile wrapper already exists"
         Write-Info "Location: $PROFILE"
         exit 0
     }
-    
+
     Write-Warn "Profile already exists"
     Write-Info "Location: $PROFILE"
-    
+
     if (-not $Force) {
         Write-ErrorMsg "Use -Force to backup and replace with wrapper"
         exit 1
     }
-    
+
     # Backup existing profile
     $backupPath = "$PROFILE.backup.$(Get-Date -Format 'yyyyMMdd-HHmmss')"
     Write-Warn "Backing up existing profile to: $backupPath"
@@ -98,9 +98,9 @@ try {
     Write-Info "Creating wrapper profile..."
     Write-Info "At: $PROFILE"
     Write-Info "Sources: $configProfilePath"
-    
+
     $wrapperContent | Out-File -FilePath $PROFILE -Encoding UTF8 -Force
-    
+
     Write-Success "Profile wrapper created successfully!"
     Write-Host ""
     Write-Info "Reload your PowerShell session to use the new profile"

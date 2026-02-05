@@ -6,7 +6,7 @@ The installation process was hanging after stowing the first package (zsh) and n
 
 ```
 [INFO] Stowing: zsh
-[✓] zsh stowed 
+[✓] zsh stowed
 # ← Script hangs here, never continues
 ```
 

@@ -31,7 +31,7 @@ fi
 
 ### Behavior
 - ✅ Skips backup if `~/.zshrc` is already a symlink to dotfiles repo
-- ✅ Skips backup if `~/.config/zsh` is already a symlink to dotfiles repo  
+- ✅ Skips backup if `~/.config/zsh` is already a symlink to dotfiles repo
 - ✅ Only backs up real files/directories that would conflict
 - ✅ Handles both relative and absolute symlink paths
 
@@ -94,7 +94,7 @@ Split into two separate config files with dedicated installation options:
 ### Files Created
 - `scripts/config/js.pkg.personal.yml` - Personal packages config
 
-### Files Updated  
+### Files Updated
 - `scripts/config/js.pkg.yml` - Removed optional section (now in personal config)
 
 ---
@@ -160,7 +160,7 @@ fi
 ### Syntax Checks ✅
 ```bash
 $ bash -n install.sh
-$ bash -n scripts/install-js-packages.sh  
+$ bash -n scripts/install-js-packages.sh
 $ bash -n scripts/manage-stow.sh
 ✓ All syntax checks passed
 ```
@@ -198,7 +198,7 @@ js.pkg.personal.yml  # Personal packages
 
 ### Personal Development Machine
 ```bash
-# Install dotfiles  
+# Install dotfiles
 ./install.sh --full
 
 # Install personal packages later (or use custom installation)

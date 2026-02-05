@@ -177,22 +177,22 @@ wezterm --version
 
 After completing all tests, you should have:
 
-✅ **Fonts**: CaskaydiaMono and JetBrainsMono Nerd Fonts installed  
-✅ **PowerShell**: Profile loaded with Starship prompt and aliases  
-✅ **Nushell**: Config loaded with Starship prompt and aliases  
-✅ **WezTerm**: Running with WebGpu, Nerd Font, and Catppuccin theme  
+✅ **Fonts**: CaskaydiaMono and JetBrainsMono Nerd Fonts installed
+✅ **PowerShell**: Profile loaded with Starship prompt and aliases
+✅ **Nushell**: Config loaded with Starship prompt and aliases
+✅ **WezTerm**: Running with WebGpu, Nerd Font, and Catppuccin theme
 
 ## Troubleshooting
 
 ### General Issues
 
-**Problem**: Symlinks not created  
+**Problem**: Symlinks not created
 **Solution**: Ensure Developer Mode is enabled OR run `stow.ps1` as Administrator
 
-**Problem**: UTF-8 encoding issues  
+**Problem**: UTF-8 encoding issues
 **Solution**: Ensure all config files have UTF-8 BOM encoding for Windows PowerShell
 
-**Problem**: PATH not updated  
+**Problem**: PATH not updated
 **Solution**: Restart terminal session or run `refreshenv` (Chocolatey)
 
 ### Reporting Issues

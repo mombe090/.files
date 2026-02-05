@@ -553,7 +553,7 @@ YAML package configurations in `_scripts/configs/`:
 
 **Professional** (`pro/`):
 - **`choco.pkg.yml`** - Professional Chocolatey packages
-- **`winget.pkg.yml`** - Professional WinGet packages  
+- **`winget.pkg.yml`** - Professional WinGet packages
 - **`js.pkg.yml`** - Professional JavaScript packages
 
 **Personal** (`perso/`):

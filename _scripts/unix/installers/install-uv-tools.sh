@@ -21,13 +21,13 @@ activate_mise() {
 # Check if UV is installed
 check_uv() {
     activate_mise
-    
+
     if ! command -v uv &> /dev/null; then
         log_error "UV is not installed"
         log_info "Install UV with mise: mise install uv"
         return 1
     fi
-    
+
     log_info "UV version: $(uv --version)"
     return 0
 }
@@ -39,7 +39,7 @@ check_pyproject() {
         log_info "Stow the UV package first: cd ~/.files && ./scripts/manage-stow.sh stow uv"
         return 1
     fi
-    
+
     log_success "Found pyproject.toml"
     return 0
 }
@@ -59,14 +59,14 @@ ensure_venv() {
 # Install all tools
 install_tools() {
     local extras="${1:-}"
-    
+
     log_step "Installing Python tools via UV..."
     echo ""
-    
+
     ensure_venv
-    
+
     cd "$HOME"
-    
+
     if [[ -n "$extras" ]]; then
         log_info "Syncing with extras: $extras"
         uv sync --extra "$extras"
@@ -74,7 +74,7 @@ install_tools() {
         log_info "Syncing core tools..."
         uv sync
     fi
-    
+
     echo ""
     log_success "Python tools installed!"
     log_info "Virtual environment: ~/.venv"
@@ -85,7 +85,7 @@ install_tools() {
 list_tools() {
     log_step "Listing installed Python tools..."
     echo ""
-    
+
     if [[ -d "$HOME/.venv" ]]; then
         "$HOME/.venv/bin/pip" list
     else
@@ -99,12 +99,12 @@ list_tools() {
 update_tools() {
     log_step "Updating Python tools..."
     echo ""
-    
+
     ensure_venv
-    
+
     cd "$HOME"
     uv sync --upgrade
-    
+
     echo ""
     log_success "Python tools updated!"
 }
@@ -113,12 +113,12 @@ update_tools() {
 sync_tools() {
     log_step "Syncing Python tools..."
     echo ""
-    
+
     ensure_venv
-    
+
     cd "$HOME"
     uv sync
-    
+
     echo ""
     log_success "Python tools synced!"
 }
@@ -144,19 +144,19 @@ Extras (optional dependencies):
 Examples:
   # Install core tools
   $(basename "$0") install
-  
+
   # Install with data science extras
   $(basename "$0") install data
-  
+
   # Install with AWS extras
   $(basename "$0") install aws
-  
+
   # Update all tools
   $(basename "$0") update
-  
+
   # List installed tools
   $(basename "$0") list
-  
+
   # Sync tools with pyproject.toml
   $(basename "$0") sync
 
@@ -198,7 +198,7 @@ EOF
 # Main function
 main() {
     local command="${1:-install}"
-    
+
     case "$command" in
         install)
             check_uv || exit 1

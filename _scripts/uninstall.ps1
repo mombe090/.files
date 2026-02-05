@@ -64,9 +64,9 @@ if (-not $Type -and -not $UninstallModules) {
     Write-Host ""
     Write-Host "  Q. Cancel" -ForegroundColor Gray
     Write-Host ""
-    
+
     $choice = Read-Host "Select [1-4, Q]"
-    
+
     switch ($choice) {
         "1" { $Type = "pro"; $UninstallPackages = $true }
         "2" { $Type = "perso"; $UninstallPackages = $true }
@@ -102,41 +102,41 @@ if (-not $Force) {
 # Uninstall packages
 if ($UninstallPackages -and $Type) {
     Write-Header "Uninstalling Packages: $Type"
-    
+
     # Check for package manager
     $pm = Get-PackageManager
     if (-not $pm) {
         Write-ErrorMsg "No package manager found (winget or choco)"
         exit 1
     }
-    
+
     Write-Info "Using package manager: $pm"
-    
+
     # Load package config
     $configPath = Join-Path $ScriptRoot "configs\packages\$Type\$pm.pkg.yml"
-    
+
     if (-not (Test-Path $configPath)) {
         Write-ErrorMsg "Config file not found: $configPath"
         exit 1
     }
-    
+
     Write-Info "Loading config: $configPath"
-    
+
     # Parse YAML (simple parsing for our structure)
     $content = Get-Content $configPath -Raw
     $packages = @()
     $currentPackage = $null
-    
+
     # Extract package IDs and flags (simple YAML parsing)
     $content -split "`n" | ForEach-Object {
         $line = $_.Trim()
-        
+
         if ($line -match '^\s*-\s*id:\s*(.+)$') {
             # Save previous package if exists
             if ($currentPackage) {
                 $packages += $currentPackage
             }
-            
+
             $currentPackage = [PSCustomObject]@{
                 Id = $matches[1].Trim()
                 Uninstallable = $false
@@ -149,30 +149,30 @@ if ($UninstallPackages -and $Type) {
             }
         }
     }
-    
+
     # Add last package
     if ($currentPackage) {
         $packages += $currentPackage
     }
-    
+
     # Filter out uninstallable packages
     $packagesToUninstall = $packages | Where-Object { -not $_.Uninstallable }
     $skippedUninstallable = ($packages | Where-Object { $_.Uninstallable }).Count
-    
+
     if ($skippedUninstallable -gt 0) {
         Write-Info "Skipping $skippedUninstallable protected package(s) (PowerShell, Git, etc.)"
     }
-    
+
     Write-Info "Found $($packagesToUninstall.Count) package(s) to uninstall"
     Write-Host ""
-    
+
     $uninstalled = 0
     $failed = 0
     $skipped = 0
-    
+
     foreach ($pkg in $packagesToUninstall) {
         Write-Step "Uninstalling: $($pkg.Id)"
-        
+
         try {
             if ($pm -eq 'winget') {
                 $result = winget uninstall --id $pkg.Id --silent --accept-source-agreements 2>&1
@@ -206,7 +206,7 @@ if ($UninstallPackages -and $Type) {
             $failed++
         }
     }
-    
+
     Write-Host ""
     Write-Header "Package Uninstallation Summary"
     Write-Info "Uninstalled: $uninstalled"
@@ -218,12 +218,12 @@ if ($UninstallPackages -and $Type) {
 if ($UninstallModules) {
     Write-Host ""
     Write-Header "Uninstalling PowerShell Modules"
-    
+
     $modules = @('Terminal-Icons', 'posh-git')
-    
+
     foreach ($moduleName in $modules) {
         Write-Step "Uninstalling: $moduleName"
-        
+
         try {
             if (Get-Module -ListAvailable -Name $moduleName) {
                 Uninstall-Module -Name $moduleName -Force -ErrorAction SilentlyContinue
@@ -237,7 +237,7 @@ if ($UninstallModules) {
             Write-Warn "  Error: $_"
         }
     }
-    
+
     Write-Info "Note: PSReadLine is a system module and cannot be uninstalled"
 }
 

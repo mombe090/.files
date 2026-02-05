@@ -71,17 +71,17 @@ $bunGlobalBin = Join-Path $env:USERPROFILE ".bun\bin"
 
 if (Test-Path $bunGlobalBin) {
     $currentPath = [Environment]::GetEnvironmentVariable("Path", "User")
-    
+
     if ($currentPath -notlike "*$bunGlobalBin*") {
         Write-Info "Adding Bun global bin to user PATH..."
-        
+
         try {
             $newPath = "$currentPath;$bunGlobalBin"
             [Environment]::SetEnvironmentVariable("Path", $newPath, "User")
-            
+
             # Also update current session PATH
             $env:Path = "$env:Path;$bunGlobalBin"
-            
+
             Write-Success "Bun global bin added to PATH: $bunGlobalBin"
             Write-Warn "Note: New terminal sessions will have this path automatically."
         }
@@ -148,40 +148,40 @@ $totalSkipped = 0
 
 foreach ($configFile in $configFiles) {
     Write-Header "Processing: $(Split-Path $configFile -Leaf)"
-    
+
     # Read config
     $configContent = Get-Content -Path $configFile -Raw
     $lines = $configContent -split "`n"
-    
+
     $packages = @()
     $currentCategory = ""
     $currentPackage = $null
-    
+
     foreach ($line in $lines) {
         $line = $line.Trim()
-        
+
         # Skip comments and empty lines
         if ($line -match '^\s*#' -or $line -eq '') {
             continue
         }
-        
+
         # Category header
         if ($line -match '^(\w+):$') {
             $currentCategory = $matches[1]
             continue
         }
-        
+
         # Package entry (handle both regular and scoped packages like @qetza/replacetokens)
         if ($line -match '^\s*-\s*id:\s*(.+)$') {
             # Save previous package if exists
             if ($currentPackage) {
                 $packages += $currentPackage
             }
-            
+
             # Extract package ID, handling quotes for scoped packages
             $packageId = $matches[1].Trim()
             $packageId = $packageId -replace '^["'']|["'']$', ''  # Remove surrounding quotes
-            
+
             $currentPackage = [PSCustomObject]@{
                 Id = $packageId
                 Name = $packageId
@@ -196,33 +196,33 @@ foreach ($configFile in $configFiles) {
             }
         }
     }
-    
+
     # Add last package
     if ($currentPackage) {
         $packages += $currentPackage
     }
-    
+
     Write-Info "Found $($packages.Count) package(s)"
-    
+
     # Filter by category if specified
     if ($Category) {
         $packages = $packages | Where-Object { $_.Category -eq $Category }
         Write-Info "Filtered to $($packages.Count) package(s) in category '$Category'"
     }
-    
+
     # Install packages
     foreach ($package in $packages) {
         Write-Step "[$($package.Category)] $($package.Name)"
-        
+
         # Check if already installed (unless Force is specified)
         if (-not $Force) {
             $isInstalled = Test-BunPackageInstalled -PackageName $package.Id
-            
+
             if ($isInstalled) {
                 # Only check for updates if CheckUpdate flag is set
                 if ($CheckUpdate) {
                     Write-Info "  Already installed, upgrading to latest version..."
-                    
+
                     # Install/upgrade with Bun (bun add --global will upgrade if newer version available)
                     if (Install-BunPackage -PackageName $package.Id) {
                         Write-Success "  Upgraded to latest version"
@@ -241,10 +241,10 @@ foreach ($configFile in $configFiles) {
                 continue
             }
         }
-        
+
         # Install/Reinstall package
         Write-Info "  Installing with Bun..."
-        
+
         if (Install-BunPackage -PackageName $package.Id) {
             if ($Force) {
                 Write-Success "  Upgraded/Reinstalled successfully"

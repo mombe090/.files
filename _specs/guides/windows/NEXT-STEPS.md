@@ -227,33 +227,33 @@ nvim
 
 ### Test 1: Install Nerd Fonts
 - **Status**: ⏳ PENDING
-- **Notes**: 
-- **Screenshot**: 
+- **Notes**:
+- **Screenshot**:
 
 ### Test 2: PowerShell with Starship
 - **Status**: ⏳ PENDING
-- **Notes**: 
-- **Screenshot**: 
+- **Notes**:
+- **Screenshot**:
 
 ### Test 3: Nushell with Starship
 - **Status**: ⏳ PENDING
-- **Notes**: 
-- **Screenshot**: 
+- **Notes**:
+- **Screenshot**:
 
 ### Test 4: WezTerm
 - **Status**: ⏳ PENDING
-- **Notes**: 
-- **Screenshot**: 
+- **Notes**:
+- **Screenshot**:
 
 ### Test 5: LazyVim (Neovim)
 - **Status**: ✅ PASSED
-- **Notes**: 
+- **Notes**:
   - Installation completed successfully
   - All dependencies found (nvim, git, ripgrep, fd, lazygit)
   - No errors during clone or setup
   - Config location: C:\Users\yayam\AppData\Local\nvim
 - **Screenshot**: N/A (see installation output above)
-- **Screenshot**: 
+- **Screenshot**:
 
 ---
 

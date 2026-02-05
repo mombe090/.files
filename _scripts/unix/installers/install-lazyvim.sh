@@ -144,7 +144,7 @@ check_dependencies() {
         print_error "Missing required dependencies: ${missing_required[*]}"
         print_info ""
         print_info "Install them using your package manager:"
-        
+
         if [[ "$OSTYPE" == "darwin"* ]]; then
             print_info "  brew install neovim git"
         elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -164,7 +164,7 @@ check_dependencies() {
         print_warning ""
         print_warning "Missing optional dependencies: ${missing_optional[*]}"
         print_info "For the best experience, install them using:"
-        
+
         if [[ "$OSTYPE" == "darwin"* ]]; then
             print_info "  brew install ripgrep fd lazygit"
         elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -193,7 +193,7 @@ backup_neovim_config() {
             print_info "Removing old backup..."
             rm -rf "$NVIM_CONFIG_BACKUP"
         fi
-        
+
         print_info "Backing up config: $NVIM_CONFIG_PATH -> $NVIM_CONFIG_BACKUP"
         mv "$NVIM_CONFIG_PATH" "$NVIM_CONFIG_BACKUP"
         print_success "Config backed up successfully"
@@ -208,7 +208,7 @@ backup_neovim_config() {
             print_info "Removing old data backup..."
             rm -rf "$NVIM_DATA_BACKUP"
         fi
-        
+
         print_info "Backing up data: $NVIM_DATA_PATH -> $NVIM_DATA_BACKUP"
         mv "$NVIM_DATA_PATH" "$NVIM_DATA_BACKUP"
         print_success "Data backed up successfully"
@@ -273,7 +273,7 @@ main() {
     if [ -d "$NVIM_CONFIG_PATH" ] && [ -f "$NVIM_CONFIG_PATH/lua/config/lazy.lua" ] && [ "$FORCE" != true ]; then
         print_warning "LazyVim appears to be already installed at: $NVIM_CONFIG_PATH"
         print_info "Use --force to reinstall"
-        
+
         read -rp "Do you want to reinstall? (y/N): " response
         if [[ ! "$response" =~ ^[Yy]$ ]]; then
             print_info "Installation cancelled"

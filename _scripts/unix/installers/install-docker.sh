@@ -58,7 +58,7 @@ check_existing_docker() {
 # ===== UNINSTALL CONFLICTING PACKAGES =====
 uninstall_conflicting_packages() {
     log_step "Removing conflicting packages..."
-    
+
     local conflicting_packages=(
         "docker.io"
         "docker-compose"

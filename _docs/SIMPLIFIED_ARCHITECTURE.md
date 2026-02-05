@@ -47,16 +47,16 @@
 # install.sh had duplicate logic
 install_mise() {
     log_step "Installing mise..."
-    
+
     # ❌ Duplicate check - mise script also checks this!
     if command -v mise &> /dev/null; then
         log_warn "mise already installed ($(mise --version))"
         return 0
     fi
-    
+
     # ❌ Duplicate PATH logic - mise script handles this!
     bash "$SCRIPTS_DIR/install-mise.sh"
-    
+
     if [[ -f "$HOME/.local/bin/mise" ]]; then
         export PATH="$HOME/.local/bin:$PATH"
         eval "$(mise activate bash)"
@@ -64,7 +64,7 @@ install_mise() {
         export PATH="/usr/local/bin:$PATH"
         eval "$(mise activate bash)"
     fi
-    
+
     log_success "mise installed"
 }
 ```
@@ -77,7 +77,7 @@ install_mise() {
     log_step "Installing mise..."
     if [[ -x "$SCRIPTS_DIR/install-mise.sh" ]]; then
         bash "$SCRIPTS_DIR/install-mise.sh"
-        
+
         # ✅ Only activate in current shell (not duplicate logic)
         if command -v mise &> /dev/null; then
             eval "$(mise activate bash)" 2>/dev/null || true

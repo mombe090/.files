@@ -19,9 +19,9 @@
 # =============================================================================
 
 # Example: Machine-specific API keys, tokens, secrets
-# $env:MY_API_KEY = "your-secret-key-here"
-# $env:OPENAI_API_KEY = "sk-..."
-# $env:GITHUB_TOKEN = "ghp_..."
+# $env:MY_API_KEY = "your-secret-key-here"  # pragma: allowlist secret
+# $env:OPENAI_API_KEY = "sk-..."  # pragma: allowlist secret
+# $env:GITHUB_TOKEN = "ghp_..."  # pragma: allowlist secret
 
 # Example: Machine-specific paths
 # $env:PROJECT_DIR = "D:\Projects"

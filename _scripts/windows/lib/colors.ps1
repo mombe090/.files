@@ -56,7 +56,7 @@ function Write-ColoredText {
         [string]$Text,
         [string]$Color
     )
-    
+
     if ($SupportsRGB) {
         Write-Host "$Color$Text$($Script:CatppuccinMocha.Reset)" -NoNewline
     } else {

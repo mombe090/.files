@@ -32,7 +32,7 @@ $modules = @(
 
 foreach ($module in $modules) {
     Write-Step "Checking: $($module.Name)"
-    
+
     if (Get-Module -ListAvailable -Name $module.Name) {
         Write-Success "Already installed"
     }

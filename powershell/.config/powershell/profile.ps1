@@ -8,10 +8,10 @@
 
 if (Get-Command starship -ErrorAction SilentlyContinue) {
     Invoke-Expression (&starship init powershell)
-    
+
     # Set Starship config location
     $env:STARSHIP_CONFIG = "$env:USERPROFILE\.config\starship\starship.toml"
-    
+
     # Set shell name for Starship prompt
     $env:STARSHIP_SHELL = "pwsh"
 }
@@ -37,17 +37,17 @@ $env:VISUAL = "nvim"
 # Import PSReadLine if available
 if (Get-Module -ListAvailable -Name PSReadLine) {
     Import-Module PSReadLine
-    
+
     # Vi mode
     Set-PSReadLineOption -EditMode Vi
-    
+
     # History search
     Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
     Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
-    
+
     # Tab completion
     Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
-    
+
     # Colors
     Set-PSReadLineOption -Colors @{
         Command   = 'Cyan'
@@ -80,7 +80,7 @@ if (Test-Path $gitAliasesPath) {
 # Kubernetes aliases (if kubectl is installed)
 if (Get-Command kubectl -ErrorAction SilentlyContinue) {
     Set-Alias -Name k -Value kubectl
-    
+
     function kg { param($resource) kubectl get $resource }
     function kd { param($resource, $name) kubectl describe $resource $name }
     function kl { param($pod) kubectl logs -f $pod }

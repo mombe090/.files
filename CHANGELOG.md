@@ -154,7 +154,7 @@ df340f8 security: add comprehensive security review and corporate safety measure
   - `--list` option to show installed fonts
   - Downloads from official nerd-fonts releases
   - Installs 170+ font variants (CascadiaMono: 36, JetBrainsMono: 96, VictorMono: 42)
-  
+
 - **`docs/INSTALL_MODERN_FONTS_GUIDE.md`** - Comprehensive font installation guide
   - Detailed installation instructions
   - Font feature descriptions (ligatures, icons, variants)
@@ -223,7 +223,7 @@ df340f8 security: add comprehensive security review and corporate safety measure
   - Why bash configuration was needed
   - How mise activation works in bash
   - Troubleshooting bash + mise issues
-  
+
 - **`docs/BUN_PATH_CONFIGURATION.md`** - Bun PATH setup guide
   - How bun global packages work
   - PATH configuration for `~/.bun/bin`
@@ -487,7 +487,7 @@ df340f8 security: add comprehensive security review and corporate safety measure
   - Timestamped backup directories
   - Skips symlinks automatically
   - Tracks backup location for easy restore
-  
+
 - **`_scripts/linux/sh/tools/uninstall.sh`** - Uninstall dotfiles and restore backups
   - Removes all stow symlinks
   - Optional backup restoration
@@ -502,7 +502,7 @@ df340f8 security: add comprehensive security review and corporate safety measure
   - Infrastructure tools: terraform, opentofu, kubectl, helm, k9s
   - DevOps tools: argocd, awscli, lazygit, github-cli
   - Will be symlinked to `~/.config/mise/config.toml` via stow
-  
+
 - **`git/.gitconfig.template`** - Template for sharing git config
   - Separates personal info into `.gitconfig.local`
   - Includes all settings without personal data
@@ -516,7 +516,7 @@ df340f8 security: add comprehensive security review and corporate safety measure
   - Troubleshooting section
   - Contributing guidelines
   - Detailed tools table with descriptions
-  
+
 - Updated **`_scripts/linux/README.md`** with:
   - Documentation for all scripts
   - Usage examples
@@ -535,11 +535,11 @@ df340f8 security: add comprehensive security review and corporate safety measure
   - ✅ Added conditional checks for Java installation
   - ✅ Reorganized OS-specific configurations
   - ✅ Added comment to use mise for Node.js version management
-  
+
 - **`zsh/.config/zsh/aliases.zsh`**
   - ✅ Fixed duplicate `gp` alias (git push)
   - ✅ Renamed `gp='git push origin'` to `gpo='git push origin'`
-  
+
 - **`zsh/.zshrc`**
   - ✅ Fixed mise activation logic (was skipping macOS)
   - ✅ Now checks if mise exists before activating

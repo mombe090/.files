@@ -100,9 +100,9 @@ Target: C:\Users\<username>\.files\nvim\.local\nvim\init.lua
 
 ```powershell
 # List all symlinks in LOCALAPPDATA\nvim
-Get-ChildItem $env:LOCALAPPDATA\nvim -Recurse -Force | 
-    Where-Object { $_.LinkType -eq 'SymbolicLink' } | 
-    Select-Object FullName, Target | 
+Get-ChildItem $env:LOCALAPPDATA\nvim -Recurse -Force |
+    Where-Object { $_.LinkType -eq 'SymbolicLink' } |
+    Select-Object FullName, Target |
     Format-Table -AutoSize
 ```
 
@@ -142,7 +142,7 @@ Get-ChildItem $env:LOCALAPPDATA\nvim -ErrorAction SilentlyContinue
 
 ```powershell
 # Check Developer Mode status
-Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock | 
+Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock |
     Select-Object AllowDevelopmentWithoutDevLicense
 
 # Enable Developer Mode (requires admin)
@@ -237,7 +237,7 @@ $initLua = Get-Item $env:LOCALAPPDATA\nvim\init.lua -ErrorAction SilentlyContinu
 if ($initLua -and $initLua.LinkType -eq 'SymbolicLink') {
     Write-Host "✓ init.lua is a valid symlink" -ForegroundColor Green
     Write-Host "  Target: $($initLua.Target)" -ForegroundColor Gray
-    
+
     # Check path correctness
     if ($initLua.FullName -notmatch '\.config') {
         Write-Host "✓ Path is correct (no .config in LOCALAPPDATA path)" -ForegroundColor Green
@@ -252,7 +252,7 @@ Write-Host ""
 
 # Test 5: List all symlinks
 Write-Host "Test 5: All symlinks in nvim directory" -ForegroundColor Yellow
-$symlinks = Get-ChildItem $env:LOCALAPPDATA\nvim -Recurse -Force | 
+$symlinks = Get-ChildItem $env:LOCALAPPDATA\nvim -Recurse -Force |
     Where-Object { $_.LinkType -eq 'SymbolicLink' }
 Write-Host "Found $($symlinks.Count) symlinks" -ForegroundColor Cyan
 Write-Host ""

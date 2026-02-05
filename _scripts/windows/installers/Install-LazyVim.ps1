@@ -89,7 +89,7 @@ function Backup-NeovimConfig {
             Write-Info "Removing old backup..."
             Remove-Item $nvimBackupPath -Recurse -Force
         }
-        
+
         Write-Info "Backing up config: $nvimConfigPath -> $nvimBackupPath"
         Move-Item $nvimConfigPath $nvimBackupPath -Force
         Write-Success "Config backed up successfully"
@@ -103,7 +103,7 @@ function Backup-NeovimConfig {
             Write-Info "Removing old data backup..."
             Remove-Item $nvimDataBackupPath -Recurse -Force
         }
-        
+
         Write-Info "Backing up data: $nvimDataPath -> $nvimDataBackupPath"
         Move-Item $nvimDataPath $nvimDataBackupPath -Force
         Write-Success "Data backed up successfully"
@@ -209,7 +209,7 @@ function Install-LazyVim {
     if ((Test-Path $nvimConfigPath) -and (Test-Path $lazyVimLua) -and -not $Force) {
         Write-Warning "LazyVim appears to be already installed at: $nvimConfigPath"
         Write-Info "Use -Force to reinstall"
-        
+
         $response = Read-Host "Do you want to reinstall? (y/N)"
         if ($response -notmatch "^[Yy]") {
             Write-Info "Installation cancelled"

@@ -36,13 +36,13 @@ $FontsFolder = [System.Environment]::GetFolderPath('Fonts')
 
 function Get-LatestNerdFontsRelease {
     Write-Info "Fetching latest Nerd Fonts release information..."
-    
+
     try {
         $apiUrl = "https://api.github.com/repos/$NerdFontsRepo/releases/latest"
         $response = Invoke-RestMethod -Uri $apiUrl -Headers @{
             'User-Agent' = 'PowerShell-NerdFonts-Installer'
         }
-        
+
         Write-Success "Latest version: $($response.tag_name)"
         return $response
     }
@@ -57,14 +57,14 @@ function Get-FontDownloadUrl {
         [string]$FontName,
         [object]$Release
     )
-    
+
     $assetName = "$FontName.zip"
     $asset = $Release.assets | Where-Object { $_.name -eq $assetName }
-    
+
     if ($asset) {
         return $asset.browser_download_url
     }
-    
+
     return $null
 }
 
@@ -73,7 +73,7 @@ function Test-FontInstalled {
         [string]$FontName,
         [string]$FontsFolder
     )
-    
+
     # Check if any .ttf files with the font name exist in the fonts folder
     $fontFiles = Get-ChildItem -Path $FontsFolder -Filter "*$FontName*.ttf" -ErrorAction SilentlyContinue
     return ($fontFiles.Count -gt 0)
@@ -84,14 +84,14 @@ function Install-Font {
         [string]$FontPath,
         [string]$FontsFolder
     )
-    
+
     try {
         $fontFileName = Split-Path -Leaf $FontPath
         $destinationPath = Join-Path $FontsFolder $fontFileName
-        
+
         # Copy font file to Windows Fonts folder
         Copy-Item -Path $FontPath -Destination $destinationPath -Force -ErrorAction Stop
-        
+
         return $true
     }
     catch {
@@ -106,33 +106,33 @@ function Install-NerdFont {
         [object]$Release,
         [string]$FontsFolder
     )
-    
+
     Write-Header "Installing $FontName Nerd Font"
-    
+
     # Check if already installed
     if (Test-FontInstalled -FontName $FontName -FontsFolder $FontsFolder) {
         Write-Success "Font already installed: $FontName"
         return $true
     }
-    
+
     # Get download URL
     $downloadUrl = Get-FontDownloadUrl -FontName $FontName -Release $Release
-    
+
     if (-not $downloadUrl) {
         Write-ErrorMsg "Font not found in release: $FontName"
         return $false
     }
-    
+
     Write-Info "Downloading: $FontName"
     Write-Info "URL: $downloadUrl"
-    
+
     # Create temp directory
     $fontTempDir = Join-Path $TempDir $FontName
     if (Test-Path $fontTempDir) {
         Remove-Item $fontTempDir -Recurse -Force
     }
     New-Item -ItemType Directory -Path $fontTempDir -Force | Out-Null
-    
+
     # Download zip file
     $zipPath = Join-Path $fontTempDir "$FontName.zip"
     try {
@@ -143,7 +143,7 @@ function Install-NerdFont {
         Write-ErrorMsg "Failed to download: $_"
         return $false
     }
-    
+
     # Extract zip file
     Write-Step "Extracting fonts..."
     try {
@@ -154,34 +154,34 @@ function Install-NerdFont {
         Write-ErrorMsg "Failed to extract: $_"
         return $false
     }
-    
+
     # Install font files
     Write-Step "Copying font files to Windows Fonts folder..."
     $fontFiles = Get-ChildItem -Path $fontTempDir -Filter "*.ttf" -Recurse
-    
+
     if ($fontFiles.Count -eq 0) {
         Write-ErrorMsg "No font files found in archive"
         return $false
     }
-    
+
     $installedCount = 0
     foreach ($fontFile in $fontFiles) {
         # Skip fonts with "Windows Compatible" in the name - we want the regular versions
         if ($fontFile.Name -match "Windows Compatible") {
             continue
         }
-        
+
         Write-Verbose "Copying: $($fontFile.Name)"
         if (Install-Font -FontPath $fontFile.FullName -FontsFolder $FontsFolder) {
             $installedCount++
         }
     }
-    
+
     Write-Success "Copied $installedCount font file(s) for $FontName"
-    
+
     # Cleanup
     Remove-Item $fontTempDir -Recurse -Force -ErrorAction SilentlyContinue
-    
+
     return $true
 }
 

@@ -31,7 +31,7 @@ for pkg in "${packages[@]}"; do
     if already_installed; then
         ((skipped++))  # ← Would hang here
     fi
-    
+
     if install_success; then
         ((installed++))  # ← Would hang here
     else
@@ -53,7 +53,7 @@ for pkg in "${packages[@]}"; do
     if already_installed; then
         skipped=$((skipped + 1))  # ✅ WORKS
     fi
-    
+
     if install_success; then
         installed=$((installed + 1))  # ✅ WORKS
     else

@@ -1,0 +1,189 @@
+# =============================================================================
+# Homebrew Packages - macOS
+# =============================================================================
+# Package configuration for macOS using Homebrew.
+#
+# Usage:
+#   Install all: just install_packages
+#   Install category: (future enhancement)
+# =============================================================================
+
+essentials:
+  - name: git
+    description: Distributed revision control system
+    category: essentials
+
+  - name: curl
+    description: Get a file from an HTTP, HTTPS or FTP server
+    category: essentials
+
+  - name: wget
+    description: Internet file retriever
+    category: essentials
+
+  - name: stow
+    description: Organize software neatly under a single directory tree (symlinks)
+    category: essentials
+
+  - name: zsh
+    description: UNIX shell (command interpreter)
+    category: essentials
+
+development:
+  - name: neovim
+    description: Ambitious Vim-fork focused on extensibility and agility
+    category: development
+
+  - name: tmux
+    description: Terminal multiplexer
+    category: development
+
+  - name: fzf
+    description: Command-line fuzzy finder written in Go
+    category: development
+
+  - name: ripgrep
+    description: Search tool like grep and The Silver Searcher
+    category: development
+
+  - name: fd
+    description: Simple, fast and user-friendly alternative to find
+    category: development
+
+  - name: bat
+    description: Clone of cat(1) with syntax highlighting and Git integration
+    category: development
+
+  - name: eza
+    description: Modern, maintained replacement for ls
+    category: development
+
+  - name: zoxide
+    description: Shell extension to navigate your filesystem faster
+    category: development
+
+  - name: delta
+    description: Syntax-highlighting pager for git and diff output
+    category: development
+
+  - name: direnv
+    description: Load/unload environment variables based on $PWD
+    category: development
+
+  - name: starship
+    description: Cross-shell prompt for astronauts
+    category: development
+
+  - name: jq
+    description: Lightweight and flexible command-line JSON processor
+    category: development
+
+  - name: yq
+    description: Process YAML, JSON, XML, CSV and properties documents
+    category: development
+
+  - name: htop
+    description: Improved top (interactive process viewer)
+    category: development
+
+  - name: btop
+    description: Resource monitor that shows usage and stats
+    category: development
+
+  - name: tree
+    description: Display directories as trees (with optional color/HTML output)
+    category: development
+
+# Language runtimes (prefer mise for version management)
+runtimes:
+  - name: node
+    description: Platform built on V8 to build network applications
+    category: runtimes
+    optional: true
+    note: "Prefer mise for version management"
+
+  - name: python@3.12
+    description: Interpreted, interactive, object-oriented programming language
+    category: runtimes
+    optional: true
+    note: "Prefer mise for version management"
+
+  - name: go
+    description: Open source programming language to build simple/reliable/efficient software
+    category: runtimes
+    optional: true
+    note: "Prefer mise for version management"
+
+  - name: rust
+    description: Safe, concurrent, practical language
+    category: runtimes
+    optional: true
+    note: "Prefer mise for version management"
+
+cloud:
+  - name: kubectl
+    description: Kubernetes command-line interface
+    category: cloud
+
+  - name: helm
+    description: Kubernetes package manager
+    category: cloud
+
+  - name: k9s
+    description: Kubernetes CLI To Manage Your Clusters In Style!
+    category: cloud
+
+  - name: terraform
+    description: Tool to build, change, and version infrastructure
+    category: cloud
+
+  - name: ansible
+    description: Automate deployment, configuration, and upgrading
+    category: cloud
+
+  - name: docker
+    description: Pack, ship and run any application as a lightweight container
+    category: cloud
+
+  - name: docker-compose
+    description: Isolated development environments using Docker
+    category: cloud
+
+fonts:
+  - name: font-cascadia-code
+    description: Microsoft's Cascadia Code font
+    category: fonts
+    tap: homebrew/cask-fonts
+
+  - name: font-jetbrains-mono-nerd-font
+    description: JetBrains Mono with Nerd Font icons
+    category: fonts
+    tap: homebrew/cask-fonts
+
+  - name: font-fira-code-nerd-font
+    description: Fira Code with Nerd Font icons
+    category: fonts
+    tap: homebrew/cask-fonts
+
+  - name: font-hack-nerd-font
+    description: Hack with Nerd Font icons
+    category: fonts
+    tap: homebrew/cask-fonts
+
+casks:
+  - name: alacritty
+    description: GPU-accelerated terminal emulator
+    category: casks
+
+  - name: wezterm
+    description: GPU-accelerated cross-platform terminal emulator
+    category: casks
+
+  - name: visual-studio-code
+    description: Open-source code editor
+    category: casks
+
+  - name: intellij-idea-ce
+    description: IntelliJ IDEA Community Edition
+    category: casks
+    optional: true

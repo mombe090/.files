@@ -157,14 +157,14 @@ Or restart your shell.
 
 ## Benefits of Modular Structure
 
-✅ **Easy to maintain** - Find and edit specific configurations quickly  
-✅ **Clean organization** - Related settings grouped in folders  
-✅ **Intuitive structure** - Know where to look based on folder names  
-✅ **Reusable** - Share individual modules across machines  
-✅ **Version control friendly** - Track changes to specific areas  
-✅ **Fast loading** - Nushell's module system is efficient  
-✅ **No conflicts** - Each module has clear responsibility  
-✅ **Scalable** - Easy to add new modules in appropriate folders  
+✅ **Easy to maintain** - Find and edit specific configurations quickly
+✅ **Clean organization** - Related settings grouped in folders
+✅ **Intuitive structure** - Know where to look based on folder names
+✅ **Reusable** - Share individual modules across machines
+✅ **Version control friendly** - Track changes to specific areas
+✅ **Fast loading** - Nushell's module system is efficient
+✅ **No conflicts** - Each module has clear responsibility
+✅ **Scalable** - Easy to add new modules in appropriate folders
 
 ## Cross-Platform Support
 

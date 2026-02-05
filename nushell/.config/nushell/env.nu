@@ -75,14 +75,14 @@ if $nu.os-info.name == 'windows' {
 if (which starship | is-not-empty) {
     mkdir ~/.cache/starship
     starship init nu | save -f ~/.cache/starship/init.nu
-    
+
     # Set Starship config location based on platform
     if $nu.os-info.name == 'windows' {
         $env.STARSHIP_CONFIG = ($env.USERPROFILE | path join ".config" "starship" "starship.toml")
     } else {
         $env.STARSHIP_CONFIG = ($env.HOME | path join ".config" "starship" "starship.toml")
     }
-    
+
     # Set shell name for Starship prompt
     $env.STARSHIP_SHELL = "nu"
 }

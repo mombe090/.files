@@ -114,7 +114,7 @@ else
     echo "1. Restart your shell:"
     echo "   exec \$SHELL -l"
     echo ""
-    
+
     # Find dotnet and suggest PATH fix
     for path in "${dotnet_paths[@]}"; do
         if [[ -f "$path" ]]; then
@@ -131,7 +131,7 @@ else
             break
         fi
     done
-    
+
     echo "3. If dotnet is not installed, run:"
     echo "   ./scripts/install-dotnet.sh"
     echo ""

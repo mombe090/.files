@@ -117,7 +117,7 @@ foreach ($pkgMgr in $packageManagers) {
             }
         }
     }
-    
+
     # Then add personal packages if requested
     if ($Type -eq 'perso' -or $Type -eq 'all') {
         $configPath = "$ConfigDir\perso\$pkgMgr.pkg.yml"
@@ -147,36 +147,36 @@ foreach ($configFile in $configFiles) {
     $pm = $configFile.PackageManager
     $pkgType = $configFile.Type
     Write-Header "Processing: $(Split-Path $configFile.Path -Leaf) [$pkgType/$pm]"
-    
+
     # Read config
     $configContent = Get-Content -Path $configFile.Path -Raw
     $lines = $configContent -split "`n"
-    
+
     $packages = @()
     $currentCategory = ""
     $currentPackage = $null
-    
+
     foreach ($line in $lines) {
         $line = $line.Trim()
-        
+
         # Skip comments and empty lines
         if ($line -match '^\s*#' -or $line -eq '') {
             continue
         }
-        
+
         # Category header
         if ($line -match '^(\w+):$') {
             $currentCategory = $matches[1]
             continue
         }
-        
+
         # Package entry
         if ($line -match '^\s*-\s*id:\s*(.+)$') {
             # Save previous package if exists
             if ($currentPackage) {
                 $packages += $currentPackage
             }
-            
+
             $packageId = $matches[1].Trim()
             $currentPackage = [PSCustomObject]@{
                 Id = $packageId
@@ -192,38 +192,38 @@ foreach ($configFile in $configFiles) {
             }
         }
     }
-    
+
     # Add last package
     if ($currentPackage) {
         $packages += $currentPackage
     }
-    
+
     Write-Info "Found $($packages.Count) package(s)"
-    
+
     # Filter by category if specified
     if ($Category) {
         $packages = $packages | Where-Object { $_.Category -eq $Category }
         Write-Info "Filtered to $($packages.Count) package(s) in category '$Category'"
     }
-    
+
     # Install packages
     foreach ($package in $packages) {
         Write-Step "[$($package.Category)] $($package.Id)"
-        
+
         # Check if already installed
         $isInstalled = Test-PackageInstalled -PackageName $package.Id -PackageManager $pm
-        
+
         if ($isInstalled) {
             # Only check for updates if CheckUpdate flag is set
             if ($CheckUpdate) {
                 Write-Info "  Already installed, checking for updates..."
-                
+
                 # Check if update is available
                 $updateAvailable = Test-PackageUpdateAvailable -PackageName $package.Id -PackageManager $pm
-                
+
                 if ($updateAvailable) {
                     Write-Info "  Update available, upgrading..."
-                    
+
                     # Try to upgrade
                     $upgraded = $false
                     if ($pm -eq 'choco') {
@@ -238,7 +238,7 @@ foreach ($configFile in $configFiles) {
                             $upgraded = $true
                         }
                     }
-                    
+
                     if ($upgraded) {
                         Write-Success "  Updated to latest version"
                         $totalInstalled++

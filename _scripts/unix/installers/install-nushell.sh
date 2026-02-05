@@ -35,13 +35,13 @@ check_nushell() {
 # Install Nushell on macOS via Homebrew
 install_macos() {
     log_step "Installing Nushell via Homebrew..."
-    
+
     if ! command -v brew &> /dev/null; then
         log_error "Homebrew is not installed"
         log_info "Install Homebrew from: https://brew.sh"
         return 1
     fi
-    
+
     brew install nushell
     log_success "Nushell installed via Homebrew"
 }
@@ -49,7 +49,7 @@ install_macos() {
 # Install Nushell on Linux via binary release
 install_linux() {
     log_step "Installing Nushell via binary release..."
-    
+
     # Detect architecture
     ARCH=$(uname -m)
     case "$ARCH" in
@@ -67,56 +67,56 @@ install_linux() {
             return 1
             ;;
     esac
-    
+
     # Get latest version from GitHub
     log_info "Fetching latest Nushell version..."
     LATEST_VERSION=$(curl -s https://api.github.com/repos/nushell/nushell/releases/latest | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
-    
+
     if [[ -z "$LATEST_VERSION" ]]; then
         log_error "Failed to fetch latest version"
         return 1
     fi
-    
+
     log_info "Latest version: $LATEST_VERSION"
-    
+
     # Download binary
     DOWNLOAD_URL="https://github.com/nushell/nushell/releases/download/${LATEST_VERSION}/nu-${LATEST_VERSION}-${ARCH_NAME}-unknown-linux-musl.tar.gz"
     TEMP_DIR=$(mktemp -d)
     DOWNLOAD_FILE="${TEMP_DIR}/nushell.tar.gz"
-    
+
     log_info "Downloading from: $DOWNLOAD_URL"
     if ! curl -L -o "$DOWNLOAD_FILE" "$DOWNLOAD_URL"; then
         log_error "Failed to download Nushell binary"
         rm -rf "$TEMP_DIR"
         return 1
     fi
-    
+
     # Extract binary
     log_info "Extracting binary..."
     tar -xzf "$DOWNLOAD_FILE" -C "$TEMP_DIR"
-    
+
     # Install to ~/.local/bin
     INSTALL_DIR="$HOME/.local/bin"
     mkdir -p "$INSTALL_DIR"
-    
+
     # Find the nu binary in the extracted directory
     NU_BINARY=$(find "$TEMP_DIR" -name "nu" -type f | head -n 1)
-    
+
     if [[ -z "$NU_BINARY" ]]; then
         log_error "Could not find nu binary in archive"
         rm -rf "$TEMP_DIR"
         return 1
     fi
-    
+
     log_info "Installing to $INSTALL_DIR/nu..."
     cp "$NU_BINARY" "$INSTALL_DIR/nu"
     chmod +x "$INSTALL_DIR/nu"
-    
+
     # Cleanup
     rm -rf "$TEMP_DIR"
-    
+
     log_success "Nushell installed to $INSTALL_DIR/nu"
-    
+
     # Check if ~/.local/bin is in PATH
     if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
         log_warn "~/.local/bin is not in your PATH"
@@ -128,7 +128,7 @@ install_linux() {
 main() {
     log_step "Installing Nushell..."
     echo ""
-    
+
     # Check if already installed
     if check_nushell; then
         log_info "Nushell version: $(nu --version)"
@@ -136,10 +136,10 @@ main() {
         log_success "Nushell is already installed"
         return 0
     fi
-    
+
     # Detect OS and install
     OS=$(detect_os)
-    
+
     case "$OS" in
         macos)
             log_info "Detected: macOS"
@@ -154,9 +154,9 @@ main() {
             return 1
             ;;
     esac
-    
+
     echo ""
-    
+
     # Verify installation
     if check_nushell; then
         log_success "Nushell installation complete!"

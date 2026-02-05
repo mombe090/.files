@@ -20,7 +20,7 @@ essentials:
   - id: Google.Chrome
     name: Google Chrome
     category: essentials
-    
+
   - id: wez.wezterm
     name: WezTerm
     category: essentials
@@ -40,39 +40,39 @@ tools:
   - id: JernejSimoncic.Wget
     name: wget (HTTP downloader)
     category: tools
-    
+
   - id: GnuWin32.Zip
     name: zip (Info-ZIP)
     category: tools
-    
+
   - id: GnuWin32.UnZip
     name: unzip (Info-ZIP)
     category: tools
-    
+
   - id: eza-community.eza
     name: eza (ls clone)
     category: tools
-    
+
   - id: jqlang.jq
     name: jq (JSON processor)
     category: tools
-    
+
   - id: Task.Task
     name: Task (Taskfile runner)
     category: tools
-    
+
   - id: GitHub.cli
     name: GitHub CLI
     category: tools
-    
+
   - id: GitHub.GitHubCopilot
     name: GitHub Copilot CLI
     category: tools
-    
+
   - id: Nushell.Nushell
     name: Nushell
     category: tools
-    
+
   - id: equalsraf.win32yank
     name: win32yank (Windows clipboard tool)
     category: tools

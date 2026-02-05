@@ -42,7 +42,7 @@ is_linux() {
 
 get_package_manager() {
     local os=$(detect_os)
-    
+
     if [[ "$os" == "macos" ]]; then
         if command -v brew &>/dev/null; then
             echo "brew"
@@ -65,7 +65,7 @@ get_package_manager() {
         fi
         return 0
     fi
-    
+
     echo "unknown"
 }
 
@@ -77,19 +77,19 @@ get_home_dir() {
     # Get real home from passwd database
     local real_home
     real_home=$(getent passwd "$(whoami)" | cut -d: -f6)
-    
+
     # Warn if HOME is stale
     if [[ "$HOME" != "$real_home" ]]; then
         log_warning "HOME was $HOME, correcting to $real_home" >&2
     fi
-    
+
     echo "$real_home"
 }
 
 ensure_home_correct() {
     local real_home
     real_home=$(getent passwd "$(whoami)" | cut -d: -f6)
-    
+
     if [[ "$HOME" != "$real_home" ]]; then
         export HOME="$real_home"
     fi

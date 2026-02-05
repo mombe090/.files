@@ -40,12 +40,12 @@ check_stow() {
 unstow_packages() {
     log_info "Removing symlinks created by stow..."
     echo ""
-    
+
     cd "$DOTFILES_ROOT"
-    
+
     local unstowed_count=0
     local skipped_count=0
-    
+
     for package in "${STOW_PACKAGES[@]}"; do
         if [[ -d "$package" ]]; then
             log_info "Unstowing $package..."
@@ -57,7 +57,7 @@ unstow_packages() {
             ((skipped_count++))
         fi
     done
-    
+
     echo ""
     log_success "Unstow complete"
     echo "  - Packages unstowed: $unstowed_count"
@@ -70,17 +70,17 @@ restore_backup() {
         log_info "No backup location found"
         return 0
     fi
-    
+
     local backup_dir=$(cat "$HOME/.dotfiles-backup-location")
-    
+
     if [[ ! -d "$backup_dir" ]]; then
         log_warn "Backup directory not found: $backup_dir"
         return 0
     fi
-    
+
     echo ""
     read -p "Restore backup from $backup_dir? [y/N]: " restore
-    
+
     if [[ "$restore" =~ ^[Yy]$ ]]; then
         log_info "Restoring backup..."
         cp -r "$backup_dir"/* "$HOME/" 2>/dev/null || true
@@ -94,14 +94,14 @@ restore_backup() {
 # ===== CLEAN ZINIT =====
 clean_zinit() {
     local zinit_dir="$HOME/.local/share/zinit"
-    
+
     if [[ ! -d "$zinit_dir" ]]; then
         return 0
     fi
-    
+
     echo ""
     read -p "Remove Zinit and plugins? [y/N]: " clean
-    
+
     if [[ "$clean" =~ ^[Yy]$ ]]; then
         log_info "Removing Zinit..."
         rm -rf "$zinit_dir"
@@ -118,23 +118,23 @@ main() {
     echo -e "${BOLD}   Dotfiles Uninstall Utility${NC}"
     echo -e "${BOLD}==================================${NC}"
     echo ""
-    
+
     log_warn "This will remove all symlinks created by stow"
     echo ""
     read -p "Continue with uninstall? [y/N]: " confirm
-    
+
     if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
         log_info "Uninstall cancelled"
         exit 0
     fi
-    
+
     echo ""
-    
+
     check_stow
     unstow_packages
     restore_backup
     clean_zinit
-    
+
     echo ""
     echo -e "${GREEN}==================================${NC}"
     echo -e "${GREEN}✓ Uninstall Complete!${NC}"

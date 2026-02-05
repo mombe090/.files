@@ -122,7 +122,7 @@ Invoke-Expression $installScript
 - Corporate environments should review Chocolatey before allowing
 - Consider pre-installing Chocolatey via corporate tools
 
-**Recommendation:** 
+**Recommendation:**
 - **For Pro Version:** Document that Chocolatey must be pre-approved by IT
 - **Alternative:** Pre-install Chocolatey via corporate package management
 
@@ -334,7 +334,7 @@ No high-severity vulnerabilities found.
 2. **Add security disclaimer to README:**
    ```markdown
    ## Corporate Environment Notes
-   
+
    - Chocolatey installation requires administrator privileges
    - Ensure Chocolatey is approved by your IT department before installing
    - Font installer (Install-ModernFonts.ps1) requires admin - this step is optional
@@ -393,6 +393,6 @@ No high-severity vulnerabilities found.
 
 ---
 
-**Reviewed by:** Senior Security Code Reviewer  
-**Date:** 2026-02-02  
+**Reviewed by:** Senior Security Code Reviewer
+**Date:** 2026-02-02
 **Recommendation:** **APPROVE** with minor documentation updates

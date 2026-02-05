@@ -36,7 +36,7 @@ MAGENTA='\033[0;35m'
 BOLD='\033[1m'
 NC='\033[0m'
 
-log_header() { 
+log_header() {
     echo ""
     echo -e "${MAGENTA}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo -e "${MAGENTA}[#] $1${NC}"
@@ -74,7 +74,7 @@ DESCRIPTION:
     - curl (required for downloads)
     - git (required for version control)
     - Just command runner (modern task runner)
-    
+
     After bootstrap completes, use:
         just install_full      # Full dotfiles installation
         just install_minimal   # Minimal dotfiles installation
@@ -82,7 +82,7 @@ DESCRIPTION:
 EXAMPLES:
     # Interactive (recommended)
     bash bootstrap.sh
-    
+
     # Non-interactive (CI/automation)
     bash bootstrap.sh --yes
 
@@ -124,7 +124,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     log_info "Detected: macOS"
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     OS="linux"
-    
+
     # Detect Linux distribution
     if command -v lsb_release &> /dev/null; then
         DISTRO=$(lsb_release -si | tr '[:upper:]' '[:lower:]')
@@ -133,7 +133,7 @@ elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     else
         DISTRO="unknown"
     fi
-    
+
     # Set package manager
     case "$DISTRO" in
         ubuntu|debian|linuxmint)
@@ -149,7 +149,7 @@ elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
             PM="unknown"
             ;;
     esac
-    
+
     log_info "Detected: Linux ($DISTRO)"
     log_info "Package Manager: $PM"
 else

@@ -31,13 +31,13 @@ install_homebrew() {
 ```bash
 install_homebrew() {
     local os=$(detect_os)
-    
+
     # Only install Homebrew on macOS
     if [[ "$os" != "macos" ]]; then
         log_info "Skipping Homebrew installation (not macOS)"
         return 0
     fi
-    
+
     log_step "Installing Homebrew..."
     if [[ -x "$SCRIPTS_DIR/install-homebrew.sh" ]]; then
         bash "$SCRIPTS_DIR/install-homebrew.sh"
@@ -66,7 +66,7 @@ custom_install() {
 custom_install() {
     # ...
     local os=$(detect_os)
-    
+
     # Only ask about Homebrew on macOS
     if [[ "$os" == "macos" ]]; then
         read -p "Install Homebrew? [Y/n]: " install_brew
@@ -139,7 +139,7 @@ $ ./install.sh --full
 $ ./install.sh
 Choose installation type: 3 (Custom)
 # Does NOT ask about Homebrew
-Install mise? [Y/n]: 
+Install mise? [Y/n]:
 # ... continues with other prompts
 ```
 
@@ -147,7 +147,7 @@ Install mise? [Y/n]:
 ```bash
 $ ./install.sh
 Choose installation type: 3 (Custom)
-Install Homebrew? [Y/n]: 
+Install Homebrew? [Y/n]:
 # ... asks about Homebrew as expected
 ```
 

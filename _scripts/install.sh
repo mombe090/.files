@@ -39,23 +39,23 @@ detect_os() {
 # ===== CHECK PREREQUISITES =====
 check_prerequisites() {
     log_step "Checking prerequisites..."
-    
+
     local missing=()
-    
+
     # Check for git
     if ! command -v git &> /dev/null; then
         missing+=("git")
     fi
-    
+
     # Check for curl
     if ! command -v curl &> /dev/null; then
         missing+=("curl")
     fi
-    
+
     if [[ ${#missing[@]} -gt 0 ]]; then
         log_error "Missing required tools: ${missing[*]}"
         log_info "Please install them first:"
-        
+
         local os=$(detect_os)
         case $os in
             macos)
@@ -73,17 +73,17 @@ check_prerequisites() {
         esac
         exit 1
     fi
-    
+
     log_success "Prerequisites satisfied"
 }
 
 # ===== BACKUP EXISTING CONFIGS =====
 backup_configs() {
     log_step "Backing up existing configurations..."
-    
+
     local backup_dir="$HOME/.dotfiles-backup-$(date +%Y%m%d-%H%M%S)"
     local backed_up=false
-    
+
     # Files to backup
     local files=(
         "$HOME/.zshrc"
@@ -95,14 +95,14 @@ backup_configs() {
         "$HOME/.config/starship.toml"
         "$HOME/.config/zsh"
     )
-    
+
     for file in "${files[@]}"; do
         if [[ -e "$file" ]] && [[ ! -L "$file" ]]; then
             if [[ "$backed_up" == false ]]; then
                 mkdir -p "$backup_dir"
                 backed_up=true
             fi
-            
+
             local relative_path="${file#$HOME/}"
             local backup_path="$backup_dir/$relative_path"
             mkdir -p "$(dirname "$backup_path")"
@@ -110,7 +110,7 @@ backup_configs() {
             log_info "Backed up: $file"
         fi
     done
-    
+
     if [[ "$backed_up" == true ]]; then
         log_success "Backup created at: $backup_dir"
         echo "$backup_dir" > "$HOME/.dotfiles-backup-location"
@@ -124,13 +124,13 @@ backup_configs() {
 install_package() {
     local package="$1"
     local mise_name="${2:-$package}"  # mise name might differ from system package name
-    
+
     # Check if already installed
     if command -v "$package" &> /dev/null; then
         log_info "$package already installed"
         return 0
     fi
-    
+
     # Try mise first
     if command -v mise &> /dev/null; then
         export MISE_DATA_DIR="$HOME/.local/share/mise"
@@ -145,11 +145,11 @@ install_package() {
             log_warn "Failed to install $package via mise, trying system package manager..."
         fi
     fi
-    
+
     # Fall back to system package manager
     local os=$(detect_os)
     log_info "Installing $package via system package manager..."
-    
+
     case $os in
         macos)
             if command -v brew &> /dev/null; then
@@ -178,20 +178,20 @@ install_package() {
             return 1
             ;;
     esac
-    
+
     log_success "$package installed"
 }
 
 # ===== INSTALL HOMEBREW =====
 install_homebrew() {
     local os=$(detect_os)
-    
+
     # Only install Homebrew on macOS
     if [[ "$os" != "macos" ]]; then
         log_info "Skipping Homebrew installation (not macOS)"
         return 0
     fi
-    
+
     log_step "Installing Homebrew..."
     if [[ -f "$SCRIPTS_DIR/installers/install-homebrew.sh" ]]; then
         bash "$SCRIPTS_DIR/installers/install-homebrew.sh"
@@ -205,7 +205,7 @@ install_mise() {
     log_step "Installing mise..."
     if [[ -f "$SCRIPTS_DIR/installers/install-mise.sh" ]]; then
         bash "$SCRIPTS_DIR/installers/install-mise.sh"
-        
+
         # Pin mise data/cache to the current user's home so it never
         # writes into another user's directory (e.g. /home/ubuntu when
         # running as yaya1).  MISE_DATA_DIR controls installs + shims.
@@ -235,26 +235,26 @@ install_essentials() {
 # ===== INSTALL CORE TOOLS =====
 install_core_tools() {
     log_step "Installing core tools..."
-    
+
     if [[ -f "$SCRIPTS_DIR/installers/install-zsh.sh" ]]; then
         bash "$SCRIPTS_DIR/installers/install-zsh.sh"
     else
         log_warn "install-zsh.sh not found at $SCRIPTS_DIR/installers/"
     fi
-    
+
     if [[ -f "$SCRIPTS_DIR/installers/install-stow.sh" ]]; then
         bash "$SCRIPTS_DIR/installers/install-stow.sh"
     else
         log_warn "install-stow.sh not found at $SCRIPTS_DIR/installers/"
     fi
-    
+
     log_success "Core tools installed"
 }
 
 # ===== INSTALL OPTIONAL TOOLS =====
 install_optional_tools() {
     log_step "Installing optional modern CLI tools..."
-    
+
     # Define tools with their mise package names
     declare -A tools=(
         ["bat"]="bat"
@@ -271,11 +271,11 @@ install_optional_tools() {
         ["yq"]="yq"
         ["btop"]="btop"
     )
-    
+
     for cmd in "${!tools[@]}"; do
         install_package "$cmd" "${tools[$cmd]}" || log_warn "Failed to install $cmd (optional)"
     done
-    
+
     log_success "Optional tools installation complete"
 }
 
@@ -293,25 +293,25 @@ install_dotnet() {
 install_personal_tools() {
     log_step "Installing personal/optional tools..."
     echo ""
-    
+
     # Clawdbot CLI - Optional personal tool
     if [[ -f "$SCRIPTS_DIR/installers/install-clawdbot.sh" ]]; then
         log_info "Installing Clawdbot CLI..."
         bash "$SCRIPTS_DIR/installers/install-clawdbot.sh" || log_warn "Failed to install clawdbot (optional)"
     fi
-    
+
     # Add more personal tools here in the future
     # if [[ -f "$SCRIPTS_DIR/installers/install-xyz.sh" ]]; then
     #     bash "$SCRIPTS_DIR/installers/install-xyz.sh" || log_warn "Failed to install xyz (optional)"
     # fi
-    
+
     log_success "Personal tools installation complete"
 }
 
 # ===== INSTALL MISE TOOLS FROM CONFIG =====
 install_mise_tools() {
     log_step "Installing tools from mise config..."
-    
+
     if command -v mise &> /dev/null; then
         # Ensure mise always writes to the current user's home
         export MISE_DATA_DIR="$HOME/.local/share/mise"
@@ -364,25 +364,25 @@ install_modern_fonts() {
 post_install() {
     log_step "Running post-install setup..."
     echo ""
-    
+
     # Deploy .gitconfig from template (copy, not symlink)
     if [[ -f "$SCRIPTS_DIR/tools/deploy-gitconfig.sh" ]]; then
         bash "$SCRIPTS_DIR/tools/deploy-gitconfig.sh"
     else
         log_warn "deploy-gitconfig.sh not found, skipping .gitconfig deployment"
     fi
-    
+
     # Create env files if they don't exist
     if [[ ! -f "$HOME/.env" ]]; then
         touch "$HOME/.env"
         log_info "Created ~/.env for environment variables"
     fi
-    
+
     if [[ ! -f "$HOME/.envrc" ]]; then
         touch "$HOME/.envrc"
         log_info "Created ~/.envrc for direnv"
     fi
-    
+
     # Install JavaScript/TypeScript packages via bun (if available)
     echo ""
     log_info "Installing JavaScript/TypeScript packages..."
@@ -391,7 +391,7 @@ post_install() {
     else
         log_warn "install-js-packages.sh not found or not executable"
     fi
-    
+
     echo ""
     log_success "Post-install setup complete"
 }
@@ -417,7 +417,7 @@ interactive_install() {
     echo "  4) Exit"
     echo ""
     read -p "Enter choice [1-4]: " choice
-    
+
     case $choice in
         1)
             full_install
@@ -443,7 +443,7 @@ interactive_install() {
 full_install() {
     log_info "Starting FULL installation..."
     echo ""
-    
+
     check_prerequisites
     backup_configs
     install_homebrew
@@ -456,7 +456,7 @@ full_install() {
     install_mise_tools
     stow_configs
     post_install
-    
+
     show_completion_message
 }
 
@@ -464,12 +464,12 @@ full_install() {
 minimal_install() {
     log_info "Starting MINIMAL installation..."
     echo ""
-    
+
     check_prerequisites
     backup_configs
     install_homebrew
     install_core_tools
-    
+
     # Only stow essential configs (zsh and git)
     log_step "Stowing minimal configurations..."
     if [[ -f "$SCRIPTS_DIR/tools/manage-stow.sh" ]]; then
@@ -478,9 +478,9 @@ minimal_install() {
         cd "$DOTFILES_ROOT"
         stow -v -t "$HOME" zsh git 2>&1 | grep -v "BUG in find_stowed_path" || true
     fi
-    
+
     post_install
-    
+
     show_completion_message
 }
 
@@ -488,12 +488,12 @@ minimal_install() {
 custom_install() {
     log_info "Starting CUSTOM installation..."
     echo ""
-    
+
     local os=$(detect_os)
-    
+
     check_prerequisites
     backup_configs
-    
+
     # Only ask about Homebrew on macOS
     if [[ "$os" == "macos" ]]; then
         read -p "Install Homebrew? [Y/n]: " install_brew
@@ -501,54 +501,54 @@ custom_install() {
             install_homebrew
         fi
     fi
-    
+
     read -p "Install mise? [Y/n]: " install_mise_choice
     if [[ ! "$install_mise_choice" =~ ^[Nn]$ ]]; then
         install_mise
     fi
-    
+
     read -p "Install essential build tools (gcc, make, cmake, etc.)? [Y/n]: " install_essentials_choice
     if [[ ! "$install_essentials_choice" =~ ^[Nn]$ ]]; then
         install_essentials
     fi
-    
+
     read -p "Install core tools (zsh, stow)? [Y/n]: " install_core
     if [[ ! "$install_core" =~ ^[Nn]$ ]]; then
         install_core_tools
     fi
-    
+
     read -p "Install optional CLI tools (bat, eza, fzf, etc.)? [Y/n]: " install_optional
     if [[ ! "$install_optional" =~ ^[Nn]$ ]]; then
         install_optional_tools
     fi
-    
+
     read -p "Install modern fonts (CascadiaMono, JetBrainsMono, VictorMono)? [Y/n]: " install_fonts
     if [[ ! "$install_fonts" =~ ^[Nn]$ ]]; then
         install_modern_fonts
     fi
-    
+
     read -p "Install .NET SDK? [Y/n]: " install_dotnet_choice
     if [[ ! "$install_dotnet_choice" =~ ^[Nn]$ ]]; then
         install_dotnet
     fi
-    
+
     read -p "Install personal tools (clawdbot, etc.)? [y/N]: " install_personal
     if [[ "$install_personal" =~ ^[Yy]$ ]]; then
         install_personal_tools
     fi
-    
+
     read -p "Install mise tools from config? [Y/n]: " install_mise_tools_choice
     if [[ ! "$install_mise_tools_choice" =~ ^[Nn]$ ]]; then
         install_mise_tools
     fi
-    
+
     read -p "Stow configurations? [Y/n]: " stow_choice
     if [[ ! "$stow_choice" =~ ^[Nn]$ ]]; then
         stow_configs
     fi
-    
+
     post_install
-    
+
     show_completion_message
 }
 
@@ -599,13 +599,13 @@ show_completion_message() {
      echo "  10. Optional: Install personal tools (not included by default):"
      echo "      ./_scripts/unix/installers/install-clawdbot.sh              # Clawdbot CLI"
     echo ""
-    
+
     if [[ -f "$HOME/.dotfiles-backup-location" ]]; then
         local backup_location=$(cat "$HOME/.dotfiles-backup-location")
         echo "Backup of old configs: $backup_location"
         echo ""
     fi
-    
+
     echo "For troubleshooting:"
      echo "  - .NET issues: cat $DOTFILES_ROOT/DOTNET_TROUBLESHOOTING.md"
      echo "  - JS packages: cat $DOTFILES_ROOT/_docs/INSTALL_JS_PACKAGES_GUIDE.md"

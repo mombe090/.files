@@ -324,6 +324,6 @@ curl -fsSL https://bun.sh/install | bash
 
 ---
 
-**Maintained by**: mombe090  
-**Repository**: https://github.com/mombe090/.files  
+**Maintained by**: mombe090
+**Repository**: https://github.com/mombe090/.files
 **Last Updated**: January 29, 2026

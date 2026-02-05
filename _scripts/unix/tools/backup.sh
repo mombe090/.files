@@ -39,21 +39,21 @@ backup_file() {
     local source="$1"
     local relative_path="${source#$HOME/}"
     local backup_path="$BACKUP_DIR/$relative_path"
-    
+
     # Skip if source doesn't exist
     if [[ ! -e "$source" ]]; then
         return 0
     fi
-    
+
     # Skip if it's already a symlink (managed by stow)
     if [[ -L "$source" ]]; then
         log_info "Skipping symlink: $source"
         return 0
     fi
-    
+
     # Create backup directory
     mkdir -p "$(dirname "$backup_path")"
-    
+
     # Backup the file/directory
     if cp -r "$source" "$backup_path" 2>/dev/null; then
         log_success "Backed up: $relative_path"
@@ -71,13 +71,13 @@ main() {
     echo -e "${BOLD}   Dotfiles Backup Utility${NC}"
     echo -e "${BOLD}==================================${NC}"
     echo ""
-    
+
     log_info "Backup destination: $BACKUP_DIR"
     echo ""
-    
+
     local backed_up_count=0
     local skipped_count=0
-    
+
     for target in "${BACKUP_TARGETS[@]}"; do
         if [[ -e "$target" ]] && [[ ! -L "$target" ]]; then
             if backup_file "$target"; then
@@ -87,9 +87,9 @@ main() {
             ((skipped_count++))
         fi
     done
-    
+
     echo ""
-    
+
     if [[ $backed_up_count -eq 0 ]]; then
         log_info "No files needed backup (all are symlinks or don't exist)"
         # Don't create empty backup directory
@@ -102,10 +102,10 @@ main() {
         echo "  - Files skipped: $skipped_count"
         echo "  - Backup location: $BACKUP_DIR"
         echo ""
-        
+
         # Save backup location for reference
         echo "$BACKUP_DIR" > "$HOME/.dotfiles-backup-location"
-        
+
         echo "To restore from backup:"
         echo "  cp -r $BACKUP_DIR/* ~/"
         echo ""

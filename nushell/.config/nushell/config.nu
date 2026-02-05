@@ -31,16 +31,16 @@ use ~/.config/nushell/integrations/external-tools.nu *
 
 $env.config = {
     show_banner: false
-    
+
     ls: {
         use_ls_colors: true
         clickable_links: true
     }
-    
+
     rm: {
         always_trash: false
     }
-    
+
     table: {
         mode: rounded
         index_mode: always
@@ -53,14 +53,14 @@ $env.config = {
         }
         header_on_separator: false
     }
-    
+
     error_style: "fancy"
-    
+
     datetime_format: {
         # normal: '%a, %d %b %Y %H:%M:%S %z'
         # table: '%m/%d/%y %I:%M:%S%p'
     }
-    
+
     explore: {
         status_bar_background: { fg: "#1D1F21", bg: "#C4C9C6" }
         command_bar_text: { fg: "#C4C9C6" }
@@ -72,14 +72,14 @@ $env.config = {
         }
         selected_cell: { bg: light_blue }
     }
-    
+
     history: {
         max_size: 100_000
         sync_on_enter: true
         file_format: "plaintext"
         isolation: false
     }
-    
+
     completions: {
         case_sensitive: false
         quick: true
@@ -98,7 +98,7 @@ $env.config = {
         vi_insert: block
         vi_normal: underscore
     }
-    
+
     color_config: (theme dark_theme)
     footer_mode: 25
     float_precision: 2
@@ -106,7 +106,7 @@ $env.config = {
     use_ansi_coloring: true
     bracketed_paste: true
     edit_mode: vi
-    
+
     shell_integration: {
         osc2: true
         osc7: true
@@ -116,14 +116,14 @@ $env.config = {
         osc633: true
         reset_application_mode: true
     }
-    
+
     render_right_prompt_on_last_line: false
     use_kitty_protocol: false
     highlight_resolved_externals: false
     recursion_limit: 50
-    
+
     plugins: {}
-    
+
     plugin_gc: {
         default: {
             enabled: true
@@ -131,7 +131,7 @@ $env.config = {
         }
         plugins: {}
     }
-    
+
     hooks: (hooks get_hooks)
     menus: (menus get_menus)
     keybindings: (keybindings get_keybindings)

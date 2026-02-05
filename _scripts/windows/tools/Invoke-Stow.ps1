@@ -90,7 +90,7 @@ function Get-RelativePath {
         [string]$From,
         [string]$To
     )
-    
+
     $fromUri = New-Object System.Uri($From)
     $toUri = New-Object System.Uri($To)
     $relativeUri = $fromUri.MakeRelativeUri($toUri)
@@ -228,7 +228,7 @@ function Invoke-StowPackage {
     )
 
     $packagePath = Join-Path $PackageDir $PackageName
-    
+
     if (-not (Test-Path $packagePath)) {
         Write-ErrorMsg "Package not found: $PackageName"
         Write-Info "Package directory: $packagePath"
@@ -245,7 +245,7 @@ function Invoke-StowPackage {
     # Recursively process all files and directories
     Get-ChildItem -Path $packagePath -Recurse -Force | ForEach-Object {
         $relativePath = $_.FullName.Substring($packagePath.Length + 1)
-        
+
         # Determine the actual target directory based on path prefix
         # Check .local/ FIRST (before .config/) to ensure proper precedence
         if ($relativePath -match '^\.local\\') {
@@ -266,7 +266,7 @@ function Invoke-StowPackage {
             # No special prefix, use target as-is
             $actualTargetDir = $TargetDir
         }
-        
+
         $targetPath = Join-Path $actualTargetDir $relativePath
 
         if ($_.PSIsContainer) {
@@ -276,7 +276,7 @@ function Invoke-StowPackage {
         else {
             # Create file symlink
             Write-Step "Linking: $relativePath"
-            
+
             if (New-SymbolicLink -Link $targetPath -Target $_.FullName) {
                 $linkCount++
             }
@@ -304,7 +304,7 @@ function Invoke-UnstowPackage {
     )
 
     $packagePath = Join-Path $PackageDir $PackageName
-    
+
     if (-not (Test-Path $packagePath)) {
         Write-ErrorMsg "Package not found: $PackageName"
         return $false
@@ -319,14 +319,14 @@ function Invoke-UnstowPackage {
 
     # Recursively process all files (in reverse to remove files before directories)
     $items = Get-ChildItem -Path $packagePath -Recurse -Force -File
-    
+
     foreach ($item in $items) {
         $relativePath = $item.FullName.Substring($packagePath.Length + 1)
-        
+
         # Determine the actual target directory based on path prefix
         # Check .local/ FIRST to ensure proper precedence over .config/
         # This prevents incorrect paths like LOCALAPPDATA\.config\app
-        
+
         # Strip leading .local/ and use $env:LOCALAPPDATA instead (Windows-style)
         # Example: nvim/.local/nvim/init.lua -> $env:LOCALAPPDATA/nvim/init.lua
         if ($relativePath -match '^\.local\\') {
@@ -344,11 +344,11 @@ function Invoke-UnstowPackage {
         else {
             $actualTargetDir = $TargetDir
         }
-        
+
         $targetPath = Join-Path $actualTargetDir $relativePath
 
         Write-Step "Unlinking: $relativePath"
-        
+
         if (Remove-SymbolicLink -Link $targetPath) {
             $unlinkCount++
         }
@@ -377,7 +377,7 @@ Write-Header "PowerShell Stow - Dotfiles Manager"
 if ($ListPackages) {
     Write-Header "Available Packages"
     $packages = Get-AvailablePackages -PackageDir $PackageDir
-    
+
     if ($packages.Count -eq 0) {
         Write-Warn "No packages found in: $PackageDir"
         exit 0
@@ -387,7 +387,7 @@ if ($ListPackages) {
         Write-Info "  $($pkg.Name)"
         Write-Verbose "Package path: $($pkg.Path)"
     }
-    
+
     Write-Success "Found $($packages.Count) package(s)"
     exit 0
 }

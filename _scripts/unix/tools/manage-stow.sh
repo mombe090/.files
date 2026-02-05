@@ -41,11 +41,11 @@ backup_conflicts() {
     local pkg="$1"
     local backup_dir="$HOME/.dotfiles-stow-backup-$(date +%Y%m%d-%H%M%S)"
     local backed_up=false
-    
+
     # Special handling for zsh package - only backup .zshrc
     if [[ "$pkg" == "zsh" ]]; then
         local zshrc="$HOME/.zshrc"
-        
+
         # Only backup if .zshrc exists and is NOT a symlink to our dotfiles
         if [[ -f "$zshrc" ]] && [[ ! -L "$zshrc" ]]; then
             mkdir -p "$backup_dir"
@@ -66,7 +66,7 @@ backup_conflicts() {
                 backed_up=true
             fi
         fi
-        
+
         # For .config/zsh, only backup if it's NOT a symlink to our dotfiles
         local config_zsh="$HOME/.config/zsh"
         if [[ -d "$config_zsh" ]] && [[ ! -L "$config_zsh" ]]; then
@@ -89,25 +89,25 @@ backup_conflicts() {
                 backed_up=true
             fi
         fi
-        
+
         if [[ "$backed_up" == true ]]; then
             echo "$backup_dir" >> "$HOME/.dotfiles-backup-location"
             log_success "Backup complete: $backup_dir"
         fi
         return 0
     fi
-    
+
     # General backup logic for other packages
     local files_to_stow=$(cd "$DOTFILES_ROOT/$pkg" && find . -type f -o -type l 2>/dev/null | sed 's|^\./||')
-    
+
     while IFS= read -r file; do
         [[ -z "$file" ]] && continue
-        
+
         local target="$HOME/$file"
-        
+
         # Skip if target doesn't exist
         [[ ! -e "$target" ]] && [[ ! -L "$target" ]] && continue
-        
+
         # Check if any parent directory is a symlink to our dotfiles
         # This prevents backing up files that are already in dotfiles via parent symlink
         local parent_dir="$target"
@@ -122,34 +122,34 @@ backup_conflicts() {
                 fi
             fi
         done
-        
+
         # Skip if file is already stowed via parent directory symlink
         [[ "$is_already_stowed" == true ]] && continue
-        
+
         # If target is a symlink, check where it points
         if [[ -L "$target" ]]; then
             local link_target=$(readlink "$target")
             local resolved_target=$(readlink -f "$target" 2>/dev/null || echo "")
-            
+
             # Skip if symlink already points to our dotfiles
             if [[ "$link_target" == *"$DOTFILES_ROOT/$pkg"* ]] || [[ "$resolved_target" == *"$DOTFILES_ROOT/$pkg"* ]]; then
                 continue
             fi
-            
+
             # Symlink exists but points elsewhere, back it up
             if [[ "$backed_up" == false ]]; then
                 mkdir -p "$backup_dir"
                 backed_up=true
                 log_info "Creating backup at: $backup_dir"
             fi
-            
+
             local backup_target="$backup_dir/${target#$HOME/}.symlink-info"
             local backup_target_dir=$(dirname "$backup_target")
             mkdir -p "$backup_target_dir"
             echo "$link_target" > "$backup_target"
             log_warn "Backed up symlink: ~/${target#$HOME/} → $link_target"
             rm -f "$target"
-            
+
         # If target is a regular file or directory (not a symlink)
         elif [[ -f "$target" ]] || [[ -d "$target" ]]; then
             # Create backup directory if needed
@@ -158,20 +158,20 @@ backup_conflicts() {
                 backed_up=true
                 log_info "Creating backup at: $backup_dir"
             fi
-            
+
             # Backup the file/directory
             local backup_target="$backup_dir/${target#$HOME/}"
             local backup_target_dir=$(dirname "$backup_target")
-            
+
             mkdir -p "$backup_target_dir"
             cp -a "$target" "$backup_target"
             log_warn "Backed up: ~/${target#$HOME/}"
-            
+
             # Remove the original so stow can create symlink
             rm -rf "$target"
         fi
     done <<< "$files_to_stow"
-    
+
     if [[ "$backed_up" == true ]]; then
         echo "$backup_dir" >> "$HOME/.dotfiles-backup-location"
         log_success "Backup complete: $backup_dir"
@@ -199,36 +199,36 @@ check_stow() {
 # ===== STOW PACKAGES =====
 stow_packages() {
     local packages=("$@")
-    
+
     if [[ ${#packages[@]} -eq 0 ]]; then
         packages=("${DEFAULT_PACKAGES[@]}")
         log_info "No packages specified, using defaults: ${packages[*]}"
     fi
-    
+
     log_step "Stowing packages..."
     echo ""
-    
+
     cd "$DOTFILES_ROOT"
-    
+
     local stowed=0
     local failed=0
     local skipped=0
-    
+
     for pkg in "${packages[@]}"; do
         if [[ ! -d "$DOTFILES_ROOT/$pkg" ]]; then
             log_warn "Package '$pkg' not found in $DOTFILES_ROOT (skipping)"
             skipped=$((skipped + 1))
             continue
         fi
-        
+
         log_info "Stowing: $pkg"
-        
+
         # Check for conflicts and backup if needed
         backup_conflicts "$pkg"
-        
+
         # Stow the package (suppress BUG message but keep other output)
         stow -v -t "$HOME" "$pkg" 2>&1 | grep -v "BUG in find_stowed_path" || true
-        
+
         # Check if stow succeeded by running it again without verbose
         if stow -t "$HOME" "$pkg" 2>/dev/null; then
             log_success "$pkg stowed"
@@ -237,10 +237,10 @@ stow_packages() {
             log_error "Failed to stow $pkg"
             failed=$((failed + 1))
         fi
-        
+
         echo ""
     done
-    
+
     # Summary
     echo ""
     log_success "Stow operation complete!"
@@ -256,58 +256,58 @@ stow_packages() {
 # ===== RESTOW PACKAGES (update symlinks) =====
 restow_packages() {
     local packages=("$@")
-    
+
     if [[ ${#packages[@]} -eq 0 ]]; then
         packages=("${DEFAULT_PACKAGES[@]}")
         log_info "No packages specified, using defaults: ${packages[*]}"
     fi
-    
+
     log_step "Re-stowing packages (update symlinks)..."
     echo ""
-    
+
     cd "$DOTFILES_ROOT"
-    
+
     for pkg in "${packages[@]}"; do
         if [[ ! -d "$DOTFILES_ROOT/$pkg" ]]; then
             log_warn "Package '$pkg' not found (skipping)"
             continue
         fi
-        
+
         log_info "Re-stowing: $pkg"
         stow -R -v -t "$HOME" "$pkg" 2>&1 | grep -v "BUG in find_stowed_path" || true
         log_success "$pkg re-stowed"
         echo ""
     done
-    
+
     log_success "Re-stow complete!"
 }
 
 # ===== UNSTOW PACKAGES (remove symlinks) =====
 unstow_packages() {
     local packages=("$@")
-    
+
     if [[ ${#packages[@]} -eq 0 ]]; then
         packages=("${DEFAULT_PACKAGES[@]}")
         log_info "No packages specified, using defaults: ${packages[*]}"
     fi
-    
+
     log_step "Unstowing packages (remove symlinks)..."
     echo ""
-    
+
     cd "$DOTFILES_ROOT"
-    
+
     for pkg in "${packages[@]}"; do
         if [[ ! -d "$DOTFILES_ROOT/$pkg" ]]; then
             log_warn "Package '$pkg' not found (skipping)"
             continue
         fi
-        
+
         log_info "Unstowing: $pkg"
         stow -D -v -t "$HOME" "$pkg" 2>&1 | grep -v "BUG in find_stowed_path" || true
         log_success "$pkg unstowed"
         echo ""
     done
-    
+
     log_success "Unstow complete!"
 }
 
@@ -315,9 +315,9 @@ unstow_packages() {
 list_packages() {
     log_step "Available packages in $DOTFILES_ROOT:"
     echo ""
-    
+
     local available=($(get_available_packages))
-    
+
     for pkg in "${available[@]}"; do
         # Check if it's a default package
         if [[ " ${DEFAULT_PACKAGES[*]} " =~ " ${pkg} " ]]; then
@@ -326,7 +326,7 @@ list_packages() {
             echo "  - $pkg"
         fi
     done
-    
+
     echo ""
     log_info "Default packages: ${DEFAULT_PACKAGES[*]}"
 }
@@ -335,19 +335,19 @@ list_packages() {
 show_status() {
     log_step "Stow status for default packages:"
     echo ""
-    
+
     cd "$DOTFILES_ROOT"
-    
+
     for pkg in "${DEFAULT_PACKAGES[@]}"; do
         if [[ ! -d "$DOTFILES_ROOT/$pkg" ]]; then
             echo -e "  ${RED}✗${NC} $pkg ${RED}(not found)${NC}"
             continue
         fi
-        
+
         # Check if package is stowed by looking for symlinks
         local stowed=false
         local config_file=""
-        
+
         # Check common config locations based on package
         case "$pkg" in
             zsh)
@@ -369,21 +369,21 @@ show_status() {
                 config_file="$HOME/.config/starship.toml"
                 ;;
         esac
-        
+
         if [[ -n "$config_file" ]] && [[ -L "$config_file" ]]; then
             local target=$(readlink "$config_file")
             if [[ "$target" == *"$pkg"* ]]; then
                 stowed=true
             fi
         fi
-        
+
         if [[ "$stowed" == true ]]; then
             echo -e "  ${GREEN}✓${NC} $pkg ${GREEN}(stowed)${NC}"
         else
             echo -e "  ${YELLOW}○${NC} $pkg ${YELLOW}(not stowed)${NC}"
         fi
     done
-    
+
     echo ""
 }
 
@@ -448,7 +448,7 @@ EOF
 main() {
     local command="${1:-stow}"
     shift || true
-    
+
     # Parse command
     case "$command" in
         stow|-s)

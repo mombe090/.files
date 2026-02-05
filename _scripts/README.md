@@ -469,7 +469,7 @@ development:
   - id: package-name
     name: Package Display Name
     category: development
-    
+
   - id: "@scope/package-name"
     name: Scoped Package
     category: development

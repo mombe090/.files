@@ -6,14 +6,14 @@ packages:
   # Personal CLI tools
   - netlify-cli
   - firebase-tools
-  
+
   # Personal frameworks/tools
   - next
   - create-react-app
   - astro
   - opencode-ai
-  
+
   # Personal development
-  
+
   # Add your personal packages here
   # - your-package-name

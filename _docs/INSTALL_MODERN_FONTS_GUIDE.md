@@ -5,7 +5,7 @@
 The `install-modern-fonts.sh` script installs three popular Nerd Fonts optimized for development:
 
 1. **CascadiaMono Nerd Font** - Microsoft's Cascadia Code with Nerd Font icons
-2. **JetBrainsMono Nerd Font** - JetBrains Mono with Nerd Font icons  
+2. **JetBrainsMono Nerd Font** - JetBrains Mono with Nerd Font icons
 3. **VictorMono Font** - Victor Mono with cursive italics
 
 ## Features
@@ -42,7 +42,7 @@ The `install-modern-fonts.sh` script installs three popular Nerd Fonts optimized
 ### CascadiaMono Nerd Font
 - **Source**: [ryanoasis/nerd-fonts](https://github.com/ryanoasis/nerd-fonts)
 - **Version**: v3.4.0
-- **Features**: 
+- **Features**:
   - Programming ligatures
   - Powerline glyphs
   - Font Awesome, Devicons, Octicons
@@ -181,7 +181,7 @@ The script installs to user directories (no sudo required). If you get permissio
 # macOS
 chmod 755 ~/Library/Fonts
 
-# Linux  
+# Linux
 chmod 755 ~/.local/share/fonts
 ```
 
@@ -305,20 +305,20 @@ fn main() {
 
 ## FAQ
 
-**Q: Do I need all three fonts?**  
+**Q: Do I need all three fonts?**
 A: No, install only the ones you want. Each can be installed independently.
 
-**Q: Will this slow down my terminal?**  
+**Q: Will this slow down my terminal?**
 A: No, font rendering is handled by your terminal emulator efficiently.
 
-**Q: Can I use these in VS Code?**  
+**Q: Can I use these in VS Code?**
 A: Yes! All three fonts work perfectly in VS Code with ligatures.
 
-**Q: Are these free?**  
+**Q: Are these free?**
 A: Yes, all fonts are free and open source (SIL Open Font License).
 
-**Q: Do these work in tmux/zellij?**  
+**Q: Do these work in tmux/zellij?**
 A: Yes, terminal multiplexers use your terminal's font settings.
 
-**Q: What's the difference between "Mono" and non-"Mono"?**  
+**Q: What's the difference between "Mono" and non-"Mono"?**
 A: "Mono" variants have fixed width (monospace) - required for terminals. Non-Mono variants are proportional - for text editors/IDEs.

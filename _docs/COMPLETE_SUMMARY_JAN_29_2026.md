@@ -115,7 +115,7 @@ install_personal_tools() {
 ```bash
 install_homebrew() {
     local os=$(detect_os)
-    
+
     # Only install Homebrew on macOS
     if [[ "$os" != "macos" ]]; then
         log_info "Skipping Homebrew installation (not macOS)"
