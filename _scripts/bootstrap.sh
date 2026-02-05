@@ -73,6 +73,7 @@ DESCRIPTION:
     Installs essential development tools:
     - curl (required for downloads)
     - git (required for version control)
+    - mise (version manager for language runtimes)
     - yq (YAML parser for package configs)
     - Essential packages (stow, zsh, build-essential, etc.)
     - Just command runner (modern task runner)
@@ -168,6 +169,7 @@ if [[ "$AUTO_YES" != "true" ]]; then
     echo -e "${BOLD}This script will install:${NC}"
     echo "  • curl (if not installed)"
     echo "  • git (if not installed)"
+    echo "  • mise - Version manager (if not installed)"
     echo "  • yq - YAML parser (if not installed)"
     echo "  • Essential development packages (via install-packages.sh)"
     echo "  • Just command runner (latest version)"
@@ -245,6 +247,43 @@ else
             ;;
     esac
     log_success "git installed"
+fi
+
+# =============================================================================
+# Install Mise (Version Manager)
+# =============================================================================
+
+log_header "Installing Mise Version Manager"
+
+if has_command mise; then
+    MISE_VERSION=$(mise --version 2>&1 | head -n1 || echo "unknown")
+    log_success "mise already installed ($MISE_VERSION)"
+else
+    log_step "Installing mise..."
+    if [[ -f "$SCRIPTS_DIR/unix/installers/install-mise.sh" ]]; then
+        if bash "$SCRIPTS_DIR/unix/installers/install-mise.sh"; then
+            log_success "mise installed"
+
+            # Activate mise for current session
+            export MISE_DATA_DIR="$HOME/.local/share/mise"
+            export MISE_CACHE_DIR="$HOME/.cache/mise"
+            export PATH="$HOME/.local/share/mise/shims:$HOME/.local/bin:$PATH"
+
+            # Verify mise is accessible
+            if has_command mise; then
+                MISE_VERSION=$(mise --version 2>&1 | head -n1 || echo "unknown")
+                log_success "mise is ready: $MISE_VERSION"
+            else
+                log_warn "mise installed but not in PATH yet"
+                log_info "You may need to restart your shell"
+            fi
+        else
+            log_warn "Failed to install mise"
+            log_info "You can install it manually later"
+        fi
+    else
+        log_warn "install-mise.sh not found, skipping mise installation"
+    fi
 fi
 
 # Install yq (YAML parser - required for install-packages.sh)
@@ -412,6 +451,7 @@ log_header "Bootstrap Complete! 🎉"
 echo -e "${GREEN}Essential tools installed:${NC}"
 echo "  ✓ curl"
 echo "  ✓ git"
+echo "  ✓ mise"
 echo "  ✓ yq"
 echo "  ✓ Essential development packages"
 echo "  ✓ just"
