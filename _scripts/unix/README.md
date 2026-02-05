@@ -1,24 +1,83 @@
-# Linux Scripts
+# Unix Scripts (Linux/macOS)
 
-This directory contains all Linux/macOS shell scripts for the dotfiles repository.
+This directory contains all Unix-like system shell scripts for the dotfiles repository.
 
 ## Directory Structure
 
 ```
-_scripts/linux/
-├── sh/
-│   ├── installers/      # Installation scripts (install-*.sh)
-│   ├── tools/           # Utility scripts (manage-stow, backup, etc.)
-│   └── checkers/        # Validation scripts (check-*.sh)
-├── config/              # Configuration files for installers
-├── docs/                # Documentation
-├── README.md            # This file
-└── MANAGE_STOW_GUIDE.md # Stow management guide
+_scripts/unix/
+├── installers/          # Installation scripts (install-*.sh)
+├── tools/               # Utility scripts (manage-stow, backup, deploy-gitconfig, etc.)
+├── checkers/            # Validation scripts (check-*.sh)
+└── lib/                 # Shared shell libraries
+    ├── init.sh          # Load all libraries
+    ├── colors.sh        # Logging functions
+    ├── common.sh        # Utility functions
+    ├── detect.sh        # OS/system detection
+    └── package-managers.sh  # Package manager abstraction
 ```
+
+## Shared Libraries
+
+All scripts use shared libraries to eliminate code duplication. To use in your scripts:
+
+```bash
+# Load all libraries at once
+source "$DOTFILES_ROOT/_scripts/unix/lib/init.sh"
+
+# Now you can use any library function
+log_info "Installing package..."
+install_package git  # Automatically uses correct PM for your OS
+```
+
+### Library Functions
+
+#### `colors.sh` - Logging Functions
+
+- `log_info "$message"` - Informational messages (green)
+- `log_success "$message"` - Success messages (green with checkmark)
+- `log_error "$message"` - Error messages (red)
+- `log_warning "$message"` - Warning messages (yellow)
+- `log_header "$message"` - Section headers (magenta)
+- `log_step "$message"` - Sub-steps (blue)
+
+#### `common.sh` - Utility Functions
+
+- `has_command $cmd` - Check if command exists
+- `retry $max_attempts $command` - Retry failed operations
+- `backup_file $file [$backup_dir]` - Create timestamped file backup
+- `confirm_prompt $message [$default]` - Ask for user confirmation
+- `safe_mkdir $path` - Create directories with error checking
+- `check_internet [$host]` - Check internet connectivity
+- `get_dotfiles_root $levels_up` - Get absolute path to repo root
+
+#### `detect.sh` - OS Detection
+
+- `detect_os` - Get OS type (macos/linux/unknown)
+- `get_distro` - Get Linux distribution ID
+- `is_macos` - Check if macOS (boolean)
+- `is_linux` - Check if Linux (boolean)
+- `get_package_manager` - Detect available PM (brew/apt/dnf/yum/pacman)
+- `is_root` - Check if running as root
+- `get_home_dir` - Get correct user home directory
+- `ensure_home_correct` - Fix stale HOME environment variable
+
+#### `package-managers.sh` - Package Manager Abstraction
+
+- `install_package $name [$pm]` - Install using available PM
+- `check_package_installed $name [$pm]` - Check if package installed
+- `update_packages [$pm]` - Update all packages
+- `install_with_brew $name` - Install with Homebrew
+- `install_with_apt $name` - Install with apt
+- `install_with_dnf $name` - Install with dnf
+- `install_with_yum $name` - Install with yum
+- `install_with_pacman $name` - Install with pacman
+
+---
 
 ## Scripts Organization
 
-### Installers (`sh/installers/`)
+### Installers (`installers/`)
 
 Installation scripts for various tools and applications:
 
@@ -166,6 +225,8 @@ dotnet new console -n MyApp
 ```
 
 ---
+
+### Checkers (`checkers/`)
 
 #### `check-dotnet.sh`
 
@@ -379,7 +440,7 @@ nvim
 
 ---
 
-### Utility Scripts
+### Tools (`tools/`)
 
 #### `manage-stow.sh`
 

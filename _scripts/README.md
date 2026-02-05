@@ -65,23 +65,30 @@ That's it! The installer will guide you through the rest.
 
 ```
 _scripts/
-├── install.ps1                      # Main installer
-├── lib/pwsh/                        # PowerShell libraries
-│   ├── colors.ps1                   # Logging functions
-│   ├── common.ps1                   # Utility functions
-│   ├── detect.ps1                   # System detection
-│   └── package-managers.ps1         # Package manager abstraction
-├── windows/pwsh/                    # Windows-specific scripts
-│   ├── install-packages.ps1         # Package installer
-│   └── setup-windows.ps1            # PowerShell module installer
-├── installers/pwsh/                 # Package manager installers
-│   ├── winget.ps1                   # WinGet installer
-│   ├── choco.ps1                    # Chocolatey installer
-│   └── powershell.ps1               # PowerShell 7 installer
-└── configs/                         # Configuration files
-    ├── packages/pro/                # Professional packages
-    ├── packages/perso/              # Personal packages
-    └── platform/                    # Platform configs
+├── install.ps1                      # Main Windows installer
+├── uninstall.ps1                    # Windows uninstaller
+├── stow.ps1                         # Stow wrapper for Windows
+├── unix/                            # Unix-like systems (Linux/macOS)
+│   ├── installers/                  # Tool installation scripts
+│   ├── tools/                       # Utility scripts
+│   ├── checkers/                    # Validation scripts
+│   └── lib/                         # Shared shell libraries
+├── windows/                         # Windows-specific (PowerShell 7+)
+│   ├── installers/                  # Application installers
+│   ├── tools/                       # Utility scripts
+│   ├── managers/                    # Package manager installers
+│   └── lib/                         # PowerShell libraries
+│       ├── colors.ps1               # Logging functions
+│       ├── common.ps1               # Utility functions
+│       ├── detect.ps1               # System detection
+│       └── package-managers.ps1     # Package manager abstraction
+├── omarchy/                         # Omarchy Linux installer
+├── just/                            # Just command runner bootstrap
+└── configs/                         # Configuration files (YAML)
+    ├── unix/packages/               # Unix package configs
+    └── windows/
+        ├── packages/                # Windows package configs (pro/perso)
+        └── platform/                # Platform configs
 ```
 
 ## 🚀 Quick Start
@@ -113,8 +120,8 @@ winget install Git.Git
 
 ```powershell
 # If you don't have WinGet, run these installers first:
-.\installers\pwsh\powershell.ps1    # Install PowerShell 7
-.\installers\pwsh\winget.ps1        # Install WinGet (if needed)
+.\windows\managers\Install-PowerShell.ps1    # Install PowerShell 7
+.\windows\managers\Install-WinGet.ps1        # Install WinGet (if needed)
 
 # Then install Git via WinGet
 winget install Git.Git
@@ -349,23 +356,23 @@ packages:
 .\install.ps1 -Type perso -CheckUpdate
 
 # Update only system packages (skip JS packages)
-.\windows\pwsh\install-packages.ps1 -Type pro -CheckUpdate
+.\windows\installers\Install-Packages.ps1 -Type pro -CheckUpdate
 
 # Update only JavaScript packages
-.\windows\pwsh\install-js-packages.ps1 -Type pro -CheckUpdate
+.\windows\installers\Install-JsPackages.ps1 -Type pro -CheckUpdate
 ```
 
 ### Individual Scripts
 
 ```powershell
 # Install packages only
-.\windows\pwsh\install-packages.ps1 -Type pro
+.\windows\installers\Install-Packages.ps1 -Type pro
 
 # Install PowerShell modules only
-.\windows\pwsh\setup-windows.ps1
+.\windows\installers\Install-PwshModules.ps1
 
 # Install JavaScript packages only (requires Bun)
-.\windows\pwsh\install-js-packages.ps1 -Type pro
+.\windows\installers\Install-JsPackages.ps1 -Type pro
 
 # Manage dotfiles with symlinks (like GNU Stow)
 # Run from .files root directory
@@ -375,10 +382,10 @@ cd ..
 .\stow.ps1 -ListPackages     # List packages
 
 # Install WinGet
-.\installers\pwsh\winget.ps1
+.\windows\managers\Install-WinGet.ps1
 
 # Install Chocolatey
-.\installers\pwsh\choco.ps1
+.\windows\managers\Install-Choco.ps1
 ```
 
 For more information on managing dotfiles with stow, see [STOW_GUIDE.md](STOW_GUIDE.md).
@@ -409,13 +416,13 @@ choco install bun -y
 .\install.ps1 -Type perso        # Installs pro + perso JS packages automatically
 
 # Manual installation (if needed)
-.\windows\pwsh\install-js-packages.ps1 -Type pro
+.\windows\installers\Install-JsPackages.ps1 -Type pro
 
 # Install only development category
-.\windows\pwsh\install-js-packages.ps1 -Type pro -Category development
+.\windows\installers\Install-JsPackages.ps1 -Type pro -Category development
 
 # Force reinstall/upgrade all packages
-.\windows\pwsh\install-js-packages.ps1 -Type pro -Force
+.\windows\installers\Install-JsPackages.ps1 -Type pro -Force
 ```
 
 ### What Gets Installed
@@ -498,13 +505,13 @@ replacetokens --version
 
 ```powershell
 # Install from custom config directory
-.\windows\pwsh\install-js-packages.ps1 -ConfigDir "C:\custom\path"
+.\windows\installers\Install-JsPackages.ps1 -ConfigDir "C:\custom\path"
 
 # Install all packages (pro + personal)
-.\windows\pwsh\install-js-packages.ps1 -Type all
+.\windows\installers\Install-JsPackages.ps1 -Type all
 
 # View detailed help
-Get-Help .\windows\pwsh\install-js-packages.ps1 -Detailed
+Get-Help .\windows\installers\Install-JsPackages.ps1 -Detailed
 ```
 
 ### Verifying Installation
@@ -535,7 +542,7 @@ choco install bun -y
 
 ```powershell
 # Try forcing reinstall
-.\windows\pwsh\install-js-packages.ps1 -Type pro -Force
+.\windows\installers\Install-JsPackages.ps1 -Type pro -Force
 
 # Or install manually
 bun add --global typescript
@@ -631,7 +638,7 @@ $PSVersionTable.PSVersion
 winget install Microsoft.PowerShell
 
 # Or use the standalone installer:
-.\installers\pwsh\powershell.ps1
+.\windows\managers\Install-PowerShell.ps1
 
 # Then open PowerShell 7 (pwsh) and run the scripts
 pwsh
@@ -660,7 +667,7 @@ If WinGet is not detected:
 ```powershell
 # Install App Installer from Microsoft Store
 # Or run our installer
-.\installers\pwsh\winget.ps1
+.\windows\managers\Install-WinGet.ps1
 ```
 
 ### PowerShell Module Installation Fails
@@ -670,7 +677,7 @@ If WinGet is not detected:
 Install-Module -Name PowerShellGet -Force -Scope CurrentUser
 
 # Then retry
-.\windows\pwsh\setup-windows.ps1
+.\windows\installers\Install-PwshModules.ps1
 ```
 
 ### Package Installation Hangs
@@ -681,7 +688,7 @@ Install-Module -Name PowerShellGet -Force -Scope CurrentUser
 
 ## 📚 Libraries Reference
 
-### `lib/pwsh/colors.ps1`
+### `windows/lib/colors.ps1`
 
 Logging functions with colors:
 
@@ -692,7 +699,7 @@ Logging functions with colors:
 - `Write-Header` - Section headers (Magenta)
 - `Write-Step` - Sub-steps (White)
 
-### `lib/pwsh/common.ps1`
+### `windows/lib/common.ps1`
 
 Utility functions:
 
@@ -703,7 +710,7 @@ Utility functions:
 - `Get-ConfirmationPrompt` - Ask for confirmation
 - `Test-InternetConnection` - Check connectivity
 
-### `lib/pwsh/detect.ps1`
+### `windows/lib/detect.ps1`
 
 System detection:
 
@@ -713,7 +720,7 @@ System detection:
 - `Test-IsWindows11` - Check if Windows 11
 - `Get-PowerShellVersion` - PowerShell version
 
-### `lib/pwsh/package-managers.ps1`
+### `windows/lib/package-managers.ps1`
 
 Package manager abstraction:
 

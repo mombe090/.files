@@ -56,6 +56,9 @@ trusted_config_paths = [
 "jq" = "latest"           # JSON processor
 "yq" = "latest"           # YAML processor
 
+# Shell scripting
+"shellcheck" = "latest"   # shell script linter
+
 # ===== DEVOPS & CLOUD TOOLS =====
 # Kubernetes
 "kubectl" = "latest"
