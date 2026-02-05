@@ -74,7 +74,8 @@ DESCRIPTION:
     - curl (required for downloads)
     - git (required for version control)
     - mise (version manager for language runtimes)
-    - yq (YAML parser for package configs)
+    - sudo, jq, wget (essential utilities)
+    - yq (YAML parser, installed via mise)
     - Essential packages (stow, zsh, build-essential, etc.)
     - Just command runner (modern task runner)
 
@@ -170,7 +171,8 @@ if [[ "$AUTO_YES" != "true" ]]; then
     echo "  • curl (if not installed)"
     echo "  • git (if not installed)"
     echo "  • mise - Version manager (if not installed)"
-    echo "  • yq - YAML parser (if not installed)"
+    echo "  • sudo, jq, wget - Essential utilities (if not installed)"
+    echo "  • yq - YAML parser (via mise)"
     echo "  • Essential development packages (via install-packages.sh)"
     echo "  • Just command runner (latest version)"
     echo ""
@@ -286,48 +288,116 @@ else
     fi
 fi
 
-# Install yq (YAML parser - required for install-packages.sh)
-# NOTE: Need mikefarah's yq v4.x, not python yq v3.x
-install_yq_binary() {
-    local install_dir="$HOME/.local/bin"
-    mkdir -p "$install_dir"
+# =============================================================================
+# Install Essential Utilities
+# =============================================================================
 
-    log_info "Downloading mikefarah's yq binary..."
+log_header "Installing Essential Utilities"
 
-    # Detect architecture
-    local arch
-    arch=$(uname -m)
-    case "$arch" in
-        x86_64)
-            arch="amd64"
+# Install sudo
+if has_command sudo; then
+    log_success "sudo already installed"
+else
+    log_step "Installing sudo..."
+    case "$PM" in
+        brew)
+            log_info "sudo not needed on macOS"
             ;;
-        aarch64|arm64)
-            arch="arm64"
+        apt)
+            # Must use su to install sudo if not available
+            if [[ $EUID -eq 0 ]]; then
+                apt-get update -qq
+                apt-get install -y sudo
+            else
+                log_error "sudo not available and not running as root"
+                log_info "Please install sudo manually or run as root"
+                exit 1
+            fi
+            ;;
+        dnf)
+            if [[ $EUID -eq 0 ]]; then
+                dnf install -y sudo
+            else
+                log_error "sudo not available and not running as root"
+                exit 1
+            fi
+            ;;
+        pacman)
+            if [[ $EUID -eq 0 ]]; then
+                pacman -S --noconfirm sudo
+            else
+                log_error "sudo not available and not running as root"
+                exit 1
+            fi
             ;;
         *)
-            log_error "Unsupported architecture: $arch"
-            return 1
+            log_warn "Cannot install sudo automatically"
             ;;
     esac
-
-    # Download latest yq binary
-    local yq_url="https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${arch}"
-
-    if curl -fsSL "$yq_url" -o "$install_dir/yq"; then
-        chmod +x "$install_dir/yq"
-        log_success "yq binary installed to $install_dir/yq"
-
-        # Add to PATH if not already there
-        if [[ ":$PATH:" != *":$install_dir:"* ]]; then
-            export PATH="$install_dir:$PATH"
-            log_info "Added $install_dir to PATH for this session"
-        fi
-        return 0
-    else
-        log_error "Failed to download yq binary"
-        return 1
+    if has_command sudo; then
+        log_success "sudo installed"
     fi
-}
+fi
+
+# Install jq
+if has_command jq; then
+    log_success "jq already installed"
+else
+    log_step "Installing jq..."
+    case "$PM" in
+        brew)
+            brew install jq
+            ;;
+        apt)
+            sudo apt-get update -qq
+            sudo apt-get install -y jq
+            ;;
+        dnf)
+            sudo dnf install -y jq
+            ;;
+        pacman)
+            sudo pacman -S --noconfirm jq
+            ;;
+        *)
+            log_error "Please install jq manually"
+            exit 1
+            ;;
+    esac
+    log_success "jq installed"
+fi
+
+# Install wget
+if has_command wget; then
+    log_success "wget already installed"
+else
+    log_step "Installing wget..."
+    case "$PM" in
+        brew)
+            brew install wget
+            ;;
+        apt)
+            sudo apt-get update -qq
+            sudo apt-get install -y wget
+            ;;
+        dnf)
+            sudo dnf install -y wget
+            ;;
+        pacman)
+            sudo pacman -S --noconfirm wget
+            ;;
+        *)
+            log_error "Please install wget manually"
+            exit 1
+            ;;
+    esac
+    log_success "wget installed"
+fi
+
+# =============================================================================
+# Install yq via Mise
+# =============================================================================
+
+log_header "Installing yq (YAML Parser)"
 
 if has_command yq; then
     YQ_VERSION=$(yq --version 2>&1 || echo "unknown")
@@ -335,62 +405,26 @@ if has_command yq; then
         log_success "yq already installed (mikefarah's version)"
     else
         log_warn "Found incompatible yq version (need mikefarah's yq v4.x)"
-        log_step "Installing mikefarah's yq..."
-        case "$PM" in
-            brew)
-                brew install yq
-                ;;
-            apt)
-                # Ubuntu's apt has old python yq - download binary instead
-                install_yq_binary || {
-                    log_error "Failed to install yq"
-                    log_info "Visit: https://github.com/mikefarah/yq"
-                    exit 1
-                }
-                ;;
-            dnf)
-                # Fedora has correct version in repos
-                sudo dnf install -y yq
-                ;;
-            pacman)
-                # Arch has correct version in repos
-                sudo pacman -S --noconfirm yq
-                ;;
-            *)
-                log_error "Please install yq manually"
-                log_info "Visit: https://github.com/mikefarah/yq"
-                exit 1
-                ;;
-        esac
-        log_success "yq installed"
+        log_step "Installing yq via mise..."
+        if has_command mise; then
+            mise install yq@latest
+            log_success "yq installed via mise"
+        else
+            log_error "mise not available, cannot install yq"
+            log_info "Please install mise first"
+            exit 1
+        fi
     fi
 else
-    log_step "Installing yq (YAML parser)..."
-    case "$PM" in
-        brew)
-            brew install yq
-            ;;
-        apt)
-            # Ubuntu's apt has old python yq - download binary instead
-            install_yq_binary || {
-                log_error "Failed to install yq"
-                log_info "Visit: https://github.com/mikefarah/yq"
-                exit 1
-            }
-            ;;
-        dnf)
-            sudo dnf install -y yq
-            ;;
-        pacman)
-            sudo pacman -S --noconfirm yq
-            ;;
-        *)
-            log_error "Please install yq manually"
-            log_info "Visit: https://github.com/mikefarah/yq"
-            exit 1
-            ;;
-    esac
-    log_success "yq installed"
+    log_step "Installing yq via mise..."
+    if has_command mise; then
+        mise install yq@latest
+        log_success "yq installed via mise"
+    else
+        log_error "mise not available, cannot install yq"
+        log_info "Please install mise first"
+        exit 1
+    fi
 fi
 
 # =============================================================================
@@ -452,7 +486,10 @@ echo -e "${GREEN}Essential tools installed:${NC}"
 echo "  ✓ curl"
 echo "  ✓ git"
 echo "  ✓ mise"
-echo "  ✓ yq"
+echo "  ✓ sudo"
+echo "  ✓ jq"
+echo "  ✓ wget"
+echo "  ✓ yq (via mise)"
 echo "  ✓ Essential development packages"
 echo "  ✓ just"
 echo ""

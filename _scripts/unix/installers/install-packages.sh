@@ -121,120 +121,15 @@ check_dependencies() {
 
     if [[ ${#missing[@]} -gt 0 ]]; then
         log_error "Missing required dependencies: ${missing[*]}"
-        log_info "Installing yq..."
+        log_info "Installing yq via mise..."
 
-        # Helper function to install yq binary
-        install_yq_binary() {
-            local install_dir="$HOME/.local/bin"
-            mkdir -p "$install_dir"
-
-            log_info "Downloading mikefarah's yq binary..."
-
-            # Detect architecture
-            local arch
-            arch=$(uname -m)
-            case "$arch" in
-                x86_64)
-                    arch="amd64"
-                    ;;
-                aarch64|arm64)
-                    arch="arm64"
-                    ;;
-                *)
-                    log_error "Unsupported architecture: $arch"
-                    return 1
-                    ;;
-            esac
-
-            # Download latest yq binary
-            local yq_url="https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${arch}"
-
-            if curl -fsSL "$yq_url" -o "$install_dir/yq"; then
-                chmod +x "$install_dir/yq"
-                log_success "yq binary installed to $install_dir/yq"
-
-                # Add to PATH if not already there
-                if [[ ":$PATH:" != *":$install_dir:"* ]]; then
-                    export PATH="$install_dir:$PATH"
-                    log_info "Added $install_dir to PATH for this session"
-                fi
-                return 0
-            else
-                log_error "Failed to download yq binary"
-                return 1
-            fi
-        }
-
-        # Install yq based on OS
-        if is_macos; then
-            if has_command brew; then
-                brew install yq
-            else
-                log_error "Homebrew not found. Please install yq manually"
-                log_info "Visit: https://github.com/mikefarah/yq"
-                exit 1
-            fi
-        elif is_linux; then
-            local pm
-            pm=$(get_package_manager)
-
-            case "$pm" in
-                apt)
-                    # Ubuntu's apt has old python yq - download binary instead
-                    install_yq_binary || {
-                        log_warning "Binary installation failed, trying mise..."
-                        if has_command mise; then
-                            mise install yq@latest
-                        else
-                            log_error "All installation methods failed"
-                            log_info "Visit: https://github.com/mikefarah/yq"
-                            exit 1
-                        fi
-                    }
-                    ;;
-                dnf)
-                    log_info "Installing yq via DNF..."
-                    sudo dnf install -y yq || {
-                        log_warning "DNF installation failed, trying mise..."
-                        if has_command mise; then
-                            mise install yq@latest
-                        else
-                            log_error "DNF installation failed and mise not available"
-                            log_info "Visit: https://github.com/mikefarah/yq"
-                            exit 1
-                        fi
-                    }
-                    ;;
-                pacman)
-                    log_info "Installing yq via Pacman..."
-                    sudo pacman -S --noconfirm yq || {
-                        log_warning "Pacman installation failed, trying mise..."
-                        if has_command mise; then
-                            mise install yq@latest
-                        else
-                            log_error "Pacman installation failed and mise not available"
-                            log_info "Visit: https://github.com/mikefarah/yq"
-                            exit 1
-                        fi
-                    }
-                    ;;
-                *)
-                    log_warning "Unsupported package manager: $pm, trying binary install..."
-                    install_yq_binary || {
-                        log_warning "Binary installation failed, trying mise..."
-                        if has_command mise; then
-                            mise install yq@latest
-                        else
-                            log_error "Please install 'yq' manually"
-                            log_info "Visit: https://github.com/mikefarah/yq"
-                            exit 1
-                        fi
-                    }
-                    ;;
-            esac
+        # Install yq via mise (preferred method)
+        if has_command mise; then
+            mise install yq@latest
+            log_success "yq installed via mise"
         else
-            log_error "Unsupported OS for automatic yq installation"
-            log_info "Visit: https://github.com/mikefarah/yq"
+            log_error "mise not available, cannot install yq"
+            log_info "Please run bootstrap script first to install mise"
             exit 1
         fi
     fi
