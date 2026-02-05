@@ -127,3 +127,8 @@ install_uv_tools:
 install_clawdbot:
     @just _log_step "Installing Clawdbot CLI..."
     @bash {{installers}}/install-clawdbot.sh
+
+# Deploy .gitconfig from template (replaces #{TOKEN}# with env vars, copies to ~/.gitconfig)
+[unix]
+deploy_gitconfig:
+    @bash {{tools}}/deploy-gitconfig.sh

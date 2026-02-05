@@ -376,16 +376,11 @@ post_install() {
     log_step "Running post-install setup..."
     echo ""
     
-    # Create local gitconfig if it doesn't exist
-    if [[ ! -f "$HOME/.gitconfig.local" ]]; then
-        log_info "Creating ~/.gitconfig.local for personal git settings..."
-        cat > "$HOME/.gitconfig.local" << 'EOF'
-# Local git configuration (not tracked)
-[user]
-    name = Your Name
-    email = your.email@example.com
-EOF
-        log_warn "Please edit ~/.gitconfig.local with your personal information"
+    # Deploy .gitconfig from template (copy, not symlink)
+    if [[ -f "$SCRIPTS_DIR/tools/deploy-gitconfig.sh" ]]; then
+        bash "$SCRIPTS_DIR/tools/deploy-gitconfig.sh"
+    else
+        log_warn "deploy-gitconfig.sh not found, skipping .gitconfig deployment"
     fi
     
     # Create env files if they don't exist
