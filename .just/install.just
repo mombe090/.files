@@ -98,9 +98,9 @@ install_docker:
     @just _log_step "Installing Docker..."
     @bash {{installers}}/install-docker.sh
 
-# Install JavaScript/TypeScript packages
+# Install JavaScript/TypeScript packages (install | personal | all)
 [unix]
-install_js_packages TYPE="pro":
+install_js_packages TYPE="install":
     @just _log_step "Installing JavaScript packages ({{TYPE}})..."
     @AUTO_CONFIRM=true bash {{installers}}/install-js-packages.sh --{{TYPE}}
 
