@@ -14,21 +14,10 @@ if [[ "$HOME" != "$REAL_HOME" ]]; then
 fi
 
 DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SCRIPTS_DIR="$DOTFILES_ROOT/_scripts/linux/sh"
+SCRIPTS_DIR="$DOTFILES_ROOT/_scripts/unix"
 
-# Colors
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
-RED='\033[0;31m'
-BOLD='\033[1m'
-NC='\033[0m'
-
-log_info() { echo -e "${GREEN}[INFO]${NC} $1"; }
-log_step() { echo -e "${BLUE}[STEP]${NC} ${BOLD}$1${NC}"; }
-log_warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
-log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
-log_success() { echo -e "${GREEN}[✓]${NC} ${BOLD}$1${NC}"; }
+# Source Unix libraries
+source "$SCRIPTS_DIR/lib/init.sh"
 
 # ===== DETECT OS =====
 detect_os() {
@@ -595,20 +584,20 @@ show_completion_message() {
     echo "     echo \$PATH | grep '.bun/bin'  # Should show ~/.bun/bin"
     echo ""
     echo "  7. Install/update JavaScript packages:"
-    echo "     ./_scripts/linux/sh/installers/install-js-packages.sh           # Professional packages only"
-    echo "     ./_scripts/linux/sh/installers/install-js-packages.sh --personal # Personal packages"
-    echo "     ./_scripts/linux/sh/installers/install-js-packages.sh --all      # Both pro & personal"
-    echo ""
-    echo "  8. Install modern fonts (if not already installed):"
-    echo "     ./_scripts/linux/sh/installers/install-modern-fonts.sh           # CascadiaMono, JetBrainsMono, VictorMono"
-    echo "     ./_scripts/linux/sh/installers/install-modern-fonts.sh --list    # List installed fonts"
-    echo ""
-    echo "  9. Install essential build tools (if not already installed):"
-    echo "     ./_scripts/linux/sh/installers/install-essentials.sh             # gcc, make, cmake, dev libraries"
-    echo "     ./_scripts/linux/sh/installers/install-essentials.sh --list      # List installed tools"
-    echo ""
-    echo "  10. Optional: Install personal tools (not included by default):"
-    echo "      ./_scripts/linux/sh/installers/install-clawdbot.sh              # Clawdbot CLI"
+     echo "     ./_scripts/unix/installers/install-js-packages.sh           # Professional packages only"
+     echo "     ./_scripts/unix/installers/install-js-packages.sh --personal # Personal packages"
+     echo "     ./_scripts/unix/installers/install-js-packages.sh --all      # Both pro & personal"
+     echo ""
+     echo "  8. Install modern fonts (if not already installed):"
+     echo "     ./_scripts/unix/installers/install-modern-fonts.sh           # CascadiaMono, JetBrainsMono, VictorMono"
+     echo "     ./_scripts/unix/installers/install-modern-fonts.sh --list    # List installed fonts"
+     echo ""
+     echo "  9. Install essential build tools (if not already installed):"
+     echo "     ./_scripts/unix/installers/install-essentials.sh             # gcc, make, cmake, dev libraries"
+     echo "     ./_scripts/unix/installers/install-essentials.sh --list      # List installed tools"
+     echo ""
+     echo "  10. Optional: Install personal tools (not included by default):"
+     echo "      ./_scripts/unix/installers/install-clawdbot.sh              # Clawdbot CLI"
     echo ""
     
     if [[ -f "$HOME/.dotfiles-backup-location" ]]; then
@@ -618,9 +607,9 @@ show_completion_message() {
     fi
     
     echo "For troubleshooting:"
-    echo "  - .NET issues: cat $DOTFILES_ROOT/DOTNET_TROUBLESHOOTING.md"
-    echo "  - JS packages: cat $DOTFILES_ROOT/_scripts/linux/docs/INSTALL_JS_PACKAGES_GUIDE.md"
-    echo "  - General help: cat $DOTFILES_ROOT/README.md"
+     echo "  - .NET issues: cat $DOTFILES_ROOT/DOTNET_TROUBLESHOOTING.md"
+     echo "  - JS packages: cat $DOTFILES_ROOT/_docs/INSTALL_JS_PACKAGES_GUIDE.md"
+     echo "  - General help: cat $DOTFILES_ROOT/README.md"
     echo ""
 }
 

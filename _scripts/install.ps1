@@ -1,4 +1,4 @@
-﻿# =============================================================================
+# =============================================================================
 # Windows Dotfiles Installer
 # =============================================================================
 # Simple installer for Windows work environment.
@@ -30,7 +30,7 @@ param(
 $ScriptRoot = if ($PSScriptRoot) { $PSScriptRoot } else { Get-Location }
 
 # Import libraries
-$libPath = Join-Path $ScriptRoot "lib\pwsh"
+$libPath = Join-Path $ScriptRoot "_scripts\windows\lib"
 . "$libPath\colors.ps1"
 . "$libPath\common.ps1"
 . "$libPath\detect.ps1"
@@ -93,7 +93,7 @@ if (-not $SkipPackages) {
     $hasWinget = Test-Command "winget"
     if (-not $hasWinget) {
         Write-Info "Installing winget..."
-        & "$ScriptRoot\installers\pwsh\winget.ps1"
+        & "$ScriptRoot\_scripts\windows\managers\Install-WinGet.ps1"
         
         if ($LASTEXITCODE -eq 0) {
             $hasWinget = $true
@@ -232,10 +232,10 @@ if (-not $SkipPackages) {
             
             # Pass CheckUpdate flag if specified
             if ($CheckUpdate) {
-                & "$ScriptRoot\windows\pwsh\install-packages.ps1" -Type $installType -PackageManager $pm -CheckUpdate
+                & "$ScriptRoot\_scripts\windows\installers\Install-Packages.ps1" -Type $installType -PackageManager $pm -CheckUpdate
             }
             else {
-                & "$ScriptRoot\windows\pwsh\install-packages.ps1" -Type $installType -PackageManager $pm
+                & "$ScriptRoot\_scripts\windows\installers\Install-Packages.ps1" -Type $installType -PackageManager $pm
             }
             
             if ($LASTEXITCODE -ne 0) {
@@ -258,17 +258,17 @@ if (-not $SkipPackages) {
         # Install JS packages following same order as system packages
         foreach ($installType in $installOrder) {
             # Check if JS package config exists for this type
-            $jsConfigPath = "$ScriptRoot\configs\packages\$installType\js.pkg.yml"
+            $jsConfigPath = "$ScriptRoot\_scripts\configs\windows\packages\$installType\js.pkg.yml"
             
             if (Test-Path $jsConfigPath) {
                 Write-Info "Installing $installType JavaScript packages..."
                 
                 # Pass CheckUpdate flag if specified
                 if ($CheckUpdate) {
-                    & "$ScriptRoot\windows\pwsh\install-js-packages.ps1" -Type $installType -CheckUpdate
+                    & "$ScriptRoot\_scripts\windows\installers\Install-JsPackages.ps1" -Type $installType -CheckUpdate
                 }
                 else {
-                    & "$ScriptRoot\windows\pwsh\install-js-packages.ps1" -Type $installType
+                    & "$ScriptRoot\_scripts\windows\installers\Install-JsPackages.ps1" -Type $installType
                 }
                 
                 if ($LASTEXITCODE -ne 0) {
@@ -290,7 +290,7 @@ if (-not $SkipPackages) {
 if (-not $SkipModules) {
     Write-Header "Step 4: PowerShell Modules"
     
-    & "$ScriptRoot\windows\pwsh\setup-windows.ps1"
+    & "$ScriptRoot\_scripts\windows\installers\Setup-Windows.ps1"
     
     if ($LASTEXITCODE -ne 0) {
         Write-Warn "Some modules failed to install"

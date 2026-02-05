@@ -35,8 +35,6 @@
 
 [include]
  path = ~/.config/delta/themes/catppuccin.gitconfig
- # Include local configuration (not tracked in git)
- path = ~/.gitconfig.local
 
 [delta]
   features = catppuccin-mocha

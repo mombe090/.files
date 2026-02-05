@@ -1,11 +1,71 @@
 # Agent Guidelines for Dotfiles Repository
 
+## Repository Structure
+
+### Core Directories
+
+- `_scripts/` - Installation and automation scripts
+  - `_scripts/unix/` - Unix-like systems (Linux/macOS)
+    - `unix/installers/` - Tool installation scripts (install-mise.sh, install-zsh.sh, etc.)
+    - `unix/tools/` - Utility scripts (deploy-gitconfig.sh, manage-stow.sh, backup.sh)
+    - `unix/checkers/` - Validation scripts (check-dotnet.sh)
+    - `unix/lib/` - Shared shell libraries (colors.sh, common.sh, detect.sh, package-managers.sh)
+  - `_scripts/windows/` - Windows-specific scripts (PowerShell 7+)
+    - `windows/installers/` - Tool installation scripts (Install-Packages.ps1, Install-LazyVim.ps1, etc.)
+    - `windows/tools/` - Utility scripts (Invoke-Stow.ps1, Test-StowLocalAppData.ps1)
+    - `windows/managers/` - Package manager installers (Install-Choco.ps1, Install-WinGet.ps1, Install-PowerShell.ps1)
+    - `windows/lib/` - Shared PowerShell libraries (colors.ps1, common.ps1, detect.ps1, package-managers.ps1)
+  - `_scripts/omarchy/` - Omarchy Linux (Arch-based) specialized scripts
+    - Injection-based configuration management (non-destructive)
+    - Modular architecture (preflight/packages/config/themes/post-install)
+  - `_scripts/just/` - Just command runner bootstrap
+  - `_scripts/configs/` - Configuration files (YAML)
+    - `configs/windows/packages/` - Windows package configs (pro/perso)
+    - `configs/unix/packages/` - Unix package configs
+- `_docs/` - MkDocs documentation site (public-facing)
+- `_specs/` - Technical specifications and development guides (internal)
+  - `_specs/just-integration/` - Just integration specs
+  - `_specs/guides/` - User and developer guides
+  - `_specs/old/` - Archived specifications
+- `.just/` - Just recipe modules (modular justfile organization)
+- Configuration directories: `nvim/`, `git/`, `zsh/`, `nushell/`, `wezterm/`, etc.
+
+### Important Files
+
+- `justfile` - Main entry point for Just command runner
+- `mkdocs.yml` - MkDocs configuration (points to `_docs/`)
+- `pyproject.toml` - Python/UV project configuration for MkDocs
+- `.gitconfig.template` - Git config template with `#{TOKEN}#` placeholders
+- `AGENTS.md` - This file (agent guidelines)
+
 ## Build/Test Commands
+
+### Just Command Runner
+
+- **Primary interface**: Use `just` commands for all automation
+- Common commands:
+  - `just install_full` - Full installation with all tools
+  - `just install_minimal` - Minimal installation (core tools only)
+  - `just stow` - Symlink dotfiles with GNU Stow
+  - `just update` - Update all tools and configs
+  - `just doctor` - Run health checks
+  - `just verify` - Verify installation
+  - `just deploy_gitconfig` - Deploy git config with token replacement
+- See `just --list` for all available commands
+
+### Testing
 
 - No traditional build system - this is a dotfiles configuration repository
 - Use `pre-commit run --all-files` to run pre-commit hooks (trailing whitespace, secrets detection, YAML validation)
 - Test configurations by symlinking and verifying tool functionality
 - For Neovim: `nvim --headless -c "checkhealth" -c "qa"` to validate configuration
+
+### Documentation
+
+- `uv venv` - Create virtual environment for MkDocs
+- `uv sync` - Install MkDocs dependencies
+- `source .venv/bin/activate && mkdocs serve` - Start local docs server
+- `mkdocs build` - Build static documentation site
 
 ## Code Style Guidelines
 
@@ -132,4 +192,319 @@ elseif ($IsMacOS) {
     # macOS-specific code
 }
 ```
+
+## Platform Detection
+
+### Detection Strategy
+
+**Entry Points**: Detect Windows vs Unix at the main script level
+- **Windows**: `install.ps1` (PowerShell 7+)
+- **Unix**: `install.sh` (Bash/Zsh) - handles both Linux and macOS
+
+**Unix Scripts**: Detect specific OS internally when needed
+
+### Unix Shell Detection
+
+```bash
+# Source Unix libraries for detection functions
+source "$DOTFILES_ROOT/_scripts/unix/lib/init.sh"
+
+# Detect OS type
+OS=$(detect_os)  # Returns: macos, linux, or unknown
+if [[ "$OS" == "macos" ]]; then
+    # macOS-specific code (e.g., Homebrew)
+elif [[ "$OS" == "linux" ]]; then
+    DISTRO=$(get_distro)  # Returns: ubuntu, debian, fedora, arch, etc.
+    case "$DISTRO" in
+        ubuntu|debian)
+            # Debian-based: use apt
+            ;;
+        fedora|rhel)
+            # RedHat-based: use dnf/yum
+            ;;
+        arch)
+            # Arch-based: use pacman
+            ;;
+    esac
+fi
+
+# Package manager abstraction
+PM=$(get_package_manager)  # Returns: brew, apt, dnf, yum, pacman, etc.
+install_package git  # Automatically uses correct PM
+```
+
+### Windows Detection
+
+PowerShell built-in variables and library functions:
+
+```powershell
+# Built-in variables (PowerShell 7+)
+if ($IsWindows -or $env:OS -eq "Windows_NT") {
+    # Windows code
+}
+
+# Library functions (source from _scripts/windows/lib/detect.ps1)
+$winVersion = Get-WindowsVersion
+if (Test-IsWindows11) {
+    # Windows 11-specific code
+}
+
+if (Test-IsAdmin) {
+    # Admin-required operations
+}
+```
+
+### Unix Shell Libraries
+
+**Location**: `_scripts/unix/lib/`
+
+#### `init.sh` - Library Loader
+```bash
+# Source all Unix libraries at once
+source "$DOTFILES_ROOT/_scripts/unix/lib/init.sh"
+```
+
+#### `colors.sh` - Logging Functions
+- `log_info $message` - Informational messages (green)
+- `log_success $message` - Success messages (green with checkmark)
+- `log_error $message` - Error messages (red)
+- `log_warning $message` - Warning messages (yellow)
+- `log_header $message` - Section headers (magenta)
+- `log_step $message` - Sub-steps (blue)
+
+#### `common.sh` - Utility Functions
+- `has_command $cmd` - Check if command exists
+- `retry $max_attempts $command` - Retry failed operations
+- `backup_file $file [$backup_dir]` - Create timestamped file backup
+- `confirm_prompt $message [$default]` - Ask for user confirmation
+- `safe_mkdir $path` - Create directories with error checking
+- `check_internet [$host]` - Check internet connectivity
+- `get_dotfiles_root $levels_up` - Get absolute path to repo root
+
+#### `detect.sh` - OS Detection
+- `detect_os` - Get OS type (macos/linux/unknown)
+- `get_distro` - Get Linux distribution ID
+- `is_macos` - Check if macOS (boolean)
+- `is_linux` - Check if Linux (boolean)
+- `get_package_manager` - Detect available PM (brew/apt/dnf/yum/pacman)
+- `is_root` - Check if running as root
+- `get_home_dir` - Get correct user home directory
+- `ensure_home_correct` - Fix stale HOME environment variable
+
+#### `package-managers.sh` - Package Manager Abstraction
+- `install_package $name [$pm]` - Install using available PM
+- `check_package_installed $name [$pm]` - Check if package installed
+- `update_packages [$pm]` - Update all packages
+- `install_with_brew $name` - Install with Homebrew
+- `install_with_apt $name` - Install with apt
+- `install_with_dnf $name` - Install with dnf
+- `install_with_yum $name` - Install with yum
+- `install_with_pacman $name` - Install with pacman
+
+## Nushell Configuration
+
+### Module Structure
+
+- **Modular layout**: Nushell config is organized into modules under `nushell/.config/nushell/`
+  - `core/hooks.nu` - Shell hooks
+  - `ui/menus.nu`, `ui/theme.nu`, `ui/keybindings.nu` - UI components
+  - `aliases/git-aliases.nu` - Git aliases
+  - `integrations/external-tools.nu` - Tool initialization (zoxide, starship, direnv)
+
+### Important Constraints
+
+- **No `&&` operator**: Nushell doesn't support `&&` - use `;` to chain commands
+- **No variable string interpolation in `source`**: Cannot use `source $"..."` with variables
+  - For Windows paths, use bare literals with tokens: `source C:/Users/#{USERNAME}#/.cache/...`
+  - Tokens get replaced at deploy time by `replacetokens` CLI
+- **Module exports**: Export functions with unique names to avoid collisions (e.g., `export def get_menus []` instead of `export def menus []`)
+- **Direnv integration**: Implemented via `env_change.PWD` hook per official nushell cookbook
+
+## Token Replacement System
+
+### Overview
+
+Template files use `#{TOKEN}#` syntax that gets replaced at deploy time with actual values.
+
+### Common Tokens
+
+- `#{USER_FULLNAME}#` - User's full name for git config
+- `#{USER_EMAIL}#` - User's email for git config
+- `#{USERNAME}#` - System username (for Windows paths)
+
+### Usage in Files
+
+**Git config template** (`git/.gitconfig.template`):
+```gitconfig
+[user]
+    name = #{USER_FULLNAME}#
+    email = #{USER_EMAIL}#
+```
+
+**Nushell external tools** (`nushell/.config/nushell/integrations/external-tools.nu`):
+```nu
+# Windows branch - use bare literal paths with tokens
+source C:/Users/#{USERNAME}#/.cache/starship/init.nu
+```
+
+### Token Replacement Tool
+
+- **CLI**: `replacetokens` (installed via npm)
+- **Pattern**: `#{TOKEN}#` (default pattern)
+- **Configuration**: In `Taskfile.yml` under `replacetokens` task
+  - Sources: `nushell/.config/nushell/**/*.nu`
+  - Environment variables provided via `env:` section
+
+## Installation Scripts - Critical Patterns
+
+### HOME Environment Variable Sanitization
+
+**Problem**: When using `su` without `-`, `$HOME` can point to the wrong directory (e.g., `/home/ubuntu/` instead of `/home/yaya1/`)
+
+**Solution**: Add this at the top of all entry-point scripts:
+
+```bash
+# Correct HOME if it's stale (happens with 'su' without '-')
+REAL_HOME=$(getent passwd "$(whoami)" | cut -d: -f6)
+if [[ "$HOME" != "$REAL_HOME" ]]; then
+    export HOME="$REAL_HOME"
+fi
+```
+
+**Applied to**:
+- `_scripts/install.sh`
+- `_scripts/just/bootstrap.sh`
+- `_scripts/unix/tools/deploy-gitconfig.sh`
+
+### Path Resolution in Scripts
+
+Scripts must resolve `DOTFILES_ROOT` relative to their location:
+
+```bash
+# Example: Script is 3 levels deep (_scripts/unix/tools/script.sh)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+```
+
+**Count carefully**:
+- `_scripts/install.sh` → 1 level deep → `..`
+- `_scripts/just/bootstrap.sh` → 2 levels deep → `../..`
+- `_scripts/unix/installers/*.sh` → 3 levels deep → `../../..`
+- `_scripts/unix/tools/*.sh` → 3 levels deep → `../../..`
+- `_scripts/windows/installers/*.ps1` → 3 levels deep → `../../..`
+- `_scripts/windows/tools/*.ps1` → 3 levels deep → `../../..`
+
+### File Existence Checks
+
+**Use `-f` instead of `-x` for script checks**:
+
+```bash
+# ❌ WRONG - git clone doesn't preserve execute permissions
+if [[ -x "$script_path" ]]; then
+    "$script_path"
+fi
+
+# ✅ CORRECT - check if file exists, then invoke with bash
+if [[ -f "$script_path" ]]; then
+    bash "$script_path"
+fi
+```
+
+### Mise Environment Variables
+
+**Correct variables** (as of mise v2024+):
+
+```bash
+export MISE_DATA_DIR="$HOME/.local/share/mise"
+export MISE_CACHE_DIR="$HOME/.cache/mise"
+```
+
+**Incorrect** (old):
+```bash
+# ❌ Don't use MISE_HOME - deprecated
+export MISE_HOME="$HOME/.local/share/mise"
+```
+
+**Apply in**:
+- `_scripts/install.sh` (3 places: `install_mise`, `install_package`, `install_mise_tools`)
+- `_scripts/unix/installers/install-mise.sh` (in shell config blocks)
+
+### Bootstrap Order
+
+**Linux** (`_scripts/just/bootstrap.sh`):
+1. `apt` (system package manager)
+2. `script` (runs install.sh)
+
+**macOS**:
+1. `brew` (Homebrew)
+2. `script` (runs install.sh)
+
+**Removed from default**:
+- `mise` - not a default package manager
+- `cargo` - not a default package manager
+
+### Git Config Deployment
+
+**Script**: `_scripts/unix/tools/deploy-gitconfig.sh`
+
+**Behavior**:
+1. Reads `git/.gitconfig.template`
+2. Prompts for `USER_FULLNAME` and `USER_EMAIL` (or uses env vars)
+3. Uses existing values from `~/.gitconfig` as defaults if file exists
+4. Replaces tokens with actual values
+5. **Copies** (not symlinks) result to `~/.gitconfig`
+
+**Invocation**:
+- Automatic: During `just install_full` (via `_scripts/install.sh`)
+- Manual: `just deploy_gitconfig`
+
+## Just Command Runner Integration
+
+### Color Variables
+
+Use Unicode escape sequences in Just recipes:
+
+```just
+# ✅ CORRECT
+reset := "\u{1b}[0m"
+bold := "\u{1b}[1m"
+red := "\u{1b}[31m"
+
+# ❌ WRONG - Invalid in Just
+reset := "\033[0m"
+```
+
+### Recipe Organization
+
+- **Main recipes**: Shown in default `just` command (defined in `justfile`)
+- **All recipes**: Available via `just --list`
+- **Module structure**: Recipes organized in `.just/*.just` files
+  - `.just/_helpers.just` - Shared variables and helper recipes
+  - `.just/install.just` - Installation recipes
+  - `.just/windows.just` - Windows-specific recipes
+  - `.just/tools.just` - Tool management recipes
+
+### Script Invocation
+
+```just
+# Use bash to invoke scripts (adds HOME guard automatically)
+install_full:
+    bash {{scripts_dir}}/install.sh --full
+```
+
+## Git Configuration
+
+### Template System
+
+**File**: `git/.gitconfig.template`
+
+**Contains**:
+- Token placeholders: `#{USER_FULLNAME}#`, `#{USER_EMAIL}#`
+- Git aliases and settings
+- Conditional includes for OS-specific configs
+
+**Deployment**:
+- Tokens replaced with actual values
+- Result copied (not symlinked) to `~/.gitconfig`
+- This allows git to modify the file without affecting the template
 

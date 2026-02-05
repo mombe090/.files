@@ -3,6 +3,7 @@ site_description: Comprehensive documentation for cross-platform dotfiles and co
 site_author: Mombe090
 repo_url: https://github.com/mombe090/.files
 repo_name: mombe090/.files
+docs_dir: _docs
 
 theme:
   name: material
@@ -78,26 +79,7 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Just Integration:
-      - Overview: specs/just-integration/specification.md
       - Architecture: specs/just-integration/architecture.md
-      - Recipes Reference: specs/just-integration/recipes.md
-      - Implementation Plan: specs/just-integration/implementation.md
-      - Getting Started:
-          - Installation: specs/just-integration/getting-started/installation.md
-          - Quick Start: specs/just-integration/getting-started/quickstart.md
-          - Bootstrap Process: specs/just-integration/getting-started/bootstrap.md
-      - Usage Guide:
-          - Common Workflows: specs/just-integration/usage/workflows.md
-          - Recipe Examples: specs/just-integration/usage/examples.md
-          - Troubleshooting: specs/just-integration/usage/troubleshooting.md
-      - Development:
-          - Contributing: specs/just-integration/development/contributing.md
-          - Testing: specs/just-integration/development/testing.md
-          - Design Decisions: specs/just-integration/development/decisions.md
-      - Reference:
-          - Module Reference: specs/just-integration/reference/modules.md
-          - Variables: specs/just-integration/reference/variables.md
-          - Error Handling: specs/just-integration/reference/errors.md
 
 extra:
   social:

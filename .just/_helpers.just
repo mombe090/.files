@@ -12,10 +12,10 @@ is_unix := if os() == "windows" { "false" } else { "true" }
 # Paths
 dotfiles_root := justfile_directory()
 scripts_dir := dotfiles_root / "_scripts"
-linux_scripts := scripts_dir / "linux/sh"
-windows_scripts := scripts_dir / "windows/pwsh"
-installers := linux_scripts / "installers"
-tools := linux_scripts / "tools"
+unix_scripts := scripts_dir / "unix"
+windows_scripts := scripts_dir / "windows"
+installers := unix_scripts / "installers"
+tools := unix_scripts / "tools"
 just_scripts := scripts_dir / "just"
 
 # User home
