@@ -455,6 +455,18 @@ fi
 
 log_header "Installing Just Command Runner"
 
+# Remove old apt version if it exists
+if command -v just &> /dev/null; then
+    CURRENT_VERSION=$(just --version 2>&1 || echo "unknown")
+    if [[ "$CURRENT_VERSION" == *"1.21.0"* ]]; then
+        log_warn "Found old just version (1.21.0 from apt)"
+        log_step "Removing old version..."
+        if command -v apt &> /dev/null; then
+            sudo apt-get remove -y just 2>/dev/null || true
+        fi
+    fi
+fi
+
 if bash "$SCRIPTS_DIR/just/install-just.sh"; then
     log_success "Just installed successfully"
 else
@@ -463,17 +475,25 @@ else
     exit 1
 fi
 
-# Verify just is in PATH
+# Verify just is in PATH and correct version
+hash -r  # Clear bash command hash
 if has_command just; then
     JUST_VERSION=$(just --version)
     log_success "Just is ready: $JUST_VERSION"
+
+    # Verify it's the correct version
+    if [[ "$JUST_VERSION" == *"1.46.0"* ]]; then
+        log_success "Correct version installed (1.46.0)"
+    else
+        log_warn "Unexpected version: $JUST_VERSION"
+        log_info "Expected: just 1.46.0"
+        log_info "Check: which just"
+    fi
 else
     log_warn "Just installed but not in PATH yet"
-    log_info "Add to your PATH (if installed to ~/.local/bin):"
-    echo '    export PATH="$HOME/.local/bin:$PATH"'
-    echo ""
-    log_info "Then reload your shell:"
-    echo "    source ~/.bashrc    # or ~/.zshrc"
+    log_info "/usr/local/bin should be in PATH by default"
+    log_info "Try opening a new terminal or run:"
+    echo "    hash -r    # Refresh command hash table"
 fi
 
 # =============================================================================
