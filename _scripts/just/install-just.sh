@@ -33,8 +33,11 @@ else
     exit 1
 fi
 
-# Try different installation methods
-install_via_homebrew() {
+# =============================================================================
+# Installation methods
+# =============================================================================
+
+install_via_brew() {
     if command -v brew &> /dev/null; then
         log_info "Installing via Homebrew..."
         brew install just
@@ -43,39 +46,29 @@ install_via_homebrew() {
     return 1
 }
 
-install_via_cargo() {
-    if command -v cargo &> /dev/null; then
-        log_info "Installing via cargo..."
-        cargo install just
-        return 0
-    fi
-    return 1
-}
-
-install_via_mise() {
-    if command -v mise &> /dev/null; then
-        log_info "Installing via mise..."
-        mise use -g just@latest
+install_via_apt() {
+    # just is available in the universe repo on Ubuntu 22.04+
+    if command -v apt &> /dev/null; then
+        log_info "Installing via apt..."
+        sudo apt-get update -qq && sudo apt-get install -y -qq just
         return 0
     fi
     return 1
 }
 
 install_via_script() {
-    log_info "Installing via official script..."
+    log_info "Installing via official install script (fallback)..."
 
-    # Determine install location
     if [ -w "/usr/local/bin" ] || sudo -n true 2>/dev/null; then
         INSTALL_DIR="/usr/local/bin"
-        log_info "Installing to $INSTALL_DIR (requires sudo)"
+        log_info "Installing to $INSTALL_DIR"
         curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | sudo bash -s -- --to "$INSTALL_DIR"
     else
         INSTALL_DIR="$HOME/.local/bin"
-        log_info "Installing to $INSTALL_DIR (no sudo)"
+        log_info "Installing to $INSTALL_DIR"
         mkdir -p "$INSTALL_DIR"
         curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to "$INSTALL_DIR"
 
-        # Add to PATH if not already there
         if [[ ":$PATH:" != *":$INSTALL_DIR:"* ]]; then
             log_warn "Add $INSTALL_DIR to your PATH"
             log_info "Add this to your ~/.zshrc or ~/.bashrc:"
@@ -86,11 +79,14 @@ install_via_script() {
     return 0
 }
 
-# Try installation methods in order of preference
+# =============================================================================
+# Install — prefer native package manager, fall back to official script
+# =============================================================================
+
 if [ "$OS" = "macos" ]; then
-    install_via_homebrew || install_via_mise || install_via_cargo || install_via_script
+    install_via_brew || install_via_script
 else
-    install_via_mise || install_via_cargo || install_via_script
+    install_via_apt || install_via_script
 fi
 
 # Verify installation
