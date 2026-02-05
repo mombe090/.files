@@ -2,21 +2,24 @@
 # maintenance.just - Update, backup, and cleanup recipes
 # =============================================================================
 
-# Update everything (git pull + mise + packages + restow)
+# Update everything (git pull + packages + mise + restow)
 [unix]
 update:
     @just _log_step "Updating dotfiles..."
     @echo ""
-    @just _log_info "1/4 Pulling latest changes..."
+    @just _log_info "1/5 Pulling latest changes..."
     @git pull
     @echo ""
-    @just _log_info "2/4 Upgrading mise tools..."
+    @just _log_info "2/5 Updating system packages..."
+    @just packages_update || true
+    @echo ""
+    @just _log_info "3/5 Upgrading mise tools..."
     @mise upgrade || true
     @echo ""
-    @just _log_info "3/4 Updating JavaScript packages..."
+    @just _log_info "4/5 Updating JavaScript packages..."
     @{{installers}}/install-js-packages.sh --update || true
     @echo ""
-    @just _log_info "4/4 Restowing configurations..."
+    @just _log_info "5/5 Restowing configurations..."
     @just restow
     @echo ""
     @just _log_success "Update complete!"
