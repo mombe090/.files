@@ -134,9 +134,9 @@ install_package() {
     
     # Try mise first
     if command -v mise &> /dev/null; then
-        export MISE_HOME="$HOME/.local/share/mise"
+        export MISE_DATA_DIR="$HOME/.local/share/mise"
         export MISE_CACHE_DIR="$HOME/.cache/mise"
-        mkdir -p "$MISE_HOME" "$MISE_CACHE_DIR"
+        mkdir -p "$MISE_DATA_DIR" "$MISE_CACHE_DIR"
 
         log_info "Installing $package via mise..."
         if mise use -g "$mise_name@latest" 2>/dev/null; then
@@ -209,10 +209,10 @@ install_mise() {
         
         # Pin mise data/cache to the current user's home so it never
         # writes into another user's directory (e.g. /home/ubuntu when
-        # running as yaya1).
-        export MISE_HOME="$HOME/.local/share/mise"
+        # running as yaya1).  MISE_DATA_DIR controls installs + shims.
+        export MISE_DATA_DIR="$HOME/.local/share/mise"
         export MISE_CACHE_DIR="$HOME/.cache/mise"
-        mkdir -p "$MISE_HOME" "$MISE_CACHE_DIR"
+        mkdir -p "$MISE_DATA_DIR" "$MISE_CACHE_DIR"
 
         # Activate mise in current shell session for subsequent commands
         if command -v mise &> /dev/null; then
@@ -311,9 +311,9 @@ install_mise_tools() {
     
     if command -v mise &> /dev/null; then
         # Ensure mise always writes to the current user's home
-        export MISE_HOME="$HOME/.local/share/mise"
+        export MISE_DATA_DIR="$HOME/.local/share/mise"
         export MISE_CACHE_DIR="$HOME/.cache/mise"
-        mkdir -p "$MISE_HOME" "$MISE_CACHE_DIR"
+        mkdir -p "$MISE_DATA_DIR" "$MISE_CACHE_DIR"
 
         mise install
         log_success "Mise tools installed"
