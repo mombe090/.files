@@ -1,0 +1,176 @@
+# =============================================================================
+# APT Packages - Debian/Ubuntu
+# =============================================================================
+# Package configuration for Debian-based distributions using apt.
+#
+# Usage:
+#   Install all: just install_packages
+#   Install category: (future enhancement)
+# =============================================================================
+
+essentials:
+  - name: git
+    description: Fast, scalable, distributed revision control system
+    category: essentials
+
+  - name: curl
+    description: Command line tool for transferring data with URL syntax
+    category: essentials
+
+  - name: wget
+    description: Retrieves files from the web
+    category: essentials
+
+  - name: stow
+    description: Organizer for /usr/local software packages
+    category: essentials
+
+  - name: zsh
+    description: Shell with lots of features
+    category: essentials
+
+  - name: build-essential
+    description: Informational list of build-essential packages
+    category: essentials
+    note: "Required for compiling software"
+
+development:
+  - name: neovim
+    description: Vim-fork focused on extensibility and agility
+    category: development
+
+  - name: tmux
+    description: Terminal multiplexer
+    category: development
+
+  - name: fzf
+    description: General-purpose command-line fuzzy finder
+    category: development
+
+  - name: ripgrep
+    description: Recursively searches directories for a regex pattern
+    category: development
+
+  - name: fd-find
+    description: Simple, fast and user-friendly alternative to find
+    category: development
+    note: "Binary is 'fdfind' on Debian/Ubuntu"
+
+  - name: bat
+    description: Cat clone with syntax highlighting and git integration
+    category: development
+
+  - name: zoxide
+    description: Smarter cd command for your terminal
+    category: development
+    ppa: true
+    note: "May need PPA or cargo install"
+
+  - name: direnv
+    description: Environment switcher for the shell
+    category: development
+
+  - name: jq
+    description: Lightweight and flexible command-line JSON processor
+    category: development
+
+  - name: htop
+    description: Interactive process viewer
+    category: development
+
+  - name: tree
+    description: Displays directory tree, in color
+    category: development
+
+  - name: silversearcher-ag
+    description: Very fast grep-like program (alternative to ack-grep)
+    category: development
+
+# Build tools and libraries
+build_tools:
+  - name: cmake
+    description: Cross-platform, open-source make system
+    category: build_tools
+
+  - name: pkg-config
+    description: Manage compile and link flags for libraries
+    category: build_tools
+
+  - name: autoconf
+    description: Automatic configure script builder
+    category: build_tools
+
+  - name: automake
+    description: Tool for generating GNU Standards-compliant Makefiles
+    category: build_tools
+
+  - name: libtool
+    description: Generic library support script
+    category: build_tools
+
+# Development libraries
+libraries:
+  - name: libssl-dev
+    description: Secure Sockets Layer toolkit - development files
+    category: libraries
+
+  - name: libffi-dev
+    description: Foreign Function Interface library (development files)
+    category: libraries
+
+  - name: libreadline-dev
+    description: GNU readline and history libraries, development files
+    category: libraries
+
+  - name: zlib1g-dev
+    description: Compression library - development
+    category: libraries
+
+  - name: libbz2-dev
+    description: High-quality block-sorting file compressor library - development
+    category: libraries
+
+  - name: libsqlite3-dev
+    description: SQLite 3 development files
+    category: libraries
+
+  - name: libncurses5-dev
+    description: Developer's libraries for ncurses
+    category: libraries
+
+# Language runtimes (prefer mise for version management)
+runtimes:
+  - name: python3
+    description: Interactive high-level object-oriented language
+    category: runtimes
+    optional: true
+    note: "System Python - prefer mise for development"
+
+  - name: python3-pip
+    description: Python package installer
+    category: runtimes
+    optional: true
+
+  - name: python3-venv
+    description: Virtual environment support for Python 3
+    category: runtimes
+    optional: true
+
+cloud:
+  - name: docker.io
+    description: Linux container runtime
+    category: cloud
+    note: "Or use official Docker installation script"
+
+  - name: docker-compose
+    description: Define and run multi-container applications with Docker
+    category: cloud
+
+fonts:
+  - name: fonts-cascadia-code
+    description: Microsoft's Cascadia Code font
+    category: fonts
+
+  - name: fonts-firacode
+    description: Monospaced font with programming ligatures
+    category: fonts

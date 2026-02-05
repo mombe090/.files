@@ -2,7 +2,46 @@
 
 ## Overview
 
-This directory contains YAML-based package configurations for Unix-like systems. Each file corresponds to a specific package manager, making it easy to maintain consistent development environments across different platforms.
+This directory contains YAML-based package configurations for Unix-like systems. Configurations are split into **professional (pro)** and **personal (perso)** to support both work and personal machines, similar to the Windows package configuration system.
+
+## Directory Structure
+
+```
+unix/packages/
+├── README.md                    # This file
+├── pro/                         # Professional/work-safe packages
+│   ├── brew.pkg.yml            # macOS Homebrew
+│   ├── apt.pkg.yml             # Debian/Ubuntu
+│   ├── dnf.pkg.yml             # Fedora/RHEL
+│   ├── pacman.pkg.yml          # Arch Linux
+│   └── mise.pkg.yml            # Mise version manager
+├── perso/                       # Personal packages (includes pro + personal)
+│   ├── brew.pkg.yml            # macOS Homebrew
+│   ├── apt.pkg.yml             # Debian/Ubuntu
+│   ├── dnf.pkg.yml             # Fedora/RHEL
+│   ├── pacman.pkg.yml          # Arch Linux
+│   └── mise.pkg.yml            # Mise version manager
+├── js.pkg.yml                   # Professional JavaScript packages
+└── js.pkg.personal.yml          # Personal JavaScript packages
+```
+
+## Professional vs Personal
+
+### Professional (pro/)
+
+Work-safe packages suitable for company/work computers:
+- Essential development tools
+- Standard language runtimes
+- Common DevOps tools
+- No experimental or personal tools
+
+### Personal (perso/)
+
+All professional packages PLUS personal additions:
+- Experimental runtimes (Deno, Bun)
+- Additional cloud tools
+- Personal productivity tools
+- Media/entertainment tools
 
 ## Configuration Files
 
@@ -19,7 +58,7 @@ This directory contains YAML-based package configurations for Unix-like systems.
 
 ### JavaScript/TypeScript
 
-- **`js.pkg.yml`** - Global JavaScript packages via Bun
+- **`js.pkg.yml`** - Professional JavaScript packages via Bun
 - **`js.pkg.personal.yml`** - Personal JavaScript packages
 
 ## Configuration Format

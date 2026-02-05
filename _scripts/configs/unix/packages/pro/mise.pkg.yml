@@ -1,8 +1,8 @@
 # =============================================================================
-# Mise Tools Configuration
+# Mise Tools Configuration - PROFESSIONAL
 # =============================================================================
-# Cross-platform version manager configuration.
-# Mise is the preferred way to manage language runtimes and dev tools.
+# Work-safe package configuration for company/work computers.
+# Includes essential development tools without experimental or personal packages.
 #
 # Usage:
 #   Install mise: _scripts/unix/installers/install-mise.sh
