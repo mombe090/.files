@@ -3,7 +3,7 @@
 # Prioritizes mise, falls back to OS package managers
 set -e
 
-DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SCRIPTS_DIR="$DOTFILES_ROOT/_scripts/linux/sh"
 
 # Colors

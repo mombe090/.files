@@ -6,13 +6,13 @@
 [unix]
 install_full:
     @just _log_step "Running full installation..."
-    @{{dotfiles_root}}/install.sh --full
+    @bash {{scripts_dir}}/install.sh --full
 
 # Install minimal setup (core tools only)
 [unix]
 install_minimal:
     @just _log_step "Running minimal installation..."
-    @{{dotfiles_root}}/install.sh --minimal
+    @bash {{scripts_dir}}/install.sh --minimal
 
 # Install specific component
 [unix]
