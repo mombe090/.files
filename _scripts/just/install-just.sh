@@ -47,8 +47,9 @@ install_via_brew() {
 }
 
 install_via_binary() {
-    # Download latest binary from GitHub releases (preferred method for latest version)
-    log_info "Installing latest binary from GitHub releases..."
+    # Download specific version from GitHub releases
+    local JUST_VERSION="1.46.0"
+    log_info "Installing just v${JUST_VERSION} from GitHub releases..."
 
     # Detect architecture
     ARCH=$(uname -m)
@@ -73,7 +74,7 @@ install_via_binary() {
     esac
 
     BINARY_NAME="just-${ARCH}-${PLATFORM}"
-    DOWNLOAD_URL="https://github.com/casey/just/releases/latest/download/${BINARY_NAME}.tar.gz"
+    DOWNLOAD_URL="https://github.com/casey/just/releases/download/${JUST_VERSION}/${BINARY_NAME}.tar.gz"
 
     log_info "Downloading: $BINARY_NAME"
 
@@ -83,7 +84,7 @@ install_via_binary() {
 
     # Download and extract
     if ! curl -fsSL "$DOWNLOAD_URL" | tar -xz -C "$TEMP_DIR"; then
-        log_warn "Failed to download binary"
+        log_warn "Failed to download binary from v${JUST_VERSION}"
         return 1
     fi
 
@@ -111,7 +112,7 @@ install_via_binary() {
 }
 
 install_via_apt() {
-    # WARNING: apt version may be outdated (e.g., 1.21.0 vs latest 1.46.0)
+    # WARNING: apt version may be outdated (e.g., 1.21.0 vs required 1.46.0)
     # Only use as fallback if binary download fails
     if command -v apt &> /dev/null; then
         log_warn "Installing via apt (may be outdated version)..."
@@ -145,14 +146,14 @@ install_via_script() {
 }
 
 # =============================================================================
-# Install — prefer latest binary, fall back to brew/apt/script
+# Install — prefer v1.46.0 binary, fall back to brew/apt/script
 # =============================================================================
 
 if [ "$OS" = "macos" ]; then
-    # macOS: Try brew first (usually up-to-date), then binary, then script
+    # macOS: Try brew first (usually up-to-date), then binary v1.46.0, then script
     install_via_brew || install_via_binary || install_via_script
 else
-    # Linux: Try binary first (latest), then apt (may be old), then script
+    # Linux: Try binary v1.46.0 first, then apt (may be old), then script
     install_via_binary || install_via_apt || install_via_script
 fi
 
