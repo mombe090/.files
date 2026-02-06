@@ -16,12 +16,39 @@ set -e
 
 # Ensure HOME points to the actual current user (fixes stale HOME after su)
 if command -v getent &> /dev/null; then
+    # Linux: use getent
     REAL_HOME=$(getent passwd "$(whoami)" | cut -d: -f6)
-    if [[ "$HOME" != "$REAL_HOME" ]]; then
+    if [[ -n "$REAL_HOME" ]] && [[ "$HOME" != "$REAL_HOME" ]]; then
         echo "[WARN] HOME was $HOME, correcting to $REAL_HOME"
         export HOME="$REAL_HOME"
     fi
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS: use eval echo
+    CURRENT_USER="$(id -un)"
+    if [[ -n "$CURRENT_USER" ]]; then
+        REAL_HOME=$(eval echo "~$CURRENT_USER")
+        if [[ -n "$REAL_HOME" ]] && [[ "$REAL_HOME" != "$HOME" ]]; then
+            echo "[WARN] HOME was $HOME, correcting to $REAL_HOME"
+            export HOME="$REAL_HOME"
+        fi
+    fi
 fi
+
+# Verify HOME is set and valid
+if [[ -z "$HOME" ]] || [[ "$HOME" == "/" ]]; then
+    echo "[ERROR] HOME is not set correctly: '$HOME'"
+    CURRENT_USER="$(id -un)"
+    export HOME=$(eval echo "~$CURRENT_USER")
+    echo "[INFO] Set HOME to: $HOME"
+fi
+
+# Final sanity check
+if [[ -z "$HOME" ]] || [[ "$HOME" == "/" ]] || [[ ! -d "$HOME" ]]; then
+    echo "[ERROR] Failed to determine HOME directory"
+    echo "[ERROR] HOME='$HOME', USER='$(id -un)'"
+    exit 1
+fi
+
 
 # Get dotfiles root directory (script is in _scripts/, go up one level)
 DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -75,9 +102,10 @@ DESCRIPTION:
     - git (required for version control)
     - mise (version manager for language runtimes)
     - sudo, jq, wget (essential utilities)
+    - stow (symlink manager for dotfiles)
     - yq (YAML parser, installed via mise)
-    - Essential packages (stow, zsh, build-essential, etc.)
-    - Just command runner (modern task runner)
+    - Essential packages (build-essential, gcc, make, cmake, etc.)
+    - Just command runner (via Homebrew on macOS, GitHub on Linux)
 
     After bootstrap completes, use:
         just install_full      # Full dotfiles installation
@@ -172,6 +200,7 @@ if [[ "$AUTO_YES" != "true" ]]; then
     echo "  • git (if not installed)"
     echo "  • mise - Version manager (if not installed)"
     echo "  • sudo, jq, wget - Essential utilities (if not installed)"
+    echo "  • stow - Symlink manager for dotfiles"
     echo "  • yq - YAML parser (via mise)"
     echo "  • Essential development packages (via install-packages.sh)"
     echo "  • Just command runner (latest version)"
@@ -394,6 +423,50 @@ else
 fi
 
 # =============================================================================
+# Install GNU Stow
+# =============================================================================
+
+log_header "Installing GNU Stow"
+
+if has_command stow; then
+    STOW_VERSION=$(stow --version 2>&1 | head -n1 || echo "unknown")
+    log_success "stow already installed ($STOW_VERSION)"
+else
+    log_step "Installing GNU Stow..."
+    if [[ -f "$SCRIPTS_DIR/unix/installers/install-stow.sh" ]]; then
+        if bash "$SCRIPTS_DIR/unix/installers/install-stow.sh"; then
+            log_success "stow installed"
+        else
+            log_warn "Failed to install stow"
+            log_info "You can install it manually later"
+        fi
+    else
+        # Fallback to direct installation
+        log_step "Installing stow directly..."
+        case "$PM" in
+            brew)
+                brew install stow
+                ;;
+            apt)
+                sudo apt-get update -qq
+                sudo apt-get install -y stow
+                ;;
+            dnf)
+                sudo dnf install -y stow
+                ;;
+            pacman)
+                sudo pacman -S --noconfirm stow
+                ;;
+            *)
+                log_error "Please install stow manually"
+                exit 1
+                ;;
+        esac
+        log_success "stow installed"
+    fi
+fi
+
+# =============================================================================
 # Install yq via Mise
 # =============================================================================
 
@@ -455,90 +528,58 @@ fi
 
 log_header "Installing Just Command Runner"
 
-# Remove old apt version if it exists
-if command -v apt &> /dev/null; then
-    if dpkg -l 2>/dev/null | grep -q "^ii.*just"; then
-        log_warn "Found just installed via apt (likely v1.21.0)"
-        log_step "Removing apt version..."
-        sudo apt-get remove -y just 2>/dev/null || true
-        sudo apt-get autoremove -y 2>/dev/null || true
-    fi
-fi
-
-# Remove old binaries and symlinks
-log_step "Cleaning old just installations..."
-if [[ -f /usr/bin/just ]] || [[ -L /usr/bin/just ]]; then
-    log_info "Removing /usr/bin/just"
-    sudo rm -f /usr/bin/just
-fi
-
-# Install just v1.46.0
-log_step "Installing just v1.46.0..."
-if bash "$SCRIPTS_DIR/just/install-just.sh"; then
-    log_success "Just installer completed"
+if has_command just; then
+    JUST_VERSION=$(just --version 2>&1 || echo "unknown")
+    log_success "just already installed ($JUST_VERSION)"
 else
-    log_error "Failed to install Just"
-    log_info "You can install it manually from: https://github.com/casey/just"
-    exit 1
-fi
+    log_step "Installing just..."
 
-# Verify binary exists
-log_step "Verifying just installation..."
-if [[ ! -f /usr/local/bin/just ]]; then
-    log_error "Binary not found at /usr/local/bin/just"
-    log_info "Installation failed - binary was not copied"
-    exit 1
-fi
-
-# Check binary is executable
-if [[ ! -x /usr/local/bin/just ]]; then
-    log_warn "Binary exists but not executable, fixing..."
-    sudo chmod +x /usr/local/bin/just
-fi
-
-# Ensure /usr/local/bin is in PATH and comes first
-if [[ ":$PATH:" != *":/usr/local/bin:"* ]]; then
-    log_warn "/usr/local/bin not in PATH, adding..."
-    export PATH="/usr/local/bin:$PATH"
-else
-    # Ensure it comes before /usr/bin
-    export PATH="/usr/local/bin:${PATH//:\/usr\/local\/bin/}"
-fi
-
-# Clear bash command hash
-hash -r 2>/dev/null || true
-
-# Verify just is accessible
-if command -v just &>/dev/null; then
-    JUST_VERSION=$(just --version 2>&1)
-    JUST_LOCATION=$(which just 2>&1)
-
-    log_success "Just is ready: $JUST_VERSION"
-    log_info "Location: $JUST_LOCATION"
-
-    # Verify it's the correct version
-    if [[ "$JUST_VERSION" == *"1.46.0"* ]]; then
-        log_success "✓ Correct version (1.46.0)"
+    if [[ "$OS" == "macos" ]]; then
+        # Use Homebrew on macOS
+        brew install just
+        log_success "just installed via Homebrew"
     else
-        log_warn "Unexpected version: $JUST_VERSION (expected 1.46.0)"
+        # Use install-just.sh on Linux
+        # Remove old apt version if it exists
+        if command -v apt &> /dev/null; then
+            if dpkg -l 2>/dev/null | grep -q "^ii.*just"; then
+                log_warn "Found just installed via apt (likely outdated)"
+                log_step "Removing apt version..."
+                sudo apt-get remove -y just 2>/dev/null || true
+                sudo apt-get autoremove -y 2>/dev/null || true
+            fi
+        fi
+
+        # Remove old binaries
+        if [[ -f /usr/bin/just ]] || [[ -L /usr/bin/just ]]; then
+            log_info "Removing old /usr/bin/just"
+            sudo rm -f /usr/bin/just
+        fi
+
+        # Install via script
+        if bash "$SCRIPTS_DIR/just/install-just.sh"; then
+            log_success "just installed via install-just.sh"
+        else
+            log_error "Failed to install just"
+            log_info "You can install it manually from: https://github.com/casey/just"
+            exit 1
+        fi
     fi
 
-    # Verify it's in the correct location
-    if [[ "$JUST_LOCATION" != "/usr/local/bin/just" ]]; then
-        log_warn "Just found at unexpected location: $JUST_LOCATION"
-        log_info "Expected: /usr/local/bin/just"
-        log_info "This may cause issues. Check your PATH:"
-        log_info "  Current PATH: $PATH"
+    # Clear bash command hash
+    hash -r 2>/dev/null || true
+
+    # Verify installation
+    if has_command just; then
+        JUST_VERSION=$(just --version 2>&1)
+        JUST_LOCATION=$(which just 2>&1)
+        log_success "just is ready: $JUST_VERSION"
+        log_info "Location: $JUST_LOCATION"
+    else
+        log_error "just command not found after installation"
+        log_info "Try: export PATH=\"/usr/local/bin:\$PATH\" && hash -r"
+        exit 1
     fi
-else
-    log_error "Just command not found after installation"
-    log_info "Binary exists at: /usr/local/bin/just"
-    log_info "But command not accessible. Diagnostic info:"
-    echo "  PATH: $PATH"
-    echo "  Hash: $(hash -t just 2>&1 || echo 'not in hash')"
-    echo "  Which: $(which just 2>&1 || echo 'not found')"
-    log_info "Try manually: export PATH=\"/usr/local/bin:\$PATH\" && hash -r"
-    exit 1
 fi
 
 # =============================================================================
@@ -554,6 +595,7 @@ echo "  ✓ mise"
 echo "  ✓ sudo"
 echo "  ✓ jq"
 echo "  ✓ wget"
+echo "  ✓ stow"
 echo "  ✓ yq (via mise)"
 echo "  ✓ Essential development packages"
 echo "  ✓ just"

@@ -14,6 +14,18 @@ install_minimal:
     @just _log_step "Running minimal installation..."
     @bash {{scripts_dir}}/install.sh --minimal
 
+# Install professional packages (work-safe)
+[unix]
+install_pro:
+    @just _log_step "Running professional installation..."
+    @bash {{scripts_dir}}/install.sh --pro
+
+# Install personal packages (includes professional + personal)
+[unix]
+install_perso:
+    @just _log_step "Running personal installation..."
+    @bash {{scripts_dir}}/install.sh --perso
+
 # Install specific component
 [unix]
 install_component COMP:

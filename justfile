@@ -18,6 +18,8 @@ default:
     @echo -e "{{color_bold}}Dotfiles{{color_reset}}"
     @echo ""
     @echo -e "  {{color_green}}just install_full{{color_reset}}        Install everything"
+    @echo -e "  {{color_green}}just install_pro{{color_reset}}         Install professional packages (work-safe)"
+    @echo -e "  {{color_green}}just install_perso{{color_reset}}       Install personal packages (includes pro)"
     @echo -e "  {{color_green}}just install_minimal{{color_reset}}     Core tools only"
     @echo -e "  {{color_green}}just packages_minimal{{color_reset}}    Install essential packages"
     @echo -e "  {{color_green}}just packages_info{{color_reset}}       Package system info"

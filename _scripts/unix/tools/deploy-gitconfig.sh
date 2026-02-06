@@ -32,10 +32,38 @@ log_success() { echo -e "${GREEN}[✓]${NC} $1"; }
 # Paths
 # ---------------------------------------------------------------------------
 # Ensure HOME points to the actual current user (fixes stale HOME after su)
-REAL_HOME=$(getent passwd "$(whoami)" | cut -d: -f6)
-if [[ "$HOME" != "$REAL_HOME" ]]; then
-    echo "[WARN] HOME was $HOME, correcting to $REAL_HOME"
-    export HOME="$REAL_HOME"
+if command -v getent &> /dev/null; then
+    # Linux: use getent
+    REAL_HOME=$(getent passwd "$(whoami)" | cut -d: -f6)
+    if [[ -n "$REAL_HOME" ]] && [[ "$HOME" != "$REAL_HOME" ]]; then
+        echo "[WARN] HOME was $HOME, correcting to $REAL_HOME"
+        export HOME="$REAL_HOME"
+    fi
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS: use eval echo
+    CURRENT_USER="$(id -un)"
+    if [[ -n "$CURRENT_USER" ]]; then
+        REAL_HOME=$(eval echo "~$CURRENT_USER")
+        if [[ -n "$REAL_HOME" ]] && [[ "$REAL_HOME" != "$HOME" ]]; then
+            echo "[WARN] HOME was $HOME, correcting to $REAL_HOME"
+            export HOME="$REAL_HOME"
+        fi
+    fi
+fi
+
+# Verify HOME is set and valid
+if [[ -z "$HOME" ]] || [[ "$HOME" == "/" ]]; then
+    echo "[ERROR] HOME is not set correctly: '$HOME'"
+    CURRENT_USER="$(id -un)"
+    export HOME=$(eval echo "~$CURRENT_USER")
+    echo "[INFO] Set HOME to: $HOME"
+fi
+
+# Final sanity check
+if [[ -z "$HOME" ]] || [[ "$HOME" == "/" ]] || [[ ! -d "$HOME" ]]; then
+    log_error "Failed to determine HOME directory"
+    log_error "HOME='$HOME', USER='$(id -un)'"
+    exit 1
 fi
 
 # Script is at: _scripts/unix/tools/ — 3 levels up to repo root
