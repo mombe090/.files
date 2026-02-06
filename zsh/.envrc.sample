@@ -1,0 +1,50 @@
+# =============================================================================
+# ENVIRONMENT VARIABLES TEMPLATE FOR ZSH/BASH
+# =============================================================================
+# Copy this file to ~/.envrc and fill in your actual values
+# This file is loaded by direnv and sourced in zsh/nushell configs
+#
+# IMPORTANT: Never commit the actual ~/.envrc file with real credentials!
+# =============================================================================
+
+# ===== USER CONFIGURATION =====
+# Used for git config generation and personal setup
+export USER_FULLNAME="Your Full Name"
+export USER_EMAIL="your.email@example.com"
+export PERSONAL_USER="your-username"  # Used to detect personal machine setup
+
+# ===== MACHINE TYPE =====
+# Set to "pro" for work machines, "perso" for personal machines
+export PC_TYPE="perso"  # Options: pro | perso
+
+# ===== OPTIONAL: AWS REGION =====
+# Uncomment if you use AWS CLI
+# export AWS_DEFAULT_REGION="us-east-1"
+
+# ===== OPTIONAL: KUBERNETES =====
+# Uncomment if you use kubectl with custom config
+# export KUBECONFIG="$HOME/.kube/config"
+
+# ===== OPTIONAL: OPENAI / AI SERVICES =====
+# Uncomment if you use AI APIs
+# export OPENAI_API_KEY="YOUR_OPENAI_API_KEY"
+# export ANTHROPIC_API_KEY="YOUR_ANTHROPIC_API_KEY"
+
+# ===== CUSTOM VARIABLES =====
+# Add your own environment variables below
+
+# ===== LOAD PRIVATE VARIABLES =====
+# Source private environment variables from ~/.private.envrc if it exists
+# This file should contain your sensitive credentials (API keys, tokens, passwords)
+if [[ -f "$HOME/.private.envrc" ]]; then
+    source "$HOME/.private.envrc"
+fi
+
+# ===== NOTES =====
+# 1. Copy this file: cp .envrc.sample ~/.envrc
+# 2. Edit with your values: nvim ~/.envrc
+# 3. Allow direnv to load it: direnv allow
+# 4. Restart your shell or run: source ~/.envrc
+#
+# ⚠️  SECURITY WARNING: Never commit ~/.envrc with real credentials!
+#     Add it to .gitignore if tracking your home directory.

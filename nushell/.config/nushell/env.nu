@@ -114,3 +114,15 @@ $env.VISUAL = "nvim"
 if (which direnv | is-not-empty) {
     $env.DIRENV_LOG_FORMAT = ""
 }
+
+# =============================================================================
+# Local Environment Variables
+# =============================================================================
+# Load local environment variables if env.local.nu exists
+# This file should contain personal credentials and machine-specific config
+# See env.nu.sample for template
+
+let env_local = ($nu.default-config-dir | path join "env.local.nu")
+if ($env_local | path exists) {
+    source $env_local
+}

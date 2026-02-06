@@ -95,6 +95,16 @@ cloud: []
 # Language runtimes - REMOVED (all handled by mise: node, python, go, rust, ruby)
 runtimes: []
 
+# Terminal emulators (casks - GUI applications)
+casks:
+  - name: wezterm
+    description: GPU-accelerated cross-platform terminal emulator
+    category: casks
+
+  - name: alacritty
+    description: GPU-accelerated terminal emulator
+    category: casks
+
 # NOTE: These tools are managed by mise (see mise/.config/mise/config.toml):
 # - bat, eza, fd, ripgrep, fzf, zoxide (modern CLI tools)
 # - neovim, tmux, direnv, delta (dev tools)

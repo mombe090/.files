@@ -1,0 +1,41 @@
+# =============================================================================
+# Homebrew Packages - Personal Profile
+# =============================================================================
+# Personal packages for macOS using Homebrew.
+#
+# NOTE: Most CLI tools are managed by mise (see mise/.config/mise/config.toml)
+# This file only contains packages that:
+#   1. Are NOT in mise config (to avoid duplicates)
+#   2. Are brew-specific (casks, fonts, libraries)
+#
+# Usage:
+#   Install via perso profile: bash _scripts/unix/installers/install-packages.sh --perso
+# =============================================================================
+
+# Essential tools (inherit from pro, add personal extras here if needed)
+essentials: []
+
+# Development tools
+development: []
+
+# Fonts (personal preferences)
+fonts: []
+
+# Terminal emulators (casks - GUI applications)
+casks:
+  - name: wezterm
+    description: GPU-accelerated cross-platform terminal emulator
+    category: casks
+
+  - name: alacritty
+    description: GPU-accelerated terminal emulator
+    category: casks
+
+# NOTE: These tools are managed by mise (see mise/.config/mise/config.toml):
+# - bat, eza, fd, ripgrep, fzf, zoxide (modern CLI tools)
+# - neovim, tmux, direnv, delta (dev tools)
+# - jq, yq (data processors)
+# - starship (shell prompt)
+# - kubectl, helm, terraform, awscli (cloud/devops tools)
+# - node, python, go, rust, ruby (language runtimes)
+

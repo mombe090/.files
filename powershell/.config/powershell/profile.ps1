@@ -31,6 +31,18 @@ $env:EDITOR = "nvim"
 $env:VISUAL = "nvim"
 
 # =============================================================================
+# Local Environment Variables
+# =============================================================================
+# Load local environment variables if env.local.ps1 exists
+# This file should contain personal credentials and machine-specific config
+# See env.ps1.sample for template
+
+$envLocal = Join-Path $PSScriptRoot "env.local.ps1"
+if (Test-Path $envLocal) {
+    . $envLocal
+}
+
+# =============================================================================
 # PSReadLine Configuration
 # =============================================================================
 

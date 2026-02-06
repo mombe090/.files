@@ -1,7 +1,10 @@
 autoload -Uz compinit
 
 # ===== MISE CONFIGURATION =====
-# Activate mise if available
+# Add mise shims to PATH immediately (ensures tools are available during shell startup)
+export PATH="$HOME/.local/share/mise/shims:$PATH"
+
+# Activate mise hooks for directory switching
 if command -v mise &> /dev/null; then
   eval "$(mise activate zsh)"
 fi

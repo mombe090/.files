@@ -293,8 +293,10 @@ install_packages_from_config() {
     fi
 
     # Get categories
-    local categories
-    mapfile -t categories < <(get_categories "$config_file")
+    local categories=()
+    while IFS= read -r category; do
+        categories+=("$category")
+    done < <(get_categories "$config_file")
 
     for category in "${categories[@]}"; do
         # Skip if category filter is set and doesn't match
@@ -350,12 +352,12 @@ install_packages_with_common() {
         *) pm_name="brew" ;;
     esac
 
-    local common_config="$CONFIG_DIR/common/${pm_name}.pkg.yml"
+    local common_config="$CONFIG_DIR/common/$PACKAGE_TYPE/${pm_name}.pkg.yml"
     local profile_config="$CONFIG_DIR/$PACKAGE_TYPE/${pm_name}.pkg.yml"
 
     # Install common packages first (if exists)
     if [[ -f "$common_config" ]]; then
-        log_info "Installing common packages shared across profiles..."
+        log_info "Installing common packages for $PACKAGE_TYPE profile..."
         install_packages_from_config "$common_config" "$pm"
     fi
 
@@ -364,7 +366,7 @@ install_packages_with_common() {
         log_info "Installing $PACKAGE_TYPE profile-specific packages..."
         install_packages_from_config "$profile_config" "$pm"
     elif [[ ! -f "$common_config" ]]; then
-        log_warning "No package config found for $pm_name (checked common and $PACKAGE_TYPE)"
+        log_warning "No package config found for $pm_name (checked common/$PACKAGE_TYPE and $PACKAGE_TYPE)"
     fi
 }
 
@@ -390,8 +392,10 @@ install_mise_tools() {
     fi
 
     # Get categories
-    local categories
-    mapfile -t categories < <(get_categories "$mise_config")
+    local categories=()
+    while IFS= read -r category; do
+        categories+=("$category")
+    done < <(get_categories "$mise_config")
 
     for category in "${categories[@]}"; do
         # Skip if category filter is set and doesn't match

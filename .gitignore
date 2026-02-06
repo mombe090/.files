@@ -3,11 +3,16 @@
 .idea
 .vscode
 
-# Env files
+# Env files (never commit actual credentials!)
 
 .envrc
 .env
 .env.local
+.private.envrc
+env.local.nu
+env.private.nu
+env.local.ps1
+env.private.ps1
 node_modules/
 
 # Local git configuration (contains personal info)
