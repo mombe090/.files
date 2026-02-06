@@ -1,0 +1,105 @@
+# =============================================================================
+# Homebrew Packages - Professional (Work-Safe Only)
+# =============================================================================
+# Professional packages for macOS using Homebrew.
+# Work-safe packages only - suitable for company computers.
+#
+# NOTE: Most CLI tools are managed by mise (see mise/.config/mise/config.toml)
+# This file only contains packages that:
+#   1. Are NOT in mise config (to avoid duplicates)
+#   2. Are essential for work environments
+#   3. Are brew-specific (fonts, libraries)
+#
+# Usage:
+#   Install via pro profile: bash _scripts/unix/installers/install-packages.sh --pro
+# =============================================================================
+
+# Essential tools (only those NOT in mise)
+essentials:
+  - name: git
+    description: Distributed version control system
+    category: essentials
+
+  - name: curl
+    description: Transfer data with URLs
+    category: essentials
+
+  - name: wget
+    description: Internet file retriever
+    category: essentials
+
+  - name: stow
+    description: GNU Stow - symlink farm manager
+    category: essentials
+
+  - name: zsh
+    description: UNIX shell (Z shell)
+    category: essentials
+
+# Development tools (only those NOT in mise)
+development:
+  - name: tree
+    description: Display directories as trees
+    category: development
+
+# Build tools
+build_tools:
+  - name: cmake
+    description: Cross-platform make
+    category: build_tools
+
+  - name: pkg-config
+    description: Manage compile and link flags
+    category: build_tools
+
+# Modern fonts (Nerd Fonts for terminal)
+fonts:
+  - name: font-cascadia-code
+    description: Microsoft's Cascadia Code font
+    category: fonts
+    tap: homebrew/cask-fonts
+
+  - name: font-jetbrains-mono-nerd-font
+    description: JetBrains Mono with Nerd Font icons
+    category: fonts
+    tap: homebrew/cask-fonts
+
+  - name: font-fira-code-nerd-font
+    description: Fira Code with Nerd Font icons
+    category: fonts
+    tap: homebrew/cask-fonts
+
+# Libraries (development libraries)
+libraries:
+  - name: openssl@3
+    description: Cryptography and SSL/TLS Toolkit
+    category: libraries
+
+  - name: readline
+    description: Library for command-line editing
+    category: libraries
+
+  - name: sqlite
+    description: Command-line interface for SQLite
+    category: libraries
+
+# Shell tools - REMOVED (all handled by mise: starship, htop, btop)
+shell_tools: []
+
+# Monitoring - REMOVED (handled by mise: htop, btop)
+monitoring: []
+
+# Cloud tools - REMOVED (handled by mise: kubectl, helm, terraform, awscli)
+cloud: []
+
+# Language runtimes - REMOVED (all handled by mise: node, python, go, rust, ruby)
+runtimes: []
+
+# NOTE: These tools are managed by mise (see mise/.config/mise/config.toml):
+# - bat, eza, fd, ripgrep, fzf, zoxide (modern CLI tools)
+# - neovim, tmux, direnv, delta (dev tools)
+# - jq, yq (data processors)
+# - starship (shell prompt)
+# - kubectl, helm, terraform, awscli (cloud/devops tools)
+# - node, python, go, rust, ruby (language runtimes)
+

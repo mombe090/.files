@@ -84,3 +84,6 @@ eval "$(starship init zsh)"
 
 PROMPT="${PROMPT}"$'\n> '
 
+
+# ===== HOMEBREW CONFIGURATION =====
+eval "$(/opt/homebrew/bin/brew shellenv)"

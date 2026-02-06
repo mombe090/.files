@@ -9,19 +9,27 @@ This directory contains YAML-based package configurations for Unix-like systems.
 ```text
 unix/packages/
 ├── README.md                    # This file
-├── pro/                         # Professional/work-safe packages
+├── common/                      # Common package configs (shared structure)
+│   ├── pro/                     # Professional/work-safe packages
+│   │   ├── brew.pkg.yml        # macOS Homebrew
+│   │   ├── apt.pkg.yml         # Debian/Ubuntu
+│   │   └── js.pkg.yml          # JavaScript packages
+│   └── perso/                   # Personal packages (includes pro + personal)
+│       ├── brew.pkg.yml        # macOS Homebrew
+│       ├── apt.pkg.yml         # Debian/Ubuntu
+│       └── js.pkg.yml          # JavaScript packages
+├── pro/                         # Legacy professional packages (deprecated)
 │   ├── brew.pkg.yml            # macOS Homebrew
-│   ├── apt.pkg.yml             # Debian/Ubuntu
-│   └── mise.pkg.yml            # Mise version manager
-├── perso/                       # Personal packages (includes pro + personal)
-│   ├── brew.pkg.yml            # macOS Homebrew
-│   ├── apt.pkg.yml             # Debian/Ubuntu
-│   ├── dnf.pkg.yml             # Fedora/RHEL
-│   ├── pacman.pkg.yml          # Arch Linux
-│   └── mise.pkg.yml            # Mise version manager
-├── js.pkg.yml                   # Professional JavaScript packages
-└── js.pkg.personal.yml          # Personal JavaScript packages
+│   └── apt.pkg.yml             # Debian/Ubuntu
+└── perso/                       # Legacy personal packages (deprecated)
+    ├── brew.pkg.yml            # macOS Homebrew
+    ├── apt.pkg.yml             # Debian/Ubuntu
+    ├── dnf.pkg.yml             # Fedora/RHEL
+    └── pacman.pkg.yml          # Arch Linux
 ```
+
+**Note**: The package system now uses `common/pro/` and `common/perso/` structure.
+Legacy `pro/` and `perso/` directories are kept for backward compatibility.
 
 ## Professional vs Personal
 
@@ -59,21 +67,28 @@ All professional packages PLUS personal additions:
 
 ### Package Managers
 
-**Professional packages (`pro/`):**
+**Professional packages (`common/pro/`):**
 
 - **`brew.pkg.yml`** - macOS Homebrew packages
 - **`apt.pkg.yml`** - Debian/Ubuntu APT packages
+- **`js.pkg.yml`** - JavaScript/TypeScript packages (via Bun)
 
-**Personal packages (`perso/`):**
+**Personal packages (`common/perso/`):**
 
-- **`brew.pkg.yml`** - macOS Homebrew packages
-- **`apt.pkg.yml`** - Debian/Ubuntu APT packages
-- **`dnf.pkg.yml`** - Fedora/RHEL DNF packages
-- **`pacman.pkg.yml`** - Arch Linux pacman packages
+- **`brew.pkg.yml`** - macOS Homebrew packages (pro + personal)
+- **`apt.pkg.yml`** - Debian/Ubuntu APT packages (pro + personal)
+- **`js.pkg.yml`** - JavaScript/TypeScript packages (pro + personal)
+
+**Legacy locations** (deprecated, kept for backward compatibility):
+
+- `pro/*.pkg.yml` - Old professional package configs
+- `perso/*.pkg.yml` - Old personal package configs (includes DNF, Pacman)
 
 ### Version Managers
 
-- **`mise.pkg.yml`** - Cross-platform mise tools (preferred for language runtimes)
+**Mise tools are now managed via `mise/.config/mise/config.toml`** instead of `mise.pkg.yml`.
+
+This allows for better version control and mise-native configuration.
 
 ### JavaScript/TypeScript
 
@@ -257,14 +272,13 @@ development:
     optional: true
 ```
 
-**To mise.pkg.yml**:
+**To mise config** (`mise/.config/mise/config.toml`):
 
-```yaml
-shell_tools:
-  - name: bottom
-    version: latest
-    description: Cross-platform graphical process monitor
-    category: shell_tools
+```toml
+[tools]
+bottom = "latest"  # Cross-platform graphical process monitor
+node = "20"        # Node.js LTS
+python = "3.11"    # Python
 ```
 
 ### Platform-Specific Notes

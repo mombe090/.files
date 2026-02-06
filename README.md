@@ -18,6 +18,9 @@ cd ~/.dotfiles
 # 2. Run bootstrap (installs mise, yq, just, essential packages)
 bash _scripts/bootstrap.sh
 
+# 3. Install mise packages and essential tools
+mise install
+
 # 3. Install dotfiles
 just install_full                 # Full installation
 # OR
@@ -28,7 +31,8 @@ just install_minimal              # Minimal installation
 
 - ✅ mise (version manager) → `/usr/local/bin/mise`
 - ✅ yq v4.x (YAML parser) via mise
-- ✅ just v1.46.0 (command runner) → `/usr/local/bin/just`
+- ✅ just (command runner) - via Homebrew on macOS, GitHub releases on Linux
+- ✅ stow (symlink manager for dotfiles)
 - ✅ Essential packages (build-essential, gcc, make, cmake, etc.)
 - ✅ Utilities: sudo, jq, wget (if not installed)
 
@@ -132,8 +136,9 @@ just doctor
 - ✅ Installs **mise** version manager globally to `/usr/local/bin`
 - ✅ Installs essential utilities: `sudo`, `jq`, `wget` (if needed)
 - ✅ Installs **yq** v4.x (YAML parser) via mise (not the outdated apt version)
+- ✅ Installs **stow** (GNU symlink manager for dotfiles)
 - ✅ Installs essential development packages from YAML configs
-- ✅ Installs **just v1.46.0** from GitHub releases (not outdated apt v1.21.0)
+- ✅ Installs **just** command runner (via Homebrew on macOS, GitHub releases on Linux)
 - ✅ Verifies installations with comprehensive diagnostics
 - ✅ Works in containers running as root (no sudo required)
 - ✅ Handles PATH setup and bash hash clearing automatically
@@ -144,9 +149,10 @@ just doctor
 2. `git` (if not installed)
 3. `mise` → `/usr/local/bin/mise`
 4. `sudo`, `jq`, `wget` (if not installed)
-5. `yq` via mise (mikefarah's yq v4.x)
-6. Essential packages (build-essential, gcc, make, etc.)
-7. `just` v1.46.0 → `/usr/local/bin/just`
+5. `stow` (GNU symlink manager)
+6. `yq` via mise (mikefarah's yq v4.x)
+7. Essential packages (build-essential, gcc, make, etc.)
+8. `just` (via Homebrew on macOS, GitHub releases on Linux)
 
 ### Method 2: Just Command Runner (Already Have Essentials)
 
@@ -322,14 +328,12 @@ _scripts/
     ├── unix/packages/  # Unix package configs
     │   ├── pro/        # Professional packages (macOS + Ubuntu/Debian only)
     │   │   ├── apt.pkg.yml      # APT packages (9 categories)
-    │   │   ├── brew.pkg.yml     # Homebrew packages (9 categories)
-    │   │   └── mise.pkg.yml     # Mise tools
+    │   │   └── brew.pkg.yml     # Homebrew packages (9 categories)
     │   └── perso/      # Personal packages (all platforms + distros)
     │       ├── apt.pkg.yml      # APT packages
     │       ├── brew.pkg.yml     # Homebrew packages
     │       ├── dnf.pkg.yml      # DNF packages (Fedora/RHEL)
-    │       ├── pacman.pkg.yml   # Pacman packages (Arch)
-    │       └── mise.pkg.yml     # Mise tools
+    │       └── pacman.pkg.yml   # Pacman packages (Arch)
     └── windows/
         ├── packages/   # Windows package configs (6)
         └── platform/   # Platform config (1)
@@ -377,10 +381,11 @@ The `bootstrap.sh` script automatically installs these essential tools:
 
 #### Phase 6: Command Runner
 
-- **just** v1.46.0 - Task runner
-  - Downloaded from GitHub releases (not apt)
-  - Installed to `/usr/local/bin/just`
+- **just** - Task runner
+  - **macOS**: Installed via Homebrew
+  - **Linux**: Downloaded from GitHub releases → `/usr/local/bin/just`
   - ⚠️ Ubuntu apt provides v1.21.0 (outdated)
+  - ✅ Bootstrap installs latest version
 
 ### Manual Installation (Without Bootstrap)
 
@@ -469,12 +474,25 @@ These dotfiles include:
 
 ### Package Management
 
-- 🍺 **Homebrew** (macOS)
-- 📦 **mise** (cross-platform, preferred)
-- 🐧 Native package managers (apt/yum/pacman on Linux)
+- 🍺 **Homebrew** (macOS) - `_scripts/configs/unix/packages/*/brew.pkg.yml`
+- 📦 **mise** (cross-platform, preferred) - `mise/.config/mise/config.toml`
+- 🐧 Native package managers (apt/yum/pacman on Linux) - `_scripts/configs/unix/packages/*/*.pkg.yml`
 - ❄️  **Nix** support with:
   - [NixDarwin](https://nix-darwin.github.io/) on macOS
   - [home-manager](https://nix-community.github.io/home-manager/) on Linux
+
+**Managing mise tools**:
+
+```bash
+# Edit mise config
+nvim mise/.config/mise/config.toml
+
+# Install all tools
+mise install
+
+# Update all tools
+mise upgrade
+```
 
 ## Software & Tools
 
@@ -632,7 +650,6 @@ YAML package configurations in `_scripts/configs/`:
 
 - **`apt.pkg.yml`** - APT packages (9 categories)
 - **`brew.pkg.yml`** - Homebrew packages (9 categories)
-- **`mise.pkg.yml`** - Mise tools (node, python, rust, etc.)
 
 **Personal** (`perso/` - all platforms + distros):
 
@@ -640,7 +657,8 @@ YAML package configurations in `_scripts/configs/`:
 - **`brew.pkg.yml`** - Homebrew packages (macOS)
 - **`dnf.pkg.yml`** - DNF packages (Fedora/RHEL)
 - **`pacman.pkg.yml`** - Pacman packages (Arch Linux)
-- **`mise.pkg.yml`** - Mise tools
+
+**Note**: Mise tools are now managed via `mise/.config/mise/config.toml` instead of `mise.pkg.yml`
 
 **Package Categories:**
 
@@ -664,17 +682,23 @@ YAML package configurations in `_scripts/configs/`:
 
 #### Windows Configs (`windows/packages/`)
 
-**Professional** (`pro/`):
+**Professional** (`common/pro/`):
 
-- **`choco.pkg.yml`** - Professional Chocolatey packages
-- **`winget.pkg.yml`** - Professional WinGet packages
-- **`js.pkg.yml`** - Professional JavaScript packages
+- **`choco.pkg.yml`** - Professional Chocolatey packages (Windows)
+- **`winget.pkg.yml`** - Professional WinGet packages (Windows)
+- **`brew.pkg.yml`** - Professional Homebrew packages (macOS)
+- **`apt.pkg.yml`** - Professional APT packages (Debian/Ubuntu)
+- **`js.pkg.yml`** - Professional JavaScript packages (Bun)
 
-**Personal** (`perso/`):
+**Personal** (`common/perso/`):
 
-- **`choco.pkg.yml`** - Personal Chocolatey packages
-- **`winget.pkg.yml`** - Personal WinGet packages
-- **`js.pkg.yml`** - Personal JavaScript packages
+- **`choco.pkg.yml`** - Personal Chocolatey packages (Windows)
+- **`winget.pkg.yml`** - Personal WinGet packages (Windows)
+- **`brew.pkg.yml`** - Personal Homebrew packages (macOS)
+- **`apt.pkg.yml`** - Personal APT packages (Debian/Ubuntu)
+- **`js.pkg.yml`** - Personal JavaScript packages (Bun)
+
+**Note**: Unix packages now use `common/pro/` and `common/perso/` structure. Legacy `pro/` and `perso/` directories maintained for backward compatibility.
 
 #### Platform Config (`windows/platform/`)
 

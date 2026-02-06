@@ -5,12 +5,40 @@ set -e
 
 # ---------------------------------------------------------------------------
 # Ensure HOME points to the actual current user, not a stale value left over
-# from sudo / su without a login shell.  getent is POSIX-portable on Linux.
+# from sudo / su without a login shell.
 # ---------------------------------------------------------------------------
-REAL_HOME=$(getent passwd "$(whoami)" | cut -d: -f6)
-if [[ "$HOME" != "$REAL_HOME" ]]; then
-    echo "[WARN] HOME was $HOME, correcting to $REAL_HOME"
-    export HOME="$REAL_HOME"
+if command -v getent &> /dev/null; then
+    # Linux: use getent
+    REAL_HOME=$(getent passwd "$(whoami)" | cut -d: -f6)
+    if [[ -n "$REAL_HOME" ]] && [[ "$HOME" != "$REAL_HOME" ]]; then
+        echo "[WARN] HOME was $HOME, correcting to $REAL_HOME"
+        export HOME="$REAL_HOME"
+    fi
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS: use eval echo or dscl
+    CURRENT_USER="$(id -un)"
+    if [[ -n "$CURRENT_USER" ]]; then
+        REAL_HOME=$(eval echo "~$CURRENT_USER")
+        if [[ -n "$REAL_HOME" ]] && [[ "$REAL_HOME" != "$HOME" ]]; then
+            echo "[WARN] HOME was $HOME, correcting to $REAL_HOME"
+            export HOME="$REAL_HOME"
+        fi
+    fi
+fi
+
+# Verify HOME is set and valid
+if [[ -z "$HOME" ]] || [[ "$HOME" == "/" ]]; then
+    echo "[ERROR] HOME is not set correctly: '$HOME'"
+    CURRENT_USER="$(id -un)"
+    export HOME=$(eval echo "~$CURRENT_USER")
+    echo "[INFO] Set HOME to: $HOME"
+fi
+
+# Final sanity check
+if [[ -z "$HOME" ]] || [[ "$HOME" == "/" ]] || [[ ! -d "$HOME" ]]; then
+    echo "[ERROR] Failed to determine HOME directory"
+    echo "[ERROR] HOME='$HOME', USER='$(id -un)'"
+    exit 1
 fi
 
 DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -206,11 +234,20 @@ install_mise() {
     if [[ -f "$SCRIPTS_DIR/installers/install-mise.sh" ]]; then
         bash "$SCRIPTS_DIR/installers/install-mise.sh"
 
+        # Verify HOME is set correctly before creating directories
+        if [[ -z "$HOME" ]] || [[ "$HOME" == "/" ]]; then
+            log_error "HOME is not set correctly: '$HOME'"
+            log_error "Cannot create mise directories"
+            return 1
+        fi
+
         # Pin mise data/cache to the current user's home so it never
         # writes into another user's directory (e.g. /home/ubuntu when
         # running as yaya1).  MISE_DATA_DIR controls installs + shims.
         export MISE_DATA_DIR="$HOME/.local/share/mise"
         export MISE_CACHE_DIR="$HOME/.cache/mise"
+
+        log_info "Creating mise directories in HOME=$HOME"
         mkdir -p "$MISE_DATA_DIR" "$MISE_CACHE_DIR"
 
         # Activate mise in current shell session for subsequent commands
@@ -255,25 +292,27 @@ install_core_tools() {
 install_optional_tools() {
     log_step "Installing optional modern CLI tools..."
 
-    # Define tools with their mise package names
-    declare -A tools=(
-        ["bat"]="bat"
-        ["eza"]="eza"
-        ["fzf"]="fzf"
-        ["rg"]="ripgrep"
-        ["fd"]="fd"
-        ["zoxide"]="zoxide"
-        ["starship"]="starship"
-        ["nvim"]="neovim"
-        ["direnv"]="direnv"
-        ["delta"]="delta"
-        ["jq"]="jq"
-        ["yq"]="yq"
-        ["btop"]="btop"
+    # Define tools (cmd:mise_package pairs)
+    local tools=(
+        "bat:bat"
+        "eza:eza"
+        "fzf:fzf"
+        "rg:ripgrep"
+        "fd:fd"
+        "zoxide:zoxide"
+        "starship:starship"
+        "nvim:neovim"
+        "direnv:direnv"
+        "delta:delta"
+        "jq:jq"
+        "yq:yq"
+        "btop:btop"
     )
 
-    for cmd in "${!tools[@]}"; do
-        install_package "$cmd" "${tools[$cmd]}" || log_warn "Failed to install $cmd (optional)"
+    for tool_pair in "${tools[@]}"; do
+        local cmd="${tool_pair%%:*}"
+        local mise_name="${tool_pair#*:}"
+        install_package "$cmd" "$mise_name" || log_warn "Failed to install $cmd (optional)"
     done
 
     log_success "Optional tools installation complete"
@@ -449,13 +488,22 @@ full_install() {
     install_homebrew
     install_mise
     install_essentials
+
+    # Install all packages from common/perso (includes pro + personal)
+    log_step "Installing packages..."
+    if [[ -f "$SCRIPTS_DIR/installers/install-packages.sh" ]]; then
+        bash "$SCRIPTS_DIR/installers/install-packages.sh" --perso
+    else
+        log_warn "install-packages.sh not found, skipping package installation"
+    fi
+
     install_core_tools
     install_optional_tools
     install_modern_fonts
     install_dotnet true  # Pass 'true' for auto-install
     install_mise_tools
     stow_configs
-    post_install
+    post_install "all"  # Install all JS packages (pro + personal)
 
     show_completion_message
 }
@@ -479,7 +527,65 @@ minimal_install() {
         stow -v -t "$HOME" zsh git 2>&1 | grep -v "BUG in find_stowed_path" || true
     fi
 
-    post_install
+    post_install "skip"  # Skip JS packages in minimal
+
+    show_completion_message
+}
+
+# ===== PROFESSIONAL INSTALLATION =====
+install_pro() {
+    log_info "Starting PROFESSIONAL installation (work-safe packages only)..."
+    echo ""
+
+    check_prerequisites
+    backup_configs
+    install_homebrew
+    install_mise
+    install_essentials
+
+    # Install professional packages only
+    log_step "Installing professional packages..."
+    if [[ -f "$SCRIPTS_DIR/installers/install-packages.sh" ]]; then
+        bash "$SCRIPTS_DIR/installers/install-packages.sh" --pro
+    else
+        log_warn "install-packages.sh not found, skipping package installation"
+    fi
+
+    install_core_tools
+    install_mise_tools
+    stow_configs
+    post_install "pro"  # Install professional JS packages only
+
+    show_completion_message
+}
+
+# ===== PERSONAL INSTALLATION =====
+install_perso() {
+    log_info "Starting PERSONAL installation (pro + personal packages)..."
+    echo ""
+
+    check_prerequisites
+    backup_configs
+    install_homebrew
+    install_mise
+    install_essentials
+
+    # Install personal packages (includes professional + personal)
+    log_step "Installing personal packages..."
+    if [[ -f "$SCRIPTS_DIR/installers/install-packages.sh" ]]; then
+        bash "$SCRIPTS_DIR/installers/install-packages.sh" --perso
+    else
+        log_warn "install-packages.sh not found, skipping package installation"
+    fi
+
+    install_core_tools
+    install_optional_tools
+    install_modern_fonts
+    install_dotnet true  # Pass 'true' for auto-install
+    install_personal_tools
+    install_mise_tools
+    stow_configs
+    post_install "perso"  # Install all JS packages (pro + personal)
 
     show_completion_message
 }
@@ -624,11 +730,19 @@ main() {
             --minimal|-m)
                 minimal_install
                 ;;
+            --pro)
+                install_pro
+                ;;
+            --perso)
+                install_perso
+                ;;
             --help|-h)
                 echo "Usage: $0 [OPTIONS]"
                 echo ""
                 echo "Options:"
-                echo "  --full, -f      Full installation (all tools)"
+                echo "  --full, -f      Full installation (all tools + personal packages)"
+                echo "  --pro           Professional installation (work-safe packages only)"
+                echo "  --perso         Personal installation (pro + personal packages)"
                 echo "  --minimal, -m   Minimal installation (core only)"
                 echo "  --help, -h      Show this help message"
                 echo ""

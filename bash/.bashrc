@@ -40,3 +40,6 @@ if command -v starship &> /dev/null; then
   export STARSHIP_SHELL="bash"
   eval "$(starship init bash)"
 fi
+
+# ===== HOMEBREW CONFIGURATION =====
+eval "$(/opt/homebrew/bin/brew shellenv)"

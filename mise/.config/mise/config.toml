@@ -39,6 +39,7 @@ trusted_config_paths = [
 "bat" = "latest"          # cat replacement
 "eza" = "latest"          # ls replacement
 "fd" = "latest"           # find replacement
+"pre-commit" = "latest"   # pre-commit hooks manager
 "ripgrep" = "latest"      # grep replacement
 "fzf" = "latest"          # fuzzy finder
 "zoxide" = "latest"       # smart cd
@@ -52,7 +53,7 @@ trusted_config_paths = [
 "tmux" = "latest"         # classic multiplexer
 
 # System tools
-"btop" = "latest"         # system monitor
+#"btop" = "latest"         # system monitor not supported on ARM yet
 "jq" = "latest"           # JSON processor
 "yq" = "latest"           # YAML processor
 
@@ -93,3 +94,4 @@ trusted_config_paths = [
 
 "vivid" = "latest"
 "aqua:go-task/task" = "latest"
+delta = "latest"

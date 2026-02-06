@@ -1,0 +1,82 @@
+# =============================================================================
+# JavaScript Packages (Personal - Common + Personal Tools)
+# =============================================================================
+# Personal JavaScript packages installed globally using Bun package manager.
+# Includes all common/pro packages PLUS personal/experimental frameworks.
+#
+# Requires: Bun to be installed (via brew/mise)
+#
+# Usage:
+#   Install all: bash _scripts/unix/installers/install-js-packages.sh --all
+#   Personal:    bash _scripts/unix/installers/install-js-packages.sh --personal
+# =============================================================================
+
+packages:
+  # Package managers & tools
+  - pnpm
+  - yarn
+
+  # TypeScript & Type checking
+  - typescript
+  - tsx
+  - ts-node
+  - "@types/node"
+
+  # Linting & Formatting
+  - eslint
+  - prettier
+  - markdownlint-cli2
+
+  # Build tools
+  - vite
+  - esbuild
+  - tsup
+
+  # Testing
+  - vitest
+  - jest
+
+  # Development tools
+  - nodemon
+  - concurrently
+  - rimraf
+  - dotenv-cli
+  - tree-sitter-cli
+
+  # CLI tools
+  - http-server
+  - serve
+  - npm-check-updates
+  - depcheck
+
+  # Token replacement (useful for CI/CD)
+  - "@qetza/replacetokens"
+
+  # Documentation
+  - typedoc
+  - jsdoc
+
+  # === PERSONAL PACKAGES ===
+
+  # Personal CLI tools
+  - vercel
+  - netlify-cli
+  - firebase-tools
+
+  # Personal frameworks/tools
+  - create-next-app
+  - nuxi
+  - "@angular/cli"
+  - "@vue/cli"
+  - create-react-app
+  - gatsby-cli
+  - astro
+
+  # Personal development
+  - ngrok
+  - localtunnel
+  - pm2
+
+# Optional packages (won't fail if installation fails)
+optional:
+  - bunx

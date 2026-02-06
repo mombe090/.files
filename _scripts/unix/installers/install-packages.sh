@@ -337,11 +337,44 @@ install_packages_from_config() {
     done
 }
 
+install_packages_with_common() {
+    local pm="$1"
+    local pm_name=""
+
+    # Determine package manager config name
+    case "$pm" in
+        brew) pm_name="brew" ;;
+        apt-get) pm_name="apt" ;;
+        dnf) pm_name="dnf" ;;
+        pacman) pm_name="pacman" ;;
+        *) pm_name="brew" ;;
+    esac
+
+    local common_config="$CONFIG_DIR/common/${pm_name}.pkg.yml"
+    local profile_config="$CONFIG_DIR/$PACKAGE_TYPE/${pm_name}.pkg.yml"
+
+    # Install common packages first (if exists)
+    if [[ -f "$common_config" ]]; then
+        log_info "Installing common packages shared across profiles..."
+        install_packages_from_config "$common_config" "$pm"
+    fi
+
+    # Install profile-specific packages (if exists)
+    if [[ -f "$profile_config" ]]; then
+        log_info "Installing $PACKAGE_TYPE profile-specific packages..."
+        install_packages_from_config "$profile_config" "$pm"
+    elif [[ ! -f "$common_config" ]]; then
+        log_warning "No package config found for $pm_name (checked common and $PACKAGE_TYPE)"
+    fi
+}
+
 install_mise_tools() {
     local mise_config="$CONFIG_DIR/$PACKAGE_TYPE/mise.pkg.yml"
 
     if [[ ! -f "$mise_config" ]]; then
-        log_warning "Mise config not found: $mise_config"
+        log_info "Mise config not found at: $mise_config"
+        log_info "Mise tools are now managed via mise/.config/mise/config.toml"
+        log_info "Run 'mise install' to install tools from mise config"
         return 0
     fi
 
@@ -474,37 +507,54 @@ main() {
     # Check dependencies
     check_dependencies
 
-    # Detect or use provided config file
-    if [[ -z "$CONFIG_FILE" ]]; then
-        CONFIG_FILE=$(detect_config_file)
-    fi
-
-    if [[ ! -f "$CONFIG_FILE" ]]; then
-        log_error "Config file not found: $CONFIG_FILE"
-        exit 1
-    fi
-
-    log_info "Using config: $CONFIG_FILE"
-    log_info "Package type: $PACKAGE_TYPE"
-
-    if [[ "$MINIMAL_MODE" == "true" ]]; then
-        log_info "Mode: MINIMAL (essentials only)"
-    else
-        log_info "Mode: FULL (all packages)"
-    fi
-
-    if [[ -n "$CATEGORY_FILTER" ]]; then
-        log_info "Category filter: $CATEGORY_FILTER"
-    fi
-
-    echo ""
-
     # Get package manager
     local pm
     pm=$(get_package_manager)
 
-    # Install packages from main config
-    install_packages_from_config "$CONFIG_FILE" "$pm"
+
+    # If custom config file provided, use it directly
+    if [[ -n "$CONFIG_FILE" ]]; then
+        if [[ ! -f "$CONFIG_FILE" ]]; then
+            log_error "Config file not found: $CONFIG_FILE"
+            exit 1
+        fi
+
+        log_info "Using custom config: $CONFIG_FILE"
+        log_info "Package type: $PACKAGE_TYPE"
+
+        if [[ "$MINIMAL_MODE" == "true" ]]; then
+            log_info "Mode: MINIMAL (essentials only)"
+        else
+            log_info "Mode: FULL (all packages)"
+        fi
+
+        if [[ -n "$CATEGORY_FILTER" ]]; then
+            log_info "Category filter: $CATEGORY_FILTER"
+        fi
+
+        echo ""
+
+        # Install packages from custom config
+        install_packages_from_config "$CONFIG_FILE" "$pm"
+    else
+        # Use common + profile-specific configs
+        log_info "Package type: $PACKAGE_TYPE"
+
+        if [[ "$MINIMAL_MODE" == "true" ]]; then
+            log_info "Mode: MINIMAL (essentials only)"
+        else
+            log_info "Mode: FULL (all packages)"
+        fi
+
+        if [[ -n "$CATEGORY_FILTER" ]]; then
+            log_info "Category filter: $CATEGORY_FILTER"
+        fi
+
+        echo ""
+
+        # Install packages from common + profile configs
+        install_packages_with_common "$pm"
+    fi
 
     # Install mise tools (if available)
     install_mise_tools

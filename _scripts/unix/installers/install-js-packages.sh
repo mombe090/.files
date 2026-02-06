@@ -13,8 +13,12 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 
-CONFIG_FILE_PRO="$DOTFILES_ROOT/_scripts/configs/unix/packages/js.pkg.yml"
-CONFIG_FILE_PERSONAL="$DOTFILES_ROOT/_scripts/configs/unix/packages/js.pkg.personal.yml"
+CONFIG_FILE_PRO="$DOTFILES_ROOT/_scripts/configs/unix/packages/common/pro/js.pkg.yml"
+CONFIG_FILE_PERSONAL="$DOTFILES_ROOT/_scripts/configs/unix/packages/common/perso/js.pkg.yml"
+
+# Fallback to old locations if new structure doesn't exist
+[[ ! -f "$CONFIG_FILE_PRO" ]] && CONFIG_FILE_PRO="$DOTFILES_ROOT/_scripts/configs/unix/packages/js.pkg.yml"
+[[ ! -f "$CONFIG_FILE_PERSONAL" ]] && CONFIG_FILE_PERSONAL="$DOTFILES_ROOT/_scripts/configs/unix/packages/js.pkg.personal.yml"
 
 # Source Unix libraries
 source "$DOTFILES_ROOT/_scripts/unix/lib/init.sh"
@@ -55,7 +59,7 @@ check_config() {
     if [[ ! -f "$config_file" ]]; then
         log_warn "Config file not found: $config_file"
         log_info "Creating default config file..."
-        mkdir -p "$SCRIPT_DIR/config"
+        mkdir -p "$(dirname "$config_file")"
         create_default_config "$config_type"
         log_success "Created default config at: $config_file"
         log_info "Edit the file to customize packages, then re-run this script"

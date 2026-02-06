@@ -64,15 +64,15 @@ Available categories:
 _scripts/configs/unix/packages/
 ├── pro/                        # Professional packages
 │   ├── apt.pkg.yml            # APT packages (Ubuntu/Debian)
-│   ├── brew.pkg.yml           # Homebrew packages (macOS)
-│   └── mise.pkg.yml           # Mise tools
+│   └── brew.pkg.yml           # Homebrew packages (macOS)
 └── perso/                      # Personal packages
     ├── apt.pkg.yml            # APT packages
     ├── brew.pkg.yml           # Homebrew packages
     ├── dnf.pkg.yml            # DNF packages (Fedora/RHEL)
-    ├── pacman.pkg.yml         # Pacman packages (Arch)
-    └── mise.pkg.yml           # Mise tools
+    └── pacman.pkg.yml         # Pacman packages (Arch)
 ```
+
+**Note**: Mise tools are managed via `mise/.config/mise/config.toml` instead of `mise.pkg.yml`.
 
 ### Profile Differences
 

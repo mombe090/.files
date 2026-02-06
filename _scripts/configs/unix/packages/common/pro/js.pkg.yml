@@ -1,0 +1,60 @@
+# =============================================================================
+# JavaScript Packages (Professional - Work-Safe Only)
+# =============================================================================
+# Professional JavaScript packages installed globally using Bun package manager.
+# Work-safe packages only - no experimental or personal frameworks.
+#
+# Requires: Bun to be installed (via brew/mise)
+#
+# Usage:
+#   Install pro: bash _scripts/unix/installers/install-js-packages.sh --install
+# =============================================================================
+
+packages:
+  # Package managers & tools
+  - pnpm
+  - yarn
+
+  # TypeScript & Type checking
+  - typescript
+  - tsx
+  - ts-node
+  - "@types/node"
+
+  # Linting & Formatting
+  - eslint
+  - prettier
+  - markdownlint-cli2
+
+  # Build tools
+  - vite
+  - esbuild
+  - tsup
+
+  # Testing
+  - vitest
+  - jest
+
+  # Development tools
+  - nodemon
+  - concurrently
+  - rimraf
+  - dotenv-cli
+  - tree-sitter-cli
+
+  # CLI tools
+  - http-server
+  - serve
+  - npm-check-updates
+  - depcheck
+
+  # Token replacement (useful for CI/CD)
+  - "@qetza/replacetokens"
+
+  # Documentation
+  - typedoc
+  - jsdoc
+
+# Optional packages (won't fail if installation fails)
+optional:
+  - bunx

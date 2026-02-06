@@ -1,0 +1,167 @@
+# =============================================================================
+# APT Packages - Professional (Work-Safe Only)
+# =============================================================================
+# Professional packages for Debian/Ubuntu using APT.
+# Work-safe packages only - suitable for company computers.
+#
+# Usage:
+#   Install via pro profile: bash _scripts/unix/installers/install-packages.sh --pro
+# =============================================================================
+
+# Essential tools
+essentials:
+  - name: git
+    description: Distributed version control system
+    category: essentials
+
+  - name: curl
+    description: Transfer data with URLs
+    category: essentials
+
+  - name: wget
+    description: Internet file retriever
+    category: essentials
+
+  - name: stow
+    description: GNU Stow - symlink farm manager
+    category: essentials
+
+  - name: zsh
+    description: UNIX shell (Z shell)
+    category: essentials
+
+  - name: jq
+    description: Command-line JSON processor
+    category: essentials
+
+  - name: unzip
+    description: De-archiver for .zip files
+    category: essentials
+
+  - name: xz-utils
+    description: XZ-format compression utilities
+    category: essentials
+
+# Development tools
+development:
+  - name: tmux
+    description: Terminal multiplexer
+    category: development
+
+  - name: tree
+    description: Display directories as trees
+    category: development
+
+  - name: neovim
+    description: Vim-fork focused on extensibility
+    category: development
+
+  - name: ripgrep
+    description: Fast search tool
+    category: development
+
+  - name: fd-find
+    description: Simple, fast alternative to find
+    category: development
+
+  - name: fzf
+    description: Command-line fuzzy finder
+    category: development
+
+  - name: bat
+    description: Cat clone with syntax highlighting
+    category: development
+
+# Shell tools
+shell_tools:
+  - name: htop
+    description: Interactive process viewer
+    category: shell_tools
+
+  - name: btop
+    description: Resource monitor
+    category: shell_tools
+    optional: true
+
+# Build tools
+build_tools:
+  - name: build-essential
+    description: Build tools (gcc, g++, make)
+    category: build_tools
+
+  - name: cmake
+    description: Cross-platform make
+    category: build_tools
+
+  - name: pkg-config
+    description: Manage compile and link flags
+    category: build_tools
+
+  - name: autoconf
+    description: Automatic configure script builder
+    category: build_tools
+
+  - name: automake
+    description: Tool for generating GNU Standards-compliant Makefiles
+    category: build_tools
+
+  - name: libtool
+    description: Generic library support script
+    category: build_tools
+
+# Libraries
+libraries:
+  - name: libssl-dev
+    description: Secure Sockets Layer toolkit - development files
+    category: libraries
+
+  - name: libreadline-dev
+    description: GNU readline library - development files
+    category: libraries
+
+  - name: zlib1g-dev
+    description: Compression library - development
+    category: libraries
+
+  - name: libbz2-dev
+    description: Bzip2 library - development
+    category: libraries
+
+  - name: libsqlite3-dev
+    description: SQLite 3 development files
+    category: libraries
+
+  - name: libffi-dev
+    description: Foreign Function Interface library - development
+    category: libraries
+
+  - name: libncurses5-dev
+    description: Developer's libraries for ncurses
+    category: libraries
+
+  - name: libxml2-dev
+    description: XML C parser - development files
+    category: libraries
+
+  - name: libxmlsec1-dev
+    description: XML security library - development files
+    category: libraries
+
+  - name: liblzma-dev
+    description: XZ-format compression library - development
+    category: libraries
+
+# Monitoring
+monitoring:
+  - name: htop
+    description: Interactive process viewer
+    category: monitoring
+
+# Cloud tools
+cloud: []
+
+# Fonts
+fonts: []
+
+# Runtimes (prefer mise)
+runtimes: []
