@@ -1,0 +1,17 @@
+# =============================================================================
+# Chocolatey - Personal Packages (Fallback)
+# =============================================================================
+# Personal packages for home/personal use.
+# Used as fallback when winget is not available.
+#
+# Usage:
+#   Install all: scripts/windows/install-packages.ps1 -Type perso -PackageManager choco
+# =============================================================================
+
+media: []
+
+browsers: []
+
+communication: []
+
+utilities: []

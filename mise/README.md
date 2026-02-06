@@ -85,7 +85,7 @@ cd ~/.dotfiles
 ./install.sh
 
 # Or manually
-./scripts/install-mise.sh
+./_scripts/linux/sh/installers/install-mise.sh
 ```
 
 ### Stow the Configuration

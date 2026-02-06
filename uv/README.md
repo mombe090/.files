@@ -51,20 +51,20 @@ When stowed, creates:
 ```bash
 # Stow the UV package
 cd ~/.files
-./scripts/manage-stow.sh stow uv
+./_scripts/linux/sh/tools/manage-stow.sh stow uv
 
 # Install all tools (creates ~/.venv and syncs packages)
-./scripts/install-uv-tools.sh install
+./_scripts/linux/sh/installers/install-uv-tools.sh install
 ```
 
 ### Install Optional Dependencies
 
 ```bash
 # Data science tools
-./scripts/install-uv-tools.sh install data
+./_scripts/linux/sh/installers/install-uv-tools.sh install data
 
 # AWS/Azure tools
-./scripts/install-uv-tools.sh install aws
+./_scripts/linux/sh/installers/install-uv-tools.sh install aws
 ```
 
 ### Managing Tools
@@ -75,15 +75,15 @@ cd ~
 uv sync
 
 # Update all tools
-./scripts/install-uv-tools.sh update
+./_scripts/linux/sh/installers/install-uv-tools.sh update
 # or
 cd ~ && uv sync --upgrade
 
 # List installed tools
-./scripts/install-uv-tools.sh list
+./_scripts/linux/sh/installers/install-uv-tools.sh list
 
 # Sync tools (install missing, remove unused)
-./scripts/install-uv-tools.sh sync
+./_scripts/linux/sh/installers/install-uv-tools.sh sync
 ```
 
 ### Using the Tools
@@ -152,10 +152,10 @@ Edit to:
 
 ```bash
 # 1. Stow UV package
-cd ~/.files && ./scripts/manage-stow.sh stow uv
+cd ~/.files && ./_scripts/linux/sh/tools/manage-stow.sh stow uv
 
 # 2. Create venv and install tools
-./scripts/install-uv-tools.sh install
+./_scripts/linux/sh/installers/install-uv-tools.sh install
 
 # 3. Tools are now available in PATH
 checkov --version
@@ -167,7 +167,7 @@ pytest --version
 uv sync
 
 # 5. Update all tools
-./scripts/install-uv-tools.sh update
+./_scripts/linux/sh/installers/install-uv-tools.sh update
 ```
 
 ## Troubleshooting
@@ -195,7 +195,7 @@ mise upgrade uv
 
 ```bash
 rm -rf ~/.venv
-./scripts/install-uv-tools.sh install
+./_scripts/linux/sh/installers/install-uv-tools.sh install
 ```
 
 ### Clear UV cache

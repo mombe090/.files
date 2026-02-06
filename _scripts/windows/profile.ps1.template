@@ -1,0 +1,106 @@
+# =============================================================================
+# Machine-Specific PowerShell Profile
+# =============================================================================
+# Location: $env:USERPROFILE\profile.ps1 (e.g., C:\Users\<username>\profile.ps1)
+#
+# This file is for machine-specific customizations that should NOT be
+# version controlled or synced across machines.
+#
+# The main PowerShell profile automatically loads this file if it exists.
+#
+# Usage:
+#   1. Copy this file to: $env:USERPROFILE\profile.ps1
+#   2. Customize as needed for this specific machine
+#   3. Restart PowerShell to load changes
+# =============================================================================
+
+# =============================================================================
+# Machine-Specific Environment Variables
+# =============================================================================
+
+# Example: Machine-specific API keys, tokens, secrets
+# $env:MY_API_KEY = "your-secret-key-here"  # pragma: allowlist secret
+# $env:OPENAI_API_KEY = "sk-..."  # pragma: allowlist secret
+# $env:GITHUB_TOKEN = "ghp_..."  # pragma: allowlist secret
+
+# Example: Machine-specific paths
+# $env:PROJECT_DIR = "D:\Projects"
+# $env:WORKSPACE = "C:\Workspace"
+
+# =============================================================================
+# Machine-Specific Aliases
+# =============================================================================
+
+# Example: Machine-specific shortcuts
+# function proj { Set-Location "D:\Projects" }
+# function work { Set-Location "C:\Workspace\current-project" }
+# function docs { Set-Location "D:\Documents" }
+
+# Example: Network drives (Windows)
+# function netdrive { Set-Location "\\server\share" }
+
+# =============================================================================
+# Machine-Specific Functions
+# =============================================================================
+
+# Example: Company VPN connection
+# function vpn-connect {
+#     Start-Process "C:\Program Files\VPN Client\vpn.exe" -ArgumentList "connect"
+# }
+
+# Example: Start common development services
+# function dev-start {
+#     docker-compose -f D:\Projects\myapp\docker-compose.yml up -d
+#     Start-Process "http://localhost:3000"
+# }
+
+# =============================================================================
+# Machine-Specific PATH Additions
+# =============================================================================
+
+# Example: Add machine-specific directories to PATH
+# function Add-ToPath {
+#     param([string]$Path)
+#     if (Test-Path $Path) {
+#         $env:Path = "$Path;$env:Path"
+#     }
+# }
+
+# Add-ToPath "D:\Tools\bin"
+# Add-ToPath "C:\CustomApps"
+
+# =============================================================================
+# Machine-Specific Module Imports
+# =============================================================================
+
+# Example: Import company-specific or machine-specific modules
+# if (Get-Module -ListAvailable -Name CompanyModule) {
+#     Import-Module CompanyModule
+# }
+
+# =============================================================================
+# Machine-Specific Completion
+# =============================================================================
+
+# Example: Custom argument completers
+# Register-ArgumentCompleter -CommandName 'my-command' -ScriptBlock {
+#     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
+#     # Return completion results
+# }
+
+# =============================================================================
+# Machine-Specific Prompt Customization
+# =============================================================================
+
+# Example: Add machine identifier to prompt (if not using Starship)
+# function prompt {
+#     Write-Host "[$(hostname)] " -NoNewline -ForegroundColor Cyan
+#     "PS $($PWD)> "
+# }
+
+# =============================================================================
+# Debug Output
+# =============================================================================
+
+# Uncomment to verify this file is loaded
+# Write-Host "Machine-specific profile loaded from: $PSCommandPath" -ForegroundColor Magenta

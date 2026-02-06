@@ -2,13 +2,128 @@
 
 All notable changes to this dotfiles repository will be documented in this file.
 
-## [Unreleased] - 2026-01-29
+## [Unreleased] - 2026-02-02
+
+### v3.0 - Windows Dotfiles Support
+
+#### Added
+
+- **Windows PowerShell 7 Support** - Native Windows dotfiles with XDG-style paths
+  - Restructured PowerShell configs to use `.config/powershell/` (matching Linux)
+  - Created wrapper-based profile loader (no admin/symlink required)
+  - Setup script: `_scripts/windows/pwsh/Setup-PowerShellProfile.ps1`
+  - 260+ Oh My Zsh-style git aliases in PowerShell
+  - XDG environment variables automatically set on Windows
+  - Starship prompt integration
+  - Machine-specific profile support
+
+- **Windows Package Management System**
+  - Package installer supporting Chocolatey, Winget, and Bun
+  - Script: `_scripts/windows/install-packages.ps1`
+  - Professional packages (54 packages):
+    - Essentials: PowerShell 7, Git, VSCode, IntelliJ, 7-Zip
+    - Development: .NET SDK, Python, Node.js, Bun, Java, Lua, Neovim
+    - Cloud: Azure CLI, kubectl, kubectx, Helm, Terraform
+    - Tools: Starship, bat, fd, ripgrep, fzf, zoxide, lazygit, wget, zip, unzip
+  - Personal packages (placeholder for media, gaming, browsers)
+  - Automatic package existence checking (skips installed packages)
+  - YAML-based package configuration
+  - JavaScript packages via Bun (TypeScript, pnpm, yarn, etc.)
+
+- **Windows-Compatible Stow System** (`stow.ps1`)
+  - PowerShell implementation of GNU Stow
+  - Intelligent path routing:
+    - `.local/` prefix → `$env:LOCALAPPDATA`
+    - `.config/` prefix → `$env:USERPROFILE\.config`
+  - Symlink creation for dotfiles
+  - Dry-run mode for testing
+  - Stow/unstow/restow operations
+  - Package listing functionality
+
+- **Nushell Windows Support**
+  - Consolidated configs from `nu/` to `nushell/` (consistency)
+  - Added XDG environment variables to `env.nu` for Windows
+  - Cross-platform compatibility maintained
+  - Git aliases and Kubernetes aliases included
+
+- **Windows-Specific Utilities**
+  - `Install-ModernFonts.ps1` - Nerd Fonts installer (CascadiaMono, JetBrainsMono)
+  - `Install-LazyVim.ps1` - LazyVim distribution installer
+  - `Test-StowLocalAppData.ps1` - Test stow path routing
+  - `Test-EnvironmentVariables.ps1` - Verify XDG variables
+
+- **Comprehensive Windows Documentation**
+  - `_scripts/windows/README.md` - Complete Windows guide (466 lines)
+  - `_scripts/windows/QUICK-START.md` - Quick reference guide
+  - `_scripts/windows/SECURITY-REVIEW.md` - Security audit (500+ lines)
+  - `_scripts/windows/ENVIRONMENT-VARIABLES.md` - XDG variables guide
+  - `_scripts/windows/MACHINE-PROFILE.md` - Machine-specific customization
+  - `_scripts/windows/LOCALAPPDATA-STOW.md` - Path routing documentation
+  - `_scripts/windows/TESTING-STOW.md` - Stow testing guide
+  - `_scripts/windows/NEXT-STEPS.md` - Testing checklist
+
+#### Security
+
+- **Corporate Environment Safety Review** ✅
+  - Zero registry modifications
+  - Zero hardcoded secrets
+  - All user-space operations
+  - Temporary execution policies (Process scope only)
+  - AutoHotkey removed from default packages (security concern)
+  - Security rating: **LOW RISK** for corporate environments
+  - Detailed audit in `SECURITY-REVIEW.md`
+
+#### Changed
+
+- **Consolidated Nushell folder structure**
+  - Moved `nu/.config/nushell/*` → `nushell/.config/nushell/`
+  - Deleted old `nu/` directory
+  - Updated all documentation references
+  - Consistency: All packages use singular names (wezterm, nushell, starship, powershell)
+
+- **PowerShell profile architecture**
+  - **Before**: `powershell/Documents/PowerShell/Microsoft.PowerShell_profile.ps1`
+  - **After**: `powershell/.config/powershell/profile.ps1`
+  - Uses wrapper file at `$PROFILE` that sources XDG profile
+  - No symlink required (no admin privileges needed)
+  - Cross-platform path structure
+
+- **WezTerm configuration enhanced**
+  - Improved window settings for Windows
+  - Launch menu for PowerShell 7, Nushell, WSL
+  - WebGpu rendering configuration
+  - Catppuccin Mocha theme
+
+#### Documentation
+
+- **Updated main README** with Windows support information
+- **Created Git aliases reference** (`_scripts/GIT-ALIASES.md`)
+  - Documents all 260+ git aliases
+  - Grouped by functionality
+  - Usage examples and descriptions
+
+#### Commits (Branch: feat/windows-dotfiles-installer)
+
+```
+32ecabc feat: add wget, zip, and unzip to professional packages
+41a400f feat: add XDG environment variables to Nushell for Windows
+d55e82b refactor: use wrapper file instead of symlink for PowerShell profile
+f32bbdb refactor: restructure PowerShell to use XDG-style paths like Linux
+ed79b69 feat: enhance wezterm configuration with improved window settings
+df340f8 security: add comprehensive security review and corporate safety measures
+74ae6d2 docs: add comprehensive Windows dotfiles README
+0a1d1ab refactor: consolidate Nushell configs from nu/ to nushell/
+```
+
+---
+
+## [Released] - 2026-01-29
 
 ### v2.1 - Modern Fonts & Critical Bug Fixes
 
 #### Added
 
-- **`scripts/install-essentials.sh`** - Install essential build tools and dependencies 🔨
+- **`_scripts/linux/sh/installers/install-essentials.sh`** - Install essential build tools and dependencies 🔨
   - Installs C/C++ compilers (gcc, g++, clang on some platforms)
   - Installs build tools (make, cmake, pkg-config)
   - Installs development libraries:
@@ -27,7 +142,7 @@ All notable changes to this dotfiles repository will be documented in this file.
   - Summary statistics (installed/already installed/failed)
   - Tested on Ubuntu 25.04 (ARM64)
 
-- **`scripts/install-modern-fonts.sh`** - Install modern Nerd Fonts for development ✨
+- **`_scripts/linux/sh/installers/install-modern-fonts.sh`** - Install modern Nerd Fonts for development ✨
   - Automatically downloads and installs Nerd Fonts
   - Fonts included:
     - **CascadiaMono Nerd Font** v3.4.0 (Cascadia Code + icons)
@@ -39,7 +154,7 @@ All notable changes to this dotfiles repository will be documented in this file.
   - `--list` option to show installed fonts
   - Downloads from official nerd-fonts releases
   - Installs 170+ font variants (CascadiaMono: 36, JetBrainsMono: 96, VictorMono: 42)
-  
+
 - **`docs/INSTALL_MODERN_FONTS_GUIDE.md`** - Comprehensive font installation guide
   - Detailed installation instructions
   - Font feature descriptions (ligatures, icons, variants)
@@ -65,16 +180,16 @@ All notable changes to this dotfiles repository will be documented in this file.
   - **Root cause**: `((counter++))` syntax caused infinite hangs
   - **Solution**: Changed to `counter=$((counter + 1))` pattern
   - **Files affected**:
-    - `scripts/manage-stow.sh` - Fixed stow/unstow operations hanging
-    - `scripts/install-js-packages.sh` - Fixed package installation hanging
-    - `scripts/install-modern-fonts.sh` - Fixed font installation hanging
+    - `_scripts/linux/sh/tools/manage-stow.sh` - Fixed stow/unstow operations hanging
+    - `_scripts/linux/sh/installers/install-js-packages.sh` - Fixed package installation hanging
+    - `_scripts/linux/sh/installers/install-modern-fonts.sh` - Fixed font installation hanging
   - Scripts now complete successfully and show summary statistics
 
 - **CRITICAL: Fixed stow backup deleting repository files** 🐛
   - **Root cause**: Backup function followed parent directory symlinks
   - **Impact**: Running stow operations deleted actual dotfiles repo files
   - **Solution**: Added parent directory symlink detection in `backup_conflicts()`
-  - **File**: `scripts/manage-stow.sh`
+  - **File**: `_scripts/linux/sh/tools/manage-stow.sh`
   - Now safely backs up only actual files, not symlink-linked repo files
 
 - **Fixed bun/mise integration issues** 🔧
@@ -93,11 +208,11 @@ All notable changes to this dotfiles repository will be documented in this file.
   - `bash/.bash_profile` - Bash login config
   - Ensures bun and other mise tools work in bash scripts
 
-- **`scripts/manage-stow.sh`** - Enhanced default packages
+- **`_scripts/linux/sh/tools/manage-stow.sh`** - Enhanced default packages
   - Added `bash` to `DEFAULT_PACKAGES` array
   - Now stows: zsh, bash, mise, zellij, bat, nvim, starship
 
-- **`scripts/install-js-packages.sh`** - Added mise activation
+- **`_scripts/linux/sh/installers/install-js-packages.sh`** - Added mise activation
   - Script now activates mise internally for bun access
   - Works in non-interactive shells and SSH sessions
   - No longer depends on shell profile being sourced
@@ -108,7 +223,7 @@ All notable changes to this dotfiles repository will be documented in this file.
   - Why bash configuration was needed
   - How mise activation works in bash
   - Troubleshooting bash + mise issues
-  
+
 - **`docs/BUN_PATH_CONFIGURATION.md`** - Bun PATH setup guide
   - How bun global packages work
   - PATH configuration for `~/.bun/bin`
@@ -188,7 +303,7 @@ All notable changes to this dotfiles repository will be documented in this file.
 
 ### Added
 
-- **`scripts/manage-stow.sh`** - Centralized GNU Stow package management
+- **`_scripts/linux/sh/tools/manage-stow.sh`** - Centralized GNU Stow package management
   - Stow/unstow/restow operations for dotfiles packages
   - Default packages: zsh, mise, zellij, bat, nvim, starship
   - **Auto-backup conflicting files before stowing** ✨
@@ -203,8 +318,8 @@ All notable changes to this dotfiles repository will be documented in this file.
   - Better error handling and user feedback
   - Summary statistics (stowed/failed/skipped)
 
-- **`scripts/install-js-packages.sh`** - Install JavaScript/TypeScript packages globally via bun
-  - Reads package list from YAML config file (`scripts/config/js.pkg.yml`)
+- **`_scripts/linux/sh/installers/install-js-packages.sh`** - Install JavaScript/TypeScript packages globally via bun
+  - Reads package list from YAML config file (`_scripts/linux/config/js.pkg.yml`)
   - Supports install, list, and update operations
   - Interactive confirmation (can skip with `--yes` flag)
   - Auto-creates default config with common packages
@@ -212,13 +327,13 @@ All notable changes to this dotfiles repository will be documented in this file.
   - Tracks installed/failed/skipped packages
   - Default packages: TypeScript, ESLint, Prettier, Vite, Vitest, and more
 
-- **`scripts/config/js.pkg.yml`** - Package list configuration
+- **`_scripts/linux/config/js.pkg.yml`** - Package list configuration
   - YAML format for easy editing
   - Pre-configured with common JavaScript/TypeScript tools
   - Organized by category (package managers, build tools, testing, etc.)
   - Optional packages section for framework CLIs
 
-- **`scripts/check-dotnet.sh`** - New diagnostic tool for .NET installation issues
+- **`_scripts/linux/sh/checkers/check-dotnet.sh`** - New diagnostic tool for .NET installation issues
   - Checks if dotnet is in PATH
   - Searches for dotnet binary in common locations (/usr/bin, /usr/local/bin, ~/.dotnet)
   - Shows installed .NET packages (OS-specific: apt/brew/yum/pacman)
@@ -247,8 +362,8 @@ All notable changes to this dotfiles repository will be documented in this file.
 
 ### Changed
 
-- **`scripts/install-js-packages.sh`** - Install JavaScript/TypeScript packages globally via bun
-  - Reads package list from YAML config file (`scripts/config/js.pkg.yml`)
+- **`_scripts/linux/sh/installers/install-js-packages.sh`** - Install JavaScript/TypeScript packages globally via bun
+  - Reads package list from YAML config file (`_scripts/linux/config/js.pkg.yml`)
   - Supports install, list, and update operations
   - Interactive confirmation (can skip with `--yes` flag)
   - Auto-creates default config with common packages
@@ -256,13 +371,13 @@ All notable changes to this dotfiles repository will be documented in this file.
   - Tracks installed/failed/skipped packages
   - Default packages: TypeScript, ESLint, Prettier, Vite, Vitest, and more
 
-- **`scripts/config/js.pkg.yml`** - Package list configuration
+- **`_scripts/linux/config/js.pkg.yml`** - Package list configuration
   - YAML format for easy editing
   - Pre-configured with common JavaScript/TypeScript tools
   - Organized by category (package managers, build tools, testing, etc.)
   - Optional packages section for framework CLIs
 
-- **`scripts/check-dotnet.sh`** - New diagnostic tool for .NET installation issues
+- **`_scripts/linux/sh/checkers/check-dotnet.sh`** - New diagnostic tool for .NET installation issues
   - Checks if dotnet is in PATH
   - Searches for dotnet binary in common locations (/usr/bin, /usr/local/bin, ~/.dotnet)
   - Shows installed .NET packages (OS-specific: apt/brew/yum/pacman)
@@ -301,13 +416,13 @@ All notable changes to this dotfiles repository will be documented in this file.
     - Single responsibility: just call the script
     - Script handles all bun detection, messaging, and installation
 
-- **`scripts/install-js-packages.sh`** - Improved messaging
+- **`_scripts/linux/sh/installers/install-js-packages.sh`** - Improved messaging
   - Changed "error" to "warning" when bun not found
   - More helpful instructions for post-install
   - Graceful exit when bun unavailable (exit 0 instead of exit 1)
   - Better suited for automated installation flows
 
-- **`scripts/install-dotnet.sh`** - Updated default .NET version from 8.0 to 10.0
+- **`_scripts/linux/sh/installers/install-dotnet.sh`** - Updated default .NET version from 8.0 to 10.0
   - Default installation now uses .NET 10 (latest stable)
   - Updated help documentation and examples
   - Improved verification with better PATH troubleshooting
@@ -322,7 +437,7 @@ All notable changes to this dotfiles repository will be documented in this file.
 
 ### Added
 
-- **`scripts/check-dotnet.sh`** - New diagnostic tool for .NET installation issues
+- **`_scripts/linux/sh/checkers/check-dotnet.sh`** - New diagnostic tool for .NET installation issues
   - Checks if dotnet is in PATH
   - Searches for dotnet binary in common locations (/usr/bin, /usr/local/bin, ~/.dotnet)
   - Shows installed .NET packages (OS-specific: apt/brew/yum/pacman)
@@ -345,7 +460,7 @@ All notable changes to this dotfiles repository will be documented in this file.
 
 ### Documentation
 
-- **`scripts/README.md`** - Updated .NET installation docs
+- **`_scripts/linux/README.md`** - Updated .NET installation docs
   - Changed default version from 8.0 to 10.0
   - Added check-dotnet.sh documentation
   - Better post-installation instructions
@@ -368,12 +483,12 @@ All notable changes to this dotfiles repository will be documented in this file.
 
 #### Utility Scripts
 
-- **`scripts/backup.sh`** - Backup existing dotfiles
+- **`_scripts/linux/sh/tools/backup.sh`** - Backup existing dotfiles
   - Timestamped backup directories
   - Skips symlinks automatically
   - Tracks backup location for easy restore
-  
-- **`scripts/uninstall.sh`** - Uninstall dotfiles and restore backups
+
+- **`_scripts/linux/sh/tools/uninstall.sh`** - Uninstall dotfiles and restore backups
   - Removes all stow symlinks
   - Optional backup restoration
   - Optional Zinit cleanup
@@ -387,7 +502,7 @@ All notable changes to this dotfiles repository will be documented in this file.
   - Infrastructure tools: terraform, opentofu, kubectl, helm, k9s
   - DevOps tools: argocd, awscli, lazygit, github-cli
   - Will be symlinked to `~/.config/mise/config.toml` via stow
-  
+
 - **`git/.gitconfig.template`** - Template for sharing git config
   - Separates personal info into `.gitconfig.local`
   - Includes all settings without personal data
@@ -401,8 +516,8 @@ All notable changes to this dotfiles repository will be documented in this file.
   - Troubleshooting section
   - Contributing guidelines
   - Detailed tools table with descriptions
-  
-- Updated **`scripts/README.md`** with:
+
+- Updated **`_scripts/linux/README.md`** with:
   - Documentation for all scripts
   - Usage examples
   - Common commands reference
@@ -420,11 +535,11 @@ All notable changes to this dotfiles repository will be documented in this file.
   - ✅ Added conditional checks for Java installation
   - ✅ Reorganized OS-specific configurations
   - ✅ Added comment to use mise for Node.js version management
-  
+
 - **`zsh/.config/zsh/aliases.zsh`**
   - ✅ Fixed duplicate `gp` alias (git push)
   - ✅ Renamed `gp='git push origin'` to `gpo='git push origin'`
-  
+
 - **`zsh/.zshrc`**
   - ✅ Fixed mise activation logic (was skipping macOS)
   - ✅ Now checks if mise exists before activating
@@ -460,7 +575,7 @@ If you're updating from an older version:
 
 1. **Backup your current setup:**
    ```bash
-   ./scripts/backup.sh
+   ./_scripts/linux/sh/tools/backup.sh
    ```
 
 2. **Pull the latest changes:**

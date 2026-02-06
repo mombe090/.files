@@ -22,7 +22,7 @@ Modern shell with structured data pipelines and powerful scripting capabilities.
 Use the provided script to install Nushell:
 
 ```bash
-./scripts/install-nushell.sh
+./_scripts/linux/sh/installers/install-nushell.sh
 ```
 
 **macOS**: Installs via Homebrew
@@ -43,7 +43,7 @@ Download from [Nushell releases](https://github.com/nushell/nushell/releases)
 
 ## Configuration Files
 
-After stowing (`./scripts/manage-stow.sh stow nushell`), the following files will be symlinked:
+After stowing (`./_scripts/linux/sh/tools/manage-stow.sh stow nushell`), the following files will be symlinked:
 
 - `~/.config/nushell/env.nu` - Environment configuration (runs first)
 - `~/.config/nushell/config.nu` - Shell configuration (runs second)

@@ -1,0 +1,50 @@
+[project]
+name = "dotfiles-docs"
+version = "1.0.0"
+description = "Documentation for Mombe090's cross-platform dotfiles"
+authors = [
+    {name = "Mombe090", email = "mombe090@users.noreply.github.com"}
+]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    # Core MkDocs
+    "mkdocs>=1.5.0",
+
+    # Material theme
+    "mkdocs-material>=9.5.0",
+
+    # Material extensions (emoji support)
+    "mkdocs-material-extensions>=1.3.0",
+
+    # Plugins
+    "mkdocs-git-revision-date-localized-plugin>=1.2.0",
+
+    # Markdown extensions (PyMdown Extensions)
+    "pymdown-extensions>=10.7.0",
+
+    # Additional dependencies for full functionality
+    "pygments>=2.17.0",  # Syntax highlighting
+    "markdown>=3.5.0",   # Base markdown processor
+]
+
+[project.optional-dependencies]
+dev = [
+    # Development tools
+    "mkdocs-minify-plugin>=0.8.0",  # Optional: minify HTML/CSS/JS
+    "mkdocs-redirects>=1.2.0",      # Optional: URL redirects
+    "mike>=2.0.0",                  # Optional: versioning support
+]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = []
+
+# MkDocs-specific configuration (optional but helpful)
+[tool.mkdocs]
+# This section is informational - actual config is in mkdocs.yml
+site_dir = "site"
+docs_dir = "docs"

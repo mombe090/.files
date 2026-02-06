@@ -75,9 +75,12 @@ bindkey -v
 
 # 🎨 Starship prompt
 
+# Set shell name for Starship prompt
+export STARSHIP_SHELL="zsh"
+
 eval "$(starship init zsh)"
 
 # 🎯 Customize the prompt (optional: adds spacing)
 
-PROMPT="${PROMPT}"$'\n\n> '
+PROMPT="${PROMPT}"$'\n> '
 

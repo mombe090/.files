@@ -20,7 +20,7 @@ This skill helps create production-ready Taskfiles following official best pract
 
 ### 1. Prefer Parameters Over Vars
 
-**IMPORTANT**: Use CLI parameters instead of `vars` whenever users need to provide input. 
+**IMPORTANT**: Use CLI parameters instead of `vars` whenever users need to provide input.
 
 **NAMING CONVENTION**: Always use lowercase Unix-style names for user-defined parameters and variables (e.g., `region`, `env`, `image_name`) for consistency with modern CLI tools. Built-in Task variables like `{{OS}}`, `{{ARCH}}`, `{{.USER_WORKING_DIR}}` remain uppercase as they are system-provided.
 
