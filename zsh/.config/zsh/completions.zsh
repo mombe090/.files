@@ -6,14 +6,25 @@ export CARAPACE_BRIDGES='zsh,bash,inshellisense'
 
 # Add system completion directories to fpath FIRST
 
-fpath=(
-    /usr/share/zsh/functions/Completion/Unix
-    /usr/share/zsh/functions/Completion/Base
-    /usr/share/zsh/functions/Completion/Linux
-    /usr/share/zsh/functions/Completion/Zsh
-    ~/.local/share/zsh/completions
-    $fpath
-)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS paths
+    fpath=(
+        /opt/homebrew/share/zsh/site-functions
+        /usr/share/zsh/5.9/functions
+        ~/.local/share/zsh/completions
+        $fpath
+    )
+else
+    # Linux paths
+    fpath=(
+        /usr/share/zsh/functions/Completion/Unix
+        /usr/share/zsh/functions/Completion/Base
+        /usr/share/zsh/functions/Completion/Linux
+        /usr/share/zsh/functions/Completion/Zsh
+        ~/.local/share/zsh/completions
+        $fpath
+    )
+fi
 
 # ===== LOAD COMPLETION DEFINITIONS (BEFORE compinit) =====
 
