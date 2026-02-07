@@ -97,7 +97,14 @@ OPTIONS:
     --help, -h      Show this help message
 
 DESCRIPTION:
-    Installs essential development tools:
+    This script prepares your machine for dotfiles installation in 2 phases:
+
+    PHASE 1: Environment Configuration (Interactive)
+    - Prompts for USER_FULLNAME, USER_EMAIL, PERSONAL_USER, PC_TYPE
+    - Creates ~/.envrc (main config) and ~/.private.envrc (secrets)
+    - Can be skipped and configured later
+
+    PHASE 2: Essential Tools Installation
     - curl (required for downloads)
     - git (required for version control)
     - mise (version manager for language runtimes)
@@ -111,11 +118,19 @@ DESCRIPTION:
         just install_full      # Full dotfiles installation
         just install_minimal   # Minimal dotfiles installation
 
+ENVIRONMENT CONFIGURATION:
+    To configure/reconfigure environment variables later:
+        bash _scripts/unix/tools/configure-env-interactive.sh
+
+    Or manually edit:
+        nvim ~/.envrc          # Basic config
+        nvim ~/.private.envrc  # Secrets
+
 EXAMPLES:
-    # Interactive (recommended)
+    # Interactive (recommended) - will prompt for configuration
     bash bootstrap.sh
 
-    # Non-interactive (CI/automation)
+    # Non-interactive (CI/automation) - skips configuration
     bash bootstrap.sh --yes
 
 EOF
@@ -187,6 +202,40 @@ elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
 else
     log_error "Unsupported OS: $OSTYPE"
     exit 1
+fi
+
+# =============================================================================
+# Configure Environment Variables (Optional)
+# =============================================================================
+
+log_header "Environment Variables Setup"
+
+if [[ ! -f "$HOME/.envrc" ]]; then
+    echo ""
+    log_info "Before installing, you should configure your environment variables."
+    log_info "This includes your name, email, and machine type (pro/perso)."
+    echo ""
+
+    if [[ "$AUTO_YES" == "true" ]]; then
+        log_info "Skipping environment setup (non-interactive mode)"
+        log_info "You can configure later with: bash _scripts/unix/tools/configure-env-interactive.sh"
+    else
+        read -p "Would you like to configure environment variables now? [Y/n]: " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+            if [[ -f "$SCRIPTS_DIR/unix/tools/configure-env-interactive.sh" ]]; then
+                bash "$SCRIPTS_DIR/unix/tools/configure-env-interactive.sh"
+            else
+                log_warn "configure-env-interactive.sh not found"
+                log_info "You can configure manually later"
+            fi
+        else
+            log_info "Skipping environment setup"
+            log_info "You can configure later with: bash _scripts/unix/tools/configure-env-interactive.sh"
+        fi
+    fi
+else
+    log_success "Environment variables already configured (~/.envrc exists)"
 fi
 
 # =============================================================================
