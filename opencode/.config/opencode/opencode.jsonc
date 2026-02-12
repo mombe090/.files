@@ -48,6 +48,14 @@
     },
   },
 
+  // Custom commands
+  "command": {
+    "commit": {
+      "template": "Use the 'committer' skill to create a git commit following Conventional Commits specification. {{input}}",
+      "description": "Create conventional commits with language support (en/fr). Usage: /commit [en|fr] [direction]",
+    },
+  },
+
   // MCP server
   "mcp": {
     "Azure MCP Server": {

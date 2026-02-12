@@ -33,3 +33,8 @@ nushell/.config/nushell/history.txt
 
 # Ignore all log files
 dotfiles_docs.egg-info/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo

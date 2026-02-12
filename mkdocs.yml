@@ -80,6 +80,10 @@ nav:
   - Home: index.md
   - Just Integration:
       - Architecture: specs/just-integration/architecture.md
+  - Skills:
+      - Committer: skills/committer.md
+      - Examples: skills/committer-examples.md
+      - Quick Reference: skills/commit-types-reference.md
 
 extra:
   social:
