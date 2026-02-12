@@ -22,12 +22,12 @@ bash _scripts/bootstrap.sh
 mise install
 
 # 4. Install dotfiles
-just install_full                 # Full installation
+just install_perso                 # Perso + Pro packages + configs
 # OR
-just install_minimal              # Minimal installation
+just install_pro                  # Professional packages + configs only
 ```
 
-**📝 Environment Configuration:**
+**Environment Configuration:**
 
 The bootstrap script will **interactively prompt** you to configure your environment variables:
 
@@ -88,12 +88,12 @@ cd $HOME\.dotfiles
 
 ### What You Need to Configure
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `USER_FULLNAME` | Your full name (for git commits) | `"John Doe"` |
-| `USER_EMAIL` | Your email (for git commits) | `"john@example.com"` |
-| `PERSONAL_USER` | Your username | `"johndoe"` |
-| `PC_TYPE` | Machine type | `"pro"` or `"perso"` |
+| Variable        | Description                      | Example              |
+|-----------------|----------------------------------|----------------------|
+| `USER_FULLNAME` | Your full name (for git commits) | `"John Doe"`         |
+| `USER_EMAIL`    | Your email (for git commits)     | `"john@example.com"` |
+| `PERSONAL_USER` | Your username                    | `"johndoe"`          |
+| `PC_TYPE`       | Machine type                     | `"pro"` or `"perso"` |
 
 ### Interactive Configuration (Recommended)
 
@@ -557,54 +557,54 @@ mise upgrade
 
 ### Core Tools
 
-| Tool        | Purpose                      | Config Location              |
-| ----------- | ---------------------------- | ---------------------------- |
-| **zsh**     | Shell                        | `zsh/.config/zsh/`           |
-| **git**     | Version control              | `git/.gitconfig`             |
-| **neovim**  | Text editor                  | `nvim/.config/nvim/`         |
-| **starship**| Shell prompt                 | `starship/starship.toml`     |
+| Tool         | Purpose         | Config Location          |
+|--------------|-----------------|--------------------------|
+| **zsh**      | Shell           | `zsh/.config/zsh/`       |
+| **git**      | Version control | `git/.gitconfig`         |
+| **neovim**   | Text editor     | `nvim/.config/nvim/`     |
+| **starship** | Shell prompt    | `starship/starship.toml` |
 
 ### Modern CLI Replacements
 
-| Tool        | Replaces | Purpose                      |
-| ----------- | -------- | ---------------------------- |
-| **bat**     | cat      | Syntax highlighting viewer   |
-| **eza**     | ls       | Modern file listing          |
-| **fd**      | find     | Fast file finder             |
-| **ripgrep** | grep     | Fast text search             |
-| **zoxide**  | cd       | Smart directory jumper       |
-| **delta**   | diff     | Beautiful git diffs          |
-| **btop**    | top      | Resource monitor             |
+| Tool        | Replaces | Purpose                    |
+|-------------|----------|----------------------------|
+| **bat**     | cat      | Syntax highlighting viewer |
+| **eza**     | ls       | Modern file listing        |
+| **fd**      | find     | Fast file finder           |
+| **ripgrep** | grep     | Fast text search           |
+| **zoxide**  | cd       | Smart directory jumper     |
+| **delta**   | diff     | Beautiful git diffs        |
+| **btop**    | top      | Resource monitor           |
 
 ### Development Tools
 
-| Tool         | Purpose                           |
-| ------------ | --------------------------------- |
-| **mise**     | Version manager (replaces asdf)   |
-| **direnv**   | Per-directory environment vars    |
-| **fzf**      | Fuzzy finder                      |
-| **jq/yq**    | JSON/YAML processors              |
+| Tool       | Purpose                         |
+|------------|---------------------------------|
+| **mise**   | Version manager (replaces asdf) |
+| **direnv** | Per-directory environment vars  |
+| **fzf**    | Fuzzy finder                    |
+| **jq/yq**  | JSON/YAML processors            |
 
 ### Infrastructure & DevOps
 
-| Tool          | Purpose                          |
-| ------------- | -------------------------------- |
-| **kubectl**   | Kubernetes CLI                   |
-| **k9s**       | Kubernetes TUI                   |
-| **kubecolor** | Colored kubectl output           |
-| **helm**      | Kubernetes package manager       |
-| **terraform** | Infrastructure as code           |
-| **ansible**   | Configuration management         |
-| **docker**    | Container runtime                |
+| Tool          | Purpose                    |
+|---------------|----------------------------|
+| **kubectl**   | Kubernetes CLI             |
+| **k9s**       | Kubernetes TUI             |
+| **kubecolor** | Colored kubectl output     |
+| **helm**      | Kubernetes package manager |
+| **terraform** | Infrastructure as code     |
+| **ansible**   | Configuration management   |
+| **docker**    | Container runtime          |
 
 ### Terminal & Multiplexer
 
-| Tool         | Purpose                      | Config Location              |
-| ------------ | ---------------------------- | ---------------------------- |
-| **alacritty**| GPU-accelerated terminal     | `alacritty/.config/`         |
-| **ghostty**  | Modern terminal emulator     | `ghostty/.config/`           |
-| **wezterm**  | GPU-accelerated terminal     | `wezterm/.config/wezterm/`   |
-| **zellij**   | Terminal multiplexer         | `zellij/.config/`            |
+| Tool          | Purpose                  | Config Location            |
+|---------------|--------------------------|----------------------------|
+| **alacritty** | GPU-accelerated terminal | `alacritty/.config/`       |
+| **ghostty**   | Modern terminal emulator | `ghostty/.config/`         |
+| **wezterm**   | GPU-accelerated terminal | `wezterm/.config/wezterm/` |
+| **zellij**    | Terminal multiplexer     | `zellij/.config/`          |
 
 ## Scripts
 

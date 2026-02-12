@@ -86,7 +86,6 @@ tf plan               # terraform plan
 
 - `python` aliased to `python3`
 - `code` opens VS Code
-- Nix Darwin rebuild shortcuts
 
 ### Linux
 
