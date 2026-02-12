@@ -56,6 +56,7 @@ trusted_config_paths = [
 #"btop" = "latest"         # system monitor not supported on ARM yet
 "jq" = "latest"           # JSON processor
 "yq" = "latest"           # YAML processor
+"yamllint" = "latest"     # YAML linter
 
 # Shell scripting
 "shellcheck" = "latest"   # shell script linter
@@ -94,4 +95,9 @@ trusted_config_paths = [
 
 "vivid" = "latest"
 "aqua:go-task/task" = "latest"
+
+# Completion engines
 delta = "latest"
+atuin = "latest"
+carapace = "latest"
+kubecolor = "latest"
