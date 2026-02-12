@@ -172,6 +172,12 @@ runtimes: []
 
 # Personal/experimental tools
 personal:
+  - name: tea
+    description: Gitea CLI - Command-line tool for Gitea (installed via binary)
+    category: personal
+    install_method: binary
+    url: https://dl.gitea.com/tea
+
   - name: youtube-dl
     description: Download videos from YouTube
     category: personal

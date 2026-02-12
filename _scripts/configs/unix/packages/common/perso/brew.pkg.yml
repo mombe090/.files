@@ -13,7 +13,10 @@
 # =============================================================================
 
 # Essential tools (inherit from pro, add personal extras here if needed)
-essentials: []
+essentials:
+  - name: tea
+    description: Gitea CLI - Command-line tool for Gitea
+    category: essentials
 
 # Development tools
 development: []
@@ -29,6 +32,14 @@ casks:
 
   - name: alacritty
     description: GPU-accelerated terminal emulator
+    category: casks
+
+  - name: bruno
+    description: Opensource IDE for exploring and testing APIs
+    category: casks
+
+  - name: multipass
+    description: Orchestrates virtual Ubuntu instances
     category: casks
 
 # NOTE: These tools are managed by mise (see mise/.config/mise/config.toml):

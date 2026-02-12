@@ -36,6 +36,10 @@ essentials:
     description: UNIX shell (Z shell)
     category: essentials
 
+  - name: nushell
+    description: Modern shell with structured data
+    category: essentials
+
 # Development tools (only those NOT in mise)
 development:
   - name: tree
