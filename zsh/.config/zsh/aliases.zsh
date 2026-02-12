@@ -39,6 +39,19 @@ alias gb='git branch'
 alias gd='git diff'
 alias glg='git log --oneline --graph'
 
+# ===== GIT FORGE CLI TOOLS =====
+
+# GitHub CLI
+alias ghpr='gh pr'
+alias ghissue='gh issue'
+alias ghrepo='gh repo'
+
+# Gitea CLI (tea)
+alias t='tea'
+alias tpr='tea pr'
+alias tissue='tea issues'
+alias trepo='tea repos'
+
 # ===== KUBERNETES ALIASES =====
 
 # Context and namespace management
@@ -102,12 +115,6 @@ alias tfv='terraform validate'
 alias q='quarkus'
 alias zj='zellij'
 alias lc='localstack'
-
-# ===== SYSTEM SPECIFIC =====
-
-# Nix Darwin
-
-alias nix-rebuild-mac='sudo darwin-rebuild switch --flake ~/.config/nix#'
 
 # ===== NAVIGATION HELPERS =====
 
