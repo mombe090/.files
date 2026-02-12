@@ -124,6 +124,7 @@ function Add-ToPath {
 Add-ToPath "$env:USERPROFILE\.local\bin"
 Add-ToPath "$env:USERPROFILE\.bun\bin"
 Add-ToPath "$env:USERPROFILE\.cargo\bin"
+Add-ToPath "$env:USERPROFILE\.dotnet\tools"
 
 # =============================================================================
 # Welcome Message
