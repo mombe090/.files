@@ -1,6 +1,7 @@
 ---
 name: feature-creator
 description: Create well-structured GitHub feature request issues using gh CLI. Use when the user requests to create a feature issue with commands like "/feature <description>", "create feature issue", or "new feature request". Generates professional, succinct issues following best practices from top open-source projects.
+model: claude-haiku-4-5-20251001
 ---
 
 # Feature Creator

@@ -1,4 +1,10 @@
-# Skill: pr-desc
+---
+name: pr-desc
+description: Generate pull request descriptions by analyzing changes between current branch and base branch (main/
+model: claude-haiku-4-5-20251001
+---
+
+# pr-desc
 
 ## Overview
 
