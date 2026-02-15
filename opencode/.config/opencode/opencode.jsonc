@@ -53,7 +53,7 @@
   // Custom commands
   "command": {
     "commit": {
-      "template": "Use the 'committer' skill to create a git commit following Conventional Commits specification. {{input}}",
+      "template": "Use the 'committer' skill to create a git commit following Conventional Commits specification. $ARGUMENTS",
       "description": "Create conventional commits with language support (en/fr). Usage: /commit [en|fr] [direction]",
     },
   },

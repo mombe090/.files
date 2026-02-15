@@ -60,6 +60,7 @@
 **IMPORTANT**: Always test installation scripts in containers, never on the host system.
 
 **Use existing Ubuntu container:**
+
 ```bash
 # Connect to the running Ubuntu container
 docker exec -it a4597fd2-8f64-4bf8-87d1-be16e727de6b bash
@@ -72,6 +73,7 @@ bash _scripts/install.sh --minimal
 ```
 
 **Or create a new Ubuntu container:**
+
 ```bash
 # Create fresh Ubuntu 24.04 container
 docker run -it --name dotfiles-test ubuntu:24.04 bash
@@ -87,6 +89,7 @@ bash _scripts/install.sh --minimal
 ```
 
 **Clean up after testing:**
+
 ```bash
 # Exit container
 exit
@@ -126,6 +129,90 @@ docker rm dotfiles-test
 - Follow existing naming conventions: kebab-case for config files, snake_case for variables
 - Comment configuration sections clearly with `# =====` style headers
 - Group related configurations together (e.g., git aliases, kubernetes aliases)
+
+### Markdown Files
+
+**IMPORTANT**: This repository uses `markdownlint` via pre-commit hooks. All markdown files must pass linting before commit.
+
+**Common markdownlint rules to follow:**
+
+- **MD022**: Add blank lines before and after headings
+
+  ````markdown
+  Some text here.
+
+  ## Heading
+
+  More text here.
+  ````
+
+- **MD031**: Add blank lines before and after fenced code blocks
+
+  ````markdown
+  Some text here.
+
+  ```bash
+  code here
+  ```
+
+  More text here.
+  ````
+
+- **MD032**: Add blank lines before and after lists
+
+  ````markdown
+  Some text here.
+
+  - List item 1
+  - List item 2
+
+  More text here.
+  ````
+
+- **MD040**: Specify language for all fenced code blocks
+
+  ````markdown
+  # ✅ Good
+  ```bash
+  echo "hello"
+  ```
+
+  ```text
+  Plain text output
+  ```
+
+  # ❌ Bad
+  ```
+  no language specified
+  ```
+  ````
+
+- **MD034**: Wrap bare URLs in angle brackets
+
+  ````markdown
+  # ✅ Good
+  Visit <https://example.com> for details
+
+  # ❌ Bad
+  Visit https://example.com for details
+  ````
+
+**When creating new markdown files:**
+
+1. Always specify language for code blocks (use `text` for non-code content like output or plain text)
+2. Add blank lines around all headings, lists, and code blocks
+3. Wrap standalone URLs in `<>` angle brackets
+4. Avoid inline HTML unless absolutely necessary
+
+**Testing markdown files:**
+
+```bash
+# Run markdownlint on all markdown files
+pre-commit run markdownlint --all-files
+
+# Run all pre-commit hooks
+pre-commit run --all-files
+```
 
 ### Aliases and Functions
 
@@ -173,6 +260,7 @@ Write-Host ""
 **Why**: Our custom helper functions in `_scripts/lib/pwsh/colors.ps1` require non-empty message parameters. PowerShell 7 strictly enforces this.
 
 **Helper Functions Available**:
+
 - `Write-Header $message` - Section headers with color
 - `Write-Info $message` - Informational messages
 - `Write-Success $message` - Success messages
@@ -240,6 +328,7 @@ elseif ($IsMacOS) {
 ### Detection Strategy
 
 **Entry Points**: Detect Windows vs Unix at the main script level
+
 - **Windows**: `install.ps1` (PowerShell 7+)
 - **Unix**: `install.sh` (Bash/Zsh) - handles both Linux and macOS
 
@@ -301,12 +390,14 @@ if (Test-IsAdmin) {
 **Location**: `_scripts/unix/lib/`
 
 #### `init.sh` - Library Loader
+
 ```bash
 # Source all Unix libraries at once
 source "$DOTFILES_ROOT/_scripts/unix/lib/init.sh"
 ```
 
 #### `colors.sh` - Logging Functions
+
 - `log_info $message` - Informational messages (green)
 - `log_success $message` - Success messages (green with checkmark)
 - `log_error $message` - Error messages (red)
@@ -315,6 +406,7 @@ source "$DOTFILES_ROOT/_scripts/unix/lib/init.sh"
 - `log_step $message` - Sub-steps (blue)
 
 #### `common.sh` - Utility Functions
+
 - `has_command $cmd` - Check if command exists
 - `retry $max_attempts $command` - Retry failed operations
 - `backup_file $file [$backup_dir]` - Create timestamped file backup
@@ -324,6 +416,7 @@ source "$DOTFILES_ROOT/_scripts/unix/lib/init.sh"
 - `get_dotfiles_root $levels_up` - Get absolute path to repo root
 
 #### `detect.sh` - OS Detection
+
 - `detect_os` - Get OS type (macos/linux/unknown)
 - `get_distro` - Get Linux distribution ID
 - `is_macos` - Check if macOS (boolean)
@@ -334,6 +427,7 @@ source "$DOTFILES_ROOT/_scripts/unix/lib/init.sh"
 - `ensure_home_correct` - Fix stale HOME environment variable
 
 #### `package-managers.sh` - Package Manager Abstraction
+
 - `install_package $name [$pm]` - Install using available PM
 - `check_package_installed $name [$pm]` - Check if package installed
 - `update_packages [$pm]` - Update all packages
@@ -377,6 +471,7 @@ Template files use `#{TOKEN}#` syntax that gets replaced at deploy time with act
 ### Usage in Files
 
 **Git config template** (`git/.gitconfig.template`):
+
 ```gitconfig
 [user]
     name = #{USER_FULLNAME}#
@@ -384,6 +479,7 @@ Template files use `#{TOKEN}#` syntax that gets replaced at deploy time with act
 ```
 
 **Nushell external tools** (`nushell/.config/nushell/integrations/external-tools.nu`):
+
 ```nu
 # Windows branch - use bare literal paths with tokens
 source C:/Users/#{USERNAME}#/.cache/starship/init.nu
@@ -414,6 +510,7 @@ fi
 ```
 
 **Applied to**:
+
 - `_scripts/install.sh`
 - `_scripts/just/bootstrap.sh`
 - `_scripts/unix/tools/deploy-gitconfig.sh`
@@ -429,6 +526,7 @@ DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 ```
 
 **Count carefully**:
+
 - `_scripts/install.sh` → 1 level deep → `..`
 - `_scripts/just/bootstrap.sh` → 2 levels deep → `../..`
 - `_scripts/unix/installers/*.sh` → 3 levels deep → `../../..`
@@ -462,26 +560,31 @@ export MISE_CACHE_DIR="$HOME/.cache/mise"
 ```
 
 **Incorrect** (old):
+
 ```bash
 # ❌ Don't use MISE_HOME - deprecated
 export MISE_HOME="$HOME/.local/share/mise"
 ```
 
 **Apply in**:
+
 - `_scripts/install.sh` (3 places: `install_mise`, `install_package`, `install_mise_tools`)
 - `_scripts/unix/installers/install-mise.sh` (in shell config blocks)
 
 ### Bootstrap Order
 
 **Linux** (`_scripts/just/bootstrap.sh`):
+
 1. `apt` (system package manager)
 2. `script` (runs install.sh)
 
 **macOS**:
+
 1. `brew` (Homebrew)
 2. `script` (runs install.sh)
 
 **Removed from default**:
+
 - `mise` - not a default package manager
 - `cargo` - not a default package manager
 
@@ -490,6 +593,7 @@ export MISE_HOME="$HOME/.local/share/mise"
 **Script**: `_scripts/unix/tools/deploy-gitconfig.sh`
 
 **Behavior**:
+
 1. Reads `git/.gitconfig.template`
 2. Prompts for `USER_FULLNAME` and `USER_EMAIL` (or uses env vars)
 3. Uses existing values from `~/.gitconfig` as defaults if file exists
@@ -497,6 +601,7 @@ export MISE_HOME="$HOME/.local/share/mise"
 5. **Copies** (not symlinks) result to `~/.gitconfig`
 
 **Invocation**:
+
 - Automatic: During `just install_full` (via `_scripts/install.sh`)
 - Manual: `just deploy_gitconfig`
 
@@ -519,6 +624,7 @@ reset := "\033[0m"
 **Installation Note**: The `_scripts/just/install-just.sh` script downloads the **latest binary** from GitHub releases to ensure modern Just features work. On Linux, it prefers the binary over apt (which may have outdated versions like 1.21.0).
 
 **Installation order**:
+
 - **macOS**: brew → binary → script
 - **Linux**: binary → apt → script
 
@@ -547,11 +653,13 @@ install_full:
 **File**: `git/.gitconfig.template`
 
 **Contains**:
+
 - Token placeholders: `#{USER_FULLNAME}#`, `#{USER_EMAIL}#`
 - Git aliases and settings
 - Conditional includes for OS-specific configs
 
 **Deployment**:
+
 - Tokens replaced with actual values
 - Result copied (not symlinked) to `~/.gitconfig`
 - This allows git to modify the file without affecting the template
