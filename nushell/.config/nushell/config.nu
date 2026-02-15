@@ -15,7 +15,7 @@ use ~/.config/nushell/ui/menus.nu
 use ~/.config/nushell/ui/keybindings.nu
 
 # Core Configuration
-use ~/.config/nushell/core/hooks.nu
+use ~/.config/nushell/core/hooks.nu *
 
 # Commands & Aliases
 use ~/.config/nushell/aliases/commands.nu *
@@ -24,6 +24,14 @@ use ~/.config/nushell/aliases/kubernetes-aliases.nu *
 
 # External Integrations
 use ~/.config/nushell/integrations/external-tools.nu *
+use ~/.config/nushell/integrations/zoxide.nu *
+
+# =============================================================================
+# External Tools Initialization
+# =============================================================================
+
+# Generate cache files for external tools (starship, carapace, atuin)
+init_all
 
 # =============================================================================
 # Main Configuration
@@ -84,7 +92,7 @@ $env.config = {
         case_sensitive: false
         quick: true
         partial: true
-        algorithm: "prefix"
+        algorithm: "fuzzy"
         external: {
             enable: true
             max_results: 100
@@ -99,7 +107,6 @@ $env.config = {
         vi_normal: underscore
     }
 
-    color_config: (theme dark_theme)
     footer_mode: 25
     float_precision: 2
     buffer_editor: ""
@@ -132,7 +139,15 @@ $env.config = {
         plugins: {}
     }
 
-    hooks: (hooks get_hooks)
+    hooks: {
+        pre_prompt: [{ null }]
+        pre_execution: [{ null }]
+        env_change: {
+            PWD: []
+        }
+        display_output: "if (term size).columns >= 100 { table -e } else { table }"
+        command_not_found: { null }
+    }
     menus: (menus get_menus)
     keybindings: (keybindings get_keybindings)
 }
@@ -154,11 +169,39 @@ $env.config.hooks.env_change.PWD ++= [{||
 }]
 
 # =============================================================================
-# Initialize External Tools & Aliases
+# Theme Configuration
+# =============================================================================
+# Source Catppuccin Mocha theme AFTER main config so it can properly set values
+
+source ~/.config/nushell/themes/catppuccin/mocha.nu
+
+# =============================================================================
+# Zoxide Integration
+# =============================================================================
+# Manually add zoxide PWD tracking hook
+# Commands (z, zi) are imported via use statement at top
+
+$env.config.hooks.env_change.PWD ++= [{||
+    if (which zoxide | is-empty) {
+        return
+    }
+    zoxide add -- $env.PWD
+}]
+
+# =============================================================================
+# Initialize Remaining External Tools
 # =============================================================================
 
-# Initialize external tools (starship, carapace, atuin, zoxide)
-init_all
+# Source other external tool integrations (with error handling for missing files)
+# Note: zoxide is sourced earlier to properly register PWD hooks
+try { source ~/.cache/starship/init.nu }
+try { source ~/.cache/carapace/init.nu }
+try { source ~/.local/share/atuin/init.nu }
+
+# Override starship's empty prompt indicators (must be after starship init)
+$env.PROMPT_INDICATOR = "> "
+$env.PROMPT_INDICATOR_VI_INSERT = "> "
+$env.PROMPT_INDICATOR_VI_NORMAL = "❮ "
 
 # Setup tree alias
 setup_tree_alias

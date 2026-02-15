@@ -1,0 +1,61 @@
+# =============================================================================
+# PRIVATE ENVIRONMENT VARIABLES (Machine-Specific)
+# =============================================================================
+# This file is for your personal/private environment variables that are
+# specific to this machine only. It should NEVER be committed to git.
+#
+# Copy this file to ~/.private.envrc and add your credentials here.
+#
+# IMPORTANT: This file is loaded automatically by .envrc
+# =============================================================================
+
+# ===== CLOUD CREDENTIALS =====
+# Add your cloud provider credentials here
+
+# AWS
+# export AWS_ACCESS_KEY_ID="YOUR_AWS_ACCESS_KEY_ID"
+# export AWS_SECRET_ACCESS_KEY="YOUR_AWS_SECRET_ACCESS_KEY"
+# export AWS_ACCOUNT_ID="123456789012"
+
+# Azure
+# export AZURE_TENANT_ID="YOUR_AZURE_TENANT_ID"
+# export AZDO_PERSONAL_ACCESS_TOKEN="YOUR_AZDO_PAT_TOKEN"
+
+# Google Cloud
+# export GOOGLE_CLOUD_PROJECT="your-gcp-project-id"
+# export GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
+
+# ===== API KEYS & TOKENS =====
+# Add your API keys and tokens here
+
+# GitHub
+# export GITHUB_TOKEN="YOUR_GITHUB_PAT_TOKEN"
+
+# OpenAI
+# export OPENAI_API_KEY="YOUR_OPENAI_API_KEY"
+
+# Anthropic Claude
+# export ANTHROPIC_API_KEY="YOUR_ANTHROPIC_API_KEY"
+
+# ===== INFRASTRUCTURE CREDENTIALS =====
+# Add your infrastructure credentials here
+
+# Proxmox
+# export PROXMOX_VE_USERNAME="root@pam"
+# export PROXMOX_VE_PASSWORD="YOUR_PROXMOX_PASSWORD"
+# export PROXMOX_VE_HOST_LAB="192.168.1.100"
+# export PROXMOX_VE_HOST_DEV="192.168.1.101"
+
+# ===== CUSTOM SECRETS =====
+# Add any other private/sensitive variables below
+
+# ===== NOTES =====
+# 1. Copy this file: cp .private.envrc.sample ~/.private.envrc
+# 2. Edit with your secrets: nvim ~/.private.envrc
+# 3. Set proper permissions: chmod 600 ~/.private.envrc
+# 4. This file is automatically loaded by ~/.envrc
+#
+# ⚠️  SECURITY WARNING:
+#     - NEVER commit ~/.private.envrc to git!
+#     - It's already in .gitignore
+#     - Keep permissions restrictive (600)

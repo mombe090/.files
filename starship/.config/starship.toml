@@ -2,13 +2,17 @@
 
 add_newline = true
 command_timeout = 1000
-format = """$os$username$hostname$env_var$kubernetes$directory$git_branch$git_status\n"""
+format = """$os$username$shell$hostname$kubernetes$directory$git_branch$git_status\n\n"""
 
 # Drop ugly default prompt characters
 
 [character]
 success_symbol = ''
 error_symbol = ''
+vimcmd_symbol = ''
+vimcmd_visual_symbol = ''
+vimcmd_replace_symbol = ''
+vimcmd_replace_one_symbol = ''
 
 # ---
 
@@ -17,7 +21,7 @@ format = '[$symbol](bold white) '
 disabled = false
 
 [os.symbols]
-Windows = ' '
+Windows = ''
 Arch = '󰣇'
 Ubuntu = ''
 Macos = '󰀵'
@@ -85,9 +89,13 @@ deleted = '[󰍶 deleted=${count}](red) '
 format = '[󱃾 $context\[$namespace\]](bold blue) '
 disabled = false
 
-# Shows current shell name
-# Uses env_var module to detect shell based on shell-specific variables
-
-[env_var.STARSHIP_SHELL]
-format = "[$env_value](bold cyan) "
+# Shows current shell with icon
+[shell]
+format = "[$indicator](bold cyan) "
 disabled = false
+zsh_indicator = ""
+bash_indicator = ""
+nu_indicator = "󰌌"
+fish_indicator = ""
+powershell_indicator = ""
+unknown_indicator = ""

@@ -9,25 +9,28 @@
   "autoupdate": false,
   "share": "disabled",
 
+  // Global permissions
+  "permission": {
+    "bash": {
+      "git push*": "deny",  // Explicitly deny all git push commands
+    },
+  },
+
   // Tools Config
 
   "agent": {
     "plan": {
       "mode": "primary",
-      "tools": {
-        "write": false,
-        "bash": false,
-        "webfetch": true,
-      },
       "permission": {
-        "edit": "deny",
+        "edit": "deny",      // Covers write, edit, patch, multiedit
+        "bash": "deny",      // No shell commands in planning phase
+        "webfetch": "allow", // Allow research
       },
     },
     "build": {
       "permission": {
         "bash": {
-          "git push": "ask",
-          "az *": "ask",
+          "az *": "ask",  // Prompt for Azure CLI commands
         },
       },
     },
@@ -35,9 +38,8 @@
     "reviewer": {
       "description": "Reviews code for best practices and potential issues, you can check dotfile for conventional config",
       "prompt": "You are a Senior Tech code reviewer. Focus on security, performance, standard best practises and maintainability. Use available mcp server to check best practices on code you reviewing.",
-      "tools": {
-        "write": false,
-        "edit": false,
+      "permission": {
+        "edit": "deny",  // Read-only reviewer
       },
     },
   },
@@ -45,6 +47,14 @@
   "formatter": {
     "prettier": {
       "disabled": false,
+    },
+  },
+
+  // Custom commands
+  "command": {
+    "commit": {
+      "template": "Use the 'committer' skill to create a git commit following Conventional Commits specification. $ARGUMENTS",
+      "description": "Create conventional commits with language support (en/fr). Usage: /commit [en|fr] [direction]",
     },
   },
 

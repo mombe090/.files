@@ -1,5 +1,5 @@
 --color=always
---theme="TwoDark"
+--theme="Catppuccin Mocha"
 --style="numbers,changes,header"
 --paging=never
 --map-syntax "*.ino:C++"

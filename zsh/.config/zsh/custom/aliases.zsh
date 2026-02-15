@@ -102,12 +102,6 @@ alias q='quarkus'
 alias zj='zellij'
 alias lc='localstack'
 
-# ===== SYSTEM SPECIFIC =====
-
-# Nix Darwin
-
-alias nix-rebuild-mac='sudo darwin-rebuild switch --flake ~/.config/nix#'
-
 # ===== NAVIGATION HELPERS =====
 
 alias ..='cd ..'

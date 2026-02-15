@@ -54,6 +54,7 @@ if $nu.os-info.name == 'windows' {
     path add ($env.USERPROFILE | path join ".local" "bin")
     path add ($env.USERPROFILE | path join ".bun" "bin")
     path add ($env.USERPROFILE | path join ".cargo" "bin")
+    path add ($env.USERPROFILE | path join ".dotnet" "tools")
 } else if $nu.os-info.name == 'macos' {
     # macOS-specific paths
     path add /opt/homebrew/bin
@@ -61,47 +62,32 @@ if $nu.os-info.name == 'windows' {
     path add ($env.HOME | path join ".local" "bin")
     path add ($env.HOME | path join ".cargo" "bin")
     path add /opt/homebrew/opt/ruby/bin
+    path add ($env.HOME | path join ".dotnet" "tools")
 } else {
     # Linux-specific paths
     path add ($env.HOME | path join ".local" "bin")
     path add ($env.HOME | path join ".cargo" "bin")
+    path add ($env.HOME | path join ".dotnet" "tools")
 }
 
 # =============================================================================
 # Starship Prompt Integration
 # =============================================================================
 
-# Initialize Starship prompt (cross-platform)
-if (which starship | is-not-empty) {
-    mkdir ~/.cache/starship
-    starship init nu | save -f ~/.cache/starship/init.nu
-
-    # Set Starship config location based on platform
-    if $nu.os-info.name == 'windows' {
-        $env.STARSHIP_CONFIG = ($env.USERPROFILE | path join ".config" "starship" "starship.toml")
-    } else {
-        $env.STARSHIP_CONFIG = ($env.HOME | path join ".config" "starship" "starship.toml")
-    }
-
-    # Set shell name for Starship prompt
-    $env.STARSHIP_SHELL = "nu"
+# Set Starship environment variables (must be at top level, not inside blocks)
+if $nu.os-info.name == 'windows' {
+    $env.STARSHIP_CONFIG = ($env.USERPROFILE | path join ".config" "starship.toml")
+} else {
+    $env.STARSHIP_CONFIG = ($env.HOME | path join ".config" "starship.toml")
 }
+$env.STARSHIP_SHELL = "nu"
 
 # =============================================================================
 # Tool Initializations
 # =============================================================================
 
-# Zoxide (smart cd)
-if (which zoxide | is-not-empty) {
-    zoxide init nushell | save -f ~/.zoxide.nu
-}
-
-# Carapace (completions)
-if (which carapace | is-not-empty) {
-    mkdir ~/.cache/carapace
-    $env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense'
-    carapace _carapace nushell | save --force ~/.cache/carapace/init.nu
-}
+# Note: Tool initialization moved to config.nu via external-tools.nu module
+# This ensures proper initialization order and avoids duplication
 
 # =============================================================================
 # Environment Variables
@@ -113,4 +99,16 @@ $env.VISUAL = "nvim"
 # Disable direnv logging (if installed)
 if (which direnv | is-not-empty) {
     $env.DIRENV_LOG_FORMAT = ""
+}
+
+# =============================================================================
+# Local Environment Variables
+# =============================================================================
+# Load local environment variables if env.local.nu exists
+# This file should contain personal credentials and machine-specific config
+# See env.nu.sample for template
+
+# Note: source is evaluated at parse time, so we use try to handle missing files
+try {
+    source ~/.config/nushell/env.local.nu
 }

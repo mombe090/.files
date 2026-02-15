@@ -1,7 +1,14 @@
 autoload -Uz compinit
 
+# ===== SHELL OPTIONS =====
+# Allow comments in interactive shell (bash-style)
+setopt INTERACTIVE_COMMENTS
+
 # ===== MISE CONFIGURATION =====
-# Activate mise if available
+# Add mise shims to PATH immediately (ensures tools are available during shell startup)
+export PATH="$HOME/.local/share/mise/shims:$PATH"
+
+# Activate mise hooks for directory switching
 if command -v mise &> /dev/null; then
   eval "$(mise activate zsh)"
 fi
@@ -35,7 +42,7 @@ typeset -a zsh_configs=(
   ~/.config/zsh/aliases.zsh
   ~/.config/zsh/completions.zsh
   ~/.config/zsh/fzf.git.zsh
-  ~/.config/zsh/themes/catppuccin-fzf-frappe.sh
+  ~/.config/zsh/themes/catppuccin-fzf-mocha.sh
 )
 
 for config in $zsh_configs; do
@@ -61,11 +68,7 @@ eval "$(direnv hook zsh)"
 
 # 🛠 User-specific setup
 
-# TODO: add check option if devbox is activated or not here
-
-if [[ "$USER" == "$PERSONAL_USER" ]]; then
-  command -v devbox &> /dev/null && eval "$(devbox global shellenv --preserve-path-stack -r)" && hash -r
-fi
+# Removed devbox integration (uninstalled)
 
 # Activate vi keybindings
 
@@ -87,3 +90,6 @@ PROMPT="${PROMPT}"$'\n> '
 
 # ===== HOMEBREW CONFIGURATION =====
 eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# ===== DOTNET TOOLS =====
+export PATH="$PATH:$HOME/.dotnet/tools"

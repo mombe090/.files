@@ -34,6 +34,9 @@ elif [ -f /usr/share/bash-completion/bash_completion ]; then
   . /usr/share/bash-completion/bash_completion
 fi
 
+# Catppuccin theme for FZF
+[[ -f ~/.config/bash/themes/catppuccin-fzf-mocha.sh ]] && source ~/.config/bash/themes/catppuccin-fzf-mocha.sh
+
 # Starship prompt (if available via mise)
 if command -v starship &> /dev/null; then
   # Set shell name for Starship prompt
@@ -43,3 +46,6 @@ fi
 
 # ===== HOMEBREW CONFIGURATION =====
 eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# ===== DOTNET TOOLS =====
+export PATH="$PATH:$HOME/.dotnet/tools"

@@ -150,3 +150,18 @@ alias gswc = git switch --create
 
 def gswd [] { git switch (git-develop-branch) }
 def gswm [] { git switch (git-main-branch) }
+
+# =============================================================================
+# Git Forge CLI Tools
+# =============================================================================
+
+# GitHub CLI
+export alias ghpr = gh pr
+export alias ghissue = gh issue
+export alias ghrepo = gh repo
+
+# Gitea CLI (tea)
+export alias t = tea
+export alias tpr = tea pr
+export alias tissue = tea issues
+export alias trepo = tea repos
