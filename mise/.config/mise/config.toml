@@ -103,4 +103,3 @@ trusted_config_paths = [
 delta = "latest"
 atuin = "latest"
 carapace = "latest"
-kubecolor = "latest"
