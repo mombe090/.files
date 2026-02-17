@@ -64,6 +64,9 @@ trusted_config_paths = [
 # ===== DEVOPS & CLOUD TOOLS =====
 # Kubernetes
 "kubectl" = "latest"
+"kubectx" = "latest"       # switch between kubectl contexts
+"kubens"  = "latest"       # switch between kubectl namespaces
+"kubecolor" = "latest"     # colorize
 "helm" = "latest"
 "aqua:norwoodj/helm-docs" = "latest"   # Generate docs from Helm charts
 "k9s" = "latest"
