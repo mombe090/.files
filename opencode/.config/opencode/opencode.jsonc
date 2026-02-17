@@ -34,14 +34,7 @@
         },
       },
     },
-
-    "reviewer": {
-      "description": "Reviews code for best practices and potential issues, you can check dotfile for conventional config",
-      "prompt": "You are a Senior Tech code reviewer. Focus on security, performance, standard best practises and maintainability. Use available mcp server to check best practices on code you reviewing.",
-      "permission": {
-        "edit": "deny",  // Read-only reviewer
-      },
-    },
+    // Note: "reviewer" agent now defined in agents/reviewer.md (markdown format)
   },
 
   "formatter": {

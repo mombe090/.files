@@ -537,6 +537,6 @@ Useful functions available in task templates:
 
 For complete documentation, see:
 
-- Official docs: https://taskfile.dev/docs/guide
-- Schema reference: https://taskfile.dev/docs/reference/schema
-- Templating guide: https://taskfile.dev/docs/reference/templating
+- Official docs: <https://taskfile.dev/docs/guide>
+- Schema reference: <https://taskfile.dev/docs/reference/schema>
+- Templating guide: <https://taskfile.dev/docs/reference/templating>
