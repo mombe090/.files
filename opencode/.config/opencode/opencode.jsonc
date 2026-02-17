@@ -56,6 +56,18 @@
       "template": "Use the 'committer' skill to create a git commit following Conventional Commits specification. $ARGUMENTS",
       "description": "Create conventional commits with language support (en/fr). Usage: /commit [en|fr] [direction]",
     },
+    "feature-gh": {
+      "template": "Use the 'feature-gh' skill to create a GitHub feature request issue. $ARGUMENTS",
+      "description": "Create GitHub feature issues using gh CLI. Usage: /feature-gh <description>",
+    },
+    "feature-tea": {
+      "template": "Use the 'feature-tea' skill to create a Gitea feature request issue. $ARGUMENTS",
+      "description": "Create Gitea feature issues using tea CLI. Usage: /feature-tea <description>",
+    },
+    "feature-az": {
+      "template": "Use the 'feature-az' skill to create an Azure DevOps feature work item. $ARGUMENTS",
+      "description": "Create Azure DevOps feature work items using az devops CLI. Usage: /feature-az <description>",
+    },
   },
 
   // MCP server
