@@ -21,6 +21,24 @@ if command -v kubectl &> /dev/null; then
     fi
 fi
 
+
+# Kubectx/Kubens completion (fpath completions loaded via ~/.local/share/zsh/completions/)
+
+if command -v kubectx &> /dev/null; then
+    compdef kx=kubectx
+fi
+
+if command -v kubens &> /dev/null; then
+    compdef kn=kubens
+fi
+
+# Flux CD completion
+
+if command -v flux &> /dev/null; then
+    source <(flux completion zsh)
+    compdef _flux flux
+fi
+
 # Azure CLI completion
 
 # Requires: python3-argcomplete (install with: sudo pacman -S python-argcomplete)

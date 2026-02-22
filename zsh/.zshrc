@@ -88,8 +88,9 @@ eval "$(starship init zsh)"
 PROMPT="${PROMPT}"$'\n> '
 
 
-# ===== HOMEBREW CONFIGURATION =====
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# only in mac os darwnin
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # ===== HOMEBREW CONFIGURATION =====
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 
-# ===== DOTNET TOOLS =====
-export PATH="$PATH:$HOME/.dotnet/tools"

@@ -137,3 +137,7 @@ alias lua='lua5.4'
 # ===== NixOs ==============
 
 alias rebuild-mini='sudo darwin-rebuild switch --flake ~/.config/nix#mombe-mini'
+
+# ===== OpenCode AI cli =================
+alias oc='opencode'
+

@@ -107,3 +107,7 @@ export PYTHONWARNINGS="ignore::FutureWarning"
 # PRE-COMMIT
 
 export PRE_COMMIT_COLOR=never
+
+
+# ===== DOTNET TOOLS =====
+export PATH="$PATH:$HOME/.dotnet/tools"

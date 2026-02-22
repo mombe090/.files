@@ -1,4 +1,7 @@
 {
+  "plugin": [
+    "oh-my-opencode@latest"
+  ],
   "$schema": "https://opencode.ai/config.json",
   //"$schema": "./config.schema.json",
 
@@ -103,4 +106,5 @@
       "enabled": true,
     },
   },
+  "provider": {},
 }

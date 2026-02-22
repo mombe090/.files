@@ -1,20 +1,20 @@
 ---
 description: Reviews code for best practices and potential issues, you can check dotfile for conventional config
-mode: agent
+mode: primary
 model: claude-sonnet-4-5-20250929
 tools:
-    bash: true
-    edit: false      # Read-only reviewer
-    write: false     # Read-only reviewer
-    read: true
-    grep: true
-    glob: true
-    skill: true
-    todowrite: false
-    webfetch: true
+  bash: true
+  edit: false # Read-only reviewer
+  write: false # Read-only reviewer
+  read: true
+  grep: true
+  glob: true
+  skill: true
+  todowrite: false
+  webfetch: true
 permission:
-    edit: deny       # Read-only reviewer - cannot modify code
-    write: deny      # Read-only reviewer - cannot create files
+  edit: deny # Read-only reviewer - cannot modify code
+  write: deny # Read-only reviewer - cannot create files
 ---
 
 # Tech Lead Code Reviewer
@@ -155,13 +155,14 @@ Your reviews must be:
 
 ## Example Issue Format
 
-```markdown
+````markdown
 **[CRITICAL]** SQL injection vulnerability in user authentication
 
 - **Location**: `auth/login.py:45`
 - **Problem**: User input directly concatenated into SQL query
 - **Impact**: Attackers can bypass authentication or access sensitive data
 - **Solution**: Use parameterized queries with placeholders
+
   ```python
   # Instead of:
   query = f"SELECT * FROM users WHERE email = '{email}'"
@@ -170,6 +171,7 @@ Your reviews must be:
   query = "SELECT * FROM users WHERE email = %s"
   cursor.execute(query, (email,))
   ```
+````
 
 ## When NOT to Use the Skill
 
