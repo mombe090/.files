@@ -98,19 +98,24 @@ eval "$(starship init zsh)"
 
 PROMPT="${PROMPT}"$'\n> '
 
-
 # only in mac os darwnin
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # ===== HOMEBREW CONFIGURATION =====
     eval "$(/opt/homebrew/bin/brew shellenv)"
+    # Added by LM Studio CLI (lms)
+    export PATH="$PATH:/Users/mombe090/.lmstudio/bin"
+    # End of LM Studio CLI section
 fi
 
 
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/mombe090/.lmstudio/bin"
-# End of LM Studio CLI section
 
 
-# ===== MISE DATA DIR =====
-export MISE_DATA_DIR="${MISE_DATA_DIR:-$HOME/.local/share/mise}"
-export MISE_CACHE_DIR="${MISE_CACHE_DIR:-$HOME/.cache/mise}"
+# ===== HOMEBREW CONFIGURATION =====
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# ===== DOTNET TOOLS =====
+export PATH="$PATH:$HOME/.dotnet/tools"
+
+source ~/private.envrc

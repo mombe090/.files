@@ -14,6 +14,9 @@
       "just destroy": "deny",
       "terraform apply -auto-approve": "deny",
       "terraform destroy -auto-approve": "deny",
+      "az devops *": "ask", // Prompt for all Azure DevOps CLI commands
+      "az *": "ask",
+      "rm -rf *": "ask",
     },
   },
 
@@ -35,7 +38,6 @@
         },
       },
     },
-    // Note: "reviewer" agent now defined in agents/reviewer.md (markdown format)
   },
 
   "formatter": {
