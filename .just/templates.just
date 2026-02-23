@@ -22,16 +22,16 @@ deploy_zed:
 
     # Validate required env vars
     if [ -z "${GITHUB_TOKEN:-}" ]; then
-        @just _log_error "GITHUB_TOKEN is not set. Please set it in ~/.private.envrc or export it in your shell."
+        >&2 echo "ERROR: GITHUB_TOKEN is not set. Please set it in ~/.private.envrc or export it in your shell."
         exit 1
     fi
 
     if [ -z "${CONTEXT7_API_KEY:-}" ]; then
-        @just _log_error "CONTEXT7_API_KEY is not set. Please set it in ~/.private.envrc or export it in your shell."
+        >&2 echo "ERROR: CONTEXT7_API_KEY is not set. Please set it in ~/.private.envrc or export it in your shell."
         exit 1
     fi
 
-    @just _log_step "Preparing Zed settings deploy..."
+    echo "STEP: Preparing Zed settings deploy..."
 
     BACKUP_DIR="${HOME}/.dotfiles-backup-$(date +%Y%m%d_%H%M%S)/zed"
     mkdir -p "${BACKUP_DIR}"
@@ -50,9 +50,9 @@ deploy_zed:
         else
             cp "${TARGET_FILE}" "${BACKUP_DIR}/settings.json"
         fi
-        @just _log_info "Backed up existing settings.json to ${BACKUP_DIR}/settings.json"
+        echo "INFO: Backed up existing settings.json to ${BACKUP_DIR}/settings.json"
     else
-        @just _log_info "No existing ~/.config/zed/settings.json to back up"
+        echo "INFO: No existing ~/.config/zed/settings.json to back up"
     fi
 
     # Ensure target dir exists
@@ -65,4 +65,4 @@ deploy_zed:
             --token-prefix '#{' \
             --token-suffix '}#')
 
-    @just _log_success "Zed settings deployed to ${TARGET_FILE}. Backup (if any) at ${BACKUP_DIR}/settings.json"
+    echo "SUCCESS: Zed settings deployed to ${TARGET_FILE}. Backup (if any) at ${BACKUP_DIR}/settings.json"
