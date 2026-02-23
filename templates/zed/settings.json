@@ -16,7 +16,7 @@
       "enabled": true,
       "remote": false,
       "settings": {
-        "github_personal_access_token": "#{GITHUB_TOKEN}#"
+        "github_personal_access_token": "#{GITHUB_MCP_TOKEN}#"
       }
     },
     "mcp-server-context7": {

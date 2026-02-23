@@ -15,13 +15,13 @@ deploy_zed:
     set -euo pipefail
 
     # Source private envrc if present to load secret env vars
-    if [ -f "${HOME}/.private.envrc" ]; then
+    if [ -f ".envrc" ]; then
         # shellcheck disable=SC1090
-        source "${HOME}/.private.envrc"
+        source ".envrc"
     fi
 
     # Validate required env vars
-    if [ -z "${GITHUB_TOKEN:-}" ]; then
+    if [ -z "${GITHUB_MCP_TOKEN:-}" ]; then
         >&2 echo "ERROR: GITHUB_TOKEN is not set. Please set it in ~/.private.envrc or export it in your shell."
         exit 1
     fi
