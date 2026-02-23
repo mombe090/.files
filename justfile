@@ -11,6 +11,7 @@ import '.just/verify.just'
 import '.just/maintenance.just'
 import '.just/windows.just'
 import '.just/dev.just'
+import '.just/templates.just'
 
 # Show available commands
 default:

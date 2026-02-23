@@ -1,0 +1,48 @@
+// Note: this file is a template. Do NOT commit secrets. Deploy via just deploy_zed
+{
+  "__template_notice__": "templates/zed/settings.json - do NOT commit secrets; deploy via just deploy_zed",
+  "icon_theme": "Catppuccin Mocha",
+  "agent": {
+    "default_model": {
+      "provider": "openai",
+      "model": "gpt-5.2-codex",
+      "enable_thinking": false
+    },
+    "favorite_models": [],
+    "model_parameters": []
+  },
+  "context_servers": {
+    "mcp-server-github": {
+      "enabled": true,
+      "remote": false,
+      "settings": {
+        "github_personal_access_token": "#{GITHUB_TOKEN}#"
+      }
+    },
+    "mcp-server-context7": {
+      "enabled": true,
+      "remote": false,
+      "settings": {
+        "context7_api_key": "#{CONTEXT7_API_KEY}#"
+      }
+    }
+  },
+  "agent_servers": {
+    "opencode": {
+      "type": "registry"
+    }
+  },
+  "terminal": {
+    "font_size": 12.0,
+    "font_family": "JetBrainsMono Nerd Font"
+  },
+  "ui_font_family": "0xProto Nerd Font Mono",
+  "buffer_font_family": "CaskaydiaMono Nerd Font Mono",
+  "ui_font_size": 13.0,
+  "buffer_font_size": 14.0,
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "Catppuccin Mocha",
+  }
+}
