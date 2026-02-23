@@ -86,3 +86,7 @@ __pycache__/
 Thumbs.db
 
 .sisyphus/
+
+# Zed Settings
+zed/.config/zed/settings.json
+zed/.config/zed/settings.jsonc
