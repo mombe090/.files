@@ -61,6 +61,7 @@ deploy_zed:
     # Run replacetokens from dotfiles root so relative template path resolves
     (cd "{{dotfiles_root}}" && \
         npx --yes @qetza/replacetokens \
+            --use-env \
             --sources "templates/zed/settings.json => ${TARGET_FILE}" \
             --token-prefix '#{' \
             --token-suffix '}#')
