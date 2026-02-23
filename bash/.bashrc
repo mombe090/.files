@@ -49,3 +49,8 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # ===== DOTNET TOOLS =====
 export PATH="$PATH:$HOME/.dotnet/tools"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/mombe090/.lmstudio/bin"
+# End of LM Studio CLI section
+

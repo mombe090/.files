@@ -1,7 +1,5 @@
 {
-  "plugin": [
-    "oh-my-opencode@latest"
-  ],
+  "plugin": ["oh-my-opencode@latest"],
   "$schema": "https://opencode.ai/config.json",
   //"$schema": "./config.schema.json",
 
@@ -15,7 +13,11 @@
   // Global permissions
   "permission": {
     "bash": {
-      "git push*": "deny",  // Explicitly deny all git push commands
+      "git push*": "deny", // Explicitly deny all git push commands
+      "just apply": "deny",
+      "just destroy": "deny",
+      "terraform apply -auto-approve": "deny",
+      "terraform destroy -auto-approve": "deny",
     },
   },
 
@@ -25,15 +27,15 @@
     "plan": {
       "mode": "primary",
       "permission": {
-        "edit": "deny",      // Covers write, edit, patch, multiedit
-        "bash": "deny",      // No shell commands in planning phase
+        "edit": "deny", // Covers write, edit, patch, multiedit
+        "bash": "deny", // No shell commands in planning phase
         "webfetch": "allow", // Allow research
       },
     },
     "build": {
       "permission": {
         "bash": {
-          "az *": "ask",  // Prompt for Azure CLI commands
+          "az *": "ask", // Prompt for Azure CLI commands
         },
       },
     },
@@ -94,7 +96,7 @@
         "run",
         "-i",
         "--rm",
-        "hashicorp/terraform-mcp-server:0.3.0",
+        "hashicorp/terraform-mcp-server:0.4.0",
       ],
     },
   },

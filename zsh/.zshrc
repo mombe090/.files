@@ -94,3 +94,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/mombe090/.lmstudio/bin"
+# End of LM Studio CLI section
+

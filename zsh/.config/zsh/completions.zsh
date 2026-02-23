@@ -26,6 +26,37 @@ else
     )
 fi
 
+# ===== GENERATE FPATH COMPLETIONS (BEFORE compinit) =====
+
+# Clap/autoload-style completions (output starts with #compdef, no compdef call)
+# must be placed in fpath for compinit to discover them.
+# Only regenerated when the completion file is missing.
+
+local _comp_dir="${HOME}/.local/share/zsh/completions"
+[[ -d "$_comp_dir" ]] || mkdir -p "$_comp_dir"
+
+if command -v zellij &> /dev/null && [[ ! -f "$_comp_dir/_zellij" ]]; then
+    zellij setup --generate-completion zsh > "$_comp_dir/_zellij"
+fi
+
+if command -v atuin &> /dev/null && [[ ! -f "$_comp_dir/_atuin" ]]; then
+    atuin gen-completions --shell zsh > "$_comp_dir/_atuin"
+fi
+
+if command -v fd &> /dev/null && [[ ! -f "$_comp_dir/_fd" ]]; then
+    fd --gen-completions zsh > "$_comp_dir/_fd"
+fi
+
+if command -v uv &> /dev/null && [[ ! -f "$_comp_dir/_uv" ]]; then
+    uv generate-shell-completion zsh > "$_comp_dir/_uv"
+fi
+
+
+# Ollama completion (community-maintained, no built-in generator)
+if command -v ollama &> /dev/null && [[ ! -f "$_comp_dir/_ollama" ]]; then
+    curl -fsSL https://gist.githubusercontent.com/obeone/9313811fd61a7cbb843e0001a4434c58/raw/_ollama.zsh > "$_comp_dir/_ollama" 2>/dev/null
+fi
+
 # ===== LOAD COMPLETION DEFINITIONS (BEFORE compinit) =====
 
 # Load standard completion functions

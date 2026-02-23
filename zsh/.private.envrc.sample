@@ -37,6 +37,9 @@
 # Anthropic Claude
 # export ANTHROPIC_API_KEY="YOUR_ANTHROPIC_API_KEY"
 
+# Context7
+# export CONTEXT7_API_KEY="YOUR_CONTEXT7_API_KEY"
+
 # ===== INFRASTRUCTURE CREDENTIALS =====
 # Add your infrastructure credentials here
 

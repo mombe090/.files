@@ -21,7 +21,6 @@ if command -v kubectl &> /dev/null; then
     fi
 fi
 
-
 # Kubectx/Kubens completion (fpath completions loaded via ~/.local/share/zsh/completions/)
 
 if command -v kubectx &> /dev/null; then
@@ -52,4 +51,61 @@ fi
 
 if command -v carapace &> /dev/null; then
     source <(carapace _carapace)
+fi
+
+# Helm completion
+
+if command -v helm &> /dev/null; then
+    source <(helm completion zsh)
+fi
+
+# K9s completion
+
+if command -v k9s &> /dev/null; then
+    source <(k9s completion zsh)
+fi
+
+# Kind completion
+
+if command -v kind &> /dev/null; then
+    source <(kind completion zsh)
+fi
+
+# ArgoCD completion
+
+if command -v argocd &> /dev/null; then
+    source <(argocd completion zsh)
+fi
+
+# YQ (YAML processor) completion
+
+if command -v yq &> /dev/null; then
+    source <(yq shell-completion zsh)
+fi
+
+# Terraform-docs completion
+
+if command -v terraform-docs &> /dev/null; then
+    source <(terraform-docs completion zsh)
+fi
+
+
+# OpenCode completion
+
+if command -v opencode &> /dev/null; then
+    source <(opencode completion)
+fi
+
+# ===== ALIAS COMPLETIONS =====
+
+# Terraform aliases (completions provided by carapace)
+
+if command -v terraform &> /dev/null; then
+    compdef tf=terraform
+fi
+
+# Zellij alias
+
+if command -v zellij &> /dev/null; then
+    compdef zj=zellij
 fi
