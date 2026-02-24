@@ -22,12 +22,12 @@ deploy_zed:
 
     # Validate required env vars
     if [ -z "${GITHUB_MCP_TOKEN:-}" ]; then
-        >&2 echo "ERROR: GITHUB_TOKEN is not set. Please set it in ~/.private.envrc or export it in your shell."
+        >&2 echo "ERROR: GITHUB_MCP_TOKEN is not set. Please set it in ~/.envrc or export it in your shell."
         exit 1
     fi
 
     if [ -z "${CONTEXT7_API_KEY:-}" ]; then
-        >&2 echo "ERROR: CONTEXT7_API_KEY is not set. Please set it in ~/.private.envrc or export it in your shell."
+        >&2 echo "ERROR: CONTEXT7_API_KEY is not set. Please set it in ~/.envrc or export it in your shell."
         exit 1
     fi
 
