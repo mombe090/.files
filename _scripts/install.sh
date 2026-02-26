@@ -232,7 +232,7 @@ install_homebrew() {
 install_mise() {
     log_step "Installing mise..."
     if [[ -f "$SCRIPTS_DIR/installers/install-mise.sh" ]]; then
-        bash "$SCRIPTS_DIR/installers/install-mise.sh"
+        bash "$SCRIPTS_DIR/installers/install-mise.sh" $MISE_SCOPE_FLAG
 
         # Verify HOME is set correctly before creating directories
         if [[ -z "$HOME" ]] || [[ "$HOME" == "/" ]]; then
@@ -723,6 +723,17 @@ show_completion_message() {
 main() {
     # Check if running with arguments
     if [[ $# -gt 0 ]]; then
+        # Extract --global/--user early so remaining args can be parsed
+        MISE_SCOPE_FLAG=""
+        REMAINING_ARGS=()
+        for arg in "$@"; do
+            case "$arg" in
+                --global|-g) MISE_SCOPE_FLAG="--global" ;;
+                --user|-u)   MISE_SCOPE_FLAG="--user" ;;
+                *)           REMAINING_ARGS+=("$arg") ;;
+            esac
+        done
+        set -- "${REMAINING_ARGS[@]}"
         case "$1" in
             --full|-f)
                 full_install
@@ -744,6 +755,9 @@ main() {
                 echo "  --pro           Professional installation (work-safe packages only)"
                 echo "  --perso         Personal installation (pro + personal packages)"
                 echo "  --minimal, -m   Minimal installation (core only)"
+                echo "  --global, -g    Install mise system-wide (/usr/local/bin, requires root/sudo)"
+                echo "  --user, -u      Install mise for current user only (default: ~/.local/bin)"
+                echo "  --help, -h      Show this help message"
                 echo "  --help, -h      Show this help message"
                 echo ""
                 echo "Run without arguments for interactive menu."

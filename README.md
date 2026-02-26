@@ -26,8 +26,11 @@ mise install
 
 # 4. Install dotfiles
 just install_perso                 # Perso + Pro packages + configs
+# OR (system-wide mise install)
+just install_perso --global        # Same, but mise installed to /usr/local/bin
 # OR
 just install_pro                  # Professional packages + configs only
+just install_pro --global         # Same, with system-wide mise
 ```
 
 **Environment Configuration:**
@@ -187,9 +190,12 @@ just --list
 
 # Full installation
 just install_full
+# OR with system-wide mise
+just install_full --global
 
 # Minimal installation (core tools only)
 just install_minimal
+just install_minimal --global
 
 # Check system health
 just doctor
@@ -236,9 +242,12 @@ just --list
 
 # Full installation
 just install_full
+# OR with system-wide mise
+just install_full --global
 
 # Minimal installation (core tools only)
 just install_minimal
+just install_minimal --global
 
 # Check system health
 just doctor
@@ -247,8 +256,10 @@ just doctor
 **Common Just Commands:**
 
 ```bash
-just install_full        # Install everything
-just install_minimal     # Core tools only
+just install_full              # Install everything
+just install_full --global     # Same, with system-wide mise
+just install_minimal           # Core tools only
+just install_minimal --global  # Same, with system-wide mise
 just update              # Update all (git pull + mise + packages + restow)
 just doctor              # Check system health
 just verify              # Verify installations
