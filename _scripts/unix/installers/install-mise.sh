@@ -94,7 +94,10 @@ install_mise() {
             ;;
     esac
 
-    log_info "mise installed"
+    case "$MISE_SCOPE" in
+        global) log_info "mise installed → /usr/local/bin/mise" ;;
+        *)     log_info "mise installed → $HOME/.local/bin/mise" ;;
+    esac
 }
 
 # ===== CONFIGURE SHELL =====

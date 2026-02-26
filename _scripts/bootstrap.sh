@@ -265,14 +265,15 @@ fi
 if [[ "$AUTO_YES" != "true" ]]; then
     echo ""
     echo -e "${BOLD}This script will install:${NC}"
-    echo "  • curl (if not installed)"
-    echo "  • git (if not installed)"
-    echo "  • mise - Version manager (if not installed)"
-    echo "  • sudo, jq, wget - Essential utilities (if not installed)"
-    echo "  • stow - Symlink manager for dotfiles"
-    echo "  • yq - YAML parser (via mise)"
-    echo "  • Essential development packages (via install-packages.sh)"
-    echo "  • Just command runner (latest version)"
+    echo "  - curl (if not installed)"
+    echo "  - git (if not installed)"
+    echo "  - zsh - Shell (if not installed)"
+    echo "  - mise - Version manager (if not installed)"
+    echo "  - sudo, jq, wget - Essential utilities (if not installed)"
+    echo "  - stow - Symlink manager for dotfiles"
+    echo "  - yq - YAML parser (via mise)"
+    echo "  - Essential development packages (via install-packages.sh)"
+    echo "  - Just command runner (latest version)"
     echo ""
     echo -e "${YELLOW}Package manager: $PM${NC}"
     echo ""
@@ -541,6 +542,39 @@ else
 fi
 
 # =============================================================================
+# Install Zsh
+# =============================================================================
+
+log_header "Installing Zsh"
+
+if has_command zsh; then
+    ZSH_VERSION=$(zsh --version 2>&1 | head -n1 || echo "unknown")
+    log_success "zsh already installed ($ZSH_VERSION)"
+else
+    log_step "Installing zsh..."
+    if [[ -f "$SCRIPTS_DIR/unix/installers/install-zsh.sh" ]]; then
+        if bash "$SCRIPTS_DIR/unix/installers/install-zsh.sh"; then
+            log_success "zsh installed"
+        else
+            log_warn "Failed to install zsh"
+            log_info "You can install it manually: sudo apt install zsh (or brew install zsh)"
+        fi
+    else
+        # Fallback to direct installation
+        case "$PM" in
+            brew) brew install zsh ;;
+            apt)  sudo apt-get update -qq && sudo apt-get install -y zsh ;;
+            dnf)  sudo dnf install -y zsh ;;
+            pacman) sudo pacman -S --noconfirm zsh ;;
+            *) log_warn "Cannot install zsh automatically for $PM" ;;
+        esac
+        if has_command zsh; then
+            log_success "zsh installed"
+        fi
+    fi
+fi
+
+# =============================================================================
 # Install yq via Mise
 # =============================================================================
 
@@ -663,16 +697,21 @@ fi
 log_header "Bootstrap Complete! 🎉"
 
 echo -e "${GREEN}Essential tools installed:${NC}"
-echo "  ✓ curl"
-echo "  ✓ git"
-echo "  ✓ mise"
-echo "  ✓ sudo"
-echo "  ✓ jq"
-echo "  ✓ wget"
-echo "  ✓ stow"
-echo "  ✓ yq (via mise)"
-echo "  ✓ Essential development packages"
-echo "  ✓ just"
+echo "  - curl"
+echo "  - git"
+echo "  - zsh"
+if [[ "$MISE_SCOPE_FLAG" == "--global" ]]; then
+    echo "  - mise  (system-wide: /usr/local/bin/mise)"
+else
+    echo "  - mise  (user: $HOME/.local/bin/mise)"
+fi
+echo "  - sudo"
+echo "  - jq"
+echo "  - wget"
+echo "  - stow"
+echo "  - yq (via mise)"
+echo "  - Essential development packages"
+echo "  - just"
 echo ""
 
 echo -e "${BOLD}Next Steps:${NC}"

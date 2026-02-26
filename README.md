@@ -47,6 +47,7 @@ bash _scripts/unix/tools/configure-env-interactive.sh
 **What bootstrap installs:**
 
 - ✅ mise (version manager) → `~/.local/bin/mise` (current user; use `--global` for system-wide)
+- ✅ zsh (shell, if not installed)
 - ✅ yq v4.x (YAML parser) via mise
 - ✅ just (command runner) - via Homebrew on macOS, GitHub releases on Linux
 - ✅ stow (symlink manager for dotfiles)
@@ -191,7 +192,7 @@ just doctor
 **What bootstrap.sh does:**
 
 - ✅ Detects your OS (macOS, Ubuntu, Debian, Fedora, Arch, etc.)
-- ✅ Installs essential tools: `curl`, `git` (if not already installed)
+- ✅ Installs essential tools: `curl`, `git`, `zsh` (if not already installed)
 - ✅ Installs **mise** version manager to `~/.local/bin` (user scope by default; pass `--global` for `/usr/local/bin`)
 - ✅ Installs essential utilities: `sudo`, `jq`, `wget` (if needed)
 - ✅ Installs **yq** v4.x (YAML parser) via mise (not the outdated apt version)
@@ -206,12 +207,13 @@ just doctor
 
 1. `curl` (if not installed)
 2. `git` (if not installed)
-3. `mise` → `~/.local/bin/mise` (user scope; `--global` for `/usr/local/bin/mise`)
-4. `sudo`, `jq`, `wget` (if not installed)
-5. `stow` (GNU symlink manager)
-6. `yq` via mise (mikefarah's yq v4.x)
-7. Essential packages (build-essential, gcc, make, etc.)
-8. `just` (via Homebrew on macOS, GitHub releases on Linux)
+3. `zsh` (if not installed)
+4. `mise` → `~/.local/bin/mise` (user scope; `--global` for `/usr/local/bin/mise`)
+5. `sudo`, `jq`, `wget` (if not installed)
+6. `stow` (GNU symlink manager)
+7. `yq` via mise (mikefarah's yq v4.x)
+8. Essential packages (build-essential, gcc, make, etc.)
+9. `just` (via Homebrew on macOS, GitHub releases on Linux)
 
 ### Method 2: Just Command Runner (Already Have Essentials)
 
