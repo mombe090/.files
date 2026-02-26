@@ -34,5 +34,17 @@
         }
       ]
     }
+  },
+  {
+    "context": "ContextEditor > Editor",
+    "bindings": {
+      "cmd-shift-s": "workspace::Save"
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "cmd-s": "workspace::SaveAll"
+    }
   }
 ]
