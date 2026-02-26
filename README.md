@@ -46,7 +46,7 @@ bash _scripts/unix/tools/configure-env-interactive.sh
 
 **What bootstrap installs:**
 
-- ✅ mise (version manager) → `/usr/local/bin/mise`
+- ✅ mise (version manager) → `~/.local/bin/mise` (current user; use `--global` for system-wide)
 - ✅ yq v4.x (YAML parser) via mise
 - ✅ just (command runner) - via Homebrew on macOS, GitHub releases on Linux
 - ✅ stow (symlink manager for dotfiles)
@@ -192,7 +192,7 @@ just doctor
 
 - ✅ Detects your OS (macOS, Ubuntu, Debian, Fedora, Arch, etc.)
 - ✅ Installs essential tools: `curl`, `git` (if not already installed)
-- ✅ Installs **mise** version manager globally to `/usr/local/bin`
+- ✅ Installs **mise** version manager to `~/.local/bin` (user scope by default; pass `--global` for `/usr/local/bin`)
 - ✅ Installs essential utilities: `sudo`, `jq`, `wget` (if needed)
 - ✅ Installs **yq** v4.x (YAML parser) via mise (not the outdated apt version)
 - ✅ Installs **stow** (GNU symlink manager for dotfiles)
@@ -206,7 +206,7 @@ just doctor
 
 1. `curl` (if not installed)
 2. `git` (if not installed)
-3. `mise` → `/usr/local/bin/mise`
+3. `mise` → `~/.local/bin/mise` (user scope; `--global` for `/usr/local/bin/mise`)
 4. `sudo`, `jq`, `wget` (if not installed)
 5. `stow` (GNU symlink manager)
 6. `yq` via mise (mikefarah's yq v4.x)
@@ -414,7 +414,8 @@ The `bootstrap.sh` script automatically installs these essential tools:
 #### Phase 2: Core Tools
 
 - **mise** v2024+ - Universal tool version manager
-  - Installed globally to `/usr/local/bin/mise`
+  - Installed to `~/.local/bin/mise` by default (user scope)
+  - Use `--global` flag to install system-wide to `/usr/local/bin/mise` (requires root or passwordless sudo)
   - Environment: `MISE_DATA_DIR="$HOME/.local/share/mise"`
   - Environment: `MISE_CACHE_DIR="$HOME/.cache/mise"`
 
@@ -638,7 +639,7 @@ install_package git  # Automatically uses correct PM for your OS
   - Flags: `--pro`, `--perso`, `--minimal`, `--category <name>`, `--dry-run`
   - Categories: essentials, development, build_tools, libraries, cloud, fonts, shell_tools, monitoring, runtimes
 - **`install-homebrew.sh`** - Install Homebrew (macOS)
-- **`install-mise.sh`** - Install mise version manager globally
+- **`install-mise.sh`** - Install mise version manager (user scope by default; `--global` for system-wide)
 - **`install-essentials.sh`** - Install build tools (gcc, make, cmake, dev libraries)
 - **`install-docker.sh`** - Install Docker Engine (Ubuntu)
 - **`install-zsh.sh`** - Install and set zsh as default shell

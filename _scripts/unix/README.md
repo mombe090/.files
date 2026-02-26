@@ -4,7 +4,7 @@ This directory contains all Unix-like system shell scripts for the dotfiles repo
 
 ## Directory Structure
 
-```
+```text
 _scripts/unix/
 ├── installers/          # Installation scripts (install-*.sh)
 ├── tools/               # Utility scripts (manage-stow, backup, deploy-gitconfig, etc.)
@@ -86,14 +86,16 @@ Installation scripts for various tools and applications:
 Install [mise](https://mise.jdx.dev) universal tool version manager.
 
 ```bash
-./scripts/install-mise.sh
+./scripts/install-mise.sh             # Install to ~/.local/bin (default, user scope)
+./scripts/install-mise.sh --global    # Install to /usr/local/bin (system-wide, requires root or passwordless sudo)
 ```
 
 **What it does:**
 
-- Installs mise globally or to ~/.local/bin
+- Installs mise to `~/.local/bin` by default (user scope)
 - Configures shell integration (zsh/bash)
-- Supports sudo and non-sudo installations
+- Use `--global` / `-g` to install system-wide to `/usr/local/bin` (requires root or passwordless sudo)
+- Use `--user` / `-u` to explicitly enforce user scope
 
 **After installation:**
 
@@ -433,10 +435,10 @@ nvim
 - Pre-configured LSP, treesitter, completion
 - File explorer, fuzzy finder, git integration
 - Beautiful UI with statusline and bufferline
-- Extensive keymaps (<leader> = space by default)
+- Extensive keymaps (leader = space by default)
 - Easy customization via lua config
 
-**Documentation:** https://www.lazyvim.org/
+**Documentation:** <https://www.lazyvim.org/>
 
 ---
 
@@ -637,6 +639,7 @@ go = "1.21"            # Pin to 1.21.x
 ```
 
 After editing, run:
+
 ```bash
 cd ~/.dotfiles
 stow mise              # Symlink the config

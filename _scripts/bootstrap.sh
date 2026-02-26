@@ -78,11 +78,20 @@ log_success() { echo -e "${GREEN}[✓]${NC} ${BOLD}$1${NC}"; }
 
 # Parse arguments
 AUTO_YES=false
+MISE_SCOPE_FLAG=""  # empty = auto-detect; "--global" or "--user" passed to install-mise.sh
 
 while [[ $# -gt 0 ]]; do
     case $1 in
         --yes|-y)
             AUTO_YES=true
+            shift
+            ;;
+        --all-users|--global|-g)
+            MISE_SCOPE_FLAG="--global"
+            shift
+            ;;
+        --user|-u)
+            MISE_SCOPE_FLAG="--user"
             shift
             ;;
         --help|-h)
@@ -93,8 +102,12 @@ USAGE:
     bash bootstrap.sh [OPTIONS]
 
 OPTIONS:
-    --yes, -y       Auto-confirm all prompts (non-interactive)
-    --help, -h      Show this help message
+    --yes, -y           Auto-confirm all prompts (non-interactive)
+    --all-users, --global, -g
+                        Install mise globally to /usr/local/bin (requires root/sudo).
+                        Use when setting up a shared machine for multiple users.
+    --user, -u          Install mise to ~/.local/bin (current user only).
+    --help, -h          Show this help message
 
 DESCRIPTION:
     This script prepares your machine for dotfiles installation in 2 phases:
@@ -132,6 +145,13 @@ EXAMPLES:
 
     # Non-interactive (CI/automation) - skips configuration
     bash bootstrap.sh --yes
+
+    # Global install (shared machine / all users)
+    bash bootstrap.sh --all-users
+    sudo bash bootstrap.sh --global
+
+    # User-only install (no sudo required)
+    bash bootstrap.sh --user
 
 EOF
             exit 0
@@ -340,8 +360,13 @@ if has_command mise; then
     log_success "mise already installed ($MISE_VERSION)"
 else
     log_step "Installing mise..."
+    if [[ -n "$MISE_SCOPE_FLAG" ]]; then
+        log_info "Scope: $MISE_SCOPE_FLAG (explicitly requested)"
+    else
+        log_info "Scope: user (~/.local/bin) — pass --global to install system-wide"
+    fi
     if [[ -f "$SCRIPTS_DIR/unix/installers/install-mise.sh" ]]; then
-        if bash "$SCRIPTS_DIR/unix/installers/install-mise.sh"; then
+        if bash "$SCRIPTS_DIR/unix/installers/install-mise.sh" $MISE_SCOPE_FLAG; then
             log_success "mise installed"
 
             # Activate mise for current session
