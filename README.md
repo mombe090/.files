@@ -16,7 +16,10 @@ git clone https://github.com/mombe090/.files.git ~/.dotfiles
 cd ~/.dotfiles
 
 # 2. Run bootstrap (will prompt for environment configuration)
+# 2. Run bootstrap (will prompt for environment configuration)
 bash _scripts/bootstrap.sh
+# OR install mise system-wide (requires root or passwordless sudo)
+bash _scripts/bootstrap.sh --global
 
 # 3. Install mise packages and essential tools
 mise install
@@ -171,7 +174,10 @@ git clone https://github.com/mombe090/.files.git ~/.dotfiles
 cd ~/.dotfiles
 
 # Run bootstrap (interactive - will prompt for confirmation)
+# Run bootstrap (interactive - will prompt for confirmation)
 bash _scripts/bootstrap.sh
+# OR install mise system-wide (requires root or passwordless sudo)
+bash _scripts/bootstrap.sh --global
 
 # Or non-interactive (auto-accepts all prompts)
 yes | bash _scripts/bootstrap.sh
