@@ -915,6 +915,53 @@ Edit `~/.gitconfig.local`:
     email = your.email@example.com
 ```
 
+---
+
+## 🔒 Security
+
+This repository has undergone a comprehensive security audit. Key security features:
+
+### ✅ Security Measures
+
+- **No exposed secrets** - Pre-commit hooks with detect-secrets and AWS credential detection
+- **Template-based configs** - Git configuration uses token replacement (#{USER_FULLNAME}#, #{USER_EMAIL}#)
+- **Proper .gitignore** - Sensitive files (.env, .gitconfig.local) excluded from version control
+- **History security** - Functions to prevent saving sensitive commands to shell history
+- **Copilot restrictions** - .copilotignore prevents AI from accessing sensitive files
+
+### 🛡️ Security Tools
+
+```bash
+# Audit shell history for leaked secrets
+just audit_history
+
+# Clear sensitive data from history
+clear_history_pattern 'password123'
+
+# Run command without saving to history
+secure export API_TOKEN=secret123
+```
+
+### 📋 Security Documentation
+
+- **[SECURITY-AUDIT-SUMMARY.md](SECURITY-AUDIT-SUMMARY.md)** - Quick overview and action items
+- **[SECURITY-DOTFILES.md](SECURITY-DOTFILES.md)** - Complete security audit report
+- **[SECURITY-ISSUES.md](SECURITY-ISSUES.md)** - Detailed security issues backlog
+- **[zsh/.config/zsh/security/README.md](zsh/.config/zsh/security/README.md)** - History security guide
+
+### ⚠️ Known Issues
+
+See [SECURITY-ISSUES.md](SECURITY-ISSUES.md) for 14 documented security issues organized by priority (P0-P3).
+
+**Critical issues to address:**
+1. External scripts lack checksum verification
+2. No work/personal profile separation
+3. Missing variable guards in rm -rf operations
+
+**Next security audit:** August 6, 2026
+
+---
+
 ## Contributing
 
 Contributions are welcome! Feel free to:
