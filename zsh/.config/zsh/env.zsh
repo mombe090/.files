@@ -16,7 +16,9 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 # CARAPACE CONFIGURATION
 
 export CARAPACE_BRIDGES='zsh,bash,inshellisense'
-export LS_COLORS="$(vivid generate catppuccin-macchiato)"
+if command -v vivid &> /dev/null; then
+    export LS_COLORS="$(vivid generate catppuccin-macchiato)"
+fi
 
 
 # FZF Catppuccin Macchiato

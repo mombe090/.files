@@ -93,7 +93,9 @@ fi
 # OpenCode completion
 
 if command -v opencode &> /dev/null; then
-    source <(opencode completion)
+    local _opencode_comp
+    _opencode_comp=$(opencode completion zsh 2>/dev/null)
+    [[ -n "$_opencode_comp" ]] && source <(echo "$_opencode_comp")
 fi
 
 # ===== ALIAS COMPLETIONS =====

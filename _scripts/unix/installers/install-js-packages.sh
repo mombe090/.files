@@ -345,6 +345,7 @@ Options:
   --update, -u        Update professional packages to latest versions
   --update-personal   Update personal packages to latest versions
   --yes, -y           Auto-confirm installation (no prompts)
+  --global, -g        Accepted for compatibility with mise scope flag (no-op: bun always installs to ~/.bun/bin)
   --help, -h          Show this help message
 
 Examples:
@@ -416,6 +417,11 @@ main() {
             --update-personal)
                 action="update"
                 config_type="personal"
+                shift
+                ;;
+            --global|-g)
+                # Silently accepted: bun always installs to ~/.bun/bin (user-global)
+                # --global here is a no-op for consistency with the mise scope flag
                 shift
                 ;;
             --yes|-y)

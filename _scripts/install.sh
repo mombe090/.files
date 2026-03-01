@@ -426,7 +426,7 @@ post_install() {
     echo ""
     log_info "Installing JavaScript/TypeScript packages..."
     if [[ -f "$SCRIPTS_DIR/installers/install-js-packages.sh" ]]; then
-        AUTO_CONFIRM=true bash "$SCRIPTS_DIR/installers/install-js-packages.sh" --yes || true
+        AUTO_CONFIRM=true bash "$SCRIPTS_DIR/installers/install-js-packages.sh" --yes ${MISE_SCOPE_FLAG:+$MISE_SCOPE_FLAG} || true
     else
         log_warn "install-js-packages.sh not found or not executable"
     fi
