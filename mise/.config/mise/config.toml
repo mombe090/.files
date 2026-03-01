@@ -86,7 +86,7 @@ kubens  = "latest"
 "lazygit" = "latest"      # TUI for git
 
 # ===== EDITOR & DEV TOOLS =====
-"neovim" = "latest"
+"aqua:neovim/neovim" = "latest"
 "aqua:tree-sitter/tree-sitter" = "latest"
 
 # Python development
