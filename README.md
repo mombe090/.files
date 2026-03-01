@@ -22,7 +22,10 @@ bash _scripts/bootstrap.sh
 bash _scripts/bootstrap.sh --global
 
 # 3. Install mise packages and essential tools
-mise install
+mise install # for lacal
+
+# To avaid ratelimit https://mise.jdx.dev/troubleshooting.html#_403-forbidden-when-installing-a-tool
+# add the var to the ~/.bashrc or ~/.zshrc
 
 # 4. Install dotfiles
 just install_perso                 # Perso + Pro packages + configs
@@ -96,7 +99,7 @@ cd $HOME\.dotfiles
 ### What You Need to Configure
 
 | Variable        | Description                      | Example              |
-|-----------------|----------------------------------|----------------------|
+| --------------- | -------------------------------- | -------------------- |
 | `USER_FULLNAME` | Your full name (for git commits) | `"John Doe"`         |
 | `USER_EMAIL`    | Your email (for git commits)     | `"john@example.com"` |
 | `PERSONAL_USER` | Your username                    | `"johndoe"`          |
@@ -329,7 +332,7 @@ cd $HOME\.dotfiles\_scripts
 - **Pro**: Professional development tools (Git, Docker, kubectl, Terraform, VSCode, etc.)
 - **Perso**: Professional + personal tools (VLC, Discord, Spotify, etc.)
 
-For detailed Windows setup, see [_scripts/windows/README.md](_scripts/windows/README.md)
+For detailed Windows setup, see [\_scripts/windows/README.md](_scripts/windows/README.md)
 
 ### Method 3: Omarchy Linux (Arch-based)
 
@@ -527,13 +530,13 @@ These dotfiles include:
 
 - 📦 **mise** - Universal tool version manager (preferred over asdf/nvm)
 - 🔨 Language support: Node.js, Python, Go, Rust, Java
-- ☁️  Infrastructure tools: kubectl, helm, terraform, ansible
+- ☁️ Infrastructure tools: kubectl, helm, terraform, ansible
 - 🐳 Container tools: docker, k9s, kubecolor
 
 ### Terminal & Editor
 
-- 🖥️  **Alacritty**, **Ghostty**, and **WezTerm** terminal configurations
-- ✏️  **Neovim** with [LazyVim](https://www.lazyvim.org/) distribution
+- 🖥️ **Alacritty**, **Ghostty**, and **WezTerm** terminal configurations
+- ✏️ **Neovim** with [LazyVim](https://www.lazyvim.org/) distribution
 - 🪟 **Zellij** terminal multiplexer configuration
 - 🎨 Consistent **Catppuccin** theme across all tools
 - 🔤 **Nerd Fonts** (CascadiaMono, JetBrainsMono, VictorMono) for icon support
@@ -542,7 +545,7 @@ These dotfiles include:
 
 - 🪟 **Hyprland** tiling window manager configuration
 - 🎨 Custom [Omarchy](https://omarchy.org) theming
-- ⚙️  Waybar and other Wayland tools
+- ⚙️ Waybar and other Wayland tools
 
 ### Version Control
 
@@ -556,7 +559,7 @@ These dotfiles include:
 - 🍺 **Homebrew** (macOS) - `_scripts/configs/unix/packages/*/brew.pkg.yml`
 - 📦 **mise** (cross-platform, preferred) - `mise/.config/mise/config.toml`
 - 🐧 Native package managers (apt/yum/pacman on Linux) - `_scripts/configs/unix/packages/*/*.pkg.yml`
-- ❄️  **Nix** support with:
+- ❄️ **Nix** support with:
   - [NixDarwin](https://nix-darwin.github.io/) on macOS
   - [home-manager](https://nix-community.github.io/home-manager/) on Linux
 
@@ -578,7 +581,7 @@ mise upgrade
 ### Core Tools
 
 | Tool         | Purpose         | Config Location          |
-|--------------|-----------------|--------------------------|
+| ------------ | --------------- | ------------------------ |
 | **zsh**      | Shell           | `zsh/.config/zsh/`       |
 | **git**      | Version control | `git/.gitconfig`         |
 | **neovim**   | Text editor     | `nvim/.config/nvim/`     |
@@ -587,7 +590,7 @@ mise upgrade
 ### Modern CLI Replacements
 
 | Tool        | Replaces | Purpose                    |
-|-------------|----------|----------------------------|
+| ----------- | -------- | -------------------------- |
 | **bat**     | cat      | Syntax highlighting viewer |
 | **eza**     | ls       | Modern file listing        |
 | **fd**      | find     | Fast file finder           |
@@ -599,7 +602,7 @@ mise upgrade
 ### Development Tools
 
 | Tool       | Purpose                         |
-|------------|---------------------------------|
+| ---------- | ------------------------------- |
 | **mise**   | Version manager (replaces asdf) |
 | **direnv** | Per-directory environment vars  |
 | **fzf**    | Fuzzy finder                    |
@@ -608,7 +611,7 @@ mise upgrade
 ### Infrastructure & DevOps
 
 | Tool          | Purpose                    |
-|---------------|----------------------------|
+| ------------- | -------------------------- |
 | **kubectl**   | Kubernetes CLI             |
 | **k9s**       | Kubernetes TUI             |
 | **kubecolor** | Colored kubectl output     |
@@ -620,7 +623,7 @@ mise upgrade
 ### Terminal & Multiplexer
 
 | Tool          | Purpose                  | Config Location            |
-|---------------|--------------------------|----------------------------|
+| ------------- | ------------------------ | -------------------------- |
 | **alacritty** | GPU-accelerated terminal | `alacritty/.config/`       |
 | **ghostty**   | Modern terminal emulator | `ghostty/.config/`         |
 | **wezterm**   | GPU-accelerated terminal | `wezterm/.config/wezterm/` |
@@ -792,8 +795,8 @@ Specialized installer for [Omarchy Linux](https://omarchy.org) (Arch-based):
 
 For detailed documentation:
 
-- **Unix**: [_scripts/unix/README.md](_scripts/unix/README.md) (if exists)
-- **Windows**: [_scripts/windows/QUICK-START.md](_scripts/windows/QUICK-START.md)
+- **Unix**: [\_scripts/unix/README.md](_scripts/unix/README.md) (if exists)
+- **Windows**: [\_scripts/windows/QUICK-START.md](_scripts/windows/QUICK-START.md)
 
 ## Documentation
 
@@ -814,16 +817,16 @@ For detailed documentation:
 ### Installation Guides
 
 - **[INSTALLATION_FLOW.md](INSTALLATION_FLOW.md)** - Visual installation flow diagram (Linux/macOS)
-- **[_scripts/unix/README.md](_scripts/unix/README.md)** - Unix script documentation (if exists)
-- **[_scripts/windows/QUICK-START.md](_scripts/windows/QUICK-START.md)** - Windows quick start guide
+- **[\_scripts/unix/README.md](_scripts/unix/README.md)** - Unix script documentation (if exists)
+- **[\_scripts/windows/QUICK-START.md](_scripts/windows/QUICK-START.md)** - Windows quick start guide
 - **[TESTING.md](TESTING.md)** - Windows testing and verification guide
 
 ### Troubleshooting Guides
 
 - **[DOTNET_TROUBLESHOOTING.md](DOTNET_TROUBLESHOOTING.md)** - .NET SDK PATH issues
 - **[VM_DOTNET_FIX.md](VM_DOTNET_FIX.md)** - .NET fixes for VMs
-- **[_scripts/unix/docs/INSTALL_JS_PACKAGES_GUIDE.md](_scripts/unix/docs/INSTALL_JS_PACKAGES_GUIDE.md)** - JavaScript package installation (if exists)
-- **[_scripts/unix/MANAGE_STOW_GUIDE.md](_scripts/unix/MANAGE_STOW_GUIDE.md)** - GNU Stow management (if exists)
+- **[\_scripts/unix/docs/INSTALL_JS_PACKAGES_GUIDE.md](_scripts/unix/docs/INSTALL_JS_PACKAGES_GUIDE.md)** - JavaScript package installation (if exists)
+- **[\_scripts/unix/MANAGE_STOW_GUIDE.md](_scripts/unix/MANAGE_STOW_GUIDE.md)** - GNU Stow management (if exists)
 
 ### Changelog
 

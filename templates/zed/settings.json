@@ -1,6 +1,15 @@
 // Note: this file is a template. Do NOT commit secrets. Deploy via just deploy_zed
 {
   "__template_notice__": "templates/zed/settings.json - do NOT commit secrets; deploy via just deploy_zed",
+  "base_keymap": "JetBrains",
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+  "session": {
+    "trust_all_worktrees": true
+  },
+  "vim_mode": true,
   "icon_theme": "Catppuccin Mocha",
   "agent": {
     "default_model": {
@@ -43,6 +52,6 @@
   "theme": {
     "mode": "system",
     "light": "One Light",
-    "dark": "Catppuccin Mocha",
+    "dark": "Catppuccin Mocha"
   }
 }

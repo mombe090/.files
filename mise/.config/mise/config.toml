@@ -58,9 +58,6 @@ trusted_config_paths = [
 "yq" = "latest"           # YAML processor
 "yamllint" = "latest"     # YAML linter
 
-# Shell scripting
-"shellcheck" = "latest"   # shell script linter
-
 # ===== DEVOPS & CLOUD TOOLS =====
 # Kubernetes
 "kubectl" = "latest"
@@ -68,7 +65,6 @@ kubectx = "latest"
 kubens  = "latest"
 "kubecolor" = "latest"     # colorize
 "helm" = "latest"
-"aqua:norwoodj/helm-docs" = "latest"   # Generate docs from Helm charts
 "k9s" = "latest"
 "kind" = "latest"
 
@@ -78,7 +74,8 @@ kubens  = "latest"
 "aqua:terraform-docs/terraform-docs" = "latest"   # Generate docs from Terraform modules
 "opentofu" = "latest"
 
-# Cloud CLIs
+# Cloud
+# CLIs
 "awscli" = "latest"
 
 # GitOps
