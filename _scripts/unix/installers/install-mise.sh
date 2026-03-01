@@ -104,36 +104,59 @@ install_mise() {
 configure_shell() {
     local zshrc="$HOME/.zshrc"
     local bashrc="$HOME/.bashrc"
+    local profile="$HOME/.profile"
 
-    # Configure zsh
-    if [[ -f "$zshrc" ]]; then
-        if grep -q 'mise activate' "$zshrc" 2>/dev/null; then
-            log_warn "mise already configured in ~/.zshrc"
+    # --- Step 1: Ensure MISE_DATA_DIR is exported (independent of mise activate) ---
+    # This must run even when mise activate is already present, e.g. on re-runs or
+    # remote machines where the block was previously skipped.
+    for rc_file in "$zshrc" "$bashrc"; do
+        [[ -f "$rc_file" ]] || continue
+        if grep -q 'MISE_DATA_DIR' "$rc_file" 2>/dev/null; then
+            log_warn "MISE_DATA_DIR already set in $rc_file — skipping"
         else
-            log_info "Adding mise to ~/.zshrc..."
-            cat >> "$zshrc" << 'EOF'
+            log_info "Writing MISE_DATA_DIR to $rc_file..."
+            cat >> "$rc_file" << 'EOF'
 
-# ===== MISE CONFIGURATION =====
-export MISE_DATA_DIR="$HOME/.local/share/mise"
-export MISE_CACHE_DIR="$HOME/.cache/mise"
-eval "$(mise activate zsh)"
+# ===== MISE DATA DIR =====
+export MISE_DATA_DIR="${MISE_DATA_DIR:-$HOME/.local/share/mise}"
+export MISE_CACHE_DIR="${MISE_CACHE_DIR:-$HOME/.cache/mise}"
+EOF
+        fi
+    done
+
+    # Also write to ~/.profile for non-interactive / login shells on Linux
+    if [[ -f "$profile" ]] || [[ "$(detect_os)" == "linux" ]]; then
+        if grep -q 'MISE_DATA_DIR' "$profile" 2>/dev/null; then
+            log_warn "MISE_DATA_DIR already set in ~/.profile — skipping"
+        else
+            log_info "Writing MISE_DATA_DIR to ~/.profile..."
+            cat >> "$profile" << 'EOF'
+
+# ===== MISE DATA DIR =====
+export MISE_DATA_DIR="${MISE_DATA_DIR:-$HOME/.local/share/mise}"
+export MISE_CACHE_DIR="${MISE_CACHE_DIR:-$HOME/.cache/mise}"
 EOF
         fi
     fi
 
-    # Configure bash
+    # --- Step 2: Activate mise (separate, idempotent check) ---
+    if [[ -f "$zshrc" ]]; then
+        if grep -q 'mise activate' "$zshrc" 2>/dev/null; then
+            log_warn "mise already activated in ~/.zshrc"
+        else
+            log_info "Adding mise activation to ~/.zshrc..."
+            echo '' >> "$zshrc"
+            echo 'eval "$(mise activate zsh)"' >> "$zshrc"
+        fi
+    fi
+
     if [[ -f "$bashrc" ]]; then
         if grep -q 'mise activate' "$bashrc" 2>/dev/null; then
-            log_warn "mise already configured in ~/.bashrc"
+            log_warn "mise already activated in ~/.bashrc"
         else
-            log_info "Adding mise to ~/.bashrc..."
-            cat >> "$bashrc" << 'EOF'
-
-# ===== MISE CONFIGURATION =====
-export MISE_DATA_DIR="$HOME/.local/share/mise"
-export MISE_CACHE_DIR="$HOME/.cache/mise"
-eval "$(mise activate bash)"
-EOF
+            log_info "Adding mise activation to ~/.bashrc..."
+            echo '' >> "$bashrc"
+            echo 'eval "$(mise activate bash)"' >> "$bashrc"
         fi
     fi
 
