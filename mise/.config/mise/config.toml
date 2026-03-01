@@ -38,15 +38,15 @@ trusted_config_paths = [
 # Modern replacements
 "aqua:sharkdp/bat" = "latest"          # cat replacement
 "eza" = "latest"          # ls replacement
-"aqua:sharkdp/fd" = "latest"           # find replacement
-"aqua:pre-commit/pre-commit" = "latest"   # pre-commit hooks manager
+"cargo:fd-find" = "latest"           # find replacement
+"pipx:pre-commit" = "latest"   # pre-commit hooks manager
 "aqua:BurntSushi/ripgrep" = "latest"      # grep replacement
 "aqua:junegunn/fzf" = "latest"          # fuzzy finder
 "aqua:ajeetdsouza/zoxide" = "latest"       # smart cd
 
 # Shell enhancements
 "aqua:starship/starship" = "latest"     # shell prompt
-"aqua:direnv/direnv" = "latest"       # environment switcher
+"asdf:asdf-community/asdf-direnv" = "latest"       # environment switcher
 
 # Terminal multiplexers
 #"zellij" = "latest"       # modern multiplexer
@@ -54,15 +54,15 @@ trusted_config_paths = [
 
 # System tools
 #"btop" = "latest"         # system monitor not supported on ARM yet
-"aqua:jqlang/jq" = "latest"           # JSON processor
+"asdf:mise-plugins/asdf-jq" = "latest"           # JSON processor
 "aqua:mikefarah/yq" = "latest"           # YAML processor
 "yamllint" = "latest"     # YAML linter
 
 # ===== DEVOPS & CLOUD TOOLS =====
 # Kubernetes
-"aqua:kubernetes/kubernetes/kubectl" = "latest"
-"aqua:ahmetb/kubectx" = "latest"
-"aqua:ahmetb/kubectx/kubens" = "latest"
+"asdf:asdf-community/asdf-kubectl" = "latest"
+"asdf:https://gitlab.com/wt0f/asdf-kubectx" = "latest"
+#"aqua:ahmetb/kubectx/kubens" = "latest"   # kubens installed via kubectx asdf plugin
 "aqua:kubecolor/kubecolor" = "latest"     # colorize
 "aqua:helm/helm" = "latest"
 "aqua:derailed/k9s" = "latest"
@@ -83,10 +83,10 @@ trusted_config_paths = [
 
 # ===== GIT & VERSION CONTROL =====
 #"github-cli" = "latest"   # gh command
-"aqua:jesseduffield/lazygit" = "latest"      # TUI for git
+"asdf:nklmilojevic/asdf-lazygit" = "latest"      # TUI for git
 
 # ===== EDITOR & DEV TOOLS =====
-"aqua:neovim/neovim" = "latest"
+"neovim" = "stable"   # vfox backend; stable tag avoids latest-tag 404
 "aqua:tree-sitter/tree-sitter" = "latest"
 
 # Python development
