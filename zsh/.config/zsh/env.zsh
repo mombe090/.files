@@ -13,6 +13,11 @@ export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 
+# MISE Configuration
+
+export MISE_DATA_DIR="${MISE_DATA_DIR:-$HOME/.local/share/mise}"
+export MISE_CACHE_DIR="${MISE_CACHE_DIR:-$HOME/.cache/mise}"
+
 # CARAPACE CONFIGURATION
 
 export CARAPACE_BRIDGES='zsh,bash,inshellisense'
