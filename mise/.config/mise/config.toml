@@ -49,7 +49,7 @@ trusted_config_paths = [
 "direnv" = "latest"       # environment switcher
 
 # Terminal multiplexers
-"zellij" = "latest"       # modern multiplexer
+#"zellij" = "latest"       # modern multiplexer
 "tmux" = "latest"         # classic multiplexer
 
 # System tools
@@ -69,7 +69,7 @@ kubens  = "latest"
 "kind" = "latest"
 
 # Infrastructure as Code
-"terraform" = "latest"
+#"terraform" = "latest"
 "aqua:terraform-linters/tflint" = "latest"        # Terraform linter
 "aqua:terraform-docs/terraform-docs" = "latest"   # Generate docs from Terraform modules
 "opentofu" = "latest"
