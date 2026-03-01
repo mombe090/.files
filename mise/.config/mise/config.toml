@@ -36,54 +36,54 @@ trusted_config_paths = [
 
 # ===== CLI TOOLS =====
 # Modern replacements
-"bat" = "latest"          # cat replacement
+"aqua:sharkdp/bat" = "latest"          # cat replacement
 "eza" = "latest"          # ls replacement
-"fd" = "latest"           # find replacement
-"pre-commit" = "latest"   # pre-commit hooks manager
-"ripgrep" = "latest"      # grep replacement
-"fzf" = "latest"          # fuzzy finder
-"zoxide" = "latest"       # smart cd
+"aqua:sharkdp/fd" = "latest"           # find replacement
+"aqua:pre-commit/pre-commit" = "latest"   # pre-commit hooks manager
+"aqua:BurntSushi/ripgrep" = "latest"      # grep replacement
+"aqua:junegunn/fzf" = "latest"          # fuzzy finder
+"aqua:ajeetdsouza/zoxide" = "latest"       # smart cd
 
 # Shell enhancements
-"starship" = "latest"     # shell prompt
-"direnv" = "latest"       # environment switcher
+"aqua:starship/starship" = "latest"     # shell prompt
+"aqua:direnv/direnv" = "latest"       # environment switcher
 
 # Terminal multiplexers
 #"zellij" = "latest"       # modern multiplexer
-"tmux" = "latest"         # classic multiplexer
+"github:tmux/tmux-builds" = "latest"         # classic multiplexer
 
 # System tools
 #"btop" = "latest"         # system monitor not supported on ARM yet
-"jq" = "latest"           # JSON processor
-"yq" = "latest"           # YAML processor
+"aqua:jqlang/jq" = "latest"           # JSON processor
+"aqua:mikefarah/yq" = "latest"           # YAML processor
 "yamllint" = "latest"     # YAML linter
 
 # ===== DEVOPS & CLOUD TOOLS =====
 # Kubernetes
-"kubectl" = "latest"
-kubectx = "latest"
-kubens  = "latest"
-"kubecolor" = "latest"     # colorize
-"helm" = "latest"
-"k9s" = "latest"
-"kind" = "latest"
+"aqua:kubernetes/kubernetes/kubectl" = "latest"
+"aqua:ahmetb/kubectx" = "latest"
+"aqua:ahmetb/kubectx/kubens" = "latest"
+"aqua:kubecolor/kubecolor" = "latest"     # colorize
+"aqua:helm/helm" = "latest"
+"aqua:derailed/k9s" = "latest"
+"aqua:kubernetes-sigs/kind" = "latest"
 
 # Infrastructure as Code
 #"terraform" = "latest"
 "aqua:terraform-linters/tflint" = "latest"        # Terraform linter
 "aqua:terraform-docs/terraform-docs" = "latest"   # Generate docs from Terraform modules
-"opentofu" = "latest"
+"aqua:opentofu/opentofu" = "latest"
 
 # Cloud
 # CLIs
-"awscli" = "latest"
+"aqua:aws/aws-cli" = "latest"
 
 # GitOps
-"argocd" = "latest"
+"aqua:argoproj/argo-cd" = "latest"
 
 # ===== GIT & VERSION CONTROL =====
 #"github-cli" = "latest"   # gh command
-"lazygit" = "latest"      # TUI for git
+"aqua:jesseduffield/lazygit" = "latest"      # TUI for git
 
 # ===== EDITOR & DEV TOOLS =====
 "aqua:neovim/neovim" = "latest"
@@ -91,13 +91,13 @@ kubens  = "latest"
 
 # Python development
 "aqua:astral-sh/ty" = "latest"        # Fast Python linter & formatter
-"uv" = "latest"
+"aqua:astral-sh/uv" = "latest"
 
-"vivid" = "latest"
+"aqua:sharkdp/vivid" = "latest"
 "aqua:go-task/task" = "latest"
 
 # Completion engines
-delta = "latest"
-atuin = "latest"
-carapace = "latest"
-flux2 = "latest"
+"aqua:dandavison/delta" = "latest"
+"aqua:atuinsh/atuin" = "latest"
+"aqua:carapace-sh/carapace-bin" = "latest"
+"aqua:fluxcd/flux2" = "latest"
