@@ -82,7 +82,7 @@ kubens  = "latest"
 "argocd" = "latest"
 
 # ===== GIT & VERSION CONTROL =====
-"github-cli" = "latest"   # gh command
+#"github-cli" = "latest"   # gh command
 "lazygit" = "latest"      # TUI for git
 
 # ===== EDITOR & DEV TOOLS =====
