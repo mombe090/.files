@@ -69,7 +69,7 @@ trusted_config_paths = [
 "aqua:kubernetes-sigs/kind" = "latest"
 
 # Infrastructure as Code
-#"terraform" = "latest"
+"aqua:hashicorp/terraform" = "latest"
 "aqua:terraform-linters/tflint" = "latest"        # Terraform linter
 "aqua:terraform-docs/terraform-docs" = "latest"   # Generate docs from Terraform modules
 "aqua:opentofu/opentofu" = "latest"
