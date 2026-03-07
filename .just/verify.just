@@ -26,3 +26,8 @@ check_path:
 check_shell:
     @just _log_step "Checking shell setup..."
     @{{dotfiles_root}}/_scripts/verify.sh --shell-only
+
+# Audit shell history for security issues
+audit_history:
+    @just _log_step "Auditing shell history for security issues..."
+    @bash {{dotfiles_root}}/_scripts/unix/tools/audit-history.sh
