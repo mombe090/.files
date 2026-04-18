@@ -1,13 +1,9 @@
 {
-  "plugin": ["oh-my-opencode@latest"],
+  "plugin": [], //["oh-my-opencode@latest"],
   "$schema": "https://opencode.ai/config.json",
-  //"$schema": "./config.schema.json",
-
-  // Theme configuration
-  "theme": "tokyonight",
   "model": "anthropic/claude-sonnet-4-5",
   "small_model": "anthropic/claude-haiku-4-5",
-  "autoupdate": false,
+  "autoupdate": true,
   "share": "disabled",
 
   // Global permissions
@@ -88,24 +84,10 @@
       "enabled": true,
       "timeout": 10000,
     },
-    "tf-registry": {
-      "type": "local",
+    "tofu-registry": {
+      "type": "remote",
       "enabled": true,
-      "command": [
-        "docker",
-        "run",
-        "-i",
-        "--rm",
-        "hashicorp/terraform-mcp-server:0.4.0",
-      ],
-    },
-  },
-
-  // TUI
-  "tui": {
-    "scroll_speed": 3,
-    "scroll_acceleration": {
-      "enabled": true,
+      "url": "https://mcp.opentofu.org/sse",
     },
   },
   "provider": {},

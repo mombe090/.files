@@ -83,7 +83,6 @@ trusted_config_paths = [
 
 # ===== GIT & VERSION CONTROL =====
 #"github-cli" = "latest"   # gh command
-"asdf:nklmilojevic/asdf-lazygit" = "latest"      # TUI for git
 
 # ===== EDITOR & DEV TOOLS =====
 "neovim" = "stable"   # vfox backend; stable tag avoids latest-tag 404
@@ -101,3 +100,5 @@ trusted_config_paths = [
 "aqua:atuinsh/atuin" = "latest"
 "aqua:carapace-sh/carapace-bin" = "latest"
 "aqua:fluxcd/flux2" = "latest"
+github-cli = "2.86.0"
+zellij = "0.43.1"

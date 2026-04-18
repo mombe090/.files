@@ -141,3 +141,10 @@ alias rebuild-mini='sudo darwin-rebuild switch --flake ~/.config/nix#mombe-mini'
 # ===== OpenCode AI cli =================
 alias oc='opencode'
 
+# ===== Flux CD cli =================
+alias sync_fsource='flux reconcile source git flux-system flux-system'
+
+alias kgk='kubectl get ks'
+alias kghr='kubectl get ks'
+
+alias kap='kubectl apply -f '
