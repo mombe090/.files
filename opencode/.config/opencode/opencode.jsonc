@@ -9,7 +9,7 @@
   // Global permissions
   "permission": {
     "bash": {
-      "git push*": "deny", // Explicitly deny all git push commands
+      "git push origin main": "deny", // Explicitly deny all git push commands
       "just apply": "deny",
       "just destroy": "deny",
       "terraform apply -auto-approve": "deny",

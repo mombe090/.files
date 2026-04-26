@@ -8,7 +8,6 @@ alias cat='bat'
 if [[ "$OSTYPE" == "darwin"* ]]; then
     alias python='python3'
     alias code="open -a 'Visual Studio Code'"
-    alias 'docker=container'
 fi
 
 # ===== MODERN LS REPLACEMENT (EZA) =====

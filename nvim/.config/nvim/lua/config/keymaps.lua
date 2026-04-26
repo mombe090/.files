@@ -27,6 +27,13 @@ for key, message in pairs(arrows) do
   end
 end
 
+-- Override K to always use LSP hover, set on LspAttach so it wins over keywordprg fallback
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = args.buf, desc = "LSP hover" })
+  end,
+})
+
 keymap.set("n", "<leader>td", "<cmd>Telescope terraform_doc<cr>", { desc = "Terraform docs" })
 keymap.set("n", "<leader>tv", ":!terraform validate<cr>", { desc = "Validate Terraform" })
 keymap.set("n", "<leader>tf", ":!terraform fmt %<cr>", { desc = "Format current file" })
