@@ -4,27 +4,27 @@
 
 # Install everything (full installation)
 [unix]
-install_full SCOPE="":
+install_full:
     @just _log_step "Running full installation..."
-    @bash {{scripts_dir}}/install.sh --full {{SCOPE}}
+    @bash {{scripts_dir}}/install.sh --full
 
 # Install minimal setup (core tools only)
 [unix]
-install_minimal SCOPE="":
+install_minimal:
     @just _log_step "Running minimal installation..."
-    @bash {{scripts_dir}}/install.sh --minimal {{SCOPE}}
+    @bash {{scripts_dir}}/install.sh --minimal
 
 # Install professional packages (work-safe)
 [unix]
-install_pro SCOPE="":
+install_pro:
     @just _log_step "Running professional installation..."
-    @bash {{scripts_dir}}/install.sh --pro {{SCOPE}}
+    @bash {{scripts_dir}}/install.sh --pro
 
 # Install personal packages (includes professional + personal)
 [unix]
-install_perso SCOPE="":
+install_perso:
     @just _log_step "Running personal installation..."
-    @bash {{scripts_dir}}/install.sh --perso {{SCOPE}}
+    @bash {{scripts_dir}}/install.sh --perso
 
 # Install specific component
 [unix]
@@ -70,9 +70,9 @@ install_homebrew:
 
 # Install mise version manager
 [unix]
-install_mise SCOPE="":
+install_mise:
     @just _log_step "Installing mise..."
-    @bash {{installers}}/install-mise.sh {{SCOPE}}
+    @bash {{installers}}/install-mise.sh
 
 # Install essential build tools (gcc, make, cmake, etc.)
 [unix]

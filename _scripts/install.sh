@@ -249,10 +249,11 @@ install_mise() {
 
         log_info "Creating mise directories in HOME=$HOME"
         mkdir -p "$MISE_DATA_DIR" "$MISE_CACHE_DIR"
+        export PATH="$HOME/.local/bin:$PATH"
 
         # Activate mise in current shell session for subsequent commands
-        if command -v mise &> /dev/null; then
-            eval "$(mise activate bash)" 2>/dev/null || true
+        if [[ -x "$HOME/.local/bin/mise" ]]; then
+            eval "$("$HOME/.local/bin/mise" activate bash)" 2>/dev/null || true
         fi
     else
         log_warn "install-mise.sh not found or not executable"
@@ -723,12 +724,16 @@ show_completion_message() {
 main() {
     # Check if running with arguments
     if [[ $# -gt 0 ]]; then
-        # Extract --global/--user early so remaining args can be parsed
+        # Extract mise scope flags early so remaining args can be parsed.
+        # mise is intentionally user-scoped only.
         MISE_SCOPE_FLAG=""
         REMAINING_ARGS=()
         for arg in "$@"; do
             case "$arg" in
-                --global|-g) MISE_SCOPE_FLAG="--global" ;;
+                --global|-g)
+                    log_error "Global mise installation is disabled. mise must be installed per-user in ~/.local/bin."
+                    exit 1
+                    ;;
                 --user|-u)   MISE_SCOPE_FLAG="--user" ;;
                 *)           REMAINING_ARGS+=("$arg") ;;
             esac
@@ -755,9 +760,7 @@ main() {
                 echo "  --pro           Professional installation (work-safe packages only)"
                 echo "  --perso         Personal installation (pro + personal packages)"
                 echo "  --minimal, -m   Minimal installation (core only)"
-                echo "  --global, -g    Install mise system-wide (/usr/local/bin, requires root/sudo)"
                 echo "  --user, -u      Install mise for current user only (default: ~/.local/bin)"
-                echo "  --help, -h      Show this help message"
                 echo "  --help, -h      Show this help message"
                 echo ""
                 echo "Run without arguments for interactive menu."

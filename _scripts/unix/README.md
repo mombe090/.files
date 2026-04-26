@@ -86,15 +86,14 @@ Installation scripts for various tools and applications:
 Install [mise](https://mise.jdx.dev) universal tool version manager.
 
 ```bash
-./scripts/install-mise.sh             # Install to ~/.local/bin (default, user scope)
-./scripts/install-mise.sh --global    # Install to /usr/local/bin (system-wide, requires root or passwordless sudo)
+./scripts/install-mise.sh             # Install to ~/.local/bin (user scope)
+./scripts/install-mise.sh --user      # Same, explicit user scope
 ```
 
 **What it does:**
 
-- Installs mise to `~/.local/bin` by default (user scope)
+- Installs mise to `~/.local/bin` (user scope only)
 - Configures shell integration (zsh/bash)
-- Use `--global` / `-g` to install system-wide to `/usr/local/bin` (requires root or passwordless sudo)
 - Use `--user` / `-u` to explicitly enforce user scope
 
 **After installation:**

@@ -78,7 +78,7 @@ log_success() { echo -e "${GREEN}[✓]${NC} ${BOLD}$1${NC}"; }
 
 # Parse arguments
 AUTO_YES=false
-MISE_SCOPE_FLAG=""  # empty = auto-detect; "--global" or "--user" passed to install-mise.sh
+MISE_SCOPE_FLAG=""  # mise is always installed in ~/.local/bin
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -87,8 +87,8 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         --all-users|--global|-g)
-            MISE_SCOPE_FLAG="--global"
-            shift
+            log_error "Global mise installation is disabled. mise must be installed per-user in ~/.local/bin."
+            exit 1
             ;;
         --user|-u)
             MISE_SCOPE_FLAG="--user"
@@ -103,10 +103,7 @@ USAGE:
 
 OPTIONS:
     --yes, -y           Auto-confirm all prompts (non-interactive)
-    --all-users, --global, -g
-                        Install mise globally to /usr/local/bin (requires root/sudo).
-                        Use when setting up a shared machine for multiple users.
-    --user, -u          Install mise to ~/.local/bin (current user only).
+    --user, -u          Install mise to ~/.local/bin (current user only; default).
     --help, -h          Show this help message
 
 DESCRIPTION:
@@ -145,10 +142,6 @@ EXAMPLES:
 
     # Non-interactive (CI/automation) - skips configuration
     bash bootstrap.sh --yes
-
-    # Global install (shared machine / all users)
-    bash bootstrap.sh --all-users
-    sudo bash bootstrap.sh --global
 
     # User-only install (no sudo required)
     bash bootstrap.sh --user
@@ -356,16 +349,18 @@ fi
 
 log_header "Installing Mise Version Manager"
 
-if has_command mise; then
-    MISE_VERSION=$(mise --version 2>&1 | head -n1 || echo "unknown")
+USER_MISE="$HOME/.local/bin/mise"
+if [[ -x "$USER_MISE" ]]; then
+    MISE_VERSION=$("$USER_MISE" --version 2>&1 | head -n1 || echo "unknown")
+    export PATH="$HOME/.local/bin:$PATH"
     log_success "mise already installed ($MISE_VERSION)"
 else
-    log_step "Installing mise..."
-    if [[ -n "$MISE_SCOPE_FLAG" ]]; then
-        log_info "Scope: $MISE_SCOPE_FLAG (explicitly requested)"
-    else
-        log_info "Scope: user (~/.local/bin) — pass --global to install system-wide"
+    if has_command mise; then
+        log_warn "Ignoring non-user mise binary at $(command -v mise)"
     fi
+
+    log_step "Installing mise..."
+    log_info "Scope: user (~/.local/bin)"
     if [[ -f "$SCRIPTS_DIR/unix/installers/install-mise.sh" ]]; then
         if bash "$SCRIPTS_DIR/unix/installers/install-mise.sh" $MISE_SCOPE_FLAG; then
             log_success "mise installed"
@@ -700,11 +695,7 @@ echo -e "${GREEN}Essential tools installed:${NC}"
 echo "  - curl"
 echo "  - git"
 echo "  - zsh"
-if [[ "$MISE_SCOPE_FLAG" == "--global" ]]; then
-    echo "  - mise  (system-wide: /usr/local/bin/mise)"
-else
-    echo "  - mise  (user: $HOME/.local/bin/mise)"
-fi
+echo "  - mise  (user: $HOME/.local/bin/mise)"
 echo "  - sudo"
 echo "  - jq"
 echo "  - wget"
