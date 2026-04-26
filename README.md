@@ -16,24 +16,21 @@ git clone https://github.com/mombe090/.files.git ~/.dotfiles
 cd ~/.dotfiles
 
 # 2. Run bootstrap (will prompt for environment configuration)
-# 2. Run bootstrap (will prompt for environment configuration)
 bash _scripts/bootstrap.sh
-# OR install mise system-wide (requires root or passwordless sudo)
-bash _scripts/bootstrap.sh --global
 
 # 3. Install mise packages and essential tools
 mise install # for lacal
 
-# To avaid ratelimit https://mise.jdx.dev/troubleshooting.html#_403-forbidden-when-installing-a-tool
-# add the var to the ~/.bashrc or ~/.zshrc
+# To avoid GitHub rate limits during mise install, create a GitHub token
+# (no permissions needed — any valid token increases the rate limit).
+# Add it to your shell config:
+export GITHUB_TOKEN="ghp_xxxxxxxxxxxx"
+export GITHUB_API_TOKEN="$GITHUB_TOKEN"  # some tools use this
 
 # 4. Install dotfiles
 just install_perso                 # Perso + Pro packages + configs
-# OR (system-wide mise install)
-just install_perso --global        # Same, but mise installed to /usr/local/bin
 # OR
 just install_pro                  # Professional packages + configs only
-just install_pro --global         # Same, with system-wide mise
 ```
 
 **Environment Configuration:**
@@ -55,7 +52,7 @@ bash _scripts/unix/tools/configure-env-interactive.sh
 
 **What bootstrap installs:**
 
-- ✅ mise (version manager) → `~/.local/bin/mise` (current user; use `--global` for system-wide)
+- ✅ mise (version manager) → `~/.local/bin/mise` (current user only)
 - ✅ zsh (shell, if not installed)
 - ✅ yq v4.x (YAML parser) via mise
 - ✅ just (command runner) - via Homebrew on macOS, GitHub releases on Linux
@@ -180,10 +177,7 @@ git clone https://github.com/mombe090/.files.git ~/.dotfiles
 cd ~/.dotfiles
 
 # Run bootstrap (interactive - will prompt for confirmation)
-# Run bootstrap (interactive - will prompt for confirmation)
 bash _scripts/bootstrap.sh
-# OR install mise system-wide (requires root or passwordless sudo)
-bash _scripts/bootstrap.sh --global
 
 # Or non-interactive (auto-accepts all prompts)
 yes | bash _scripts/bootstrap.sh
@@ -193,12 +187,9 @@ just --list
 
 # Full installation
 just install_full
-# OR with system-wide mise
-just install_full --global
 
 # Minimal installation (core tools only)
 just install_minimal
-just install_minimal --global
 
 # Check system health
 just doctor
@@ -208,7 +199,7 @@ just doctor
 
 - ✅ Detects your OS (macOS, Ubuntu, Debian, Fedora, Arch, etc.)
 - ✅ Installs essential tools: `curl`, `git`, `zsh` (if not already installed)
-- ✅ Installs **mise** version manager to `~/.local/bin` (user scope by default; pass `--global` for `/usr/local/bin`)
+- ✅ Installs **mise** version manager to `~/.local/bin` (user scope only)
 - ✅ Installs essential utilities: `sudo`, `jq`, `wget` (if needed)
 - ✅ Installs **yq** v4.x (YAML parser) via mise (not the outdated apt version)
 - ✅ Installs **stow** (GNU symlink manager for dotfiles)
@@ -223,7 +214,7 @@ just doctor
 1. `curl` (if not installed)
 2. `git` (if not installed)
 3. `zsh` (if not installed)
-4. `mise` → `~/.local/bin/mise` (user scope; `--global` for `/usr/local/bin/mise`)
+4. `mise` → `~/.local/bin/mise` (user scope only)
 5. `sudo`, `jq`, `wget` (if not installed)
 6. `stow` (GNU symlink manager)
 7. `yq` via mise (mikefarah's yq v4.x)
@@ -245,12 +236,9 @@ just --list
 
 # Full installation
 just install_full
-# OR with system-wide mise
-just install_full --global
 
 # Minimal installation (core tools only)
 just install_minimal
-just install_minimal --global
 
 # Check system health
 just doctor
@@ -260,9 +248,7 @@ just doctor
 
 ```bash
 just install_full              # Install everything
-just install_full --global     # Same, with system-wide mise
 just install_minimal           # Core tools only
-just install_minimal --global  # Same, with system-wide mise
 just update              # Update all (git pull + mise + packages + restow)
 just doctor              # Check system health
 just verify              # Verify installations
@@ -436,8 +422,7 @@ The `bootstrap.sh` script automatically installs these essential tools:
 #### Phase 2: Core Tools
 
 - **mise** v2024+ - Universal tool version manager
-  - Installed to `~/.local/bin/mise` by default (user scope)
-  - Use `--global` flag to install system-wide to `/usr/local/bin/mise` (requires root or passwordless sudo)
+  - Installed to `~/.local/bin/mise` (user scope only)
   - Environment: `MISE_DATA_DIR="$HOME/.local/share/mise"`
   - Environment: `MISE_CACHE_DIR="$HOME/.cache/mise"`
 
@@ -661,7 +646,7 @@ install_package git  # Automatically uses correct PM for your OS
   - Flags: `--pro`, `--perso`, `--minimal`, `--category <name>`, `--dry-run`
   - Categories: essentials, development, build_tools, libraries, cloud, fonts, shell_tools, monitoring, runtimes
 - **`install-homebrew.sh`** - Install Homebrew (macOS)
-- **`install-mise.sh`** - Install mise version manager (user scope by default; `--global` for system-wide)
+- **`install-mise.sh`** - Install mise version manager (user scope only)
 - **`install-essentials.sh`** - Install build tools (gcc, make, cmake, dev libraries)
 - **`install-docker.sh`** - Install Docker Engine (Ubuntu)
 - **`install-zsh.sh`** - Install and set zsh as default shell
