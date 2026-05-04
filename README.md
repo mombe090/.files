@@ -18,9 +18,6 @@ cd ~/.dotfiles
 # 2. Run bootstrap (will prompt for environment configuration)
 bash _scripts/bootstrap.sh
 
-# 3. Install mise packages and essential tools
-mise install # for lacal
-
 # To avoid GitHub rate limits during mise install, create a GitHub token
 # (no permissions needed — any valid token increases the rate limit).
 # Add it to your shell config:

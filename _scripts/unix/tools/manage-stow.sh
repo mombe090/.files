@@ -23,6 +23,10 @@ DEFAULT_PACKAGES=(
     "wezterm"
     "nushell"
     "powershell"
+    "agents"
+    "pi"
+    "copilot"
+    "opencode"
 )
 
 # All available packages (auto-detect from directories)
@@ -251,6 +255,51 @@ stow_packages() {
     echo "  → Skipped: $skipped"
     echo "  Total: ${#packages[@]}"
     echo ""
+
+    # Wire ~/.agents/skills -> ~/.skills so Pi can discover skills natively
+    wire_agent_skills
+}
+
+# ===== WIRE AGENT SKILLS SYMLINK =====
+# Pi reads ~/.agents/skills/ natively. Since skills are stowed to ~/.skills/,
+# we create per-skill symlinks inside ~/.agents/skills/ pointing to ~/.skills/<name>.
+# This preserves externally installed skills (e.g. microsoft-foundry) in ~/.agents/skills/.
+wire_agent_skills() {
+    local skills_src="$HOME/.skills"
+    local skills_dir="$HOME/.agents/skills"
+
+    if [[ ! -d "$skills_src" ]]; then
+        log_warn "~/.skills not found; skipping agent skill wiring (stow 'agents' first)"
+        return
+    fi
+
+    mkdir -p "$skills_dir"
+
+    local linked=0
+    for skill_path in "$skills_src"/*/; do
+        local name
+        name=$(basename "$skill_path")
+        local link="$skills_dir/$name"
+
+        if [[ -L "$link" ]] && [[ "$(readlink "$link")" == "$skills_src/$name" ]]; then
+            continue  # already correct
+        fi
+
+        if [[ -e "$link" ]] && [[ ! -L "$link" ]]; then
+            log_warn "~/.agents/skills/$name exists and is not a symlink; skipping"
+            continue
+        fi
+
+        rm -f "$link"
+        ln -s "$skills_src/$name" "$link"
+        linked=$((linked + 1))
+    done
+
+    if [[ $linked -gt 0 ]]; then
+        log_success "Wired $linked skill(s) from ~/.skills into ~/.agents/skills/"
+    else
+        log_info "~/.agents/skills/ skill links already up to date"
+    fi
 }
 
 # ===== RESTOW PACKAGES (update symlinks) =====
