@@ -23,11 +23,13 @@ fi
 
 # Kubectx/Kubens completion (fpath completions loaded via ~/.local/share/zsh/completions/)
 
-if command -v kubectx &> /dev/null; then
+# Only set up compdef if the tool actually works (mise shims can pass command -v
+# but the underlying tool may not be installed yet, causing compdef errors)
+if command -v kubectx &> /dev/null && kubectx --version &> /dev/null 2>&1; then
     compdef kx=kubectx
 fi
 
-if command -v kubens &> /dev/null; then
+if command -v kubens &> /dev/null && kubens --version &> /dev/null 2>&1; then
     compdef kn=kubens
 fi
 

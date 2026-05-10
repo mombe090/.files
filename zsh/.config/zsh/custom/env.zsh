@@ -54,3 +54,6 @@ export PATH="$JAVA_HOME/bin:$PATH"
 # PRE-COMMIT
 
 export PRE_COMMIT_COLOR=never
+
+# AWS prompt — disable OMZP rendering (Starship handles the prompt)
+export SHOW_AWS_PROMPT=false

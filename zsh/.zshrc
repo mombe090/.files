@@ -1,5 +1,12 @@
 autoload -Uz compinit
 
+# ===== HOME SANITIZATION =====
+
+REAL_HOME=$(getent passwd "$(whoami)" 2>/dev/null | cut -d: -f6)
+if [[ -n "$REAL_HOME" && "$HOME" != "$REAL_HOME" ]]; then
+    export HOME="$REAL_HOME"
+fi
+
 # ===== SHELL OPTIONS =====
 # Allow comments in interactive shell (bash-style)
 setopt INTERACTIVE_COMMENTS
@@ -18,6 +25,10 @@ fi
 # 📁 Set Zinit home directory based on XDG specification
 
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+
+# 📁 Set ZSH cache directory (needed by OMZP snippets)
+
+ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-${HOME}/.cache/zsh}"
 
 # 📦 Install Zinit if not already present
 

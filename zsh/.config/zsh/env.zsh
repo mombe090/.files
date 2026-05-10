@@ -124,6 +124,10 @@ export PYTHONWARNINGS="ignore::FutureWarning"
 
 export PRE_COMMIT_COLOR=never
 
+# AWS prompt — disable OMZP rendering (Starship handles the prompt)
+
+export SHOW_AWS_PROMPT=false
+
 
 # ===== DOTNET TOOLS =====
 export PATH="$PATH:$HOME/.dotnet/tools"
