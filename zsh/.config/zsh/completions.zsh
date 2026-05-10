@@ -51,6 +51,10 @@ if command -v uv &> /dev/null && [[ ! -f "$_comp_dir/_uv" ]]; then
     uv generate-shell-completion zsh > "$_comp_dir/_uv"
 fi
 
+if command -v flux-operator &> /dev/null && [[ ! -f "$_comp_dir/_flux-operator" ]]; then
+    flux-operator completion zsh > "$_comp_dir/_flux-operator"
+fi
+
 
 # Ollama completion (community-maintained, no built-in generator)
 if command -v ollama &> /dev/null && [[ ! -f "$_comp_dir/_ollama" ]]; then
