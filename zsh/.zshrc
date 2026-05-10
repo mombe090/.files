@@ -110,3 +110,7 @@ fi
 export PATH="$PATH:/Users/mombe090/.lmstudio/bin"
 # End of LM Studio CLI section
 
+
+# ===== MISE DATA DIR =====
+export MISE_DATA_DIR="${MISE_DATA_DIR:-$HOME/.local/share/mise}"
+export MISE_CACHE_DIR="${MISE_CACHE_DIR:-$HOME/.cache/mise}"
