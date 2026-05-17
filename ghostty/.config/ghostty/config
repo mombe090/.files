@@ -24,3 +24,6 @@ background-opacity = 0.84
 shell-integration = "zsh"
 
 # show keybiding ghostty +list-keybinds --default
+
+# Fix general slowness on hyprland (https://github.com/ghostty-org/ghostty/discussions/3224)
+async-backend = epoll
