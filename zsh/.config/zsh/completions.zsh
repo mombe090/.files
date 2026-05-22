@@ -6,7 +6,14 @@ export CARAPACE_BRIDGES='zsh,bash,inshellisense'
 
 # Add system completion directories to fpath FIRST
 
+# Homebrew can occasionally leave behind dangling completion symlinks
+# (for example _ghostty). compinit aborts on those, so clean them up first.
 if [[ "$OSTYPE" == "darwin"* ]]; then
+    local _brew_site_functions="/opt/homebrew/share/zsh/site-functions"
+    if [[ -L "$_brew_site_functions/_ghostty" && ! -e "$_brew_site_functions/_ghostty" ]]; then
+        rm -f "$_brew_site_functions/_ghostty"
+    fi
+
     # macOS paths
     fpath=(
         /opt/homebrew/share/zsh/site-functions

@@ -117,5 +117,3 @@ fi
 
 # ===== DOTNET TOOLS =====
 export PATH="$PATH:$HOME/.dotnet/tools"
-
-source ~/private.envrc

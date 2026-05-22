@@ -27,7 +27,10 @@
     "surface0":  "#313244",
     "base":      "#1e1e2e",
     "mantle":    "#181825",
-    "crust":     "#11111b"
+    "crust":     "#11111b",
+    "panel":     "#1b1d2b",
+    "panelOk":   "#1b221f",
+    "panelErr":  "#261c22"
   },
   "colors": {
     "accent":            "mauve",
@@ -45,14 +48,14 @@
     "selectedBg":        "surface0",
     "userMessageBg":     "surface0",
     "userMessageText":   "",
-    "customMessageBg":   "surface0",
+    "customMessageBg":   "panel",
     "customMessageText": "",
     "customMessageLabel":"mauve",
-    "toolPendingBg":     "base",
-    "toolSuccessBg":     "#1a2a1e",
-    "toolErrorBg":       "#2a1a1e",
+    "toolPendingBg":     "panel",
+    "toolSuccessBg":     "panelOk",
+    "toolErrorBg":       "panelErr",
     "toolTitle":         "mauve",
-    "toolOutput":        "",
+    "toolOutput":        "subtext1",
 
     "mdHeading":         "yellow",
     "mdLink":            "blue",

@@ -12,8 +12,10 @@ import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 const home = process.env.HOME ?? "";
 const lightModePath = join(home, ".config/omarchy/current/theme/light.mode");
 
-function omarchyPiTheme(): "light" | "dark" {
-	return existsSync(lightModePath) ? "light" : "dark";
+function omarchyPiTheme(): string {
+	// Keep Omarchy light/dark auto-sync, but map dark mode to the custom
+	// Catppuccin theme instead of pi's built-in "dark" theme.
+	return existsSync(lightModePath) ? "light" : "catppuccin-mocha";
 }
 
 export default function (pi: ExtensionAPI) {
