@@ -41,6 +41,13 @@ export TALOS_EDITOR=nvim
 export K9S_CONFIG_DIR=~/.config/k9s
 export LOCALSTACK_ACTIVATE_PRO=0
 
+# Forgejo (fj)
+export FORGEJO_HOST="https://git.prod.home.mombesoft.com"
+export FORGEJO_REPO="homelab/craftarc"
+fj() {
+  command fj --host "$FORGEJO_HOST" "$@"
+}
+
 # Path additions (OS-specific)
 
 export PATH="$HOME/.local/bin:$PATH"

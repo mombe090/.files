@@ -1,3 +1,5 @@
+export PATH="/Users/mombe090/.local/share/mise/installs/node/24.18.0/bin:$PATH"
+
 autoload -Uz compinit
 
 # ===== HOME SANITIZATION =====
@@ -117,3 +119,6 @@ fi
 
 # ===== DOTNET TOOLS =====
 export PATH="$PATH:$HOME/.dotnet/tools"
+
+# Pi
+export PATH="/Users/mombe090/.local/share/mise/installs/node/24.18.0/bin:$PATH"

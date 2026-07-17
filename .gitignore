@@ -76,11 +76,6 @@ nushell/.config/nushell/history.txt
 # Ignore all log files
 dotfiles_docs.egg-info/
 
-# Python cache files
-__pycache__/
-*.pyc
-*.pyo
-
 # System files
 .DS_Store
 Thumbs.db
@@ -90,3 +85,21 @@ Thumbs.db
 # Zed Settings
 zed/.config/zed/settings.json
 zed/.config/zed/settings.jsonc
+
+# Backup files
+*.bak
+
+# OpenCode runtime
+.opencode/node_modules/
+.opencode/package-lock.json
+opencode/.config/opencode/plugins/
+opencode/.config/opencode/opencode.json
+
+# Pi agent runtime
+pi/.pi/agent/auth.json
+pi/.pi/agent/trust.json
+pi/.pi/agent/sessions/
+pi/.pi/agent/npm/
+
+# Copilot IDE locks
+copilot/.copilot/ide/

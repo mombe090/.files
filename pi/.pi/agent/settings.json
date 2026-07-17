@@ -1,0 +1,11 @@
+{
+  "lastChangelogVersion": "0.80.3",
+  "theme": "catppuccin-mocha",
+  "defaultProvider": "omlx",
+  "defaultModel": "Ornith-1.0-35B-8bit",
+  "hideThinkingBlock": true,
+  "packages": [
+    "npm:pi-web-access",
+    "npm:@mjasnikovs/pi-task"
+  ]
+}

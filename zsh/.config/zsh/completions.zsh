@@ -62,6 +62,10 @@ if command -v flux-operator &> /dev/null && [[ ! -f "$_comp_dir/_flux-operator" 
     flux-operator completion zsh > "$_comp_dir/_flux-operator"
 fi
 
+if command -v herdr &> /dev/null && [[ ! -f "$_comp_dir/_herdr" ]]; then
+    herdr completion zsh > "$_comp_dir/_herdr"
+fi
+
 
 # Ollama completion (community-maintained, no built-in generator)
 if command -v ollama &> /dev/null && [[ ! -f "$_comp_dir/_ollama" ]]; then
@@ -93,6 +97,8 @@ zstyle ':completion:*:approximate:*' max-errors 1 numeric
 
 zstyle ':completion:*' list-dirs-first true
 zstyle ':completion:*' squeeze-slashes true
+zstyle ':completion:*' hidden-files show  # Show dotfiles/dotdirs in completions
+zstyle ':completion:*:*:cd:*' hidden-files show  # Ensure cd shows dotdirs
 
 # File and directory completion behavior
 
@@ -110,6 +116,7 @@ zstyle ':completion:*:git:*' group-order 'main commands' 'alias commands' 'exter
 zstyle ':fzf-tab:*' use-fzf-default-opts yes
 zstyle ':fzf-tab:*' switch-group ',' '.'
 zstyle ':fzf-tab:*' continuous-trigger '/'
+zstyle ':fzf-tab:*' use-group-name yes
 
 # Configure file/directory previews with fallbacks
 

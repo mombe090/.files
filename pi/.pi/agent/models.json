@@ -1,0 +1,29 @@
+{
+  "providers": {
+    "omlx": {
+      "baseUrl": "http://127.0.0.1:4500/v1",
+      "api": "openai-completions",
+      "apiKey": "019f33cb-d7c5-7196-b3ba-a41cdb7617c2",
+      "authHeader": true,
+      "models": [
+        {
+          "id": "Ornith-1.0-35B-8bit",
+          "name": "Ornith-1.0-35B-8bit",
+          "reasoning": false,
+          "input": [
+            "text",
+            "image"
+          ],
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0
+          },
+          "contextWindow": 262144,
+          "maxTokens": 32768
+        }
+      ]
+    }
+  }
+}

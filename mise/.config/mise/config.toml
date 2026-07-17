@@ -33,19 +33,10 @@ trusted_config_paths = [
 
 # Ruby
 "ruby" = "latest"
-
-# ===== CLI TOOLS =====
-# Modern replacements
-"aqua:sharkdp/bat" = "latest"          # cat replacement
 "eza" = "latest"          # ls replacement
 "cargo:fd-find" = "latest"           # find replacement
 "pipx:pre-commit" = "latest"   # pre-commit hooks manager
 "aqua:BurntSushi/ripgrep" = "latest"      # grep replacement
-"aqua:junegunn/fzf" = "latest"          # fuzzy finder
-"aqua:ajeetdsouza/zoxide" = "latest"       # smart cd
-
-# Shell enhancements
-"aqua:starship/starship" = "latest"     # shell prompt
 "asdf:asdf-community/asdf-direnv" = "latest"       # environment switcher
 
 # Terminal multiplexers
@@ -55,14 +46,13 @@ trusted_config_paths = [
 # System tools
 #"btop" = "latest"         # system monitor not supported on ARM yet
 "asdf:mise-plugins/asdf-jq" = "latest"           # JSON processor
-"aqua:mikefarah/yq" = "latest"           # YAML processor
 "yamllint" = "latest"     # YAML linter
 
 # ===== DEVOPS & CLOUD TOOLS =====
 # Kubernetes
 "asdf:asdf-community/asdf-kubectl" = "latest"
-"asdf:https://gitlab.com/wt0f/asdf-kubectx" = "latest"
-#"aqua:ahmetb/kubectx/kubens" = "latest"   # kubens installed via kubectx asdf plugin
+"aqua:ahmetb/kubectx" = "0.11.0"
+"aqua:ahmetb/kubectx/kubens" = "0.11.0"   # kubens installed via kubectx asdf plugin
 "aqua:kubecolor/kubecolor" = "latest"     # colorize
 "aqua:helm/helm" = "latest"
 "aqua:derailed/k9s" = "latest"
@@ -92,7 +82,6 @@ trusted_config_paths = [
 "aqua:astral-sh/ty" = "latest"        # Fast Python linter & formatter
 "aqua:astral-sh/uv" = "latest"
 
-"aqua:sharkdp/vivid" = "latest"
 "aqua:go-task/task" = "latest"
 
 # Completion engines
@@ -102,3 +91,9 @@ trusted_config_paths = [
 "aqua:fluxcd/flux2" = "latest"
 github-cli = "2.86.0"
 zellij = "0.43.1"
+fd = "10.4.2"
+bat = "0.26.1"
+fzf = "0.73.1"
+zoxide = "0.10.0"
+direnv = "2.37.1"
+starship = "1.26.0"

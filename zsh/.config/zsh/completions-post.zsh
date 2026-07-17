@@ -21,16 +21,48 @@ if command -v kubectl &> /dev/null; then
     fi
 fi
 
-# Kubectx/Kubens completion (fpath completions loaded via ~/.local/share/zsh/completions/)
+# Kubectx/Kubens completion
 
-# Only set up compdef if the tool actually works (mise shims can pass command -v
-# but the underlying tool may not be installed yet, causing compdef errors)
+# kubectx completes kubectl context names from kubeconfig
+# kubens completes kubectl namespace names
 if command -v kubectx &> /dev/null && kubectx --version &> /dev/null 2>&1; then
-    compdef kx=kubectx
-fi
+    # _kubectx completion function - complete kubectl context names
+    _kubectx() {
+        local curcontext="$curcontext" state line
+        typeset -A opt_args
+        _arguments -s \
+            '-r[remove a context]:context:->context' \
+            '-c[show current context]:context:->context' \
+            '-s[shell into context]:context:->context' \
+            '-d[delete context]:context:->context'
+        case $state in
+            context)
+                local contexts
+                contexts=( ${(@f)$(kubectl config get-contexts -o name 2>/dev/null)} )
+                _describe -t contexts context contexts
+                ;;
+        esac
+    }
+    compdef _kubectx kubectx
+    compdef _kubectx kx
 
-if command -v kubens &> /dev/null && kubens --version &> /dev/null 2>&1; then
-    compdef kn=kubens
+    # _kubens completion function - complete namespace names
+    _kubens() {
+        local curcontext="$curcontext" state line
+        typeset -A opt_args
+        _arguments -s \
+            '-h[print help]'
+        _arguments '1:namespace:->namespace'
+        case $state in
+            namespace)
+                local namespaces
+                namespaces=( ${(@f)$(kubectl get namespaces --no-headers -o custom-columns="NAME:.metadata.name" 2>/dev/null)} )
+                _describe -t namespaces namespace namespaces
+                ;;
+        esac
+    }
+    compdef _kubens kubens
+    compdef _kubens kn
 fi
 
 # Flux CD completion
