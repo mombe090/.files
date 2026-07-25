@@ -31,6 +31,7 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 # 📁 Set ZSH cache directory (needed by OMZP snippets)
 
 ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-${HOME}/.cache/zsh}"
+mkdir -p "$ZSH_CACHE_DIR/completions"
 
 # 📦 Install Zinit if not already present
 

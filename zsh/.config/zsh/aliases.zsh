@@ -73,6 +73,8 @@ alias kgs='kubecolor get svc'
 alias kgn='kubecolor get ns'
 alias kd='kubecolor describe'
 alias kdel='kubecolor delete'
+alias kghttp='kubecolor get httproutes'
+alias kdesc='kubecolor describe'
 
 # Apply and create
 
