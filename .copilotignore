@@ -1,0 +1,111 @@
+# GitHub Copilot Ignore File
+# Files matching these patterns will not be processed by Copilot
+# See: SECURITY-DOTFILES.md for rationale
+
+# =============================================================================
+# Environment and Secrets
+# =============================================================================
+
+*.env
+*.env.*
+.envrc
+.env.local
+.env.production
+.env.development
+
+# Secret files
+*secret*
+*credential*
+*password*
+*.key
+*.pem
+*.ppk
+*.p12
+*.pfx
+
+# =============================================================================
+# Configuration Files (May Contain Secrets)
+# =============================================================================
+
+# Infrastructure as Code
+*.tfvars
+terraform.tfvars
+*.tfstate
+*.tfstate.*
+
+# Kubernetes
+.kube/
+*kubeconfig*
+
+# Cloud Providers
+.aws/
+.azure/
+.gcloud/
+*gcp-credentials*
+
+# Git config (may contain tokens)
+.gitconfig.local
+
+# =============================================================================
+# Sensitive Directories
+# =============================================================================
+
+secrets/
+private/
+vault/
+credentials/
+keys/
+
+# Backup directories that might contain sensitive data
+*.backup/
+backups/
+
+# =============================================================================
+# SSH and Certificates
+# =============================================================================
+
+.ssh/
+*.crt
+*.cert
+*.cer
+*.der
+*.ca-bundle
+*.ca-cert
+
+# =============================================================================
+# Database and Connection Strings
+# =============================================================================
+
+*database.yml
+*database.json
+*db-config*
+*connection-string*
+
+# =============================================================================
+# Shell History (May Contain Leaked Secrets)
+# =============================================================================
+
+.zsh_history
+.bash_history
+.history
+
+# =============================================================================
+# Temporary and Cache Files
+# =============================================================================
+
+.cache/
+tmp/
+temp/
+*.tmp
+
+# =============================================================================
+# Generated or Binary Files
+# =============================================================================
+
+*.log
+*.sqlite
+*.db
+node_modules/
+.venv/
+venv/
+__pycache__/
