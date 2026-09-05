@@ -86,6 +86,11 @@ Thumbs.db
 zed/.config/zed/settings.json
 zed/.config/zed/settings.jsonc
 
+# Zed runtime databases (LMDB prompt library, etc.)
+*.mdb
+zed/.config/zed/prompts/
+zed/.config/zed/db/
+
 # Backup files
 *.bak
 
