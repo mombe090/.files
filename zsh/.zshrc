@@ -128,3 +128,6 @@ export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
 # Added by cua-driver-rs installer — see https://github.com/trycua/cua
 export PATH="/Users/mombe090/.local/bin:$PATH"
+
+# Added by the Hunk installer (https://hunk.dev)
+export PATH='/Users/mombe090/.hunk/bin':"$PATH"

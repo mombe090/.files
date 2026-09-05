@@ -23,7 +23,7 @@ trusted_config_paths = [
 "bun" = "1.3.14"
 
 # Python
-"python" = "3.14.6"
+python = "3.14.3"
 
 # Go
 "go" = "1.26.5"
@@ -35,7 +35,7 @@ trusted_config_paths = [
 "ruby" = "4.0.6"
 "eza" = "0.23.5"
 "cargo:fd-find" = "10.4.2"
-"pipx:pre-commit" = "4.6.0"
+"pipx:pre-commit" = "latest"
 "aqua:BurntSushi/ripgrep" = "15.2.0"
 "asdf:asdf-community/asdf-direnv" = "2.37.1"
 
@@ -50,7 +50,6 @@ trusted_config_paths = [
 # Kubernetes
 "asdf:asdf-community/asdf-kubectl" = "1.36.2"
 "aqua:ahmetb/kubectx" = "0.11.0"
-"aqua:ahmetb/kubectx/kubens" = "0.11.0"
 "aqua:kubecolor/kubecolor" = "0.6.0"
 "aqua:helm/helm" = "3.21.3"
 "aqua:derailed/k9s" = "0.51.0"
@@ -92,3 +91,7 @@ zoxide = "0.10.0"
 direnv = "2.37.1"
 starship = "1.26.0"
 "aqua:jesseduffield/lazygit" = "0.63.0"
+"asdf:https://gitlab.com/wt0f/asdf-kubectx" = "0.11.0"
+kubens = "0.9.5"
+"aqua:sharkdp/vivid" = "0.11.1"
+"aqua:mikefarah/yq" = "4.53.2"
