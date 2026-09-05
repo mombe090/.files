@@ -79,6 +79,7 @@ zinit cdreplay -q
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 eval "$(direnv hook zsh)"
+eval "$(omp completions zsh)"
 
 # 🛠 User-specific setup
 
@@ -123,3 +124,7 @@ export PATH="$PATH:$HOME/.dotnet/tools"
 
 # Pi
 export PATH="/Users/mombe090/.local/share/mise/installs/node/24.18.0/bin:$PATH"
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+
+# Added by cua-driver-rs installer — see https://github.com/trycua/cua
+export PATH="/Users/mombe090/.local/bin:$PATH"

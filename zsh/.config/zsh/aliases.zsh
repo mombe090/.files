@@ -149,3 +149,6 @@ alias kgk='kubectl get ks'
 alias kghr='kubectl get ks'
 
 alias kap='kubectl apply -f '
+
+# ===== ZED REMOTE ALIASES =====
+alias zedmini-craftarc='zed ssh://192.168.11.92:/Users/mombe090/Workstation/perso/craftarc'

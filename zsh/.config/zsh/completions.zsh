@@ -66,6 +66,14 @@ if command -v herdr &> /dev/null && [[ ! -f "$_comp_dir/_herdr" ]]; then
     herdr completion zsh > "$_comp_dir/_herdr"
 fi
 
+if command -v hermes &> /dev/null && [[ ! -f "$_comp_dir/_hermes" ]]; then
+    hermes completion zsh > "$_comp_dir/_hermes"
+fi
+
+if command -v mise &> /dev/null && [[ ! -f "$_comp_dir/_mise" ]]; then
+    mise completion zsh > "$_comp_dir/_mise"
+fi
+
 
 # Ollama completion (community-maintained, no built-in generator)
 if command -v ollama &> /dev/null && [[ ! -f "$_comp_dir/_ollama" ]]; then

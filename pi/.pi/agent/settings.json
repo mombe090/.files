@@ -1,11 +1,13 @@
 {
   "lastChangelogVersion": "0.80.3",
   "theme": "catppuccin-mocha",
-  "defaultProvider": "omlx",
-  "defaultModel": "Ornith-1.0-35B-8bit",
-  "hideThinkingBlock": true,
+  "defaultProvider": "opencode",
+  "defaultModel": "deepseek-v4-flash-free",
+  "hideThinkingBlock": false,
   "packages": [
     "npm:pi-web-access",
-    "npm:@mjasnikovs/pi-task"
-  ]
+    "npm:@mjasnikovs/pi-task",
+    "npm:@hypabolic/pi-hypa"
+  ],
+  "defaultThinkingLevel": "high"
 }

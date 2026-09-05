@@ -8,9 +8,9 @@ Ghostty is a fast, feature-rich terminal emulator with native platform integrati
 
 ## Features
 
-- **Theme**: Catppuccin Frappe
-- **Font**: CaskaydiaMono Nerd Font Mono at 16pt
-- **Transparency**: 90% opacity with 20px blur radius
+- **Theme**: Catppuccin Macchiato
+- **Font**: CaskaydiaMono Nerd Font Mono at 12pt
+- **Transparency**: 97.88% opacity, no blur (aligned with Alacritty)
 - **Shell Integration**: ZSH with enhanced features
 - **macOS**: Option key as Alt, official icon
 
